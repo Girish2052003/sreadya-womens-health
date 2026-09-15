@@ -90,6 +90,8 @@ def check() -> None:
         "dailyReminderKeepsEightAmAcrossSpringDstChange",
         "dailyReminderKeepsEightAmAcrossAutumnDstChange",
         "oneShotReminderPreservesStoredLocalCalendarFields",
+        "dailyReminderKeepsEightAmInEveryAvailableTimeZone",
+        "oneShotReminderKeepsWallClockAfterTimeZoneChange",
     ):
         if marker not in test_text:
             raise SystemExit(f"Android reminder test marker missing: {marker}")

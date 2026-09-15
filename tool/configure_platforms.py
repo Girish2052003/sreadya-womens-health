@@ -40,6 +40,8 @@ ANDROID_MANIFEST = r'''<manifest xmlns:android="http://schemas.android.com/apk/r
     <uses-permission android:name="android.permission.health.READ_OVULATION_TEST" />
     <uses-permission android:name="android.permission.health.WRITE_OVULATION_TEST" />
     <uses-permission android:name="android.permission.health.READ_SEXUAL_ACTIVITY" />
+    <uses-permission android:name="android.permission.health.WRITE_SEXUAL_ACTIVITY" />
+    <uses-permission android:name="android.permission.health.READ_HEALTH_DATA_HISTORY" />
 
     <queries>
         <package android:name="com.google.android.apps.healthdata" />
@@ -213,6 +215,8 @@ def check_android() -> None:
             'android:allowBackup="false"',
             'android.permission.health.READ_MENSTRUATION',
             'android.permission.health.READ_SEXUAL_ACTIVITY',
+            'android.permission.health.WRITE_SEXUAL_ACTIVITY',
+            'android.permission.health.READ_HEALTH_DATA_HISTORY',
             '.SrevaBootReceiver',
             'android.intent.category.HEALTH_PERMISSIONS',
         ],

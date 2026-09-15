@@ -26,7 +26,7 @@ class _HealthIntegrationScreenState
   Future<void> _request() async {
     final ok = await ref
         .read(healthPlatformProvider)
-        .requestAuthorization(_selected);
+        .requestAuthorization(_selected, includeHistory: true);
     if (!mounted) return;
     setState(() => _status = ref.read(healthPlatformProvider).status());
     ScaffoldMessenger.of(context).showSnackBar(
@@ -41,14 +41,17 @@ class _HealthIntegrationScreenState
   }
 
   Future<void> _previewImport() async {
+    final platform = ref.read(healthPlatformProvider);
+    final status = await platform.status();
     final now = DateTime.now();
-    final rows = await ref
-        .read(healthPlatformProvider)
-        .readRecords(
-          categories: _selected,
-          from: DateTime(now.year - 1, now.month, now.day),
-          to: now,
-        );
+    final from = status.historicalReadGranted
+        ? DateTime(now.year - 1, now.month, now.day)
+        : now.subtract(const Duration(days: 30));
+    final rows = await platform.readRecords(
+      categories: _selected,
+      from: from,
+      to: now,
+    );
     if (!mounted) return;
     setState(() {
       _preview = rows;
@@ -99,6 +102,18 @@ class _HealthIntegrationScreenState
                   ),
                 ),
               ),
+              if (status?.platformName == 'Health Connect' &&
+                  status?.available == true)
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(top: 8),
+                  child: Text(
+                    status!.historicalReadGranted
+                        ? 'Long-history access granted — previews can include older Health Connect records.'
+                        : status.historicalReadAvailable
+                        ? 'Long-history access is not granted. Until you grant it, Sreva previews only the recent 30-day window.'
+                        : 'This Health Connect version does not expose long-history access. Sreva previews only the recent 30-day window.',
+                  ),
+                ),
               const SizedBox(height: 16),
               Text(
                 'Choose categories',

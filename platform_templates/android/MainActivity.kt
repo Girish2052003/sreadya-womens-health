@@ -24,6 +24,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.health.connect.client.HealthConnectClient
+import androidx.health.connect.client.HealthConnectFeatures
 import androidx.health.connect.client.PermissionController
 import androidx.health.connect.client.permission.HealthPermission
 import androidx.health.connect.client.records.BasalBodyTemperatureRecord
@@ -162,19 +163,44 @@ class MainActivity : FlutterFragmentActivity() {
         when (call.method) {
             "status" -> {
                 val available = HealthConnectClient.getSdkStatus(this) == HealthConnectClient.SDK_AVAILABLE
-                result.success(mapOf(
-                    "available" to available,
-                    "authorizationRequested" to (SecurePrefs(this).getString("health.authorization.requested") == "true"),
-                    "platformName" to "Health Connect",
-                    "supportedCategories" to supported,
-                ))
+                if (!available) {
+                    result.success(mapOf(
+                        "available" to false,
+                        "authorizationRequested" to (SecurePrefs(this).getString("health.authorization.requested") == "true"),
+                        "platformName" to "Health Connect",
+                        "supportedCategories" to supported,
+                        "historicalReadAvailable" to false,
+                        "historicalReadGranted" to false,
+                    ))
+                    return
+                }
+                val client = HealthConnectClient.getOrCreate(this)
+                scope.launch {
+                    try {
+                        val granted = withContext(Dispatchers.IO) {
+                            client.permissionController.getGrantedPermissions()
+                        }
+                        result.success(mapOf(
+                            "available" to true,
+                            "authorizationRequested" to (SecurePrefs(this@MainActivity).getString("health.authorization.requested") == "true"),
+                            "platformName" to "Health Connect",
+                            "supportedCategories" to supported,
+                            "historicalReadAvailable" to historyReadAvailable(client),
+                            "historicalReadGranted" to
+                                (HealthPermission.PERMISSION_READ_HEALTH_DATA_HISTORY in granted),
+                        ))
+                    } catch (error: Throwable) {
+                        result.error("health_status_failed", error.message, null)
+                    }
+                }
             }
             "requestAuthorization" -> {
                 if (HealthConnectClient.getSdkStatus(this) != HealthConnectClient.SDK_AVAILABLE) {
                     result.success(false); return
                 }
                 val categories = (call.argument<List<String>>("categories") ?: emptyList()).filter { it in supported }
-                val permissions = healthPermissions(categories)
+                val includeHistory = call.argument<Boolean>("includeHistory") ?: false
+                val permissions = healthPermissions(categories, includeHistory)
                 if (permissions.isEmpty()) { result.success(false); return }
                 pendingHealthPermission = result
                 requestedHealthPermissions = permissions
@@ -186,7 +212,17 @@ class MainActivity : FlutterFragmentActivity() {
         }
     }
 
-    private fun healthPermissions(categories: List<String>): Set<String> {
+    private fun historyReadAvailable(
+        client: HealthConnectClient = HealthConnectClient.getOrCreate(this),
+    ): Boolean =
+        client.features.getFeatureStatus(
+            HealthConnectFeatures.FEATURE_READ_HEALTH_DATA_HISTORY,
+        ) == HealthConnectFeatures.FEATURE_STATUS_AVAILABLE
+
+    private fun healthPermissions(
+        categories: List<String>,
+        includeHistory: Boolean = false,
+    ): Set<String> {
         val permissions = mutableSetOf<String>()
         for (category in categories) {
             when (category) {
@@ -210,8 +246,14 @@ class MainActivity : FlutterFragmentActivity() {
                     permissions += HealthPermission.getReadPermission(OvulationTestRecord::class)
                     permissions += HealthPermission.getWritePermission(OvulationTestRecord::class)
                 }
-                "sexualActivity" -> permissions += HealthPermission.getReadPermission(SexualActivityRecord::class)
+                "sexualActivity" -> {
+                    permissions += HealthPermission.getReadPermission(SexualActivityRecord::class)
+                    permissions += HealthPermission.getWritePermission(SexualActivityRecord::class)
+                }
             }
+        }
+        if (includeHistory && historyReadAvailable()) {
+            permissions += HealthPermission.PERMISSION_READ_HEALTH_DATA_HISTORY
         }
         return permissions
     }
@@ -223,12 +265,26 @@ class MainActivity : FlutterFragmentActivity() {
         val categories = call.argument<List<String>>("categories") ?: emptyList()
         val fromMillis = call.argument<Number>("fromMillis")?.toLong() ?: run { result.success(emptyList<Any>()); return }
         val toMillis = call.argument<Number>("toMillis")?.toLong() ?: run { result.success(emptyList<Any>()); return }
-        val from = Instant.ofEpochMilli(fromMillis)
+        val requestedFrom = Instant.ofEpochMilli(fromMillis)
         val to = Instant.ofEpochMilli(toMillis)
         val client = HealthConnectClient.getOrCreate(this)
         scope.launch {
             try {
-                val rows = withContext(Dispatchers.IO) { readRows(client, categories, from, to) }
+                val granted = withContext(Dispatchers.IO) {
+                    client.permissionController.getGrantedPermissions()
+                }
+                val fallbackFrom = Instant.now().minusSeconds(30L * 24L * 60L * 60L)
+                val effectiveFrom =
+                    if (HealthPermission.PERMISSION_READ_HEALTH_DATA_HISTORY in granted) {
+                        requestedFrom
+                    } else if (requestedFrom.isAfter(fallbackFrom)) {
+                        requestedFrom
+                    } else {
+                        fallbackFrom
+                    }
+                val rows = withContext(Dispatchers.IO) {
+                    readRows(client, categories, effectiveFrom, to)
+                }
                 result.success(rows)
             } catch (error: Throwable) {
                 result.error("health_read_failed", error.message, null)
@@ -304,7 +360,16 @@ class MainActivity : FlutterFragmentActivity() {
         }
         if ("sexualActivity" in categories) {
             client.readRecords(ReadRecordsRequest(SexualActivityRecord::class, filter)).records.forEach { record ->
-                rows += mapOf("id" to record.metadata.id, "type" to "sexualActivity", "dateMillis" to record.time.toEpochMilli(), "value" to "recorded")
+                rows += mapOf(
+                    "id" to record.metadata.id,
+                    "type" to "sexualActivity",
+                    "dateMillis" to record.time.toEpochMilli(),
+                    "value" to when (record.protectionUsed) {
+                        SexualActivityRecord.PROTECTION_USED_PROTECTED -> "protected"
+                        SexualActivityRecord.PROTECTION_USED_UNPROTECTED -> "unprotected"
+                        else -> "unknown"
+                    },
+                )
             }
         }
         return rows.sortedBy { (it["dateMillis"] as? Long) ?: 0L }
@@ -361,6 +426,18 @@ class MainActivity : FlutterFragmentActivity() {
                     "high" -> OvulationTestRecord.RESULT_HIGH
                     "negative" -> OvulationTestRecord.RESULT_NEGATIVE
                     else -> OvulationTestRecord.RESULT_INCONCLUSIVE
+                },
+            )
+            "sexualActivity" -> SexualActivityRecord(
+                time = instant,
+                zoneOffset = zone,
+                metadata = metadata,
+                protectionUsed = when (value?.lowercase()) {
+                    "protected", "protection used", "yes" ->
+                        SexualActivityRecord.PROTECTION_USED_PROTECTED
+                    "unprotected", "no protection", "no" ->
+                        SexualActivityRecord.PROTECTION_USED_UNPROTECTED
+                    else -> SexualActivityRecord.PROTECTION_USED_UNKNOWN
                 },
             )
             else -> null

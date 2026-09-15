@@ -68,12 +68,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       return;
     }
     const categories = {HealthDataCategory.menstrualFlow};
-    final authorized = await platform.requestAuthorization(categories);
+    final authorized = await platform.requestAuthorization(
+      categories,
+      includeHistory: true,
+    );
     if (!authorized) return;
+    final refreshedStatus = await platform.status();
     final now = DateTime.now();
+    final from = refreshedStatus.historicalReadGranted
+        ? DateTime(now.year - 2, now.month, now.day)
+        : now.subtract(const Duration(days: 30));
     final rows = await platform.readRecords(
       categories: categories,
-      from: DateTime(now.year - 2, now.month, now.day),
+      from: from,
       to: now,
     );
     if (mounted) setState(() => _healthPreview = rows);

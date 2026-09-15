@@ -30,6 +30,88 @@ class _RemindersScreenState extends ConsumerState<RemindersScreen> {
     ref.invalidate(reminderReconciliationProvider);
   }
 
+  Future<void> _editQuietHours(
+    ReminderPreferences prefs,
+    ClockPreference clockPreference,
+  ) async {
+    var startHour = prefs.quietStartHour;
+    var endHour = prefs.quietEndHour;
+    final value = await showDialog<(int, int)>(
+      context: context,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: const Text('Edit quiet hours'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DropdownButtonFormField<int>(
+                initialValue: startHour,
+                decoration: const InputDecoration(labelText: 'Quiet starts'),
+                items: [
+                  for (var hour = 0; hour < 24; hour++)
+                    DropdownMenuItem(
+                      value: hour,
+                      child: Text(
+                        UserFormatters.formatClock(
+                          TimeOfDay(hour: hour, minute: 0),
+                          clockPreference,
+                          context,
+                        ),
+                      ),
+                    ),
+                ],
+                onChanged: (hour) {
+                  if (hour != null) {
+                    setDialogState(() => startHour = hour);
+                  }
+                },
+              ),
+              const SizedBox(height: 12),
+              DropdownButtonFormField<int>(
+                initialValue: endHour,
+                decoration: const InputDecoration(labelText: 'Quiet ends'),
+                items: [
+                  for (var hour = 0; hour < 24; hour++)
+                    DropdownMenuItem(
+                      value: hour,
+                      child: Text(
+                        UserFormatters.formatClock(
+                          TimeOfDay(hour: hour, minute: 0),
+                          clockPreference,
+                          context,
+                        ),
+                      ),
+                    ),
+                ],
+                onChanged: (hour) {
+                  if (hour != null) {
+                    setDialogState(() => endHour = hour);
+                  }
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () =>
+                  Navigator.of(dialogContext).pop((startHour, endHour)),
+              child: const Text('Save'),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (value != null) {
+      await _save(
+        prefs.copyWith(quietStartHour: value.$1, quietEndHour: value.$2),
+      );
+    }
+  }
+
   Future<void> _rebuild() async {
     setState(() => _busy = true);
     try {
@@ -164,6 +246,8 @@ class _RemindersScreenState extends ConsumerState<RemindersScreen> {
                   '${UserFormatters.formatClock(TimeOfDay(hour: prefs.quietStartHour, minute: 0), clockPreference, context)} – '
                   '${UserFormatters.formatClock(TimeOfDay(hour: prefs.quietEndHour, minute: 0), clockPreference, context)}',
                 ),
+                trailing: const Icon(Icons.edit_outlined),
+                onTap: () => _editQuietHours(prefs, clockPreference),
               ),
               ListTile(
                 title: const Text('Lock-screen privacy'),

@@ -29,11 +29,15 @@ class HealthPlatformStatus {
     required this.authorizationRequested,
     required this.platformName,
     required this.supportedCategories,
+    required this.historicalReadAvailable,
+    required this.historicalReadGranted,
   });
   final bool available;
   final bool authorizationRequested;
   final String platformName;
   final Set<HealthDataCategory> supportedCategories;
+  final bool historicalReadAvailable;
+  final bool historicalReadGranted;
 }
 
 HealthDataCategory? _categoryByName(String name) {
@@ -62,6 +66,8 @@ class HealthPlatform {
                 .map(_categoryByName)
                 .whereType<HealthDataCategory>()
                 .toSet(),
+        historicalReadAvailable: map?['historicalReadAvailable'] == true,
+        historicalReadGranted: map?['historicalReadGranted'] == true,
       );
     } on MissingPluginException {
       return const HealthPlatformStatus(
@@ -69,15 +75,21 @@ class HealthPlatform {
         authorizationRequested: false,
         platformName: 'Unavailable',
         supportedCategories: {},
+        historicalReadAvailable: false,
+        historicalReadGranted: false,
       );
     }
   }
 
-  Future<bool> requestAuthorization(Set<HealthDataCategory> categories) async {
+  Future<bool> requestAuthorization(
+    Set<HealthDataCategory> categories, {
+    bool includeHistory = false,
+  }) async {
     if (categories.isEmpty) return false;
     try {
       return await _channel.invokeMethod<bool>('requestAuthorization', {
             'categories': categories.map((value) => value.name).toList(),
+            'includeHistory': includeHistory,
           }) ??
           false;
     } on MissingPluginException {

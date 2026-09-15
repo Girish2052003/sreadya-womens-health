@@ -43,7 +43,7 @@ class CycleVaultService {
     hashLength: 32,
   );
 
-  Future<String> exportToFile(String passphrase) async {
+  Future<List<int>> exportBytes(String passphrase) async {
     if (passphrase.length < 12) {
       throw ArgumentError(
         'CycleVault recovery passphrase must be at least 12 characters.',
@@ -80,12 +80,16 @@ class CycleVaultService {
       'salt': base64Encode(salt),
       'sealedPayload': base64Encode(box.concatenation()),
     };
+    return utf8.encode(jsonEncode(outer));
+  }
 
+  Future<String> exportToFile(String passphrase) async {
+    final bytes = await exportBytes(passphrase);
     final directory = await getTemporaryDirectory();
     final name =
         'sreva-${DateTime.now().toUtc().toIso8601String().replaceAll(':', '-')}.cyclevault';
     final file = File(p.join(directory.path, name));
-    await file.writeAsString(jsonEncode(outer), flush: true);
+    await file.writeAsBytes(bytes, flush: true);
     return file.path;
   }
 
@@ -94,15 +98,35 @@ class CycleVaultService {
     String passphrase, {
     CycleVaultRestoreMode mode = CycleVaultRestoreMode.replaceAll,
   }) async {
-    final outer =
-        jsonDecode(await File(path).readAsString()) as Map<String, dynamic>;
-    final manifest = Map<String, dynamic>.from(outer['manifest'] as Map);
+    return restoreBytes(await File(path).readAsBytes(), passphrase, mode: mode);
+  }
+
+  Future<CycleVaultRestoreResult> restoreBytes(
+    List<int> bytes,
+    String passphrase, {
+    CycleVaultRestoreMode mode = CycleVaultRestoreMode.replaceAll,
+  }) async {
+    final decoded = jsonDecode(utf8.decode(bytes));
+    if (decoded is! Map) {
+      throw const FormatException('Malformed CycleVault container.');
+    }
+    final outer = Map<String, dynamic>.from(decoded);
+    final rawManifest = outer['manifest'];
+    if (rawManifest is! Map) {
+      throw const FormatException('CycleVault manifest is missing.');
+    }
+    final manifest = Map<String, dynamic>.from(rawManifest);
     if (manifest['format'] != format ||
         manifest['formatVersion'] != formatVersion) {
       throw const FormatException('Unsupported CycleVault format.');
     }
-    final salt = base64Decode(outer['salt'] as String);
-    final sealed = base64Decode(outer['sealedPayload'] as String);
+    final saltValue = outer['salt'];
+    final sealedValue = outer['sealedPayload'];
+    if (saltValue is! String || sealedValue is! String) {
+      throw const FormatException('CycleVault encrypted payload is missing.');
+    }
+    final salt = base64Decode(saltValue);
+    final sealed = base64Decode(sealedValue);
     final key = await _kdf.deriveKeyFromPassword(
       password: passphrase,
       nonce: salt,
@@ -118,7 +142,11 @@ class CycleVaultService {
       secretKey: key,
       aad: utf8.encode(jsonEncode(manifest)),
     );
-    final payload = jsonDecode(utf8.decode(clear)) as Map<String, dynamic>;
+    final decodedPayload = jsonDecode(utf8.decode(clear));
+    if (decodedPayload is! Map) {
+      throw const FormatException('Malformed CycleVault payload.');
+    }
+    final payload = Map<String, dynamic>.from(decodedPayload);
     final periods = (payload['periods'] as List<dynamic>? ?? const [])
         .map(
           (value) => _periodFromJson(Map<String, dynamic>.from(value as Map)),

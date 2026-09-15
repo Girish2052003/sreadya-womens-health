@@ -32,6 +32,8 @@ class PredictionEvaluation {
     required this.windowCoverage,
     required this.earlyBiasDays,
     required this.lateBiasDays,
+    required this.overConfidenceRate,
+    required this.underConfidenceRate,
   });
 
   final int sampleCount;
@@ -40,6 +42,8 @@ class PredictionEvaluation {
   final double windowCoverage;
   final double earlyBiasDays;
   final double lateBiasDays;
+  final double overConfidenceRate;
+  final double underConfidenceRate;
 }
 
 class PredictionEvaluator {
@@ -54,6 +58,8 @@ class PredictionEvaluator {
         windowCoverage: 0,
         earlyBiasDays: 0,
         lateBiasDays: 0,
+        overConfidenceRate: 0,
+        underConfidenceRate: 0,
       );
     }
 
@@ -68,6 +74,16 @@ class PredictionEvaluator {
         .map((value) => value.abs())
         .toList();
     final late = signed.where((value) => value > 0).toList();
+    final highConfidence = outcomes
+        .where(
+          (value) => value.prediction.confidence == PredictionConfidence.high,
+        )
+        .toList(growable: false);
+    final lowConfidence = outcomes
+        .where(
+          (value) => value.prediction.confidence == PredictionConfidence.low,
+        )
+        .toList(growable: false);
 
     return PredictionEvaluation(
       sampleCount: outcomes.length,
@@ -82,6 +98,14 @@ class PredictionEvaluator {
       lateBiasDays: late.isEmpty
           ? 0
           : late.reduce((a, b) => a + b) / late.length,
+      overConfidenceRate: highConfidence.isEmpty
+          ? 0
+          : highConfidence.where((value) => !value.withinWindow).length /
+                highConfidence.length,
+      underConfidenceRate: lowConfidence.isEmpty
+          ? 0
+          : lowConfidence.where((value) => value.withinWindow).length /
+                lowConfidence.length,
     );
   }
 
