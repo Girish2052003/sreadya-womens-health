@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Public product name is `Sreva`; internal dedication is `For Sree Kutty`.
+- Public product name is `Sreva`; internal dedication is `Sreedevi Nallan Chakravathy`.
 - Minimum iOS target is 17.0; first physical target is iPhone 17.
 - Core app must work without account, operator backend or network.
 - No health values in ordinary logs, analytics, diagnostics or CI fixtures.
