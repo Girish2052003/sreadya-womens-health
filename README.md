@@ -2,7 +2,7 @@
 
 **A private, local-first women's cycle companion.**
 
-> Internal dedication: **Sreedevi Nallan Chakravathy.** Public product name: **Sreva**.
+> In honour of **Sreedevi Nallan Chakravathy**. Public product name: **Sreva**.
 
 Sreva is designed so menstrual and reproductive-health data remains on the user's device. Core tracking, prediction, reminders, insights, reports, and assistant intent parsing are local-first and usable without an account or internet connection.
 
