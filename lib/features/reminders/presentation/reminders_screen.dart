@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../../app/providers.dart';
 import '../data/reminder_preferences.dart';
+import '../data/reminder_scheduler.dart';
 import '../domain/reminder_models.dart';
 import 'personal_reminders_panel.dart';
 
@@ -198,20 +199,22 @@ class _RemindersScreenState extends ConsumerState<RemindersScreen> {
 class _ReminderHealthCard extends StatelessWidget {
   const _ReminderHealthCard({required this.scheduler});
 
-  final dynamic scheduler;
+  final ReminderScheduler scheduler;
+
+  Future<(ReminderPermissionStatus, List<Map<String, Object?>>)> _load() async {
+    final status = await scheduler.permissionStatus();
+    final pending = await scheduler.pending();
+    return (status, pending);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: Future.wait([scheduler.permissionStatus(), scheduler.pending()]),
+    return FutureBuilder<(ReminderPermissionStatus, List<Map<String, Object?>>)>(
+      future: _load(),
       builder: (context, snapshot) {
-        final values = snapshot.data;
-        final status = values == null
-            ? null
-            : values[0] as ReminderPermissionStatus;
-        final pending = values == null
-            ? const <Map<String, Object?>>[]
-            : values[1] as List<Map<String, Object?>>;
+        final status = snapshot.data?.$1;
+        final pending =
+            snapshot.data?.$2 ?? const <Map<String, Object?>>[];
         final next = pending.isEmpty
             ? 'No pending local reminders'
             : '${pending.length} local reminder(s) scheduled';
