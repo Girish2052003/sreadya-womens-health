@@ -27,10 +27,26 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed lib test tool
       - run: flutter analyze
       - run: flutter test
-      - run: python -m py_compile tool/configure_platforms.py tool/privacy_scan.py
+      - run: python -m py_compile tool/configure_platforms.py tool/privacy_scan.py tool/generate_sbom.py
       - run: python -m pip install pytest
-      - run: python -m pytest -q verification/reference/test_sreva_reference.py
+      - run: python -m pytest -q verification/reference
       - run: python tool/privacy_scan.py
+      - name: Dependency vulnerability scan (OSV)
+        run: |
+          docker run --rm -v "$PWD:/src" ghcr.io/google/osv-scanner:v2.3.3 \
+            scan source --recursive /src
+      - name: Generate CycloneDX SBOM
+        run: |
+          mkdir -p build/security
+          dart pub deps --json > build/security/pub-deps.json
+          python tool/generate_sbom.py build/security/pub-deps.json build/security/sreva-cyclonedx.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sreva-security-evidence
+          path: |
+            build/security/sreva-cyclonedx.json
+            pubspec.lock
+          retention-days: 30
 
   android-unsigned:
     runs-on: ubuntu-latest
@@ -49,7 +65,17 @@ jobs:
         run: |
           python3 tool/configure_platforms.py android
           python3 tool/configure_platforms.py android --check
-      - run: flutter build appbundle --release
+      - name: Build Android release AAB
+        run: flutter build appbundle --release
+      - name: Build Android installable release APK
+        run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sreva-android-release-unsigned-store
+          path: |
+            build/app/outputs/bundle/release/app-release.aab
+            build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30
 
   ios-no-codesign:
     runs-on: macos-26
@@ -69,3 +95,8 @@ jobs:
           python3 tool/configure_platforms.py ios
           python3 tool/configure_platforms.py ios --check
       - run: flutter build ios --release --no-codesign
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sreva-ios-unsigned-release
+          path: build/ios/iphoneos/Runner.app
+          retention-days: 30
