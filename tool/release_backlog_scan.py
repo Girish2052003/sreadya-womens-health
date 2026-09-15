@@ -13,6 +13,14 @@ TEXT_SUFFIXES = {".dart", ".kt", ".swift", ".py", ".yml", ".yaml"}
 EXCLUDED = {
     "tool/release_backlog_scan.py",  # contains the marker vocabulary by design
 }
+MARKER_PATTERN = re.compile(
+    r"\b(?:TODO|FIXME|HACK|XXX)\b|\bcoming\s+soon\b|\bplaceholder\b",
+    flags=re.IGNORECASE,
+)
+
+
+def contains_backlog_marker(line: str) -> bool:
+    return MARKER_PATTERN.search(line) is not None
 
 
 def annotation_escape(value: str) -> str:
@@ -25,10 +33,6 @@ def annotation_escape(value: str) -> str:
 
 def main() -> None:
     findings: list[tuple[str, int, str]] = []
-    marker_pattern = re.compile(
-        r"(?:TODO|FIXME|HACK|XXX|coming\s+soon|placeholder)",
-        flags=re.IGNORECASE,
-    )
 
     for root_name in SCAN_ROOTS:
         root = ROOT / root_name
@@ -42,7 +46,7 @@ def main() -> None:
                 continue
             text = path.read_text(encoding="utf-8", errors="ignore")
             for number, line in enumerate(text.splitlines(), start=1):
-                if marker_pattern.search(line):
+                if contains_backlog_marker(line):
                     findings.append((relative, number, line.strip()))
 
     if findings:
