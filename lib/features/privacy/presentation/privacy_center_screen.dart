@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../app/providers.dart';
 import '../../../core/platform/privacy_platform.dart';
@@ -285,8 +286,14 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
               ),
               const SizedBox(height: 24),
               Text(
-                'Delete data',
+                'Policy & deletion',
                 style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              FilledButton.tonalIcon(
+                onPressed: () => context.push('/more/privacy-policy'),
+                icon: const Icon(Icons.policy_outlined),
+                label: const Text('Read full privacy policy'),
               ),
               const SizedBox(height: 8),
               OutlinedButton.icon(
@@ -312,16 +319,17 @@ class _PrivacyStatus extends StatelessWidget {
     required this.title,
     required this.value,
   });
+
   final IconData icon;
   final String title;
   final String value;
 
   @override
   Widget build(BuildContext context) => Card(
-    child: ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      subtitle: Text(value),
-    ),
-  );
+        child: ListTile(
+          leading: Icon(icon),
+          title: Text(title),
+          subtitle: Text(value),
+        ),
+      );
 }
