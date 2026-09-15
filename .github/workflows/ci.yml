@@ -22,7 +22,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-          cache: pip
       - run: flutter --version
       - run: flutter pub get
       - run: dart format --output=none --set-exit-if-changed lib test tool
