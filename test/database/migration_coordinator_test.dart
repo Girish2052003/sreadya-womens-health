@@ -5,7 +5,7 @@ import 'package:sreva/core/database/migration_coordinator.dart';
 void main() {
   test('migrates an old schema through every required version', () {
     final db = sqlite3.openInMemory();
-    addTearDown(db.dispose);
+    addTearDown(db.close);
     db.execute(
       'CREATE TABLE metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);',
     );
@@ -36,7 +36,7 @@ void main() {
 
   test('rolls back schema and data when a migration fails', () {
     final db = sqlite3.openInMemory();
-    addTearDown(db.dispose);
+    addTearDown(db.close);
     db.execute(
       'CREATE TABLE metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);',
     );
