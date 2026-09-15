@@ -107,7 +107,9 @@ def test_android_release_hardening_targets_play_and_forbids_debug_signing():
 
 def test_release_ci_builds_android_installable_and_store_artifacts_and_sbom():
     ci = read(".github/workflows/ci.yml")
-    assert "testReleaseUnitTest" in ci
+    android_tests = read("tool/configure_android_tests.py")
+    assert ":app:testReleaseUnitTest" in ci
+    assert "android.onlyEnableUnitTestForTheTestedBuildType=false" in android_tests
     assert "configure_android_tests.py" in ci
     assert "configure_android_release.py" in ci
     assert "flutter build appbundle --release" in ci
@@ -140,6 +142,7 @@ def test_production_workflow_requires_real_upload_key_secrets():
     assert "SREVA_ANDROID_KEY_ALIAS" in workflow
     assert "SREVA_ANDROID_KEY_PASSWORD" in workflow
     assert "tool/secret_scan.py" in workflow
+    assert ":app:testReleaseUnitTest" in workflow
     assert "--require-signing" in workflow
     assert "SHA256SUMS.txt" in workflow
 
