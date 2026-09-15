@@ -36,7 +36,7 @@ import androidx.health.connect.client.records.metadata.Metadata
 import androidx.health.connect.client.request.ReadRecordsRequest
 import androidx.health.connect.client.time.TimeRangeFilter
 import androidx.health.connect.client.units.Temperature
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -61,7 +61,7 @@ private const val ACTION_FIRE = "com.sreva.health.sreva.FIRE_REMINDER"
 private const val ACTION_PERIOD_STARTED = "com.sreva.health.sreva.PERIOD_STARTED"
 private const val ACTION_SNOOZE = "com.sreva.health.sreva.SNOOZE"
 
-class MainActivity : FlutterActivity() {
+class MainActivity : FlutterFragmentActivity() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private lateinit var notificationPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var microphonePermissionLauncher: ActivityResultLauncher<String>
@@ -104,7 +104,7 @@ class MainActivity : FlutterActivity() {
 
     private fun handlePrivacy(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "excludeFromBackup" -> result.success(null) // android:allowBackup=false is applied by the build patch.
+            "excludeFromBackup" -> result.success(null)
             "setSensitiveScreen" -> {
                 val enabled = call.argument<Boolean>("enabled") ?: true
                 if (enabled) window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
