@@ -12,44 +12,11 @@ from __future__ import annotations
 import argparse
 import plistlib
 import re
-import shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ANDROID_PACKAGE = "com.sreva.health.sreva"
 
-ANDROID_GRADLE = r'''plugins {
-    id("com.android.application")
-    id("kotlin-android")
-    id("dev.flutter.flutter-gradle-plugin")
-}
-
-android {
-    namespace = "com.sreva.health.sreva"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
-    defaultConfig {
-        applicationId = "com.sreva.health.sreva"
-        minSdk = 26
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
-    }
-}
-
-flutter {
-    source = "../.."
-}
+ANDROID_DEPENDENCIES = r'''
 
 dependencies {
     implementation("androidx.health.connect:connect-client:1.1.0")
@@ -203,7 +170,17 @@ def configure_android() -> None:
     app_dir = ROOT / "android" / "app"
     require(app_dir, "generated Android project; run flutter create first")
 
-    (app_dir / "build.gradle.kts").write_text(ANDROID_GRADLE, encoding="utf-8")
+    gradle_path = app_dir / "build.gradle.kts"
+    require(gradle_path, "generated Android app Gradle file")
+    gradle = gradle_path.read_text(encoding="utf-8")
+    if "minSdk = flutter.minSdkVersion" in gradle:
+        gradle = gradle.replace("minSdk = flutter.minSdkVersion", "minSdk = 26")
+    elif "minSdk = 26" not in gradle:
+        raise SystemExit("Unable to locate Flutter minSdk declaration in generated Android Gradle file")
+    if 'androidx.health.connect:connect-client:1.1.0' not in gradle:
+        gradle = gradle.rstrip() + ANDROID_DEPENDENCIES
+    gradle_path.write_text(gradle, encoding="utf-8")
+
     manifest = app_dir / "src" / "main" / "AndroidManifest.xml"
     manifest.parent.mkdir(parents=True, exist_ok=True)
     manifest.write_text(ANDROID_MANIFEST, encoding="utf-8")
