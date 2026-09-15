@@ -44,7 +44,7 @@ class _PersonalRemindersPanelState extends State<PersonalRemindersPanel> {
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<ReminderKind>(
-                  value: kind,
+                  initialValue: kind,
                   items:
                       const [
                             ReminderKind.medication,
@@ -118,8 +118,9 @@ class _PersonalRemindersPanelState extends State<PersonalRemindersPanel> {
 
   Future<void> _schedule(PersonalReminder reminder) async {
     var permission = await widget.scheduler.permissionStatus();
-    if (!permission.allowed && !await widget.scheduler.requestPermission())
+    if (!permission.allowed && !await widget.scheduler.requestPermission()) {
       return;
+    }
     permission = await widget.scheduler.permissionStatus();
     if (!permission.allowed) return;
     final plan = ReminderPlanner().personalDaily(
@@ -207,12 +208,13 @@ class _PersonalRemindersPanelState extends State<PersonalRemindersPanel> {
               for (final value in await _store.readAll()) {
                 if (value.enabled) await _schedule(value);
               }
-              if (context.mounted)
+              if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Daily reminders rebuilt on this device.'),
                   ),
                 );
+              }
             },
             icon: const Icon(Icons.refresh),
             label: const Text('Rebuild daily reminders'),

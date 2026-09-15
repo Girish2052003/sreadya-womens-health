@@ -14,11 +14,7 @@ class PredictionHistoryRecord {
 }
 
 class PredictionHistoryStore {
-  PredictionHistoryStore({
-    required HealthVault vault,
-    required VaultCipher cipher,
-  }) : _vault = vault,
-       _cipher = cipher;
+  PredictionHistoryStore({required this._vault, required this._cipher});
 
   final HealthVault _vault;
   final VaultCipher _cipher;

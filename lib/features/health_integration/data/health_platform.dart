@@ -68,7 +68,7 @@ class HealthPlatform {
         available: false,
         authorizationRequested: false,
         platformName: 'Unavailable',
-        supportedCategories: const {},
+        supportedCategories: {},
       );
     }
   }

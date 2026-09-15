@@ -45,9 +45,10 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
         ),
       );
     } catch (error) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Backup failed: $error')));
+      }
     } finally {
       if (mounted) setState(() => _busy = false);
     }

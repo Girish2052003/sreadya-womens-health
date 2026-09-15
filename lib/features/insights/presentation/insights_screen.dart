@@ -26,8 +26,9 @@ class InsightsScreen extends ConsumerWidget {
           data: (observationItems) => FutureBuilder(
             future: _build(ref, periodItems, observationItems),
             builder: (context, snapshot) {
-              if (!snapshot.hasData)
+              if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
+              }
               final insight = snapshot.data!;
               return ListView(
                 padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 28),

@@ -87,8 +87,9 @@ class ParsedCommand {
 
   String? get label {
     if (intent == LocalIntent.logFlow) return '${value ?? 'Flow'} flow';
-    if (intent == LocalIntent.addReminder)
+    if (intent == LocalIntent.addReminder) {
       return _reminderLabel(value ?? rawText ?? 'Health reminder');
+    }
     final kind = observationKind;
     return kind?.name;
   }
@@ -243,8 +244,9 @@ class LocalIntentParser {
   }
 
   ReminderKind _reminderKind(String text) {
-    if (_containsAny(text, ['contraception', 'birth control', 'pill']))
+    if (_containsAny(text, ['contraception', 'birth control', 'pill'])) {
       return ReminderKind.contraception;
+    }
     if (text.contains('supplement')) return ReminderKind.supplement;
     if (text.contains('ovulation')) return ReminderKind.ovulationTest;
     if (text.contains('pregnancy test')) return ReminderKind.pregnancyTest;

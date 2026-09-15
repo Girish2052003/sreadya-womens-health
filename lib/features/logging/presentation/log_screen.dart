@@ -398,10 +398,11 @@ class LogScreen extends ConsumerWidget {
                 ? null
                 : noteController.text.trim(),
           );
-      if (context.mounted)
+      if (context.mounted) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text('${spec.label} saved locally.')));
+      }
     }
     valueController.dispose();
     noteController.dispose();
@@ -439,12 +440,13 @@ class _FlowSection extends StatelessWidget {
                         flowLevel: flow,
                         label: '${flow.name} flow',
                       );
-                  if (context.mounted)
+                  if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('${flow.name} flow saved locally.'),
                       ),
                     );
+                  }
                 },
               ),
             )

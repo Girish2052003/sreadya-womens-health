@@ -85,8 +85,9 @@ class InsightEngine {
         ifAbsent: () => 1,
       );
       final flow = observation.flowLevel;
-      if (flow != null)
+      if (flow != null) {
         flowCounts.update(flow, (value) => value + 1, ifAbsent: () => 1);
+      }
     }
 
     final messages = <String>[];
@@ -151,8 +152,9 @@ class InsightEngine {
     for (final observation in observations.where((item) => item.kind == kind)) {
       PeriodEpisode? latest;
       for (final period in periods) {
-        if (!_date(period.start).isAfter(_date(observation.occurredAt)))
+        if (!_date(period.start).isAfter(_date(observation.occurredAt))) {
           latest = period;
+        }
       }
       if (latest == null) continue;
       final day =

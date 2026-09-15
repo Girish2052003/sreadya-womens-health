@@ -30,8 +30,7 @@ class _StagedRestore {
 }
 
 class CycleVaultService {
-  CycleVaultService({required HealthRepository repository})
-    : _repository = repository;
+  CycleVaultService({required this._repository});
 
   static const String format = 'SREVA-CYCLEVAULT';
   static const int formatVersion = 1;
@@ -195,8 +194,9 @@ class CycleVaultService {
     for (var i = 0; i < ordered.length; i++) {
       final current = ordered[i];
       if (!periodIds.add(current.id)) return false;
-      if (current.end != null && current.end!.isBefore(current.start))
+      if (current.end != null && current.end!.isBefore(current.start)) {
         return false;
+      }
       if (i > 0) {
         final previous = ordered[i - 1];
         final previousEnd = previous.end ?? previous.start;

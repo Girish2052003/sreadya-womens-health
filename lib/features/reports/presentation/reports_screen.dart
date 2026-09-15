@@ -13,7 +13,7 @@ class ReportsScreen extends ConsumerStatefulWidget {
 }
 
 class _ReportsScreenState extends ConsumerState<ReportsScreen> {
-  late Set<ReportCategory> _selected = {
+  late final Set<ReportCategory> _selected = {
     ...ReportSelection.safeDefault().categories,
   };
   bool _busy = false;
@@ -42,9 +42,10 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
         ),
       );
     } catch (error) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Report failed: $error')));
+      }
     } finally {
       if (mounted) setState(() => _busy = false);
     }

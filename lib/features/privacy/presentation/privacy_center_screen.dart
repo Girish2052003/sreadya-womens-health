@@ -19,7 +19,7 @@ class PrivacyCenterScreen extends ConsumerStatefulWidget {
 
 class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
   late Future<PrivacySettings> _settings = PrivacySettingsStore().read();
-  late Future<HealthPlatformStatus> _healthStatus = ref
+  late final Future<HealthPlatformStatus> _healthStatus = ref
       .read(healthPlatformProvider)
       .status();
 
@@ -169,7 +169,7 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
               ),
               if (settings.appLockEnabled)
                 DropdownButtonFormField<int>(
-                  value: settings.autoLockMinutes,
+                  initialValue: settings.autoLockMinutes,
                   decoration: const InputDecoration(
                     labelText: 'Automatically lock after',
                   ),
@@ -180,13 +180,14 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
                     DropdownMenuItem(value: 15, child: Text('15 minutes')),
                   ],
                   onChanged: (value) {
-                    if (value != null)
+                    if (value != null) {
                       _save(settings.copyWith(autoLockMinutes: value));
+                    }
                   },
                 ),
               const SizedBox(height: 16),
               DropdownButtonFormField<NotificationPrivacy>(
-                value: settings.notificationPrivacy,
+                initialValue: settings.notificationPrivacy,
                 decoration: const InputDecoration(
                   labelText: 'Notification privacy',
                 ),

@@ -14,8 +14,7 @@ class HealthImportResult {
 }
 
 class HealthImportService {
-  HealthImportService({required HealthRepository repository})
-    : _repository = repository;
+  HealthImportService({required this._repository});
   final HealthRepository _repository;
   static const _uuid = Uuid();
 
@@ -59,8 +58,9 @@ class HealthImportService {
       }
       if (type == 'menstrualFlow') {
         final flow = _flow(row['value']?.toString());
-        if (flow != null)
+        if (flow != null) {
           flowDays.add((day: day, flow: flow, externalId: externalId));
+        }
       }
     }
 

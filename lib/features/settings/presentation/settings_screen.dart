@@ -62,7 +62,7 @@ class SettingsScreen extends ConsumerWidget {
             Text('Time & units', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 8),
             DropdownButtonFormField<ClockPreference>(
-              value: settings.clockPreference,
+              initialValue: settings.clockPreference,
               decoration: const InputDecoration(labelText: 'Clock format'),
               items: const [
                 DropdownMenuItem(
@@ -79,13 +79,14 @@ class SettingsScreen extends ConsumerWidget {
                 ),
               ],
               onChanged: (value) {
-                if (value != null)
+                if (value != null) {
                   _save(ref, settings.copyWith(clockPreference: value));
+                }
               },
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<UnitSystem>(
-              value: settings.unitSystem,
+              initialValue: settings.unitSystem,
               decoration: const InputDecoration(labelText: 'Units'),
               items: const [
                 DropdownMenuItem(
@@ -98,8 +99,9 @@ class SettingsScreen extends ConsumerWidget {
                 ),
               ],
               onChanged: (value) {
-                if (value != null)
+                if (value != null) {
                   _save(ref, settings.copyWith(unitSystem: value));
+                }
               },
             ),
             const SizedBox(height: 20),

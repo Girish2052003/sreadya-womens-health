@@ -6,11 +6,7 @@ import '../crypto/vault_cipher.dart';
 import 'health_vault.dart';
 
 class LocalHealthRepository implements HealthRepository {
-  LocalHealthRepository({
-    required HealthVault vault,
-    required VaultCipher cipher,
-  }) : _vault = vault,
-       _cipher = cipher;
+  LocalHealthRepository({required this._vault, required this._cipher});
 
   final HealthVault _vault;
   final VaultCipher _cipher;

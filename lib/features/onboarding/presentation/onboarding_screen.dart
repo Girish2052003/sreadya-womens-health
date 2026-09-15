@@ -52,10 +52,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       await OnboardingStore().complete();
       widget.onComplete();
     } catch (error) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Setup could not finish: $error')),
         );
+      }
     } finally {
       if (mounted) setState(() => _saving = false);
     }

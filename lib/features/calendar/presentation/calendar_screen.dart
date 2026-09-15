@@ -73,8 +73,9 @@ class CalendarScreen extends ConsumerWidget {
                     trailing: PopupMenuButton<String>(
                       onSelected: (value) {
                         if (value == 'edit') _editPeriod(context, ref, period);
-                        if (value == 'delete')
+                        if (value == 'delete') {
                           _deletePeriod(context, ref, period);
+                        }
                         if (value == 'end') _endPeriod(context, ref, period);
                       },
                       itemBuilder: (_) => [
@@ -116,10 +117,11 @@ class CalendarScreen extends ConsumerWidget {
           .read(healthActionsProvider)
           .savePeriod(PeriodEpisode(id: _uuid.v7(), start: start));
     } catch (error) {
-      if (context.mounted)
+      if (context.mounted) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text('Could not add period: $error')));
+      }
     }
   }
 
@@ -143,7 +145,7 @@ class CalendarScreen extends ConsumerWidget {
         content: Text(
           end == null
               ? 'This period is currently ongoing.'
-              : 'Current end: ${DateFormat.yMMMd().format(end!)}',
+              : 'Current end: ${DateFormat.yMMMd().format(end)}',
         ),
         actions: [
           TextButton(
@@ -178,10 +180,11 @@ class CalendarScreen extends ConsumerWidget {
             ),
           );
     } catch (error) {
-      if (context.mounted)
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Could not edit period: $error')),
         );
+      }
     }
   }
 
@@ -234,7 +237,8 @@ class CalendarScreen extends ConsumerWidget {
         ],
       ),
     );
-    if (yes == true)
+    if (yes == true) {
       await ref.read(healthActionsProvider).deletePeriod(period.id);
+    }
   }
 }

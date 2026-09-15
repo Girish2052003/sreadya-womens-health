@@ -7,10 +7,9 @@ import '../../reminders/data/reminder_scheduler.dart';
 
 class DiagnosticService {
   DiagnosticService({
-    required HealthVault vault,
+    required this._vault,
     ReminderScheduler? reminderScheduler,
-  }) : _vault = vault,
-       _reminders = reminderScheduler ?? ReminderScheduler();
+  }) : _reminders = reminderScheduler ?? ReminderScheduler();
 
   final HealthVault _vault;
   final ReminderScheduler _reminders;
@@ -18,21 +17,6 @@ class DiagnosticService {
   Future<String> build() async {
     final permission = await _reminders.permissionStatus();
     final pending = await _reminders.pending();
-    return DiagnosticReportBuilder().build(
-          appVersion: AppVersions.app,
-          platform: Platform.operatingSystem,
-          osVersion: Platform.operatingSystemVersion,
-          databaseSchema: _vault.schemaVersion,
-          predictionEngine: AppVersions.predictionEngine,
-          reminderEngine: AppVersions.reminderEngine,
-          healthAdapter: AppVersions.healthAdapter,
-          notificationPermission: permission.description,
-          nextReminderState: pending.isEmpty
-              ? 'none'
-              : 'scheduled:${pending.length}',
-          lastMigrationState: 'schema-${_vault.schemaVersion}',
-          databaseIntegrity: _vault.integrityCheck(),
-        ) +
-        '\ndatabase_cipher=${_vault.cipherVersion()}';
+    return '${DiagnosticReportBuilder().build(appVersion: AppVersions.app, platform: Platform.operatingSystem, osVersion: Platform.operatingSystemVersion, databaseSchema: _vault.schemaVersion, predictionEngine: AppVersions.predictionEngine, reminderEngine: AppVersions.reminderEngine, healthAdapter: AppVersions.healthAdapter, notificationPermission: permission.description, nextReminderState: pending.isEmpty ? 'none' : 'scheduled:${pending.length}', lastMigrationState: 'schema-${_vault.schemaVersion}', databaseIntegrity: _vault.integrityCheck())}\ndatabase_cipher=${_vault.cipherVersion()}';
   }
 }

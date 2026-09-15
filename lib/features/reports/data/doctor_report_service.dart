@@ -10,8 +10,7 @@ import '../../cycle/domain/cycle_models.dart';
 import '../domain/report_selection.dart';
 
 class DoctorReportService {
-  DoctorReportService({required HealthRepository repository})
-    : _repository = repository;
+  DoctorReportService({required this._repository});
 
   final HealthRepository _repository;
 
