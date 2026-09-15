@@ -205,7 +205,8 @@ class LogScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs =
-        ref.watch(appPreferencesProvider).valueOrNull ?? const AppPreferences();
+        ref.watch(appPreferencesProvider).asData?.value ??
+        const AppPreferences();
     final observations = ref.watch(observationsProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Log today')),
@@ -540,8 +541,9 @@ class LogScreen extends ConsumerWidget {
         ],
       ),
     );
-    if (yes == true)
+    if (yes == true) {
       await ref.read(healthActionsProvider).deleteObservation(item.id);
+    }
   }
 }
 

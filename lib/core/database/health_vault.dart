@@ -47,8 +47,9 @@ class HealthVault {
           final rows = probe.select(
             "SELECT value FROM metadata WHERE key='schema_version' LIMIT 1;",
           );
-          if (rows.isNotEmpty)
+          if (rows.isNotEmpty) {
             currentVersion = int.parse(rows.first['value'] as String);
+          }
         }
       } finally {
         probe.close();

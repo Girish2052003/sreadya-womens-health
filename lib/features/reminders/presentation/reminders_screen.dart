@@ -60,7 +60,8 @@ class _RemindersScreenState extends ConsumerState<RemindersScreen> {
   @override
   Widget build(BuildContext context) {
     final appPreferences =
-        ref.watch(appPreferencesProvider).valueOrNull ?? const AppPreferences();
+        ref.watch(appPreferencesProvider).asData?.value ??
+        const AppPreferences();
     final clockPreference = appPreferences.clockPreference;
     return Scaffold(
       appBar: AppBar(title: const Text('Reminders')),

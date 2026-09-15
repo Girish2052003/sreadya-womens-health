@@ -345,7 +345,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         ],
       ),
     );
-    if (yes == true)
+    if (yes == true) {
       await ref.read(healthActionsProvider).deletePeriod(period.id);
+    }
   }
 }

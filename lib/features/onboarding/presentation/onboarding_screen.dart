@@ -8,7 +8,6 @@ import '../../cycle/domain/cycle_models.dart';
 import '../../health_integration/data/health_import_service.dart';
 import '../../health_integration/data/health_platform.dart';
 import '../../life_stage/domain/life_stage.dart';
-import '../../reminders/data/reminder_preferences.dart';
 import '../../reminders/domain/reminder_models.dart';
 import '../../settings/data/privacy_settings_store.dart';
 
