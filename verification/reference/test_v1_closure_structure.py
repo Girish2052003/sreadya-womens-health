@@ -115,9 +115,19 @@ def test_release_ci_builds_android_installable_and_store_artifacts_and_sbom():
     assert "jarsigner -verify -strict" in ci
     assert "apksigner" in ci
     assert "actions/upload-artifact" in ci
+    assert "tool/secret_scan.py" in ci
     assert "SBOM" in ci or "sbom" in ci.lower()
     assert "osv-scanner" in ci.lower()
     assert "dependency" in ci.lower()
+
+
+def test_secret_scanner_covers_high_signal_credentials():
+    scanner = read("tool/secret_scan.py")
+    assert "PRIVATE KEY" in scanner
+    assert "github_pat_" in scanner
+    assert "AWS access key" in scanner
+    assert "Google API key" in scanner
+    assert "OpenAI-style API key" in scanner
 
 
 def test_production_workflow_requires_real_upload_key_secrets():
@@ -129,6 +139,7 @@ def test_production_workflow_requires_real_upload_key_secrets():
     assert "SREVA_ANDROID_KEYSTORE_PASSWORD" in workflow
     assert "SREVA_ANDROID_KEY_ALIAS" in workflow
     assert "SREVA_ANDROID_KEY_PASSWORD" in workflow
+    assert "tool/secret_scan.py" in workflow
     assert "--require-signing" in workflow
     assert "SHA256SUMS.txt" in workflow
 
