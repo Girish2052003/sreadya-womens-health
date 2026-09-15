@@ -15,8 +15,16 @@ EXCLUDED = {
 }
 
 
+def annotation_escape(value: str) -> str:
+    return (
+        value.replace("%", "%25")
+        .replace("\r", "%0D")
+        .replace("\n", "%0A")
+    )
+
+
 def main() -> None:
-    findings: list[str] = []
+    findings: list[tuple[str, int, str]] = []
     marker_pattern = re.compile(
         r"(?:TODO|FIXME|HACK|XXX|coming\s+soon|placeholder)",
         flags=re.IGNORECASE,
@@ -35,11 +43,19 @@ def main() -> None:
             text = path.read_text(encoding="utf-8", errors="ignore")
             for number, line in enumerate(text.splitlines(), start=1):
                 if marker_pattern.search(line):
-                    findings.append(f"{relative}:{number}: {line.strip()}")
+                    findings.append((relative, number, line.strip()))
 
     if findings:
+        rendered = []
+        for relative, number, line in findings:
+            rendered.append(f"{relative}:{number}: {line}")
+            print(
+                f"::error file={relative},line={number},title=Release backlog marker::"
+                + annotation_escape(line)
+            )
         raise SystemExit(
-            "Release backlog markers found in production source:\n" + "\n".join(findings)
+            "Release backlog markers found in production source:\n"
+            + "\n".join(rendered)
         )
 
     print(
