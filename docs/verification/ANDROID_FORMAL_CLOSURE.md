@@ -4,6 +4,8 @@ Status: **PENDING — do not claim closure until every mandatory gate below is g
 
 Release candidate: Sreva `1.0.0+1`
 
+Source implementation parent: `70f2c271bd66e7c5d127ed6d75fb02eaf58f492d`
+
 ## Frozen product laws
 
 1. The user's device is the authoritative health datastore.
@@ -67,7 +69,7 @@ All must pass from the same candidate tree before merge:
 
 ## Current closure audit
 
-The expanded acceptance suite is intentionally RED until all newly identified worldwide-v1 gaps are implemented. No gate may be deleted or weakened merely to obtain a green build.
+The production patch closing the audited worldwide-v1 gaps has been applied and canonically formatted. The expanded acceptance suite remains authoritative and must now prove the candidate green end-to-end. No gate may be deleted or weakened merely to obtain a green build.
 
 ## Final repository gates
 
