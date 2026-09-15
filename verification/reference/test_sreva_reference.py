@@ -1,4 +1,5 @@
 from datetime import date
+from pathlib import Path
 
 from sreva_reference import predict_cycle, parse_local_intent, build_diagnostic_report
 
@@ -58,3 +59,9 @@ def test_partner_share_only_contains_explicitly_selected_categories():
     text = build_partner_summary({'prediction'}, prediction_window='18–22 September', wellness='cramps severe')
     assert '18–22 September' in text
     assert 'cramps severe' not in text
+
+
+def test_android_activity_result_host_uses_fragment_activity():
+    source = Path('platform_templates/android/MainActivity.kt').read_text(encoding='utf-8')
+    assert 'import io.flutter.embedding.android.FlutterFragmentActivity' in source
+    assert 'class MainActivity : FlutterFragmentActivity()' in source
