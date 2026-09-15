@@ -5,7 +5,11 @@ import 'cycle_prediction.dart';
 class CyclePredictor {
   static const String algorithmVersion = 'prediction-v1';
 
-  CyclePrediction? predict(List<DateTime> periodStarts, {DateTime? createdAt}) {
+  CyclePrediction? predict(
+    List<DateTime> periodStarts, {
+    List<int> completedPeriodDurations = const [],
+    DateTime? createdAt,
+  }) {
     if (periodStarts.length < 2) return null;
 
     final ordered =
@@ -54,12 +58,20 @@ class CyclePredictor {
         ? PredictionConfidence.medium
         : PredictionConfidence.low;
 
+    final validDurations = completedPeriodDurations
+        .where((value) => value >= 1 && value <= 14)
+        .toList(growable: false);
+    final periodDuration = validDurations.isEmpty
+        ? null
+        : _median(validDurations.map((e) => e.toDouble()).toList()).round();
+
     final latest = ordered.last;
     final likely = latest.add(Duration(days: estimate));
     return CyclePrediction(
       algorithmVersion: algorithmVersion,
       createdAt: createdAt ?? DateTime.now(),
       estimatedCycleLengthDays: estimate,
+      estimatedPeriodDurationDays: periodDuration,
       mostLikelyDate: likely,
       windowStart: likely.subtract(Duration(days: halfWidth)),
       windowEnd: likely.add(Duration(days: halfWidth)),
