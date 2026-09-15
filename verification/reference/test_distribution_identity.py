@@ -1,3 +1,4 @@
+import importlib.util
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -38,7 +39,36 @@ def test_family_preview_has_distinct_package_without_changing_production_identit
     assert PREVIEW_APPLICATION_ID in config_text
     assert "configure_android_preview.py" in workflow_text
     assert PREVIEW_APPLICATION_ID in workflow_text
+    assert "configure_platforms.py android" in workflow_text
+    assert "configure_android_tests.py" in workflow_text
 
     # Production remains the frozen package used by the existing Play-ready path.
     assert "flutter create --platforms=android --org com.sreva.health ." in production_text
     assert "configure_android_preview.py" not in production_text
+
+
+def test_preview_config_changes_only_application_id(tmp_path, monkeypatch) -> None:
+    module_path = ROOT / "tool/configure_android_preview.py"
+    spec = importlib.util.spec_from_file_location("configure_android_preview", module_path)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    gradle = tmp_path / "build.gradle.kts"
+    gradle.write_text(
+        "android {\n"
+        '    namespace = "com.sreva.health.sreva"\n'
+        "    defaultConfig {\n"
+        '        applicationId = "com.sreva.health.sreva"\n'
+        "    }\n"
+        "}\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(module, "GRADLE", gradle)
+
+    module.configure()
+    text = gradle.read_text(encoding="utf-8")
+
+    assert 'namespace = "com.sreva.health.sreva"' in text
+    assert f'applicationId = "{PREVIEW_APPLICATION_ID}"' in text
+    assert f'applicationId = "{PRODUCTION_APPLICATION_ID}"' not in text
