@@ -33,10 +33,10 @@ Android release engineering includes:
 - AAB/APK signature verification;
 - OSV dependency scanning;
 - CycloneDX SBOM generation;
-- SHA-256 release checksums in the production workflow;
+- SHA-256 release checksums in the controlled release payload;
 - Google Play health/privacy/compliance runbooks.
 
-The normal CI uses an ephemeral test signing key only to prove the complete release-signing pipeline. The manually dispatched production workflow requires the publisher's real Google Play upload key through protected GitHub secrets.
+The normal public CI uses ephemeral test signing keys only to prove the complete Android release-signing pipelines. It compiles and verifies Android and iOS but does **not** publish installable CI binaries. Manually dispatched production and family-preview workflows require environment-scoped signing secrets and encrypt signed release payloads before storing them as GitHub Actions artifacts.
 
 ## Targets
 
@@ -51,6 +51,7 @@ The normal CI uses an ephemeral test signing key only to prove the complete rele
 - Android production runbook: `docs/android/PLAY_PRODUCTION_RUNBOOK.md`
 - Google Play compliance checklist: `docs/android/PLAY_COMPLIANCE_CHECKLIST.md`
 - Publishable privacy-policy page source: `docs/android/privacy-policy.html`
+- Public-repository security posture: `docs/security/PUBLIC_REPOSITORY_HARDENING.md`
 - Security policy: `SECURITY.md`
 - Privacy architecture: `PRIVACY.md`
 

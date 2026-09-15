@@ -2,25 +2,25 @@ import importlib.util
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-PRIVATE_DEDICATION_TOKEN = "Sreedevi"
+REPOSITORY_DEDICATION_TOKEN = "Sreedevi"
 PRODUCTION_APPLICATION_ID = "com.sreva.health.sreva"
 PREVIEW_APPLICATION_ID = "com.sreva.health.sreva.preview"
 
 
-def test_private_dedication_is_repository_only_not_runtime_copy() -> None:
+def test_repository_dedication_is_provenance_only_not_runtime_copy() -> None:
     runtime_text = "\n".join(
         path.read_text(encoding="utf-8", errors="ignore")
         for path in (ROOT / "lib").rglob("*.dart")
     )
-    assert PRIVATE_DEDICATION_TOKEN not in runtime_text
+    assert REPOSITORY_DEDICATION_TOKEN not in runtime_text
 
     # Preserve the repository-level dedication/provenance rather than deleting it.
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     master_spec = (
         ROOT / "docs/superpowers/specs/2026-09-15-sreva-master-design.md"
     ).read_text(encoding="utf-8")
-    assert PRIVATE_DEDICATION_TOKEN in readme
-    assert PRIVATE_DEDICATION_TOKEN in master_spec
+    assert REPOSITORY_DEDICATION_TOKEN in readme
+    assert REPOSITORY_DEDICATION_TOKEN in master_spec
 
 
 def test_family_preview_has_distinct_package_without_changing_production_identity() -> None:
