@@ -17,8 +17,8 @@ import '../features/partner/presentation/partner_screen.dart';
 import '../features/privacy/presentation/privacy_center_screen.dart';
 import '../features/reminders/presentation/reminders_screen.dart';
 import '../features/reports/presentation/reports_screen.dart';
-import '../features/settings/presentation/settings_screen.dart';
 import '../features/settings/domain/app_preferences.dart';
+import '../features/settings/presentation/settings_screen.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'providers.dart';
 import 'sreva_shell.dart';
@@ -31,64 +31,64 @@ final GoRouter _router = GoRouter(
           SrevaShell(navigationShell: navigationShell),
       branches: [
         StatefulShellBranch(
-          routes: [GoRoute(path: '/', builder: (_, __) => const HomeScreen())],
+          routes: [GoRoute(path: '/', builder: (_, _) => const HomeScreen())],
         ),
         StatefulShellBranch(
           routes: [
             GoRoute(
               path: '/calendar',
-              builder: (_, __) => const CalendarScreen(),
+              builder: (_, _) => const CalendarScreen(),
             ),
           ],
         ),
         StatefulShellBranch(
           routes: [
-            GoRoute(path: '/log', builder: (_, __) => const LogScreen()),
+            GoRoute(path: '/log', builder: (_, _) => const LogScreen()),
           ],
         ),
         StatefulShellBranch(
           routes: [
             GoRoute(
               path: '/insights',
-              builder: (_, __) => const InsightsScreen(),
+              builder: (_, _) => const InsightsScreen(),
             ),
           ],
         ),
         StatefulShellBranch(
           routes: [
-            GoRoute(path: '/more', builder: (_, __) => const MoreScreen()),
+            GoRoute(path: '/more', builder: (_, _) => const MoreScreen()),
           ],
         ),
       ],
     ),
     GoRoute(
       path: '/more/reminders',
-      builder: (_, __) => const RemindersScreen(),
+      builder: (_, _) => const RemindersScreen(),
     ),
     GoRoute(
       path: '/more/assistant',
-      builder: (_, __) => const AssistantScreen(),
+      builder: (_, _) => const AssistantScreen(),
     ),
     GoRoute(
       path: '/more/life-stage',
-      builder: (_, __) => const LifeStageScreen(),
+      builder: (_, _) => const LifeStageScreen(),
     ),
     GoRoute(
       path: '/more/health',
-      builder: (_, __) => const HealthIntegrationScreen(),
+      builder: (_, _) => const HealthIntegrationScreen(),
     ),
-    GoRoute(path: '/more/reports', builder: (_, __) => const ReportsScreen()),
-    GoRoute(path: '/more/partner', builder: (_, __) => const PartnerScreen()),
+    GoRoute(path: '/more/reports', builder: (_, _) => const ReportsScreen()),
+    GoRoute(path: '/more/partner', builder: (_, _) => const PartnerScreen()),
     GoRoute(
       path: '/more/privacy',
-      builder: (_, __) => const PrivacyCenterScreen(),
+      builder: (_, _) => const PrivacyCenterScreen(),
     ),
-    GoRoute(path: '/more/backup', builder: (_, __) => const BackupScreen()),
+    GoRoute(path: '/more/backup', builder: (_, _) => const BackupScreen()),
     GoRoute(
       path: '/more/diagnostics',
-      builder: (_, __) => const DiagnosticsScreen(),
+      builder: (_, _) => const DiagnosticsScreen(),
     ),
-    GoRoute(path: '/more/settings', builder: (_, __) => const SettingsScreen()),
+    GoRoute(path: '/more/settings', builder: (_, _) => const SettingsScreen()),
   ],
 );
 
@@ -124,8 +124,11 @@ class _SrevaAppState extends ConsumerState<SrevaApp> {
   @override
   Widget build(BuildContext context) {
     ref.watch(reminderReconciliationProvider);
-    final preferences =
-        ref.watch(appPreferencesProvider).valueOrNull ?? const AppPreferences();
+    final preferences = ref.watch(appPreferencesProvider).when(
+      data: (value) => value,
+      loading: () => const AppPreferences(),
+      error: (_, _) => const AppPreferences(),
+    );
     final themeMode = switch (preferences.themePreference) {
       ThemePreference.system => ThemeMode.system,
       ThemePreference.light => ThemeMode.light,
