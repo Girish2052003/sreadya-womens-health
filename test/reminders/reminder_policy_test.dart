@@ -44,6 +44,7 @@ void main() {
   test('moves a reminder out of quiet hours deterministically', () {
     final settings = ReminderPolicySettings(
       enabledOffsetsDays: const {3},
+      lateDays: 0,
       hour: 23,
       minute: 30,
       privacy: NotificationPrivacy.maximum,
