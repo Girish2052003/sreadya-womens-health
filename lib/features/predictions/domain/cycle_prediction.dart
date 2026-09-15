@@ -12,11 +12,13 @@ class CyclePrediction {
     required this.validIntervals,
     required this.excludedIntervals,
     required this.medianAbsoluteDeviation,
+    this.estimatedPeriodDurationDays,
   });
 
   final String algorithmVersion;
   final DateTime createdAt;
   final int estimatedCycleLengthDays;
+  final int? estimatedPeriodDurationDays;
   final DateTime mostLikelyDate;
   final DateTime windowStart;
   final DateTime windowEnd;
