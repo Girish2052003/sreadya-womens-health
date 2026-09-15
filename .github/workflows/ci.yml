@@ -27,7 +27,7 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed lib test tool
       - run: flutter analyze
       - run: flutter test
-      - run: python -m py_compile tool/configure_platforms.py tool/configure_android_tests.py tool/configure_android_release.py tool/verify_android_signatures.py tool/verify_v1_traceability.py tool/release_backlog_scan.py tool/privacy_scan.py tool/secret_scan.py tool/generate_sbom.py
+      - run: python -m py_compile tool/configure_platforms.py tool/configure_android_tests.py tool/configure_android_release.py tool/configure_android_preview.py tool/verify_android_signatures.py tool/verify_v1_traceability.py tool/release_backlog_scan.py tool/privacy_scan.py tool/secret_scan.py tool/generate_sbom.py
       - run: python -m pip install pytest
       - run: python -m pytest -q verification/reference
       - name: Verify exhaustive worldwide-v1 traceability
@@ -122,6 +122,84 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sreva-android-v1-ci-test-signed
+          path: |
+            build/app/outputs/bundle/release/app-release.aab
+            build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30
+
+  android-family-preview-verification:
+    runs-on: ubuntu-latest
+    needs: flutter-core
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.2'
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - name: Generate Android host from the same Sreva source
+        run: flutter create --platforms=android --org com.sreva.health .
+      - name: Install the complete Sreva Android native capability set
+        run: |
+          python3 tool/configure_platforms.py android
+          python3 tool/configure_platforms.py android --check
+          python3 tool/configure_android_tests.py
+          python3 tool/configure_android_tests.py --check
+      - name: Change only the family-preview application identity
+        run: |
+          python3 tool/configure_android_preview.py
+          python3 tool/configure_android_preview.py --check
+          grep -F 'applicationId = "com.sreva.health.sreva.preview"' android/app/build.gradle.kts
+          grep -F 'namespace = "com.sreva.health.sreva"' android/app/build.gradle.kts
+          grep -F 'android.permission.health.READ_MENSTRUATION' android/app/src/main/AndroidManifest.xml
+      - name: Enforce the same API and signing policy as production
+        run: |
+          python3 tool/configure_android_release.py
+          python3 tool/configure_android_release.py --check
+      - name: Run Android Kotlin release unit tests
+        working-directory: android
+        run: ./gradlew :app:testReleaseUnitTest --stacktrace
+      - name: Create isolated ephemeral family-preview key
+        run: |
+          keytool -genkeypair \
+            -storetype JKS \
+            -keystore "$RUNNER_TEMP/sreva-preview-ci-upload.jks" \
+            -storepass sreva-preview-ci-store-pass \
+            -keypass sreva-preview-ci-key-pass \
+            -alias sreva-preview-ci-upload \
+            -keyalg RSA \
+            -keysize 3072 \
+            -validity 3650 \
+            -dname "CN=Sreva Family Preview CI, OU=Verification, O=Sreva, C=FI"
+      - name: Verify family-preview signing path
+        env:
+          SREVA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreva-preview-ci-upload.jks
+          SREVA_ANDROID_KEYSTORE_PASSWORD: sreva-preview-ci-store-pass
+          SREVA_ANDROID_KEY_ALIAS: sreva-preview-ci-upload
+          SREVA_ANDROID_KEY_PASSWORD: sreva-preview-ci-key-pass
+        run: python3 tool/configure_android_release.py --require-signing
+      - name: Build signed family-preview AAB and APK
+        env:
+          SREVA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreva-preview-ci-upload.jks
+          SREVA_ANDROID_KEYSTORE_PASSWORD: sreva-preview-ci-store-pass
+          SREVA_ANDROID_KEY_ALIAS: sreva-preview-ci-upload
+          SREVA_ANDROID_KEY_PASSWORD: sreva-preview-ci-key-pass
+        run: |
+          flutter build appbundle --release
+          flutter build apk --release
+      - name: Verify family-preview signatures
+        env:
+          SREVA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreva-preview-ci-upload.jks
+          SREVA_ANDROID_KEYSTORE_PASSWORD: sreva-preview-ci-store-pass
+          SREVA_ANDROID_KEY_ALIAS: sreva-preview-ci-upload
+        run: |
+          python3 tool/verify_android_signatures.py \
+            --aab build/app/outputs/bundle/release/app-release.aab \
+            --apk build/app/outputs/flutter-apk/app-release.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sreva-android-family-preview-ci-test-signed
           path: |
             build/app/outputs/bundle/release/app-release.aab
             build/app/outputs/flutter-apk/app-release.apk
