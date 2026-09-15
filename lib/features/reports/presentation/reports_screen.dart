@@ -14,7 +14,9 @@ class ReportsScreen extends ConsumerStatefulWidget {
 }
 
 class _ReportsScreenState extends ConsumerState<ReportsScreen> {
-  late final Set<ReportCategory> _selected = {...ReportSelection.safeDefault().categories};
+  late final Set<ReportCategory> _selected = {
+    ...ReportSelection.safeDefault().categories,
+  };
   DateTime _to = DateTime.now();
   late DateTime _from = DateTime(_to.year - 1, _to.month, _to.day);
   bool _busy = false;
@@ -53,9 +55,14 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('Preview report', style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                'Preview report',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               const SizedBox(height: 12),
-              Text('Date range: ${UserFormatters.formatDate(_from, locale)} – ${UserFormatters.formatDate(_to, locale)}'),
+              Text(
+                'Date range: ${UserFormatters.formatDate(_from, locale)} – ${UserFormatters.formatDate(_to, locale)}',
+              ),
               const SizedBox(height: 8),
               const Text('Included categories:'),
               const SizedBox(height: 4),
@@ -66,7 +73,9 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
               if (!_selected.contains(ReportCategory.sexualActivity))
                 const Text('Sexual activity: excluded'),
               const SizedBox(height: 16),
-              const Text('Nothing leaves the device until you choose one of the share actions below.'),
+              const Text(
+                'Nothing leaves the device until you choose one of the share actions below.',
+              ),
               const SizedBox(height: 16),
               FilledButton.icon(
                 onPressed: _busy
@@ -102,8 +111,16 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
       final service = await ref.read(doctorReportServiceProvider.future);
       final selection = ReportSelection(categories: _selected);
       final path = pdf
-          ? await service.generatePdf(from: _from, to: _to, selection: selection)
-          : await service.generateCsv(from: _from, to: _to, selection: selection);
+          ? await service.generatePdf(
+              from: _from,
+              to: _to,
+              selection: selection,
+            )
+          : await service.generateCsv(
+              from: _from,
+              to: _to,
+              selection: selection,
+            );
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(path)],
@@ -112,7 +129,8 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
       );
     } catch (error) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Report failed: $error')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Report failed: $error')));
       }
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -127,13 +145,17 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const Text('Choose exactly what leaves the device. Private notes and sexual activity are off by default.'),
+          const Text(
+            'Choose exactly what leaves the device. Private notes and sexual activity are off by default.',
+          ),
           const SizedBox(height: 12),
           Card(
             child: ListTile(
               leading: const Icon(Icons.date_range_outlined),
               title: const Text('Report date range'),
-              subtitle: Text('${UserFormatters.formatDate(_from, locale)} – ${UserFormatters.formatDate(_to, locale)}'),
+              subtitle: Text(
+                '${UserFormatters.formatDate(_from, locale)} – ${UserFormatters.formatDate(_to, locale)}',
+              ),
               trailing: const Icon(Icons.edit_calendar_outlined),
               onTap: _pickRange,
             ),
@@ -146,7 +168,9 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                     (category) => CheckboxListTile(
                       value: _selected.contains(category),
                       title: Text(_label(category)),
-                      subtitle: _isHighlyPrivate(category) ? const Text('Highly private — explicit opt-in') : null,
+                      subtitle: _isHighlyPrivate(category)
+                          ? const Text('Highly private — explicit opt-in')
+                          : null,
                       onChanged: (value) => setState(() {
                         if (value == true) {
                           _selected.add(category);
@@ -166,24 +190,27 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
             label: Text(_busy ? 'Preparing…' : 'Preview report'),
           ),
           const SizedBox(height: 16),
-          const Text('Sreva does not upload the report to a developer server. The operating-system share sheet controls the destination you choose.'),
+          const Text(
+            'Sreva does not upload the report to a developer server. The operating-system share sheet controls the destination you choose.',
+          ),
         ],
       ),
     );
   }
 
   bool _isHighlyPrivate(ReportCategory value) =>
-      value == ReportCategory.privateNotes || value == ReportCategory.sexualActivity;
+      value == ReportCategory.privateNotes ||
+      value == ReportCategory.sexualActivity;
 
   String _label(ReportCategory value) => switch (value) {
-        ReportCategory.periods => 'Period dates',
-        ReportCategory.flow => 'Flow',
-        ReportCategory.symptoms => 'Symptoms',
-        ReportCategory.pain => 'Pain',
-        ReportCategory.medications => 'Medications & supplements',
-        ReportCategory.temperature => 'Basal temperature',
-        ReportCategory.ovulation => 'Ovulation observations',
-        ReportCategory.privateNotes => 'Private notes',
-        ReportCategory.sexualActivity => 'Sexual activity',
-      };
+    ReportCategory.periods => 'Period dates',
+    ReportCategory.flow => 'Flow',
+    ReportCategory.symptoms => 'Symptoms',
+    ReportCategory.pain => 'Pain',
+    ReportCategory.medications => 'Medications & supplements',
+    ReportCategory.temperature => 'Basal temperature',
+    ReportCategory.ovulation => 'Ovulation observations',
+    ReportCategory.privateNotes => 'Private notes',
+    ReportCategory.sexualActivity => 'Sexual activity',
+  };
 }

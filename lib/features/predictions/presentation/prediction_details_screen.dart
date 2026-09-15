@@ -15,13 +15,16 @@ class PredictionDetailsScreen extends ConsumerWidget {
       appBar: AppBar(title: const Text('Prediction details')),
       body: prediction.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(child: Text('Prediction unavailable: $error')),
+        error: (error, _) =>
+            Center(child: Text('Prediction unavailable: $error')),
         data: (value) {
           if (value == null) {
             return const Center(
               child: Padding(
                 padding: EdgeInsets.all(24),
-                child: Text('Sreva needs at least two valid period starts before it can estimate a future cycle.'),
+                child: Text(
+                  'Sreva needs at least two valid period starts before it can estimate a future cycle.',
+                ),
               ),
             );
           }
@@ -40,19 +43,27 @@ class PredictionDetailsScreen extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Most likely start', style: Theme.of(context).textTheme.titleMedium),
+                      Text(
+                        'Most likely start',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                       Text(
                         UserFormatters.formatDate(value.mostLikelyDate, locale),
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(fontWeight: FontWeight.w700),
                       ),
                       const SizedBox(height: 12),
                       Text(
                         'Likely window: ${UserFormatters.formatDate(value.windowStart, locale)} – ${UserFormatters.formatDate(value.windowEnd, locale)}',
                       ),
                       Text('Confidence: $confidence'),
-                      Text('Estimated cycle length: ${value.estimatedCycleLengthDays} days'),
+                      Text(
+                        'Estimated cycle length: ${value.estimatedCycleLengthDays} days',
+                      ),
                       if (value.estimatedPeriodDurationDays != null)
-                        Text('Estimated period duration: about ${value.estimatedPeriodDurationDays} days'),
+                        Text(
+                          'Estimated period duration: about ${value.estimatedPeriodDurationDays} days',
+                        ),
                     ],
                   ),
                 ),
@@ -64,12 +75,21 @@ class PredictionDetailsScreen extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Why this estimate?', style: Theme.of(context).textTheme.titleMedium),
+                      Text(
+                        'Why this estimate?',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                       const SizedBox(height: 8),
                       Text('Algorithm: ${value.algorithmVersion}'),
-                      Text('Valid recent cycle intervals: ${value.validIntervals.join(', ')} days'),
-                      Text('Excluded implausible intervals: ${value.excludedIntervals.isEmpty ? 'none' : value.excludedIntervals.join(', ')}'),
-                      Text('Median absolute deviation: ${value.medianAbsoluteDeviation.toStringAsFixed(1)} days'),
+                      Text(
+                        'Valid recent cycle intervals: ${value.validIntervals.join(', ')} days',
+                      ),
+                      Text(
+                        'Excluded implausible intervals: ${value.excludedIntervals.isEmpty ? 'none' : value.excludedIntervals.join(', ')}',
+                      ),
+                      Text(
+                        'Median absolute deviation: ${value.medianAbsoluteDeviation.toStringAsFixed(1)} days',
+                      ),
                     ],
                   ),
                 ),

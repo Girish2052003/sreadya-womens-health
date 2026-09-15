@@ -6,7 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class PinLockService {
   PinLockService({FlutterSecureStorage? storage})
-      : _storage = storage ?? const FlutterSecureStorage();
+    : _storage = storage ?? const FlutterSecureStorage();
 
   static const _key = 'sreva.app-pin.verifier.v1';
   final FlutterSecureStorage _storage;
@@ -30,7 +30,10 @@ class PinLockService {
     final hash = await _derive(pin, salt);
     await _storage.write(
       key: _key,
-      value: jsonEncode({'salt': base64Encode(salt), 'hash': base64Encode(hash)}),
+      value: jsonEncode({
+        'salt': base64Encode(salt),
+        'hash': base64Encode(hash),
+      }),
     );
   }
 

@@ -49,7 +49,9 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.security.KeyStore
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZonedDateTime
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
@@ -146,7 +148,7 @@ class MainActivity : FlutterFragmentActivity() {
                 SrevaReminderRuntime.cancel(this, id)
                 result.success(null)
             }
-            "pending" -> result.success(store.all().map { mapOf("id" to it.id, "timestampMillis" to it.timestampMillis) })
+            "pending" -> result.success(store.all().map { entry -> mapOf("id" to entry.id, "timestampMillis" to (entry.scheduledEpochMillis() ?: entry.timestampMillis)) })
             "consumePendingAction" -> result.success(store.consumePendingAction())
             else -> result.notImplemented()
         }
@@ -428,27 +430,116 @@ data class ReminderEntry(
     val id: String,
     val kind: String,
     val timestampMillis: Long,
+    val targetLocalYear: Int,
+    val targetLocalMonth: Int,
+    val targetLocalDay: Int,
+    val targetLocalHour: Int,
+    val targetLocalMinute: Int,
     val title: String,
     val body: String,
     val repeatDaily: Boolean,
     val label: String?,
 ) {
-    fun toJson(): JSONObject = JSONObject().apply {
-        put("id", id); put("kind", kind); put("timestampMillis", timestampMillis)
-        put("title", title); put("body", body); put("repeatDaily", repeatDaily); put("label", label)
+    fun scheduledEpochMillis(nowMillis: Long = System.currentTimeMillis()): Long? {
+        val zone = ZoneId.systemDefault()
+        val now = Instant.ofEpochMilli(nowMillis)
+        if (repeatDaily) {
+            val localNow = now.atZone(zone)
+            var target = ZonedDateTime.of(
+                localNow.toLocalDate().atTime(targetLocalHour, targetLocalMinute),
+                zone,
+            )
+            if (!target.toInstant().isAfter(now)) target = target.plusDays(1)
+            return target.toInstant().toEpochMilli()
+        }
+        val target = ZonedDateTime.of(
+            LocalDateTime.of(
+                targetLocalYear,
+                targetLocalMonth,
+                targetLocalDay,
+                targetLocalHour,
+                targetLocalMinute,
+            ),
+            zone,
+        ).toInstant()
+        return if (target.isAfter(now)) target.toEpochMilli() else null
     }
+
+    fun toJson(): JSONObject = JSONObject().apply {
+        put("id", id)
+        put("kind", kind)
+        put("timestampMillis", timestampMillis)
+        put("targetLocalYear", targetLocalYear)
+        put("targetLocalMonth", targetLocalMonth)
+        put("targetLocalDay", targetLocalDay)
+        put("targetLocalHour", targetLocalHour)
+        put("targetLocalMinute", targetLocalMinute)
+        put("title", title)
+        put("body", body)
+        put("repeatDaily", repeatDaily)
+        put("label", label)
+    }
+
     companion object {
+        fun fromTimestamp(
+            id: String,
+            kind: String,
+            timestampMillis: Long,
+            title: String,
+            body: String,
+            repeatDaily: Boolean,
+            label: String?,
+        ): ReminderEntry {
+            val local = Instant.ofEpochMilli(timestampMillis).atZone(ZoneId.systemDefault())
+            return ReminderEntry(
+                id = id,
+                kind = kind,
+                timestampMillis = timestampMillis,
+                targetLocalYear = local.year,
+                targetLocalMonth = local.monthValue,
+                targetLocalDay = local.dayOfMonth,
+                targetLocalHour = local.hour,
+                targetLocalMinute = local.minute,
+                title = title,
+                body = body,
+                repeatDaily = repeatDaily,
+                label = label,
+            )
+        }
+
         fun fromCall(call: MethodCall): ReminderEntry? {
             val id = call.argument<String>("id") ?: return null
             val kind = call.argument<String>("kind") ?: return null
             val timestamp = call.argument<Number>("timestampMillis")?.toLong() ?: return null
-            return ReminderEntry(id, kind, timestamp, call.argument<String>("title") ?: "Sreva", call.argument<String>("body") ?: "You have a reminder.", call.argument<Boolean>("repeatDaily") ?: false, call.argument<String>("label"))
+            return fromTimestamp(
+                id = id,
+                kind = kind,
+                timestampMillis = timestamp,
+                title = call.argument<String>("title") ?: "Sreva",
+                body = call.argument<String>("body") ?: "You have a reminder.",
+                repeatDaily = call.argument<Boolean>("repeatDaily") ?: false,
+                label = call.argument<String>("label"),
+            )
         }
-        fun fromJson(json: JSONObject) = ReminderEntry(
-            json.getString("id"), json.getString("kind"), json.getLong("timestampMillis"),
-            json.optString("title", "Sreva"), json.optString("body", "You have a reminder."),
-            json.optBoolean("repeatDaily", false), if (json.isNull("label")) null else json.optString("label")
-        )
+
+        fun fromJson(json: JSONObject): ReminderEntry {
+            val timestamp = json.getLong("timestampMillis")
+            val fallback = Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault())
+            return ReminderEntry(
+                id = json.getString("id"),
+                kind = json.getString("kind"),
+                timestampMillis = timestamp,
+                targetLocalYear = json.optInt("targetLocalYear", fallback.year),
+                targetLocalMonth = json.optInt("targetLocalMonth", fallback.monthValue),
+                targetLocalDay = json.optInt("targetLocalDay", fallback.dayOfMonth),
+                targetLocalHour = json.optInt("targetLocalHour", fallback.hour),
+                targetLocalMinute = json.optInt("targetLocalMinute", fallback.minute),
+                title = json.optString("title", "Sreva"),
+                body = json.optString("body", "You have a reminder."),
+                repeatDaily = json.optBoolean("repeatDaily", false),
+                label = if (json.isNull("label")) null else json.optString("label"),
+            )
+        }
     }
 }
 
@@ -460,13 +551,20 @@ class SecurePrefs(context: Context) {
         val store = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
         (store.getKey(alias, null) as? SecretKey)?.let { return it }
         val generator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
-        generator.init(KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
-            .setBlockModes(KeyProperties.BLOCK_MODE_GCM).setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE).build())
+        generator.init(
+            KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                .build()
+        )
         return generator.generateKey()
     }
 
     fun putString(name: String, value: String?) {
-        if (value == null) { prefs.edit().remove(name).apply(); return }
+        if (value == null) {
+            prefs.edit().remove(name).apply()
+            return
+        }
         val cipher = Cipher.getInstance("AES/GCM/NoPadding")
         cipher.init(Cipher.ENCRYPT_MODE, key())
         val encrypted = cipher.doFinal(value.toByteArray(Charsets.UTF_8))
@@ -483,24 +581,39 @@ class SecurePrefs(context: Context) {
             val cipher = Cipher.getInstance("AES/GCM/NoPadding")
             cipher.init(Cipher.DECRYPT_MODE, key(), GCMParameterSpec(128, iv))
             String(cipher.doFinal(body), Charsets.UTF_8)
-        } catch (_: Throwable) { null }
+        } catch (_: Throwable) {
+            null
+        }
     }
 }
 
 class SrevaReminderStore(private val context: Context) {
     private val secure = SecurePrefs(context)
+
     fun all(): MutableList<ReminderEntry> {
         val raw = secure.getString("reminders") ?: return mutableListOf()
         return try {
             val array = JSONArray(raw)
             MutableList(array.length()) { index -> ReminderEntry.fromJson(array.getJSONObject(index)) }
-        } catch (_: Throwable) { mutableListOf() }
+        } catch (_: Throwable) {
+            mutableListOf()
+        }
     }
+
     fun write(values: List<ReminderEntry>) {
-        val array = JSONArray(); values.forEach { array.put(it.toJson()) }; secure.putString("reminders", array.toString())
+        val array = JSONArray()
+        values.forEach { array.put(it.toJson()) }
+        secure.putString("reminders", array.toString())
     }
-    fun upsert(entry: ReminderEntry) { val values = all(); values.removeAll { it.id == entry.id }; values += entry; write(values) }
-    fun remove(id: String) { write(all().filterNot { it.id == id }) }
+
+    fun upsert(entry: ReminderEntry) {
+        val values = all()
+        values.removeAll { it.id == entry.id }
+        values += entry
+        write(values)
+    }
+
+    fun remove(id: String) = write(all().filterNot { it.id == id })
     fun putPendingAction(value: String) = secure.putString("pendingAction", value)
     fun consumePendingAction(): String? = secure.getString("pendingAction").also { secure.putString("pendingAction", null) }
 }
@@ -509,39 +622,47 @@ object SrevaReminderRuntime {
     fun ensureNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= 26) {
             val manager = context.getSystemService(NotificationManager::class.java)
-            manager.createNotificationChannel(NotificationChannel(REMINDER_CHANNEL, REMINDER_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT))
+            manager.createNotificationChannel(
+                NotificationChannel(REMINDER_CHANNEL, REMINDER_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
+            )
         }
     }
 
     fun schedule(context: Context, entry: ReminderEntry) {
         ensureNotificationChannel(context)
+        val target = entry.scheduledEpochMillis() ?: return
         val manager = context.getSystemService(AlarmManager::class.java)
-        val intent = Intent(context, SrevaAlarmReceiver::class.java).setAction(ACTION_FIRE).putExtra("id", entry.id)
-        val pending = PendingIntent.getBroadcast(context, entry.id.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        var target = entry.timestampMillis
-        if (entry.repeatDaily) while (target <= System.currentTimeMillis()) target += 24 * 60 * 60 * 1000L
-        if (target > System.currentTimeMillis()) manager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, target, pending)
+        val intent = Intent(context, SrevaAlarmReceiver::class.java)
+            .setAction(ACTION_FIRE)
+            .putExtra("id", entry.id)
+        val pending = PendingIntent.getBroadcast(
+            context,
+            entry.id.hashCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+        manager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, target, pending)
     }
 
     fun cancel(context: Context, id: String) {
         val manager = context.getSystemService(AlarmManager::class.java)
-        val pending = PendingIntent.getBroadcast(context, id.hashCode(), Intent(context, SrevaAlarmReceiver::class.java).setAction(ACTION_FIRE).putExtra("id", id), PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE)
-        if (pending != null) { manager.cancel(pending); pending.cancel() }
+        val pending = PendingIntent.getBroadcast(
+            context,
+            id.hashCode(),
+            Intent(context, SrevaAlarmReceiver::class.java).setAction(ACTION_FIRE).putExtra("id", id),
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE,
+        )
+        if (pending != null) {
+            manager.cancel(pending)
+            pending.cancel()
+        }
     }
 
     fun rescheduleAll(context: Context) {
         val store = SrevaReminderStore(context)
-        val now = System.currentTimeMillis()
         val kept = mutableListOf<ReminderEntry>()
         for (entry in store.all()) {
-            var next = entry
-            if (entry.repeatDaily) {
-                var target = entry.timestampMillis
-                while (target <= now) target += 24 * 60 * 60 * 1000L
-                next = entry.copy(timestampMillis = target)
-                kept += next
-                schedule(context, next)
-            } else if (entry.timestampMillis > now) {
+            if (entry.repeatDaily || entry.scheduledEpochMillis() != null) {
                 kept += entry
                 schedule(context, entry)
             }
@@ -557,20 +678,40 @@ class SrevaAlarmReceiver : BroadcastReceiver() {
         val entry = store.all().firstOrNull { it.id == id } ?: return
         SrevaReminderRuntime.ensureNotificationChannel(context)
         val manager = context.getSystemService(NotificationManager::class.java)
-        val contentIntent = PendingIntent.getActivity(context, id.hashCode(), context.packageManager.getLaunchIntentForPackage(context.packageName), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val contentIntent = PendingIntent.getActivity(
+            context,
+            id.hashCode(),
+            context.packageManager.getLaunchIntentForPackage(context.packageName),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
         val builder = NotificationCompat.Builder(context, REMINDER_CHANNEL)
-            .setSmallIcon(android.R.drawable.ic_dialog_info).setContentTitle(entry.title).setContentText(entry.body)
-            .setAutoCancel(true).setContentIntent(contentIntent).setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle(entry.title)
+            .setContentText(entry.body)
+            .setAutoCancel(true)
+            .setContentIntent(contentIntent)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         if (entry.kind.startsWith("period")) {
-            val started = PendingIntent.getBroadcast(context, (id + "started").hashCode(), Intent(context, SrevaActionReceiver::class.java).setAction(ACTION_PERIOD_STARTED), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-            val snooze = PendingIntent.getBroadcast(context, (id + "snooze").hashCode(), Intent(context, SrevaActionReceiver::class.java).setAction(ACTION_SNOOZE), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            val started = PendingIntent.getBroadcast(
+                context,
+                (id + "started").hashCode(),
+                Intent(context, SrevaActionReceiver::class.java).setAction(ACTION_PERIOD_STARTED),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
+            val snooze = PendingIntent.getBroadcast(
+                context,
+                (id + "snooze").hashCode(),
+                Intent(context, SrevaActionReceiver::class.java).setAction(ACTION_SNOOZE),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
             builder.addAction(0, "Period started", started).addAction(0, "Snooze 2 hours", snooze)
         }
         manager.notify(id.hashCode(), builder.build())
         if (entry.repeatDaily) {
-            val next = entry.copy(timestampMillis = entry.timestampMillis + 24 * 60 * 60 * 1000L)
-            store.upsert(next); SrevaReminderRuntime.schedule(context, next)
-        } else store.remove(entry.id)
+            SrevaReminderRuntime.schedule(context, entry)
+        } else {
+            store.remove(entry.id)
+        }
     }
 }
 
@@ -587,8 +728,17 @@ class SrevaActionReceiver : BroadcastReceiver() {
             }
             ACTION_SNOOZE -> {
                 val id = "snooze-${System.currentTimeMillis()}"
-                val entry = ReminderEntry(id, "snooze", System.currentTimeMillis() + 2 * 60 * 60 * 1000L, "Sreva", "You have a reminder.", false, null)
-                store.upsert(entry); SrevaReminderRuntime.schedule(context, entry)
+                val entry = ReminderEntry.fromTimestamp(
+                    id = id,
+                    kind = "snooze",
+                    timestampMillis = System.currentTimeMillis() + 2 * 60 * 60 * 1000L,
+                    title = "Sreva",
+                    body = "You have a reminder.",
+                    repeatDaily = false,
+                    label = null,
+                )
+                store.upsert(entry)
+                SrevaReminderRuntime.schedule(context, entry)
             }
         }
     }

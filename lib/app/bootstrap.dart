@@ -14,7 +14,8 @@ class SrevaBootstrap extends StatefulWidget {
   State<SrevaBootstrap> createState() => _SrevaBootstrapState();
 }
 
-class _SrevaBootstrapState extends State<SrevaBootstrap> with WidgetsBindingObserver {
+class _SrevaBootstrapState extends State<SrevaBootstrap>
+    with WidgetsBindingObserver {
   late Future<bool> _onboarding = OnboardingStore().isComplete();
   bool _unlocked = false;
   bool _unlockAttempted = false;
@@ -100,8 +101,14 @@ class _SrevaBootstrapState extends State<SrevaBootstrap> with WidgetsBindingObse
           decoration: const InputDecoration(labelText: '6–10 digit PIN'),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-          FilledButton(onPressed: () => Navigator.pop(context, controller.text), child: const Text('Unlock')),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, controller.text),
+            child: const Text('Unlock'),
+          ),
         ],
       ),
     );
@@ -112,9 +119,8 @@ class _SrevaBootstrapState extends State<SrevaBootstrap> with WidgetsBindingObse
     if (ok) {
       setState(() => _unlocked = true);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Incorrect Sreva PIN.')),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Incorrect Sreva PIN.')));
     }
   }
 
@@ -124,19 +130,24 @@ class _SrevaBootstrapState extends State<SrevaBootstrap> with WidgetsBindingObse
       future: _onboarding,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const MaterialApp(home: Scaffold(body: Center(child: CircularProgressIndicator())));
+          return const MaterialApp(
+            home: Scaffold(body: Center(child: CircularProgressIndicator())),
+          );
         }
         if (snapshot.data != true) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             home: OnboardingScreen(
-              onComplete: () => setState(() => _onboarding = Future.value(true)),
+              onComplete: () =>
+                  setState(() => _onboarding = Future.value(true)),
             ),
           );
         }
         if (!_unlockAttempted) {
           WidgetsBinding.instance.addPostFrameCallback((_) => _unlock());
-          return const MaterialApp(home: Scaffold(body: Center(child: CircularProgressIndicator())));
+          return const MaterialApp(
+            home: Scaffold(body: Center(child: CircularProgressIndicator())),
+          );
         }
         if (!_unlocked) {
           return MaterialApp(
@@ -151,7 +162,13 @@ class _SrevaBootstrapState extends State<SrevaBootstrap> with WidgetsBindingObse
                       children: [
                         const Icon(Icons.lock_outline, size: 56),
                         const SizedBox(height: 16),
-                        const Text('Sreva is locked', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
+                        const Text(
+                          'Sreva is locked',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                         const SizedBox(height: 8),
                         const Text(
                           'Unlock with Face ID, Touch ID, Android biometrics, or your device PIN/passcode.',

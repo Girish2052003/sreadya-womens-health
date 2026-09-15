@@ -21,14 +21,17 @@ class HealthVault {
   }) async {
     final root = await getApplicationSupportDirectory();
     await Directory(root.path).create(recursive: true);
-    await (privacyPlatform ?? PrivacyPlatform()).excludePathFromBackup(root.path);
+    await (privacyPlatform ?? PrivacyPlatform()).excludePathFromBackup(
+      root.path,
+    );
     final dbPath = p.join(root.path, 'sreva_vault.sqlite3');
 
     final provider = keyProvider ?? DatabaseKeyProvider();
     final rawKey = await provider.readOrCreate();
     final pragmaKey = provider.toSqlCipherRawKey(rawKey);
 
-    final existed = await File(dbPath).exists() && await File(dbPath).length() > 0;
+    final existed =
+        await File(dbPath).exists() && await File(dbPath).length() > 0;
     var currentVersion = 0;
     if (existed) {
       final probe = sqlite3.open(dbPath);
@@ -36,11 +39,16 @@ class HealthVault {
         _applyKey(probe, pragmaKey);
         probe.select('SELECT count(*) FROM sqlite_master;');
         final hasMetadata = probe
-            .select("SELECT name FROM sqlite_master WHERE type='table' AND name='metadata';")
+            .select(
+              "SELECT name FROM sqlite_master WHERE type='table' AND name='metadata';",
+            )
             .isNotEmpty;
         if (hasMetadata) {
-          final rows = probe.select("SELECT value FROM metadata WHERE key='schema_version' LIMIT 1;");
-          if (rows.isNotEmpty) currentVersion = int.parse(rows.first['value'] as String);
+          final rows = probe.select(
+            "SELECT value FROM metadata WHERE key='schema_version' LIMIT 1;",
+          );
+          if (rows.isNotEmpty)
+            currentVersion = int.parse(rows.first['value'] as String);
         }
       } finally {
         probe.close();
@@ -98,8 +106,11 @@ class HealthVault {
       coordinator.migrate(db);
 
       final integrity = db.select('PRAGMA integrity_check;');
-      if (integrity.isEmpty || integrity.first.values.first.toString().toLowerCase() != 'ok') {
-        throw StateError('Health Vault integrity check failed after migration.');
+      if (integrity.isEmpty ||
+          integrity.first.values.first.toString().toLowerCase() != 'ok') {
+        throw StateError(
+          'Health Vault integrity check failed after migration.',
+        );
       }
 
       for (final snapshot in snapshots.values) {
@@ -134,7 +145,9 @@ class HealthVault {
   }
 
   int get schemaVersion {
-    final result = database.select("SELECT value FROM metadata WHERE key='schema_version' LIMIT 1;");
+    final result = database.select(
+      "SELECT value FROM metadata WHERE key='schema_version' LIMIT 1;",
+    );
     return result.isEmpty ? 0 : int.parse(result.first['value'] as String);
   }
 
@@ -145,7 +158,9 @@ class HealthVault {
 
   String cipherVersion() {
     final result = database.select('PRAGMA cipher_version;');
-    return result.isEmpty ? 'unavailable' : result.first.values.first.toString();
+    return result.isEmpty
+        ? 'unavailable'
+        : result.first.values.first.toString();
   }
 
   void close() => database.close();

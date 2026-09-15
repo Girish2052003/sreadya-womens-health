@@ -38,7 +38,9 @@ class _PinLockScreenState extends State<PinLockScreen> {
       if (mounted) {
         setState(() => _configured = Future.value(true));
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Sreva PIN verifier saved in secure device storage.')),
+          const SnackBar(
+            content: Text('Sreva PIN verifier saved in secure device storage.'),
+          ),
         );
       }
     } finally {
@@ -93,7 +95,9 @@ class _PinLockScreenState extends State<PinLockScreen> {
               FilledButton.icon(
                 onPressed: _busy ? null : _save,
                 icon: const Icon(Icons.pin_outlined),
-                label: Text(configured ? 'Change Sreva PIN' : 'Enable Sreva PIN'),
+                label: Text(
+                  configured ? 'Change Sreva PIN' : 'Enable Sreva PIN',
+                ),
               ),
               if (configured) ...[
                 const SizedBox(height: 8),
