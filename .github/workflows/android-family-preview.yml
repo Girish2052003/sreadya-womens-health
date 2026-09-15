@@ -1,0 +1,126 @@
+name: Sreva Android family preview
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  SREVA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreva-preview.jks
+  SREVA_PREVIEW_APPLICATION_ID: com.sreva.health.sreva.preview
+
+jobs:
+  family-preview:
+    name: Verify and build full-capability family preview
+    runs-on: ubuntu-latest
+    environment: android-family-preview
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.2'
+          channel: stable
+          cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Require dedicated preview signing secrets
+        env:
+          KEYSTORE_B64: ${{ secrets.SREVA_PREVIEW_ANDROID_UPLOAD_KEYSTORE_B64 }}
+          STORE_PASSWORD: ${{ secrets.SREVA_PREVIEW_ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.SREVA_PREVIEW_ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.SREVA_PREVIEW_ANDROID_KEY_PASSWORD }}
+        run: |
+          test -n "$KEYSTORE_B64"
+          test -n "$STORE_PASSWORD"
+          test -n "$KEY_ALIAS"
+          test -n "$KEY_PASSWORD"
+          printf '%s' "$KEYSTORE_B64" | base64 --decode > "$SREVA_ANDROID_KEYSTORE_PATH"
+          chmod 600 "$SREVA_ANDROID_KEYSTORE_PATH"
+          test -s "$SREVA_ANDROID_KEYSTORE_PATH"
+
+      - run: flutter pub get
+      - run: dart format --output=none --set-exit-if-changed lib test tool
+      - run: flutter analyze
+      - run: flutter test
+      - run: python -m py_compile tool/configure_platforms.py tool/configure_android_tests.py tool/configure_android_release.py tool/configure_android_preview.py tool/verify_android_signatures.py tool/verify_v1_traceability.py tool/release_backlog_scan.py tool/privacy_scan.py tool/secret_scan.py tool/generate_sbom.py
+      - run: python -m pip install pytest
+      - run: python -m pytest -q verification/reference
+      - name: Verify exhaustive worldwide-v1 traceability
+        run: python tool/verify_v1_traceability.py
+      - name: Fail on release backlog markers
+        run: python tool/release_backlog_scan.py
+      - run: python tool/privacy_scan.py
+      - name: Scan repository for committed credentials
+        run: python tool/secret_scan.py
+      - name: Dependency vulnerability scan (OSV)
+        run: |
+          docker run --rm -v "$PWD:/src" ghcr.io/google/osv-scanner:v2.3.3 \
+            scan source --recursive /src
+      - name: Generate CycloneDX SBOM
+        run: |
+          mkdir -p build/security
+          dart pub deps --json > build/security/pub-deps.json
+          python tool/generate_sbom.py build/security/pub-deps.json build/security/sreva-cyclonedx.json
+
+      - name: Generate Android host
+        run: flutter create --platforms=android --org com.sreva.health .
+      - name: Configure complete Sreva Android host
+        run: |
+          python3 tool/configure_platforms.py android
+          python3 tool/configure_platforms.py android --check
+          python3 tool/configure_android_tests.py
+          python3 tool/configure_android_tests.py --check
+      - name: Apply family-preview application identity only
+        run: |
+          python3 tool/configure_android_preview.py
+          python3 tool/configure_android_preview.py --check
+          grep -F 'applicationId = "com.sreva.health.sreva.preview"' android/app/build.gradle.kts
+          grep -F 'android.permission.health.READ_MENSTRUATION' android/app/src/main/AndroidManifest.xml
+      - name: Configure preview signing and Play-compatible target
+        env:
+          SREVA_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SREVA_PREVIEW_ANDROID_KEYSTORE_PASSWORD }}
+          SREVA_ANDROID_KEY_ALIAS: ${{ secrets.SREVA_PREVIEW_ANDROID_KEY_ALIAS }}
+          SREVA_ANDROID_KEY_PASSWORD: ${{ secrets.SREVA_PREVIEW_ANDROID_KEY_PASSWORD }}
+        run: |
+          python3 tool/configure_android_release.py --require-signing
+          python3 tool/configure_android_release.py --check --require-signing
+      - name: Run Android Kotlin release unit tests
+        working-directory: android
+        run: ./gradlew :app:testReleaseUnitTest --stacktrace
+      - name: Build signed family-preview AAB and APK
+        env:
+          SREVA_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SREVA_PREVIEW_ANDROID_KEYSTORE_PASSWORD }}
+          SREVA_ANDROID_KEY_ALIAS: ${{ secrets.SREVA_PREVIEW_ANDROID_KEY_ALIAS }}
+          SREVA_ANDROID_KEY_PASSWORD: ${{ secrets.SREVA_PREVIEW_ANDROID_KEY_PASSWORD }}
+        run: |
+          flutter build appbundle --release
+          flutter build apk --release
+      - name: Verify preview signatures
+        env:
+          SREVA_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SREVA_PREVIEW_ANDROID_KEYSTORE_PASSWORD }}
+          SREVA_ANDROID_KEY_ALIAS: ${{ secrets.SREVA_PREVIEW_ANDROID_KEY_ALIAS }}
+        run: |
+          python3 tool/verify_android_signatures.py \
+            --aab build/app/outputs/bundle/release/app-release.aab \
+            --apk build/app/outputs/flutter-apk/app-release.apk
+      - name: Create preview release checksums
+        run: |
+          mkdir -p build/release
+          cp build/app/outputs/bundle/release/app-release.aab build/release/sreva-1.0.0+1-family-preview.aab
+          cp build/app/outputs/flutter-apk/app-release.apk build/release/sreva-1.0.0+1-family-preview.apk
+          sha256sum build/release/sreva-1.0.0+1-family-preview.aab build/release/sreva-1.0.0+1-family-preview.apk > build/release/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sreva-android-1.0.0-family-preview-signed
+          path: |
+            build/release/sreva-1.0.0+1-family-preview.aab
+            build/release/sreva-1.0.0+1-family-preview.apk
+            build/release/SHA256SUMS.txt
+            build/security/sreva-cyclonedx.json
+            pubspec.lock
+          retention-days: 30
