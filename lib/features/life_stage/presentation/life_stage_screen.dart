@@ -63,8 +63,7 @@ class LifeStageScreen extends ConsumerWidget {
       'Periods, symptoms, predictions and reminders.',
     LifeStageMode.tryingToConceive =>
       'Adds fertility observations, tests, temperature and cervical mucus.',
-    LifeStageMode.pregnancy =>
-      'Pauses cycle prediction and focuses on pregnancy-related personal tracking.',
+    LifeStageMode.pregnancy => 'Pauses cycle prediction and focuses on pregnancy-related personal tracking.',
     LifeStageMode.postpartum =>
       'Postpartum recovery context without deleting prior cycles.',
     LifeStageMode.breastfeeding =>
