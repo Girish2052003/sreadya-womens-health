@@ -1,0 +1,52 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Apple
+.DS_Store
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/ephemeral/
+*.xcuserstate
+
+# Android
+android/.gradle/
+android/local.properties
+
+# Secrets / signing
+*.p12
+*.mobileprovision
+*.jks
+*.keystore
+.env
+.env.*
+!.env.example
+
+# Worktrees
+.worktrees/
+
+# Local health data / exports
+*.cyclevault
+*.sqlite
+*.sqlite3
+*.db
+*.pdf
+*.csv
+
+# Test coverage
+coverage/
+
+# Python
+__pycache__/
+.pytest_cache/
+*.py[cod]
