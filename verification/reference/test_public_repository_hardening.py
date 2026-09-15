@@ -80,7 +80,9 @@ def test_public_maintainer_security_posture_is_documented_and_linked() -> None:
     readme = _text(ROOT / "README.md")
     security = _text(ROOT / "SECURITY.md")
 
-    assert "Maintainer: Girish Nallan Chakravathy" in note_text
+    assert re.search(
+        r"\*{0,2}Maintainer:\*{0,2}\s+Girish Nallan Chakravathy", note_text
+    )
     assert "public repository" in note_text.lower()
     assert "ChatGPT" not in note_text
     assert "PUBLIC_REPOSITORY_HARDENING.md" in readme
