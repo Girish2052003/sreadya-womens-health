@@ -41,12 +41,22 @@ def test_partner_future_transport_is_an_explicit_interface():
     assert "abstract interface class PartnerTransport" in src
 
 
-def test_worldwide_formatters_are_wired():
-    src = read("lib/core/settings/user_formatters.dart")
-    assert "formatClock" in src
-    assert "temperatureUnit" in src
-    assert "weightUnit" in src
-    assert "waterUnit" in src
+def test_worldwide_formatters_are_wired_to_sensitive_time_and_measurement_ui():
+    formatters = read("lib/core/settings/user_formatters.dart")
+    reminders = read("lib/features/reminders/presentation/reminders_screen.dart")
+    personal = read(
+        "lib/features/reminders/presentation/personal_reminders_panel.dart"
+    )
+    logging = read("lib/features/logging/presentation/log_screen.dart")
+    assert "formatClock" in formatters
+    assert "temperatureUnit" in formatters
+    assert "weightUnit" in formatters
+    assert "waterUnit" in formatters
+    assert "UserFormatters.formatClock" in reminders
+    assert "UserFormatters.formatClock" in personal
+    assert "UserFormatters.temperatureForStorage" in logging
+    assert "UserFormatters.weightForStorage" in logging
+    assert "UserFormatters.waterForStorage" in logging
 
 
 def test_individual_observations_can_be_deleted():
@@ -54,6 +64,15 @@ def test_individual_observations_can_be_deleted():
     logging = read("lib/features/logging/presentation/log_screen.dart")
     assert "deleteObservation" in providers
     assert "Delete observation" in logging
+
+
+def test_pin_fallback_is_independent_from_database_key():
+    pin = read("lib/features/privacy/data/pin_lock_service.dart")
+    bootstrap = read("lib/app/bootstrap.dart")
+    assert "Argon2id" in pin
+    assert "FlutterSecureStorage" in pin
+    assert "DatabaseKeyProvider" not in pin
+    assert "Use Sreva PIN" in bootstrap
 
 
 def test_migration_recovery_snapshot_is_real():
@@ -68,6 +87,8 @@ def test_android_reminder_runtime_preserves_local_wall_clock():
     assert "targetLocalYear" in src
     assert "targetLocalHour" in src
     assert "ZonedDateTime" in src
+    assert "plusDays(1)" in src
+    assert "24 * 60 * 60 * 1000L" not in src
 
 
 def test_release_ci_builds_android_installable_and_store_artifacts_and_sbom():
@@ -76,4 +97,5 @@ def test_release_ci_builds_android_installable_and_store_artifacts_and_sbom():
     assert "flutter build apk --release" in ci
     assert "actions/upload-artifact" in ci
     assert "SBOM" in ci or "sbom" in ci.lower()
+    assert "osv-scanner" in ci.lower()
     assert "dependency" in ci.lower()
