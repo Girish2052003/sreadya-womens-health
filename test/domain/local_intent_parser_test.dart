@@ -36,7 +36,10 @@ void main() {
   });
 
   test('parses private medication reminder with local clock time', () {
-    final result = parser.parse('Remind me to take medicine at 8:30 pm', now: now);
+    final result = parser.parse(
+      'Remind me to take medicine at 8:30 pm',
+      now: now,
+    );
     expect(result.intent, LocalIntent.addReminder);
     expect(result.reminderKind, ReminderKind.medication);
     expect(result.reminderHour, 20);

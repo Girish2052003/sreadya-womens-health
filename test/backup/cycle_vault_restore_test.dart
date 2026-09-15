@@ -46,129 +46,145 @@ void main() {
     },
   );
 
-  test('CycleVault encrypted bytes round-trip periods and observations', () async {
-    final source = _MemoryRepository(
-      periods: [
-        PeriodEpisode(
-          id: 'p1',
-          start: DateTime(2026, 8, 1),
-          end: DateTime(2026, 8, 4),
-        ),
-      ],
-      observations: [
-        HealthObservation(
-          id: 'o1',
-          kind: ObservationKind.cramps,
-          occurredAt: DateTime(2026, 8, 1, 9),
-          severity: ObservationSeverity.moderate,
-          label: 'Cramps',
-        ),
-      ],
-    );
-    final bytes = await CycleVaultService(repository: source).exportBytes(passphrase);
-    final target = _MemoryRepository(
-      periods: [PeriodEpisode(id: 'old', start: DateTime(2026, 1, 1))],
-    );
+  test(
+    'CycleVault encrypted bytes round-trip periods and observations',
+    () async {
+      final source = _MemoryRepository(
+        periods: [
+          PeriodEpisode(
+            id: 'p1',
+            start: DateTime(2026, 8, 1),
+            end: DateTime(2026, 8, 4),
+          ),
+        ],
+        observations: [
+          HealthObservation(
+            id: 'o1',
+            kind: ObservationKind.cramps,
+            occurredAt: DateTime(2026, 8, 1, 9),
+            severity: ObservationSeverity.moderate,
+            label: 'Cramps',
+          ),
+        ],
+      );
+      final bytes = await CycleVaultService(repository: source)
+          .exportBytes(passphrase);
+      final target = _MemoryRepository(
+        periods: [PeriodEpisode(id: 'old', start: DateTime(2026, 1, 1))],
+      );
 
-    final result = await CycleVaultService(
-      repository: target,
-    ).restoreBytes(bytes, passphrase);
+      final result = await CycleVaultService(repository: target)
+          .restoreBytes(bytes, passphrase);
 
-    expect(result.periods, 1);
-    expect(result.observations, 1);
-    expect(target.periods.single.id, 'p1');
-    expect(target.observations.single.id, 'o1');
-    expect(target.periods.single.source, RecordSource.cycleVault);
-    expect(target.observations.single.source, RecordSource.cycleVault);
-  });
+      expect(result.periods, 1);
+      expect(result.observations, 1);
+      expect(target.periods.single.id, 'p1');
+      expect(target.observations.single.id, 'o1');
+      expect(target.periods.single.source, RecordSource.cycleVault);
+      expect(target.observations.single.source, RecordSource.cycleVault);
+    },
+  );
 
   test('wrong CycleVault passphrase cannot replace live health data', () async {
     final source = _MemoryRepository(
       periods: [PeriodEpisode(id: 'p1', start: DateTime(2026, 8, 1))],
     );
-    final bytes = await CycleVaultService(repository: source).exportBytes(passphrase);
+    final bytes = await CycleVaultService(repository: source)
+        .exportBytes(passphrase);
     final target = _MemoryRepository(
       periods: [PeriodEpisode(id: 'live', start: DateTime(2026, 7, 1))],
     );
 
     await expectLater(
-      CycleVaultService(repository: target).restoreBytes(
-        bytes,
-        'definitely the wrong passphrase',
-      ),
+      CycleVaultService(repository: target)
+          .restoreBytes(bytes, 'definitely the wrong passphrase'),
       throwsA(anything),
     );
     expect(target.periods.single.id, 'live');
   });
 
-  test('tampered CycleVault ciphertext is rejected without replacement', () async {
-    final source = _MemoryRepository(
-      periods: [PeriodEpisode(id: 'p1', start: DateTime(2026, 8, 1))],
-    );
-    final bytes = await CycleVaultService(repository: source).exportBytes(passphrase);
-    final outer = jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
-    final sealed = base64Decode(outer['sealedPayload'] as String);
-    sealed[sealed.length ~/ 2] ^= 0x01;
-    outer['sealedPayload'] = base64Encode(sealed);
-    final tampered = utf8.encode(jsonEncode(outer));
-    final target = _MemoryRepository(
-      periods: [PeriodEpisode(id: 'live', start: DateTime(2026, 7, 1))],
-    );
+  test(
+    'tampered CycleVault ciphertext is rejected without replacement',
+    () async {
+      final source = _MemoryRepository(
+        periods: [PeriodEpisode(id: 'p1', start: DateTime(2026, 8, 1))],
+      );
+      final bytes = await CycleVaultService(repository: source)
+          .exportBytes(passphrase);
+      final outer = jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
+      final sealed = base64Decode(outer['sealedPayload'] as String);
+      sealed[sealed.length ~/ 2] ^= 0x01;
+      outer['sealedPayload'] = base64Encode(sealed);
+      final tampered = utf8.encode(jsonEncode(outer));
+      final target = _MemoryRepository(
+        periods: [PeriodEpisode(id: 'live', start: DateTime(2026, 7, 1))],
+      );
 
-    await expectLater(
-      CycleVaultService(repository: target).restoreBytes(tampered, passphrase),
-      throwsA(anything),
-    );
-    expect(target.periods.single.id, 'live');
-  });
+      await expectLater(
+        CycleVaultService(repository: target)
+            .restoreBytes(tampered, passphrase),
+        throwsA(anything),
+      );
+      expect(target.periods.single.id, 'live');
+    },
+  );
 
-  test('unsupported CycleVault format is rejected before replacement', () async {
-    final source = _MemoryRepository(
-      periods: [PeriodEpisode(id: 'p1', start: DateTime(2026, 8, 1))],
-    );
-    final bytes = await CycleVaultService(repository: source).exportBytes(passphrase);
-    final outer = jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
-    final manifest = Map<String, dynamic>.from(outer['manifest'] as Map);
-    manifest['formatVersion'] = 999;
-    outer['manifest'] = manifest;
-    final unsupported = utf8.encode(jsonEncode(outer));
-    final target = _MemoryRepository(
-      periods: [PeriodEpisode(id: 'live', start: DateTime(2026, 7, 1))],
-    );
+  test(
+    'unsupported CycleVault format is rejected before replacement',
+    () async {
+      final source = _MemoryRepository(
+        periods: [PeriodEpisode(id: 'p1', start: DateTime(2026, 8, 1))],
+      );
+      final bytes = await CycleVaultService(repository: source)
+          .exportBytes(passphrase);
+      final outer = jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
+      final manifest = Map<String, dynamic>.from(outer['manifest'] as Map);
+      manifest['formatVersion'] = 999;
+      outer['manifest'] = manifest;
+      final unsupported = utf8.encode(jsonEncode(outer));
+      final target = _MemoryRepository(
+        periods: [PeriodEpisode(id: 'live', start: DateTime(2026, 7, 1))],
+      );
 
-    await expectLater(
-      CycleVaultService(repository: target).restoreBytes(unsupported, passphrase),
-      throwsFormatException,
-    );
-    expect(target.periods.single.id, 'live');
-  });
+      await expectLater(
+        CycleVaultService(repository: target)
+            .restoreBytes(unsupported, passphrase),
+        throwsFormatException,
+      );
+      expect(target.periods.single.id, 'live');
+    },
+  );
 
-  test('domain-invalid decrypted CycleVault never replaces live data', () async {
-    final source = _MemoryRepository(
-      periods: [
-        PeriodEpisode(
-          id: 'p1',
-          start: DateTime(2026, 8, 1),
-          end: DateTime(2026, 8, 4),
-        ),
-        PeriodEpisode(
-          id: 'p2',
-          start: DateTime(2026, 8, 3),
-          end: DateTime(2026, 8, 6),
-        ),
-      ],
-    );
-    final bytes = await CycleVaultService(repository: source).exportBytes(passphrase);
-    final target = _MemoryRepository(
-      periods: [PeriodEpisode(id: 'live', start: DateTime(2026, 7, 1))],
-    );
+  test(
+    'domain-invalid decrypted CycleVault never replaces live data',
+    () async {
+      final source = _MemoryRepository(
+        periods: [
+          PeriodEpisode(
+            id: 'p1',
+            start: DateTime(2026, 8, 1),
+            end: DateTime(2026, 8, 4),
+          ),
+          PeriodEpisode(
+            id: 'p2',
+            start: DateTime(2026, 8, 3),
+            end: DateTime(2026, 8, 6),
+          ),
+        ],
+      );
+      final bytes = await CycleVaultService(repository: source)
+          .exportBytes(passphrase);
+      final target = _MemoryRepository(
+        periods: [PeriodEpisode(id: 'live', start: DateTime(2026, 7, 1))],
+      );
 
-    await expectLater(
-      CycleVaultService(repository: target).restoreBytes(bytes, passphrase),
-      throwsStateError,
-    );
-    expect(target.periods.single.id, 'live');
-  });
+      await expectLater(
+        CycleVaultService(repository: target).restoreBytes(bytes, passphrase),
+        throwsStateError,
+      );
+      expect(target.periods.single.id, 'live');
+    },
+  );
 }
 
 class _MemoryStore {
@@ -202,12 +218,16 @@ class _MemoryRepository implements HealthRepository {
   }
 
   @override
-  Future<List<HealthObservation>> listObservations({DateTime? from, DateTime? to}) async =>
-      observations.where((value) {
+  Future<List<HealthObservation>> listObservations({
+    DateTime? from,
+    DateTime? to,
+  }) async => observations
+      .where((value) {
         if (from != null && value.occurredAt.isBefore(from)) return false;
         if (to != null && value.occurredAt.isAfter(to)) return false;
         return true;
-      }).toList(growable: false);
+      })
+      .toList(growable: false);
 
   @override
   Future<List<PeriodEpisode>> listPeriods() async => List.unmodifiable(periods);
