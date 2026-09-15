@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sreva/features/backup/domain/restore_transaction.dart';
-import 'package:sreva/features/cycle/domain/cycle_models.dart';
 
 void main() {
   test('failed staged restore never replaces the live repository', () async {
