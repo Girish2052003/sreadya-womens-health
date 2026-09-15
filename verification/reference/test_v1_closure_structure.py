@@ -84,15 +84,20 @@ def test_migration_recovery_snapshot_is_real():
 
 def test_android_reminder_runtime_preserves_local_wall_clock():
     src = read("platform_templates/android/MainActivity.kt")
+    tests = read("platform_templates/android/ReminderWallClockTest.kt")
     assert "targetLocalYear" in src
     assert "targetLocalHour" in src
     assert "ZonedDateTime" in src
     assert "plusDays(1)" in src
     assert "24 * 60 * 60 * 1000L" not in src
+    assert "dailyReminderKeepsEightAmAcrossSpringDstChange" in tests
+    assert "dailyReminderKeepsEightAmAcrossAutumnDstChange" in tests
 
 
 def test_release_ci_builds_android_installable_and_store_artifacts_and_sbom():
     ci = read(".github/workflows/ci.yml")
+    assert "testReleaseUnitTest" in ci
+    assert "configure_android_tests.py" in ci
     assert "flutter build appbundle --release" in ci
     assert "flutter build apk --release" in ci
     assert "actions/upload-artifact" in ci
