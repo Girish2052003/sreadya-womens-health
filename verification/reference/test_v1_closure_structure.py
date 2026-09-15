@@ -94,13 +94,59 @@ def test_android_reminder_runtime_preserves_local_wall_clock():
     assert "dailyReminderKeepsEightAmAcrossAutumnDstChange" in tests
 
 
+def test_android_release_hardening_targets_play_and_forbids_debug_signing():
+    src = read("tool/configure_android_release.py")
+    assert "TARGET_API = 36" in src
+    assert "targetSdk = {TARGET_API}" in src
+    assert "compileSdk = {TARGET_API}" in src
+    assert "SREVA_ANDROID_KEYSTORE_PATH" in src
+    assert "--require-signing" in src
+    assert 'signingConfigs.getByName(\"debug\")' in src
+    assert "debug signing key" in src
+
+
 def test_release_ci_builds_android_installable_and_store_artifacts_and_sbom():
     ci = read(".github/workflows/ci.yml")
     assert "testReleaseUnitTest" in ci
     assert "configure_android_tests.py" in ci
+    assert "configure_android_release.py" in ci
     assert "flutter build appbundle --release" in ci
     assert "flutter build apk --release" in ci
+    assert "jarsigner -verify -strict" in ci
+    assert "apksigner" in ci
     assert "actions/upload-artifact" in ci
     assert "SBOM" in ci or "sbom" in ci.lower()
     assert "osv-scanner" in ci.lower()
     assert "dependency" in ci.lower()
+
+
+def test_production_workflow_requires_real_upload_key_secrets():
+    workflow = read(".github/workflows/android-production.yml")
+    assert "workflow_dispatch" in workflow
+    assert "ref: main" in workflow
+    assert "android-production" in workflow
+    assert "SREVA_ANDROID_UPLOAD_KEYSTORE_B64" in workflow
+    assert "SREVA_ANDROID_KEYSTORE_PASSWORD" in workflow
+    assert "SREVA_ANDROID_KEY_ALIAS" in workflow
+    assert "SREVA_ANDROID_KEY_PASSWORD" in workflow
+    assert "--require-signing" in workflow
+    assert "SHA256SUMS.txt" in workflow
+
+
+def test_privacy_policy_is_available_in_app_and_as_publishable_page_source():
+    app = read("lib/app/sreva_app.dart")
+    center = read("lib/features/privacy/presentation/privacy_center_screen.dart")
+    policy = read("lib/features/privacy/presentation/privacy_policy_screen.dart")
+    public_page = read("docs/android/privacy-policy.html")
+    assert "/more/privacy-policy" in app
+    assert "Read full privacy policy" in center
+    assert "Sreva Privacy Policy" in policy
+    assert "Sreva Privacy Policy" in public_page
+    assert "reproductive-health" in public_page
+
+
+def test_release_version_is_worldwide_v1():
+    pubspec = read("pubspec.yaml")
+    versions = read("lib/core/version/app_versions.dart")
+    assert "version: 1.0.0+1" in pubspec
+    assert "static const String app = '1.0.0';" in versions
