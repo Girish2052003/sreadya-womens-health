@@ -108,4 +108,63 @@ class ReminderWallClockTest {
         assertEquals(8, local.hour)
         assertEquals(15, local.minute)
     }
+
+    @Test
+    fun dailyReminderKeepsEightAmInEveryAvailableTimeZone() {
+        for (zoneName in ZoneId.getAvailableZoneIds()) {
+            val zone = ZoneId.of(zoneName)
+            TimeZone.setDefault(TimeZone.getTimeZone(zone))
+            val entry = ReminderEntry.fromTimestamp(
+                id = "worldwide-$zoneName",
+                kind = "medication",
+                timestampMillis = ZonedDateTime.of(2026, 6, 15, 8, 0, 0, 0, zone)
+                    .toInstant()
+                    .toEpochMilli(),
+                title = "Sreva",
+                body = "You have a reminder.",
+                repeatDaily = true,
+                label = null,
+            )
+            val now = ZonedDateTime.of(2026, 6, 15, 9, 0, 0, 0, zone)
+                .toInstant()
+                .toEpochMilli()
+
+            val scheduled = entry.scheduledEpochMillis(now)
+            assertNotNull("No schedule produced for $zoneName", scheduled)
+            val local = Instant.ofEpochMilli(scheduled!!).atZone(zone)
+            assertEquals("Wrong local hour for $zoneName", 8, local.hour)
+            assertEquals("Wrong local minute for $zoneName", 0, local.minute)
+        }
+    }
+
+    @Test
+    fun oneShotReminderKeepsWallClockAfterTimeZoneChange() {
+        TimeZone.setDefault(TimeZone.getTimeZone(helsinki))
+        val entry = ReminderEntry.fromTimestamp(
+            id = "travel",
+            kind = "periodThreeDays",
+            timestampMillis = ZonedDateTime.of(2026, 9, 17, 8, 15, 0, 0, helsinki)
+                .toInstant()
+                .toEpochMilli(),
+            title = "Sreva",
+            body = "You have a reminder.",
+            repeatDaily = false,
+            label = null,
+        )
+
+        val destination = ZoneId.of("Asia/Kolkata")
+        TimeZone.setDefault(TimeZone.getTimeZone(destination))
+        val now = ZonedDateTime.of(2026, 9, 16, 12, 0, 0, 0, destination)
+            .toInstant()
+            .toEpochMilli()
+
+        val scheduled = entry.scheduledEpochMillis(now)
+        assertNotNull(scheduled)
+        val local = Instant.ofEpochMilli(scheduled!!).atZone(destination)
+        assertEquals(2026, local.year)
+        assertEquals(9, local.monthValue)
+        assertEquals(17, local.dayOfMonth)
+        assertEquals(8, local.hour)
+        assertEquals(15, local.minute)
+    }
 }

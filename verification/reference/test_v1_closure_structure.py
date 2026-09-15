@@ -92,6 +92,8 @@ def test_android_reminder_runtime_preserves_local_wall_clock():
     assert "24 * 60 * 60 * 1000L" not in src
     assert "dailyReminderKeepsEightAmAcrossSpringDstChange" in tests
     assert "dailyReminderKeepsEightAmAcrossAutumnDstChange" in tests
+    assert "dailyReminderKeepsEightAmInEveryAvailableTimeZone" in tests
+    assert "oneShotReminderKeepsWallClockAfterTimeZoneChange" in tests
 
 
 def test_android_release_hardening_targets_play_and_forbids_debug_signing():
@@ -164,3 +166,26 @@ def test_release_version_is_worldwide_v1():
     versions = read("lib/core/version/app_versions.dart")
     assert "version: 1.0.0+1" in pubspec
     assert "static const String app = '1.0.0';" in versions
+
+
+def test_reminder_quiet_hours_are_user_editable():
+    reminders = read("lib/features/reminders/presentation/reminders_screen.dart")
+    assert "_editQuietHours" in reminders
+    assert "Edit quiet hours" in reminders
+    assert "quietStartHour" in reminders
+    assert "quietEndHour" in reminders
+
+
+def test_android_health_connect_historical_and_sexual_activity_write_are_complete():
+    platform = read("tool/configure_platforms.py")
+    native = read("platform_templates/android/MainActivity.kt")
+    assert "android.permission.health.READ_HEALTH_DATA_HISTORY" in platform
+    assert "android.permission.health.WRITE_SEXUAL_ACTIVITY" in platform
+    assert "HealthPermission.PERMISSION_READ_HEALTH_DATA_HISTORY" in native
+    assert "getWritePermission(SexualActivityRecord::class)" in native
+    assert "PROTECTION_USED_PROTECTED" in native
+    assert "PROTECTION_USED_UNPROTECTED" in native
+
+
+def test_dependency_lockfile_is_committed():
+    assert (ROOT / "pubspec.lock").is_file()
