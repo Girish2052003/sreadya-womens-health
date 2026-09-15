@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../core/settings/user_formatters.dart';
+import '../../settings/domain/app_preferences.dart';
 import '../data/personal_reminder_store.dart';
 import '../data/reminder_scheduler.dart';
 import '../domain/reminder_models.dart';
 
 class PersonalRemindersPanel extends StatefulWidget {
-  const PersonalRemindersPanel({required this.scheduler, super.key});
+  const PersonalRemindersPanel({
+    required this.scheduler,
+    required this.clockPreference,
+    super.key,
+  });
+
   final ReminderScheduler scheduler;
+  final ClockPreference clockPreference;
 
   @override
   State<PersonalRemindersPanel> createState() => _PersonalRemindersPanelState();
@@ -45,21 +53,20 @@ class _PersonalRemindersPanelState extends State<PersonalRemindersPanel> {
                 const SizedBox(height: 12),
                 DropdownButtonFormField<ReminderKind>(
                   initialValue: kind,
-                  items:
-                      const [
-                            ReminderKind.medication,
-                            ReminderKind.contraception,
-                            ReminderKind.supplement,
-                            ReminderKind.ovulationTest,
-                            ReminderKind.pregnancyTest,
-                          ]
-                          .map(
-                            (value) => DropdownMenuItem(
-                              value: value,
-                              child: Text(_kindLabel(value)),
-                            ),
-                          )
-                          .toList(),
+                  items: const [
+                    ReminderKind.medication,
+                    ReminderKind.contraception,
+                    ReminderKind.supplement,
+                    ReminderKind.ovulationTest,
+                    ReminderKind.pregnancyTest,
+                  ]
+                      .map(
+                        (value) => DropdownMenuItem(
+                          value: value,
+                          child: Text(_kindLabel(value)),
+                        ),
+                      )
+                      .toList(),
                   onChanged: (value) {
                     if (value != null) setState(() => kind = value);
                   },
@@ -77,7 +84,13 @@ class _PersonalRemindersPanelState extends State<PersonalRemindersPanel> {
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: const Text('Time'),
-                  subtitle: Text(time.format(context)),
+                  subtitle: Text(
+                    UserFormatters.formatClock(
+                      time,
+                      widget.clockPreference,
+                      context,
+                    ),
+                  ),
                   trailing: const Icon(Icons.schedule),
                   onTap: () async {
                     final value = await showTimePicker(
@@ -148,88 +161,93 @@ class _PersonalRemindersPanelState extends State<PersonalRemindersPanel> {
 
   @override
   Widget build(BuildContext context) => FutureBuilder<List<PersonalReminder>>(
-    future: _future,
-    builder: (context, snapshot) {
-      final values = snapshot.data ?? const [];
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
+        future: _future,
+        builder: (context, snapshot) {
+          final values = snapshot.data ?? const [];
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(
-                child: Text(
-                  'Other reminders',
-                  style: Theme.of(context).textTheme.titleLarge
-                      ?.copyWith(fontWeight: FontWeight.w700),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Other reminders',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: _add,
+                    tooltip: 'Add reminder',
+                    icon: const Icon(Icons.add_alarm),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Medication, contraception, supplement, ovulation-test and pregnancy-test reminders stay on this device.',
+              ),
+              const SizedBox(height: 8),
+              if (values.isEmpty)
+                const Card(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text('No daily reminders yet.'),
+                  ),
+                )
+              else
+                Card(
+                  child: Column(
+                    children: values
+                        .map(
+                          (value) => ListTile(
+                            leading: const Icon(Icons.alarm),
+                            title: Text(value.label),
+                            subtitle: Text(
+                              '${_kindLabel(value.kind)} · '
+                              '${UserFormatters.formatClock(TimeOfDay(hour: value.hour, minute: value.minute), widget.clockPreference, context)}',
+                            ),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete_outline),
+                              onPressed: () => _delete(value),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ),
-              ),
-              IconButton(
-                onPressed: _add,
-                tooltip: 'Add reminder',
-                icon: const Icon(Icons.add_alarm),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          const Text(
-            'Medication, contraception, supplement, ovulation-test and pregnancy-test reminders stay on this device.',
-          ),
-          const SizedBox(height: 8),
-          if (values.isEmpty)
-            const Card(
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Text('No daily reminders yet.'),
-              ),
-            )
-          else
-            Card(
-              child: Column(
-                children: values
-                    .map(
-                      (value) => ListTile(
-                        leading: const Icon(Icons.alarm),
-                        title: Text(value.label),
-                        subtitle: Text(
-                          '${_kindLabel(value.kind)} · ${TimeOfDay(hour: value.hour, minute: value.minute).format(context)}',
-                        ),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete_outline),
-                          onPressed: () => _delete(value),
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
+                onPressed: () async {
+                  for (final value in await _store.readAll()) {
+                    if (value.enabled) await _schedule(value);
+                  }
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Daily reminders rebuilt on this device.',
                         ),
                       ),
-                    )
-                    .toList(),
+                    );
+                  }
+                },
+                icon: const Icon(Icons.refresh),
+                label: const Text('Rebuild daily reminders'),
               ),
-            ),
-          const SizedBox(height: 8),
-          OutlinedButton.icon(
-            onPressed: () async {
-              for (final value in await _store.readAll()) {
-                if (value.enabled) await _schedule(value);
-              }
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Daily reminders rebuilt on this device.'),
-                  ),
-                );
-              }
-            },
-            icon: const Icon(Icons.refresh),
-            label: const Text('Rebuild daily reminders'),
-          ),
-        ],
+            ],
+          );
+        },
       );
-    },
-  );
 
   static String _kindLabel(ReminderKind value) => switch (value) {
-    ReminderKind.medication => 'Medication',
-    ReminderKind.contraception => 'Contraception',
-    ReminderKind.supplement => 'Supplement',
-    ReminderKind.ovulationTest => 'Ovulation test',
-    ReminderKind.pregnancyTest => 'Pregnancy test',
-    _ => 'Cycle reminder',
-  };
+        ReminderKind.medication => 'Medication',
+        ReminderKind.contraception => 'Contraception',
+        ReminderKind.supplement => 'Supplement',
+        ReminderKind.ovulationTest => 'Ovulation test',
+        ReminderKind.pregnancyTest => 'Pregnancy test',
+        _ => 'Cycle reminder',
+      };
 }
