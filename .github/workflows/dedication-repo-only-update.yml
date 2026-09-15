@@ -1,0 +1,99 @@
+name: Update Sreva repository dedication
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/dedication-repo-only-update.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-dedication:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Update repository-only dedication and verify runtime exclusion
+        run: |
+          python3 - <<'PY'
+          import base64
+          from pathlib import Path
+
+          old = base64.b64decode('U3JlZWRldmkgTmFsbGFuIENoYWtyYXZhdGh5').decode()
+          new = base64.b64decode('U3JlZWRldmkgR2lyaXNoIE5hbGxhbiBDaGFrcmF2YXRoeQ==').decode()
+
+          allowed = [
+              Path('README.md'),
+              Path('docs/superpowers/plans/2026-09-15-sreva-v1-implementation.md'),
+              Path('docs/superpowers/specs/2026-09-15-sreva-master-design.md'),
+          ]
+
+          total = 0
+          for path in allowed:
+              text = path.read_text(encoding='utf-8')
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected exactly one old dedication occurrence, found {count}')
+              path.write_text(text.replace(old, new), encoding='utf-8')
+              total += count
+
+          if total != 3:
+              raise SystemExit(f'Expected exactly 3 repository dedication replacements, got {total}')
+
+          # Personal dedication names are repository provenance only and must never
+          # enter distributable application/runtime generation surfaces.
+          runtime_roots = [Path('lib'), Path('tool'), Path('platform_templates')]
+          for root in runtime_roots:
+              if not root.exists():
+                  continue
+              for path in root.rglob('*'):
+                  if not path.is_file():
+                      continue
+                  try:
+                      text = path.read_text(encoding='utf-8')
+                  except UnicodeDecodeError:
+                      continue
+                  if 'Sreedevi' in text or new in text or old in text:
+                      raise SystemExit(f'Personal dedication leaked into runtime/generator surface: {path}')
+
+          # The new full dedication must exist only in the three approved
+          # repository-provenance documents.
+          found = []
+          for path in Path('.').rglob('*'):
+              if not path.is_file() or '.git' in path.parts:
+                  continue
+              try:
+                  text = path.read_text(encoding='utf-8')
+              except UnicodeDecodeError:
+                  continue
+              if new in text:
+                  found.append(path.as_posix())
+          expected = sorted(p.as_posix() for p in allowed)
+          if sorted(found) != expected:
+              raise SystemExit(f'Unexpected new dedication locations: {found}; expected {expected}')
+
+          print('Repository dedication updated in exactly 3 provenance files.')
+          print('Runtime/generator dedication leakage: NONE.')
+          PY
+
+      - name: Remove one-shot updater from authoritative main
+        run: rm .github/workflows/dedication-repo-only-update.yml
+
+      - name: Commit exact repository-provenance change
+        run: |
+          git diff --check
+          git status --short
+          git config user.name 'GIRISH NALLAN CHAKRAVATHY'
+          git config user.email '132274277+Girish2052003@users.noreply.github.com'
+          git add README.md \
+            docs/superpowers/plans/2026-09-15-sreva-v1-implementation.md \
+            docs/superpowers/specs/2026-09-15-sreva-master-design.md \
+            .github/workflows/dedication-repo-only-update.yml
+          git commit -m 'docs: update Sreva repository dedication'
+          git push origin HEAD:main
