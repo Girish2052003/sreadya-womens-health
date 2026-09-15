@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-15  
 **Public product name:** Sreva  
-**Internal dedication:** For Sree Kutty  
+**Internal dedication:** Sreedevi Nallan Chakravathy  
 **Primary launch device:** iPhone 17  
 **Minimum iOS target:** iOS 17  
 **Platforms:** iOS and Android  
