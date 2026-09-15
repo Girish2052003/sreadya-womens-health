@@ -7,10 +7,9 @@ Database databaseAtVersion(int version) {
   db.execute(
     'CREATE TABLE metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);',
   );
-  db.execute(
-    "INSERT INTO metadata VALUES('schema_version', ?);",
-    [version.toString()],
-  );
+  db.execute("INSERT INTO metadata VALUES('schema_version', ?);", [
+    version.toString(),
+  ]);
   return db;
 }
 
