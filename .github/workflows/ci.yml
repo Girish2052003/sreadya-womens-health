@@ -77,7 +77,7 @@ jobs:
           python3 tool/configure_android_tests.py --check
       - name: Run Android Kotlin release unit tests
         working-directory: android
-        run: ./gradlew testReleaseUnitTest --stacktrace
+        run: ./gradlew :app:testReleaseUnitTest --stacktrace
       - name: Create ephemeral CI upload key
         run: |
           keytool -genkeypair \
