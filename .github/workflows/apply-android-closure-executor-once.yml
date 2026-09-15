@@ -36,12 +36,7 @@ jobs:
           block = text[start:end]
           lines = []
           for line in block.splitlines():
-              if line.startswith('          '):
-                  lines.append(line[10:])
-              elif not line.strip():
-                  lines.append('')
-              else:
-                  raise SystemExit(f'Unexpected patch indentation: {line!r}')
+              lines.append(line[10:] if line.startswith('          ') else line)
           patch = Path('/tmp/sreva_android_closure_patch.py')
           patch.write_text('\n'.join(lines) + '\n', encoding='utf-8')
           compile(patch.read_text(encoding='utf-8'), str(patch), 'exec')
