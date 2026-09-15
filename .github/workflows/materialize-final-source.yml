@@ -26,11 +26,11 @@ jobs:
           cat bootstrap/final.part00 bootstrap/final.part01 bootstrap/final.part02 bootstrap/final.part03 bootstrap/final.part04 > /tmp/sreva.b64
           base64 -d /tmp/sreva.b64 > /tmp/sreva.tar.xz
           echo '2db6a1d42853b6af9a964765ed16407e4fa528a2ff5bc7d105449121afa869a3  /tmp/sreva.tar.xz' | sha256sum -c -
-          tar -xJf /tmp/sreva.tar.xz -C .
+          # Workflow files are installed separately through the authorized GitHub connector.
+          tar -xJf /tmp/sreva.tar.xz --exclude='.github/workflows/ci.yml' -C .
           rm -rf bootstrap
-          rm -f .github/workflows/materialize-final-source.yml
 
-      - name: Commit exact Sreva source
+      - name: Commit exact Sreva application source
         shell: bash
         run: |
           set -euo pipefail
