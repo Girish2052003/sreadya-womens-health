@@ -22,23 +22,25 @@ class LifeStageScreen extends ConsumerWidget {
               'Choose the context that best fits now. Changing modes never deletes your history.',
             ),
             const SizedBox(height: 12),
-            Card(
-              child: Column(
-                children: LifeStageMode.values
-                    .map(
-                      (mode) => RadioListTile<LifeStageMode>(
-                        value: mode,
-                        groupValue: current,
-                        title: Text(mode.label),
-                        subtitle: Text(_description(mode)),
-                        onChanged: (value) async {
-                          if (value == null) return;
-                          await ref.read(lifeStageStoreProvider).write(value);
-                          ref.invalidate(lifeStageProvider);
-                        },
-                      ),
-                    )
-                    .toList(),
+            RadioGroup<LifeStageMode>(
+              groupValue: current,
+              onChanged: (value) async {
+                if (value == null) return;
+                await ref.read(lifeStageStoreProvider).write(value);
+                ref.invalidate(lifeStageProvider);
+              },
+              child: Card(
+                child: Column(
+                  children: LifeStageMode.values
+                      .map(
+                        (mode) => RadioListTile<LifeStageMode>(
+                          value: mode,
+                          title: Text(mode.label),
+                          subtitle: Text(_description(mode)),
+                        ),
+                      )
+                      .toList(),
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -61,7 +63,8 @@ class LifeStageScreen extends ConsumerWidget {
       'Periods, symptoms, predictions and reminders.',
     LifeStageMode.tryingToConceive =>
       'Adds fertility observations, tests, temperature and cervical mucus.',
-    LifeStageMode.pregnancy => 'Pauses cycle prediction and focuses on pregnancy-related personal tracking.',
+    LifeStageMode.pregnancy =>
+      'Pauses cycle prediction and focuses on pregnancy-related personal tracking.',
     LifeStageMode.postpartum =>
       'Postpartum recovery context without deleting prior cycles.',
     LifeStageMode.breastfeeding =>
