@@ -234,20 +234,24 @@ CAPABILITIES = {
     },
 }
 
-# Positive medical/contraceptive claims are release blockers. These are kept
-# deliberately narrow so transparent disclaimers such as "not diagnostic" are
-# allowed while product copy that claims to diagnose/treat/prevent is rejected.
+# Positive medical/contraceptive claims are release blockers. Match affirmative
+# product claims rather than naked medical phrases so transparent disclaimers
+# such as "Sreva does not diagnose disease" remain valid safety copy.
 forbidden_claims = (
-    "sreva diagnoses",
-    "diagnose disease",
-    "diagnoses disease",
-    "treats disease",
-    "treatment decision provided by sreva",
-    "prevents pregnancy",
-    "guaranteed contraception",
-    "guaranteed contraceptive effectiveness",
-    "clinically guarantees ovulation",
+    r"\b(?:sreva|the app)\s+(?:can\s+)?diagnos(?:e|es)\b",
+    r"\b(?:sreva|the app)\s+(?:can\s+)?treat(?:s)?\s+(?:disease|condition|symptoms?)\b",
+    r"\b(?:sreva|the app)\s+(?:can\s+)?prevent(?:s)?\s+pregnancy\b",
+    r"\bguaranteed contraception\b",
+    r"\bguaranteed contraceptive effectiveness\b",
+    r"\bcontraceptive effectiveness is guaranteed\b",
+    r"\bclinically guarantees ovulation\b",
+    r"\btreatment decision provided by sreva\b",
 )
+
+
+def find_forbidden_claims(text: str) -> list[str]:
+    lowered = text.lower()
+    return [pattern for pattern in forbidden_claims if re.search(pattern, lowered)]
 
 
 def require_nonempty(path: str) -> None:
@@ -284,15 +288,45 @@ def main() -> None:
         encoding="utf-8"
     )
     required_observations = (
-        "cramps", "headache", "migraine", "backPain", "breastTenderness",
-        "bloating", "acne", "nausea", "digestion", "fatigue", "dizziness",
-        "appetite", "cravings", "sleep", "energy", "stress", "mood",
-        "anxiety", "irritability", "libido", "vaginalDischarge",
-        "cervicalMucus", "basalBodyTemperature", "weight", "exercise",
-        "water", "custom", "ovulationTest", "pregnancyTest", "sexualActivity",
-        "protection", "contraception", "medication", "supplement", "dailyNote",
+        "cramps",
+        "headache",
+        "migraine",
+        "backPain",
+        "breastTenderness",
+        "bloating",
+        "acne",
+        "nausea",
+        "digestion",
+        "fatigue",
+        "dizziness",
+        "appetite",
+        "cravings",
+        "sleep",
+        "energy",
+        "stress",
+        "mood",
+        "anxiety",
+        "irritability",
+        "libido",
+        "vaginalDischarge",
+        "cervicalMucus",
+        "basalBodyTemperature",
+        "weight",
+        "exercise",
+        "water",
+        "custom",
+        "ovulationTest",
+        "pregnancyTest",
+        "sexualActivity",
+        "protection",
+        "contraception",
+        "medication",
+        "supplement",
+        "dailyNote",
     )
-    missing_observations = [item for item in required_observations if item not in cycle_model]
+    missing_observations = [
+        item for item in required_observations if item not in cycle_model
+    ]
     if missing_observations:
         raise SystemExit(f"Observation model missing: {missing_observations}")
 
@@ -300,24 +334,40 @@ def main() -> None:
         encoding="utf-8"
     )
     required_life_stages = (
-        "cycleTracking", "tryingToConceive", "pregnancy", "postpartum",
-        "breastfeeding", "perimenopause", "menopauseTransition",
+        "cycleTracking",
+        "tryingToConceive",
+        "pregnancy",
+        "postpartum",
+        "breastfeeding",
+        "perimenopause",
+        "menopauseTransition",
         "hormonalContraception",
     )
     missing_stages = [item for item in required_life_stages if item not in life_stage]
     if missing_stages:
         raise SystemExit(f"Life-stage model missing: {missing_stages}")
 
-    reminder_model = (ROOT / "lib/features/reminders/domain/reminder_models.dart").read_text(
-        encoding="utf-8"
-    )
+    reminder_model = (
+        ROOT / "lib/features/reminders/domain/reminder_models.dart"
+    ).read_text(encoding="utf-8")
     required_reminders = (
-        "periodSevenDays", "periodThreeDays", "periodOneDay",
-        "periodExpectedDay", "periodLate", "medication", "contraception",
-        "supplement", "ovulationTest", "pregnancyTest",
-        "maximum", "balanced", "detailed",
+        "periodSevenDays",
+        "periodThreeDays",
+        "periodOneDay",
+        "periodExpectedDay",
+        "periodLate",
+        "medication",
+        "contraception",
+        "supplement",
+        "ovulationTest",
+        "pregnancyTest",
+        "maximum",
+        "balanced",
+        "detailed",
     )
-    missing_reminders = [item for item in required_reminders if item not in reminder_model]
+    missing_reminders = [
+        item for item in required_reminders if item not in reminder_model
+    ]
     if missing_reminders:
         raise SystemExit(f"Reminder model missing: {missing_reminders}")
 
@@ -325,7 +375,7 @@ def main() -> None:
         path.read_text(encoding="utf-8", errors="ignore").lower()
         for path in (ROOT / "lib").rglob("*.dart")
     )
-    claim_hits = [claim for claim in forbidden_claims if claim in production_copy]
+    claim_hits = find_forbidden_claims(production_copy)
     if claim_hits:
         raise SystemExit(
             "Regulatory firewall violation (diagnose/contraceptive effectiveness claim): "
