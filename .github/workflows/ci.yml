@@ -27,10 +27,12 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed lib test tool
       - run: flutter analyze
       - run: flutter test
-      - run: python -m py_compile tool/configure_platforms.py tool/configure_android_tests.py tool/configure_android_release.py tool/privacy_scan.py tool/generate_sbom.py
+      - run: python -m py_compile tool/configure_platforms.py tool/configure_android_tests.py tool/configure_android_release.py tool/privacy_scan.py tool/secret_scan.py tool/generate_sbom.py
       - run: python -m pip install pytest
       - run: python -m pytest -q verification/reference
       - run: python tool/privacy_scan.py
+      - name: Scan repository for committed credentials
+        run: python tool/secret_scan.py
       - name: Dependency vulnerability scan (OSV)
         run: |
           docker run --rm -v "$PWD:/src" ghcr.io/google/osv-scanner:v2.3.3 \
@@ -79,6 +81,7 @@ jobs:
       - name: Create ephemeral CI upload key
         run: |
           keytool -genkeypair \
+            -storetype JKS \
             -keystore "$RUNNER_TEMP/sreva-ci-upload.jks" \
             -storepass sreva-ci-store-pass \
             -keypass sreva-ci-key-pass \
