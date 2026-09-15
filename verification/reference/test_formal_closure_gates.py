@@ -1,10 +1,16 @@
 from pathlib import Path
+import runpy
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
 def read(path: str) -> str:
     return (ROOT / path).read_text(encoding="utf-8")
+
+
+def firewall():
+    module = runpy.run_path(str(ROOT / "tool/verify_v1_traceability.py"))
+    return module["find_forbidden_claims"]
 
 
 def test_master_plan_traceability_covers_all_22_capability_families():
@@ -37,6 +43,26 @@ def test_ci_and_production_run_formal_closure_gates():
 
 def test_regulatory_firewall_is_machine_checked():
     verifier = read("tool/verify_v1_traceability.py")
-    assert "diagnose" in verifier.lower()
+    assert "diagnos" in verifier.lower()
     assert "contraceptive effectiveness" in verifier.lower()
     assert "forbidden_claims" in verifier
+    assert "find_forbidden_claims" in verifier
+
+
+def test_regulatory_firewall_allows_explicit_negated_safety_copy():
+    find_forbidden_claims = firewall()
+    safe_copy = (
+        "Sreva v1 does not use this information to diagnose disease, make "
+        "treatment decisions or claim contraceptive effectiveness."
+    )
+    assert find_forbidden_claims(safe_copy) == []
+
+
+def test_regulatory_firewall_rejects_affirmative_medical_or_contraceptive_claims():
+    find_forbidden_claims = firewall()
+    unsafe_copy = (
+        "Sreva diagnoses disease. The app treats symptoms. "
+        "Sreva prevents pregnancy with guaranteed contraceptive effectiveness."
+    )
+    hits = find_forbidden_claims(unsafe_copy)
+    assert len(hits) >= 3
