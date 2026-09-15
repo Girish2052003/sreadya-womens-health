@@ -7,9 +7,10 @@ Database databaseAtVersion(int version) {
   db.execute(
     'CREATE TABLE metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);',
   );
-  db.execute("INSERT INTO metadata VALUES('schema_version', ?);", [
-    version.toString(),
-  ]);
+  db.execute(
+    "INSERT INTO metadata VALUES('schema_version', ?);",
+    [version.toString()],
+  );
   return db;
 }
 
@@ -20,8 +21,9 @@ void main() {
     final coordinator = MigrationCoordinator(
       targetVersion: 2,
       steps: {
-        1: (database) =>
-            database.execute('CREATE TABLE adjacent_one(id INTEGER PRIMARY KEY);'),
+        1: (database) => database.execute(
+          'CREATE TABLE adjacent_one(id INTEGER PRIMARY KEY);',
+        ),
       },
     );
 
@@ -41,8 +43,9 @@ void main() {
       targetVersion: 3,
       steps: {
         1: (_) => throw StateError('old step must not replay'),
-        2: (database) =>
-            database.execute('CREATE TABLE adjacent_two(id INTEGER PRIMARY KEY);'),
+        2: (database) => database.execute(
+          'CREATE TABLE adjacent_two(id INTEGER PRIMARY KEY);',
+        ),
       },
     );
 
