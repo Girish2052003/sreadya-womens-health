@@ -287,10 +287,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               onPressed: _saving ? null : _finish,
               child: const Text('Continue without history'),
             ),
-            const SizedBox(height: 20),
-            const Center(
-              child: Text('In honour of Sreedevi Nallan Chakravathy ❤️'),
-            ),
           ],
         ),
       ),
