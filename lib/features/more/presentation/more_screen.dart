@@ -10,76 +10,27 @@ class MoreScreen extends StatelessWidget {
       (
         'Everyday',
         [
-          (
-            Icons.alarm_outlined,
-            'Reminders',
-            '3-day period alerts, medicine and quiet hours',
-            '/more/reminders',
-          ),
-          (
-            Icons.chat_bubble_outline,
-            'Private assistant',
-            'Natural-language logging and offline voice',
-            '/more/assistant',
-          ),
-          (
-            Icons.favorite_border,
-            'Life stage',
-            'Cycle, TTC, pregnancy, postpartum and menopause',
-            '/more/life-stage',
-          ),
+          (Icons.alarm_outlined, 'Reminders', '3-day period alerts, medicine and quiet hours', '/more/reminders'),
+          (Icons.chat_bubble_outline, 'Private assistant', 'Natural-language logging and offline voice', '/more/assistant'),
+          (Icons.favorite_border, 'Life stage', 'Cycle, TTC, pregnancy, postpartum and menopause', '/more/life-stage'),
         ],
       ),
       (
         'Health & sharing',
         [
-          (
-            Icons.health_and_safety_outlined,
-            'Apple Health / Health Connect',
-            'Explicit, granular integration only',
-            '/more/health',
-          ),
-          (
-            Icons.description_outlined,
-            'Doctor report',
-            'Generate PDF or CSV entirely on this device',
-            '/more/reports',
-          ),
-          (
-            Icons.people_outline,
-            'Partner sharing',
-            'Share only what you intentionally select',
-            '/more/partner',
-          ),
+          (Icons.health_and_safety_outlined, 'Apple Health / Health Connect', 'Explicit, granular integration only', '/more/health'),
+          (Icons.description_outlined, 'Doctor report', 'Generate and preview PDF/CSV entirely on this device', '/more/reports'),
+          (Icons.people_outline, 'Partner sharing', 'Share only what you intentionally select', '/more/partner'),
         ],
       ),
       (
         'Privacy & resilience',
         [
-          (
-            Icons.lock_outline,
-            'Privacy Center',
-            'App lock, notification privacy and data location',
-            '/more/privacy',
-          ),
-          (
-            Icons.backup_outlined,
-            'CycleVault',
-            'Encrypted user-controlled backup and restore',
-            '/more/backup',
-          ),
-          (
-            Icons.build_circle_outlined,
-            'Diagnostics',
-            'Operational report with no health payload',
-            '/more/diagnostics',
-          ),
-          (
-            Icons.settings_outlined,
-            'Settings & accessibility',
-            'Language-ready, theme and display preferences',
-            '/more/settings',
-          ),
+          (Icons.lock_outline, 'Privacy Center', 'App lock, notification privacy and data location', '/more/privacy'),
+          (Icons.pin_outlined, 'Sreva PIN', 'Optional local PIN fallback; no plaintext PIN storage', '/more/pin'),
+          (Icons.backup_outlined, 'CycleVault', 'Encrypted user-controlled backup and restore', '/more/backup'),
+          (Icons.build_circle_outlined, 'Diagnostics', 'Operational report with no health payload', '/more/diagnostics'),
+          (Icons.settings_outlined, 'Settings & accessibility', 'Language-ready, theme and display preferences', '/more/settings'),
         ],
       ),
     ];
@@ -92,18 +43,12 @@ class MoreScreen extends StatelessWidget {
             child: ListTile(
               leading: Icon(Icons.shield_outlined),
               title: Text('Local Sovereign Core'),
-              subtitle: Text(
-                'Your reproductive-health data stays in Sreva’s encrypted vault on this device.',
-              ),
+              subtitle: Text('Your reproductive-health data stays in Sreva’s encrypted vault on this device.'),
             ),
           ),
           const SizedBox(height: 16),
           for (final group in groups) ...[
-            Text(
-              group.$1,
-              style: Theme.of(context).textTheme.titleMedium
-                  ?.copyWith(fontWeight: FontWeight.w700),
-            ),
+            Text(group.$1, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
             const SizedBox(height: 8),
             Card(
               child: Column(
