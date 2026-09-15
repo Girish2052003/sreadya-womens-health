@@ -52,12 +52,22 @@ All must pass from the same candidate tree before merge:
 - Android host generation and native bridge installation checks
 - Play target API/release-signing policy checks
 - Kotlin release unit tests including Helsinki DST forward/backward reminder cases
+- Kotlin worldwide timezone database and travel/timezone-change wall-clock tests
+- editable quiet-hours policy controls
+- Health Connect history permission and supported read/write symmetry
+- CycleVault cryptographic round-trip, wrong-passphrase, tamper, format and atomic-failure tests
+- prediction calibration including over/under-confidence signals
+- complete deterministic local-assistant intent-family tests
 - ephemeral non-debug release-signing path verification
 - signed release AAB build
 - signed release APK build
 - AAB signature verification
 - APK signature verification
 - iOS release compile without code signing (non-blocking for Android commercial launch but mandatory for shared-code regression closure)
+
+## Current closure audit
+
+The expanded acceptance suite is intentionally RED until all newly identified worldwide-v1 gaps are implemented. No gate may be deleted or weakened merely to obtain a green build.
 
 ## Final repository gates
 
