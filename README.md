@@ -23,7 +23,7 @@ Sreva is designed so menstrual and reproductive-health data remains on the user'
 
 - First production target: iPhone 17, minimum iOS 17.
 - Cross-platform product: iOS + Android from the same Flutter codebase, with native Swift/Kotlin adapters where platform APIs require them.
-- Flutter stable line: 3.47.x.
+- Flutter toolchain: 3.47.2 / Dart 3.13.2.
 
 ## Repository status
 

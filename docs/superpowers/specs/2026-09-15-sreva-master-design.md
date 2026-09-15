@@ -31,7 +31,7 @@ The app must never present a predicted period date as biologically guaranteed. P
 
 ## 3. Production technology
 
-- Flutter 3.47.x / Dart 3.13.x.
+- Flutter 3.47.2 / Dart 3.13.2.
 - Modular clean architecture, feature-oriented directory structure.
 - Riverpod for state management.
 - Declarative routing.

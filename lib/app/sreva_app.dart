@@ -18,6 +18,8 @@ import '../features/privacy/presentation/privacy_center_screen.dart';
 import '../features/reminders/presentation/reminders_screen.dart';
 import '../features/reports/presentation/reports_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
+import '../features/settings/domain/app_preferences.dart';
+import '../l10n/generated/app_localizations.dart';
 import 'providers.dart';
 import 'sreva_shell.dart';
 
@@ -47,40 +49,69 @@ final GoRouter _router = GoRouter(
   ],
 );
 
-class SrevaApp extends ConsumerWidget {
+class SrevaApp extends ConsumerStatefulWidget {
   const SrevaApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // Reconcile the single primary cycle reminder whenever prediction or
-    // reminder preferences change. Permission prompts are never triggered here.
+  ConsumerState<SrevaApp> createState() => _SrevaAppState();
+}
+
+class _SrevaAppState extends ConsumerState<SrevaApp> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _consumeNotificationAction());
+  }
+
+  Future<void> _consumeNotificationAction() async {
+    final action = await ref.read(reminderSchedulerProvider).consumePendingAction();
+    if (action != 'periodStarted') return;
+    try {
+      await ref.read(healthActionsProvider).startPeriod(DateTime.now());
+    } on StateError {
+      // An existing overlapping period means the explicit notification action
+      // has already been represented locally; never create a duplicate.
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     ref.watch(reminderReconciliationProvider);
-    final scheme = ColorScheme.fromSeed(seedColor: const Color(0xFF9D426B), brightness: Brightness.light);
+    final preferences = ref.watch(appPreferencesProvider).valueOrNull ?? const AppPreferences();
+    final themeMode = switch (preferences.themePreference) {
+      ThemePreference.system => ThemeMode.system,
+      ThemePreference.light => ThemeMode.light,
+      ThemePreference.dark => ThemeMode.dark,
+    };
+    final lightScheme = ColorScheme.fromSeed(
+      seedColor: const Color(0xFF9D426B),
+      brightness: Brightness.light,
+      contrastLevel: preferences.highContrast ? 1.0 : 0.0,
+    );
+    final darkScheme = ColorScheme.fromSeed(
+      seedColor: const Color(0xFFE59AB9),
+      brightness: Brightness.dark,
+      contrastLevel: preferences.highContrast ? 1.0 : 0.0,
+    );
     return MaterialApp.router(
       title: 'Sreva',
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('en'), Locale('fi'), Locale('ta'), Locale('hi'), Locale('es'),
-        Locale('fr'), Locale('de'), Locale('ar'), Locale('pt'), Locale('it'),
-      ],
-      themeMode: ThemeMode.system,
+      supportedLocales: AppLocalizations.supportedLocales,
+      themeMode: themeMode,
       theme: ThemeData(
-        colorScheme: scheme,
+        colorScheme: lightScheme,
         useMaterial3: true,
         scaffoldBackgroundColor: const Color(0xFFFFFBFD),
         cardTheme: const CardThemeData(margin: EdgeInsets.zero),
         inputDecorationTheme: const InputDecorationTheme(border: OutlineInputBorder()),
       ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFE59AB9), brightness: Brightness.dark),
-        useMaterial3: true,
-      ),
+      darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
       routerConfig: _router,
     );
-  }
-}
+  }}

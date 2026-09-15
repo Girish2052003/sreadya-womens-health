@@ -50,3 +50,6 @@ coverage/
 __pycache__/
 .pytest_cache/
 *.py[cod]
+
+# Superpowers execution ledger
+.superpowers/

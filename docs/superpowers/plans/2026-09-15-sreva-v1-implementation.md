@@ -6,7 +6,7 @@
 
 **Architecture:** Feature-oriented Flutter application with platform adapters for native health, notifications and device security. The domain layer is deterministic and independently testable; persistence, encrypted backup, notifications, HealthKit/Health Connect and UI are adapters around it.
 
-**Tech Stack:** Flutter 3.47.x, Dart 3.13.x, Riverpod, Drift/SQLite, secure storage, local authentication, local notifications, HealthKit/Health Connect adapters, local PDF/CSV, audited cryptography.
+**Tech Stack:** Flutter 3.47.2, Dart 3.13.2, Riverpod, Drift/SQLite, secure storage, local authentication, local notifications, HealthKit/Health Connect adapters, local PDF/CSV, audited cryptography.
 
 **Spec:** `docs/superpowers/specs/2026-09-15-sreva-master-design.md`
 

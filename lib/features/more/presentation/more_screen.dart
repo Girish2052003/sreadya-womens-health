@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+class MoreScreen extends StatelessWidget {
+  const MoreScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final groups = <(String, List<(IconData, String, String, String)>)>[
+      ('Everyday', [
+        (Icons.alarm_outlined, 'Reminders', '3-day period alerts, medicine and quiet hours', '/more/reminders'),
+        (Icons.chat_bubble_outline, 'Private assistant', 'Natural-language logging and offline voice', '/more/assistant'),
+        (Icons.favorite_border, 'Life stage', 'Cycle, TTC, pregnancy, postpartum and menopause', '/more/life-stage'),
+      ]),
+      ('Health & sharing', [
+        (Icons.health_and_safety_outlined, 'Apple Health / Health Connect', 'Explicit, granular integration only', '/more/health'),
+        (Icons.description_outlined, 'Doctor report', 'Generate PDF or CSV entirely on this device', '/more/reports'),
+        (Icons.people_outline, 'Partner sharing', 'Share only what you intentionally select', '/more/partner'),
+      ]),
+      ('Privacy & resilience', [
+        (Icons.lock_outline, 'Privacy Center', 'App lock, notification privacy and data location', '/more/privacy'),
+        (Icons.backup_outlined, 'CycleVault', 'Encrypted user-controlled backup and restore', '/more/backup'),
+        (Icons.build_circle_outlined, 'Diagnostics', 'Operational report with no health payload', '/more/diagnostics'),
+        (Icons.settings_outlined, 'Settings & accessibility', 'Language-ready, theme and display preferences', '/more/settings'),
+      ]),
+    ];
+    return Scaffold(
+      appBar: AppBar(title: const Text('More')),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          const Card(
+            child: ListTile(
+              leading: Icon(Icons.shield_outlined),
+              title: Text('Local Sovereign Core'),
+              subtitle: Text('Your reproductive-health data stays in Sreva’s encrypted vault on this device.'),
+            ),
+          ),
+          const SizedBox(height: 16),
+          for (final group in groups) ...[
+            Text(group.$1, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+            const SizedBox(height: 8),
+            Card(
+              child: Column(
+                children: group.$2.map((item) => ListTile(
+                  leading: Icon(item.$1),
+                  title: Text(item.$2),
+                  subtitle: Text(item.$3),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => context.push(item.$4),
+                )).toList(),
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+        ],
+      ),
+    );
+  }
+}
