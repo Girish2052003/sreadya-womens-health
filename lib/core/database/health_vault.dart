@@ -60,7 +60,7 @@ class HealthVault {
       );
       return HealthVault._(db, dbPath);
     } catch (_) {
-      db.dispose();
+      db.close();
       rethrow;
     }
   }
@@ -84,5 +84,5 @@ class HealthVault {
         : result.first.values.first.toString();
   }
 
-  void close() => database.dispose();
+  void close() => database.close();
 }
