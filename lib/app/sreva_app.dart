@@ -15,6 +15,7 @@ import '../features/logging/presentation/log_screen.dart';
 import '../features/more/presentation/more_screen.dart';
 import '../features/partner/presentation/partner_screen.dart';
 import '../features/predictions/presentation/prediction_details_screen.dart';
+import '../features/privacy/presentation/pin_lock_screen.dart';
 import '../features/privacy/presentation/privacy_center_screen.dart';
 import '../features/reminders/presentation/reminders_screen.dart';
 import '../features/reports/presentation/reports_screen.dart';
@@ -31,13 +32,9 @@ final GoRouter _router = GoRouter(
       builder: (context, state, navigationShell) => SrevaShell(navigationShell: navigationShell),
       branches: [
         StatefulShellBranch(routes: [GoRoute(path: '/', builder: (_, _) => const HomeScreen())]),
-        StatefulShellBranch(
-          routes: [GoRoute(path: '/calendar', builder: (_, _) => const CalendarScreen())],
-        ),
+        StatefulShellBranch(routes: [GoRoute(path: '/calendar', builder: (_, _) => const CalendarScreen())]),
         StatefulShellBranch(routes: [GoRoute(path: '/log', builder: (_, _) => const LogScreen())]),
-        StatefulShellBranch(
-          routes: [GoRoute(path: '/insights', builder: (_, _) => const InsightsScreen())],
-        ),
+        StatefulShellBranch(routes: [GoRoute(path: '/insights', builder: (_, _) => const InsightsScreen())]),
         StatefulShellBranch(routes: [GoRoute(path: '/more', builder: (_, _) => const MoreScreen())]),
       ],
     ),
@@ -49,6 +46,7 @@ final GoRouter _router = GoRouter(
     GoRoute(path: '/more/reports', builder: (_, _) => const ReportsScreen()),
     GoRoute(path: '/more/partner', builder: (_, _) => const PartnerScreen()),
     GoRoute(path: '/more/privacy', builder: (_, _) => const PrivacyCenterScreen()),
+    GoRoute(path: '/more/pin', builder: (_, _) => const PinLockScreen()),
     GoRoute(path: '/more/backup', builder: (_, _) => const BackupScreen()),
     GoRoute(path: '/more/diagnostics', builder: (_, _) => const DiagnosticsScreen()),
     GoRoute(path: '/more/settings', builder: (_, _) => const SettingsScreen()),
@@ -75,8 +73,7 @@ class _SrevaAppState extends ConsumerState<SrevaApp> {
     try {
       await ref.read(healthActionsProvider).startPeriod(DateTime.now());
     } on StateError {
-      // An existing overlapping period means the explicit notification action
-      // has already been represented locally; never create a duplicate.
+      // Existing overlapping history means this action is already represented.
     }
   }
 
