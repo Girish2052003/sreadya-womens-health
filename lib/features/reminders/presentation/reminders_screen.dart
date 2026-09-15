@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../app/providers.dart';
+import '../../../core/settings/user_formatters.dart';
+import '../../settings/domain/app_preferences.dart';
 import '../data/reminder_preferences.dart';
 import '../data/reminder_scheduler.dart';
 import '../domain/reminder_models.dart';
@@ -58,6 +59,9 @@ class _RemindersScreenState extends ConsumerState<RemindersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appPreferences = ref.watch(appPreferencesProvider).valueOrNull ??
+        const AppPreferences();
+    final clockPreference = appPreferences.clockPreference;
     return Scaffold(
       appBar: AppBar(title: const Text('Reminders')),
       body: FutureBuilder<ReminderPreferences>(
@@ -131,8 +135,10 @@ class _RemindersScreenState extends ConsumerState<RemindersScreen> {
               ListTile(
                 title: const Text('Reminder time'),
                 subtitle: Text(
-                  DateFormat.jm().format(
-                    DateTime(2026, 1, 1, prefs.hour, prefs.minute),
+                  UserFormatters.formatClock(
+                    TimeOfDay(hour: prefs.hour, minute: prefs.minute),
+                    clockPreference,
+                    context,
                   ),
                 ),
                 trailing: const Icon(Icons.schedule),
@@ -154,7 +160,8 @@ class _RemindersScreenState extends ConsumerState<RemindersScreen> {
               ListTile(
                 title: const Text('Quiet hours'),
                 subtitle: Text(
-                  '${prefs.quietStartHour.toString().padLeft(2, '0')}:00 – ${prefs.quietEndHour.toString().padLeft(2, '0')}:00',
+                  '${UserFormatters.formatClock(TimeOfDay(hour: prefs.quietStartHour, minute: 0), clockPreference, context)} – '
+                  '${UserFormatters.formatClock(TimeOfDay(hour: prefs.quietEndHour, minute: 0), clockPreference, context)}',
                 ),
               ),
               ListTile(
@@ -187,6 +194,7 @@ class _RemindersScreenState extends ConsumerState<RemindersScreen> {
               const SizedBox(height: 24),
               PersonalRemindersPanel(
                 scheduler: ref.read(reminderSchedulerProvider),
+                clockPreference: clockPreference,
               ),
             ],
           );
