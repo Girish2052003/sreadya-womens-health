@@ -76,7 +76,7 @@ jobs:
           python3 tool/configure_android_release.py --check --require-signing
       - name: Run Android Kotlin release unit tests
         working-directory: android
-        run: ./gradlew testReleaseUnitTest --stacktrace
+        run: ./gradlew :app:testReleaseUnitTest --stacktrace
       - name: Build Play-ready AAB and production-signed APK
         env:
           SREVA_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SREVA_ANDROID_KEYSTORE_PASSWORD }}
