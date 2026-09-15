@@ -14,6 +14,7 @@ import '../features/life_stage/presentation/life_stage_screen.dart';
 import '../features/logging/presentation/log_screen.dart';
 import '../features/more/presentation/more_screen.dart';
 import '../features/partner/presentation/partner_screen.dart';
+import '../features/predictions/presentation/prediction_details_screen.dart';
 import '../features/privacy/presentation/privacy_center_screen.dart';
 import '../features/reminders/presentation/reminders_screen.dart';
 import '../features/reports/presentation/reports_screen.dart';
@@ -27,65 +28,29 @@ final GoRouter _router = GoRouter(
   initialLocation: '/',
   routes: [
     StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) =>
-          SrevaShell(navigationShell: navigationShell),
+      builder: (context, state, navigationShell) => SrevaShell(navigationShell: navigationShell),
       branches: [
+        StatefulShellBranch(routes: [GoRoute(path: '/', builder: (_, _) => const HomeScreen())]),
         StatefulShellBranch(
-          routes: [GoRoute(path: '/', builder: (_, _) => const HomeScreen())],
+          routes: [GoRoute(path: '/calendar', builder: (_, _) => const CalendarScreen())],
         ),
+        StatefulShellBranch(routes: [GoRoute(path: '/log', builder: (_, _) => const LogScreen())]),
         StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/calendar',
-              builder: (_, _) => const CalendarScreen(),
-            ),
-          ],
+          routes: [GoRoute(path: '/insights', builder: (_, _) => const InsightsScreen())],
         ),
-        StatefulShellBranch(
-          routes: [GoRoute(path: '/log', builder: (_, _) => const LogScreen())],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/insights',
-              builder: (_, _) => const InsightsScreen(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(path: '/more', builder: (_, _) => const MoreScreen()),
-          ],
-        ),
+        StatefulShellBranch(routes: [GoRoute(path: '/more', builder: (_, _) => const MoreScreen())]),
       ],
     ),
-    GoRoute(
-      path: '/more/reminders',
-      builder: (_, _) => const RemindersScreen(),
-    ),
-    GoRoute(
-      path: '/more/assistant',
-      builder: (_, _) => const AssistantScreen(),
-    ),
-    GoRoute(
-      path: '/more/life-stage',
-      builder: (_, _) => const LifeStageScreen(),
-    ),
-    GoRoute(
-      path: '/more/health',
-      builder: (_, _) => const HealthIntegrationScreen(),
-    ),
+    GoRoute(path: '/prediction', builder: (_, _) => const PredictionDetailsScreen()),
+    GoRoute(path: '/more/reminders', builder: (_, _) => const RemindersScreen()),
+    GoRoute(path: '/more/assistant', builder: (_, _) => const AssistantScreen()),
+    GoRoute(path: '/more/life-stage', builder: (_, _) => const LifeStageScreen()),
+    GoRoute(path: '/more/health', builder: (_, _) => const HealthIntegrationScreen()),
     GoRoute(path: '/more/reports', builder: (_, _) => const ReportsScreen()),
     GoRoute(path: '/more/partner', builder: (_, _) => const PartnerScreen()),
-    GoRoute(
-      path: '/more/privacy',
-      builder: (_, _) => const PrivacyCenterScreen(),
-    ),
+    GoRoute(path: '/more/privacy', builder: (_, _) => const PrivacyCenterScreen()),
     GoRoute(path: '/more/backup', builder: (_, _) => const BackupScreen()),
-    GoRoute(
-      path: '/more/diagnostics',
-      builder: (_, _) => const DiagnosticsScreen(),
-    ),
+    GoRoute(path: '/more/diagnostics', builder: (_, _) => const DiagnosticsScreen()),
     GoRoute(path: '/more/settings', builder: (_, _) => const SettingsScreen()),
   ],
 );
@@ -101,15 +66,11 @@ class _SrevaAppState extends ConsumerState<SrevaApp> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => _consumeNotificationAction(),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) => _consumeNotificationAction());
   }
 
   Future<void> _consumeNotificationAction() async {
-    final action = await ref
-        .read(reminderSchedulerProvider)
-        .consumePendingAction();
+    final action = await ref.read(reminderSchedulerProvider).consumePendingAction();
     if (action != 'periodStarted') return;
     try {
       await ref.read(healthActionsProvider).startPeriod(DateTime.now());
@@ -122,9 +83,7 @@ class _SrevaAppState extends ConsumerState<SrevaApp> {
   @override
   Widget build(BuildContext context) {
     ref.watch(reminderReconciliationProvider);
-    final preferences = ref
-        .watch(appPreferencesProvider)
-        .when(
+    final preferences = ref.watch(appPreferencesProvider).when(
           data: (value) => value,
           loading: () => const AppPreferences(),
           error: (_, _) => const AppPreferences(),
@@ -160,9 +119,7 @@ class _SrevaAppState extends ConsumerState<SrevaApp> {
         useMaterial3: true,
         scaffoldBackgroundColor: const Color(0xFFFFFBFD),
         cardTheme: const CardThemeData(margin: EdgeInsets.zero),
-        inputDecorationTheme: const InputDecorationTheme(
-          border: OutlineInputBorder(),
-        ),
+        inputDecorationTheme: const InputDecorationTheme(border: OutlineInputBorder()),
       ),
       darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
       routerConfig: _router,
