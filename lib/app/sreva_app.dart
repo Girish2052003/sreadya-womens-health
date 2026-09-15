@@ -17,6 +17,7 @@ import '../features/partner/presentation/partner_screen.dart';
 import '../features/predictions/presentation/prediction_details_screen.dart';
 import '../features/privacy/presentation/pin_lock_screen.dart';
 import '../features/privacy/presentation/privacy_center_screen.dart';
+import '../features/privacy/presentation/privacy_policy_screen.dart';
 import '../features/reminders/presentation/reminders_screen.dart';
 import '../features/reports/presentation/reports_screen.dart';
 import '../features/settings/domain/app_preferences.dart';
@@ -86,6 +87,10 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/more/privacy',
       builder: (_, _) => const PrivacyCenterScreen(),
+    ),
+    GoRoute(
+      path: '/more/privacy-policy',
+      builder: (_, _) => const PrivacyPolicyScreen(),
     ),
     GoRoute(path: '/more/pin', builder: (_, _) => const PinLockScreen()),
     GoRoute(path: '/more/backup', builder: (_, _) => const BackupScreen()),
