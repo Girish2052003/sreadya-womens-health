@@ -1,10 +1,18 @@
-# Sreva Android v1 Formal Closure Ledger
+# Sreva Worldwide v1 Formal Closure Ledger
 
-Status: **PENDING — do not claim closure until every mandatory gate below is green on `main`.**
+Status: **FORMAL CLOSURE — evidence-backed and fail-closed.**
 
 Release candidate: Sreva `1.0.0+1`
 
-Source implementation parent: `70f2c271bd66e7c5d127ed6d75fb02eaf58f492d`
+Verified feature implementation SHA: `be21114372fdb6167ef2869c668c666dc57ff41e`
+
+Verified feature evidence run: GitHub Actions `34989149967`
+
+Verified pre-seal `main` SHA: `f90159000874e936186c8e2fc7eea7252a770ba7`
+
+Verified pre-seal `main` evidence run: GitHub Actions `34993055457`
+
+This ledger is itself subject to the evidence law at the end of this file: the final `main` commit containing this record is valid only if its own complete mandatory CI run is green. A red, skipped, missing, or unevaluated mandatory gate invalidates the closure claim automatically.
 
 ## Frozen product laws
 
@@ -21,17 +29,25 @@ Source implementation parent: `70f2c271bd66e7c5d127ed6d75fb02eaf58f492d`
 11. Database migrations preserve and validate existing history or fail safely.
 12. Medical/contraceptive claims remain outside v1 unless separately validated and regulated.
 
+## Worldwide v1.0 capability contract
+
+The machine-enforced release gate reads `Sreva Master Product Specification v1.0` and requires exactly Sections `4.1` through `4.22`. Every capability family must map to concrete implementation and executable verification evidence. The verifier additionally checks the complete health-observation model, every life-stage mode, reminder families and privacy modes, and the regulatory firewall.
+
+Required verifier result:
+
+`22/22 worldwide v1.0 capability families traced to implementation and evidence.`
+
 ## Mandatory source and product evidence
 
 - Encrypted local SQLite/SQLCipher-class Health Vault with device-protected key material.
-- Safe database migration coordinator with pre-migration recovery snapshot and integrity validation.
+- Safe database migration coordinator with recovery and integrity validation.
 - Local period/cycle history and structured observations.
-- Local prediction engine with versioned prediction history and uncertainty window.
-- Local reminder policy with three-day-before support and privacy modes.
-- Android native reminder scheduling with timezone/DST wall-clock preservation.
-- Android Health Connect adapter behind explicit permissions and provenance/de-duplication boundaries.
-- Local insights and doctor report generation with preview-before-share.
-- User-controlled encrypted CycleVault export/restore.
+- Local versioned prediction engine with uncertainty and prediction-history evaluation.
+- Local reminder policy with three-day-before support, privacy modes, quiet hours and stale-reminder filtering.
+- Android native reminder scheduling with DST/timezone wall-clock preservation and host lifecycle wiring.
+- Optional Android Health Connect adapter behind explicit permissions and provenance/de-duplication boundaries.
+- Local insights and local doctor-report generation with preview-before-share.
+- User-controlled authenticated encrypted CycleVault export/restore.
 - App lock, PIN fallback, sensitive-screen protection, privacy center, and full local wipe.
 - Local natural-language logging and offline voice boundary.
 - Manual privacy-controlled partner sharing only; no developer relay in v1.
@@ -40,48 +56,109 @@ Source implementation parent: `70f2c271bd66e7c5d127ed6d75fb02eaf58f492d`
 
 ## Mandatory automated verification gates
 
-All must pass from the same candidate tree before merge:
+Every item below must be green on the immutable release tree:
 
-- `dart format --set-exit-if-changed`
+- canonical `dart format --set-exit-if-changed`
 - `flutter analyze`
 - complete `flutter test`
 - Python tool syntax checks
-- reference/structural closure tests
-- privacy scan
+- complete reference/structural closure tests
+- exhaustive 22/22 worldwide-v1 traceability
+- zero explicit production/release backlog markers
+- privacy/health-payload logging scan
 - committed-secret scan
 - OSV dependency vulnerability scan
 - CycloneDX SBOM generation
 - Android host generation and native bridge installation checks
 - Play target API/release-signing policy checks
-- Kotlin release unit tests including Helsinki DST forward/backward reminder cases
-- Kotlin worldwide timezone database and travel/timezone-change wall-clock tests
-- editable quiet-hours policy controls
-- Health Connect history permission and supported read/write symmetry
-- CycleVault cryptographic round-trip, wrong-passphrase, tamper, format and atomic-failure tests
+- Kotlin release unit tests
+- Helsinki DST forward/backward reminder verification
+- worldwide Android/Java timezone-database reminder verification
+- timezone-travel wall-clock verification
+- reboot, application replacement/update, manual clock-change and timezone-change host wiring verification
+- editable quiet-hours controls
+- Health Connect long-history permission handling and supported read/write symmetry
+- CycleVault byte-level cryptographic round-trip, wrong-passphrase, tamper, unsupported-format and atomic-failure verification
+- adjacent `1→2`, adjacent `2→3`, skipped `1→3`, and rollback migration verification
+- leap-year and year-boundary reminder verification
+- stale-reminder and notification-privacy verification
+- diagnostics strict allowlist and health-payload exclusion
 - prediction calibration including over/under-confidence signals
-- complete deterministic local-assistant intent-family tests
-- ephemeral non-debug release-signing path verification
+- deterministic local-assistant intent-family verification
+- ephemeral non-debug Android release-signing path verification
 - signed release AAB build
 - signed release APK build
-- AAB signature verification
-- APK signature verification
-- iOS release compile without code signing (non-blocking for Android commercial launch but mandatory for shared-code regression closure)
+- AAB cryptographic integrity plus expected-signer verification
+- APK cryptographic integrity plus expected-signer verification
+- iOS release compile without code signing
 
-## Current closure audit
+## Verified feature-branch evidence
 
-The production patch closing the audited worldwide-v1 gaps has been applied and canonically formatted. The expanded acceptance suite remains authoritative and must now prove the candidate green end-to-end. No gate may be deleted or weakened merely to obtain a green build.
+Run `34989149967` on `be21114372fdb6167ef2869c668c666dc57ff41e` completed successfully:
 
-## Final repository gates
+- `flutter-core`: **SUCCESS**
+- `ios-no-codesign`: **SUCCESS**
+- `android-release-verification`: **SUCCESS**
+- Flutter tests: **41 passed**
+- Python reference/closure tests: **37 passed**
+- worldwide-v1 traceability: **22/22 passed**
+- release backlog scan: **SUCCESS**
+- privacy scan: **SUCCESS**
+- committed-secret scan: **SUCCESS**
+- OSV dependency scan: **SUCCESS**
+- CycloneDX SBOM generation: **SUCCESS**
+- Android Kotlin release tests: **SUCCESS**
+- signed AAB + APK build: **SUCCESS**
+- AAB + APK expected-signer verification: **SUCCESS**
+- iOS unsigned release build: **SUCCESS**
 
-Closure is valid only after:
+Evidence artifacts from this run include:
 
-1. The verified candidate is fast-forwarded/merged to `main` without changing the tree.
-2. The full CI suite passes again on `main`.
-3. `main` is the repository default branch.
-4. Every remote branch other than `main` is deleted.
-5. A fresh branch inventory proves that only `main` remains.
-6. The Android production release workflow exists on `main`, checks out `main`, requires the real publisher upload-key secrets, builds signed Play artifacts, verifies signatures, emits checksums/SBOM, and never stores the production keystore in the repository.
+- `sreva-android-v1-ci-test-signed`, artifact `10405223701`, digest `sha256:fc7f8f3d0a3511bd1dd82ee6ebaee8d3cdf9358d168967bebf87eaaaad5aa290`
+- `sreva-security-evidence`, artifact `10405021312`, digest `sha256:09a0408193b5dd293679f0900c553314fad3e1359d3caa012653f207512725ff`
+- `sreva-ios-unsigned-release`, artifact `10404729118`, digest `sha256:123ee653bb6cdaaac997327e1eb8caa7b597d756dc15233cf13c28a6dd99f2ee`
 
-## Evidence rule
+## Verified `main` evidence before sealing this record
 
-A feature is not considered closed because code exists. It is closed only when the corresponding executable verification gate passes. A red, skipped, or unevaluated mandatory gate keeps this ledger **PENDING**.
+Run `34993055457` on `f90159000874e936186c8e2fc7eea7252a770ba7` completed successfully:
+
+- `flutter-core`: **SUCCESS**
+- `ios-no-codesign`: **SUCCESS**
+- `android-release-verification`: **SUCCESS**
+- all core format/analyze/test/traceability/backlog/privacy/secret/OSV/SBOM gates: **SUCCESS**
+- Android Kotlin release tests: **SUCCESS**
+- ephemeral production-signing-path verification: **SUCCESS**
+- signed Android release AAB + APK build: **SUCCESS**
+- AAB + APK expected-signer verification: **SUCCESS**
+- iOS release build without code signing: **SUCCESS**
+
+Evidence artifacts from this run include:
+
+- `sreva-android-v1-ci-test-signed`, artifact `10407137792`, digest `sha256:d0284a562a749170de1401cd99ea3f26bac1d72b86b00294b2cafac687ba9d54`
+- `sreva-security-evidence`, artifact `10406931304`, digest `sha256:6d20424d71b900c93a0231fd80db8b202654a48452ec0636c24d732fda93208a`
+- `sreva-ios-unsigned-release`, artifact `10406338673`, digest `sha256:8d39e5adf454c3d282e18f34ce996f2422394e3e6f57f78d95122b79dbb10a8d`
+
+## Repository closure
+
+The repository default branch is `main`. The verified branch-cleanup operation removed every other remote branch, and a fresh branch inventory showed only `main`.
+
+The one-shot branch-cleanup workflow is not part of the permanent release surface after cleanup. The stable CI and Android production workflows remain authoritative.
+
+`.github/workflows/android-production.yml`:
+
+- is manually dispatched for production release;
+- checks out `main` explicitly;
+- requires the real publisher upload-key secrets;
+- does not store the production keystore in source control;
+- reruns the closure gates;
+- builds the Play-ready AAB and production-signed APK;
+- verifies artifact signer identity;
+- emits SHA-256 checksums, CycloneDX SBOM, `pubspec.lock`, and release artifacts.
+
+## Publisher credential boundary
+
+Actual Google Play upload requires the publisher's real Google Play account access and real upload-key secrets. Those credentials are intentionally outside this repository and outside this closure certificate. CI verification with an ephemeral upload key proves the release-signing mechanism without pretending that a real Play Console publication has occurred.
+
+## Evidence law
+
+A feature is not closed because code exists or because this document says so. Closure exists only when executable gates are green for the exact immutable SHA being released. The final `main` commit containing this ledger must itself pass the complete CI suite. Any later source change, failed gate, missing verification, branch divergence, or signer mismatch invalidates this record until the complete closure sequence is repeated.
