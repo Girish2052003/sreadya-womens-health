@@ -116,8 +116,8 @@ def test_release_ci_builds_android_installable_and_store_artifacts_and_sbom():
     assert "configure_android_release.py" in ci
     assert "flutter build appbundle --release" in ci
     assert "flutter build apk --release" in ci
-    assert "jarsigner -verify -strict" in ci
-    assert "apksigner" in ci
+    assert "tool/verify_android_signatures.py" in ci
+    assert "jarsigner -verify -strict" not in ci
     assert "actions/upload-artifact" in ci
     assert "tool/secret_scan.py" in ci
     assert "SBOM" in ci or "sbom" in ci.lower()
@@ -146,6 +146,7 @@ def test_production_workflow_requires_real_upload_key_secrets():
     assert "tool/secret_scan.py" in workflow
     assert ":app:testReleaseUnitTest" in workflow
     assert "--require-signing" in workflow
+    assert "tool/verify_android_signatures.py" in workflow
     assert "SHA256SUMS.txt" in workflow
 
 

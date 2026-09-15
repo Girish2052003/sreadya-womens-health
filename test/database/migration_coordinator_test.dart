@@ -2,14 +2,62 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sqlite3/sqlite3.dart';
 import 'package:sreva/core/database/migration_coordinator.dart';
 
+Database databaseAtVersion(int version) {
+  final db = sqlite3.openInMemory();
+  db.execute(
+    'CREATE TABLE metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);',
+  );
+  db.execute("INSERT INTO metadata VALUES('schema_version', ?);", [
+    version.toString(),
+  ]);
+  return db;
+}
+
 void main() {
-  test('migrates an old schema through every required version', () {
-    final db = sqlite3.openInMemory();
+  test('adjacent migration 1 to 2 runs exactly the 1 to 2 step', () {
+    final db = databaseAtVersion(1);
     addTearDown(db.close);
-    db.execute(
-      'CREATE TABLE metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);',
+    final coordinator = MigrationCoordinator(
+      targetVersion: 2,
+      steps: {
+        1: (database) =>
+            database.execute('CREATE TABLE adjacent_one(id INTEGER PRIMARY KEY);'),
+      },
     );
-    db.execute("INSERT INTO metadata VALUES('schema_version', '1');");
+
+    coordinator.migrate(db);
+
+    expect(coordinator.readSchemaVersion(db), 2);
+    expect(
+      db.select("SELECT name FROM sqlite_master WHERE name='adjacent_one';"),
+      isNotEmpty,
+    );
+  });
+
+  test('adjacent migration 2 to 3 does not replay the 1 to 2 step', () {
+    final db = databaseAtVersion(2);
+    addTearDown(db.close);
+    final coordinator = MigrationCoordinator(
+      targetVersion: 3,
+      steps: {
+        1: (_) => throw StateError('old step must not replay'),
+        2: (database) =>
+            database.execute('CREATE TABLE adjacent_two(id INTEGER PRIMARY KEY);'),
+      },
+    );
+
+    coordinator.migrate(db);
+
+    expect(coordinator.readSchemaVersion(db), 3);
+    expect(
+      db.select("SELECT name FROM sqlite_master WHERE name='adjacent_two';"),
+      isNotEmpty,
+    );
+  });
+
+  test('skipped-version upgrade 1 to 3 runs every required step', () {
+    final db = databaseAtVersion(1);
+    addTearDown(db.close);
 
     final coordinator = MigrationCoordinator(
       targetVersion: 3,
@@ -35,12 +83,8 @@ void main() {
   });
 
   test('rolls back schema and data when a migration fails', () {
-    final db = sqlite3.openInMemory();
+    final db = databaseAtVersion(1);
     addTearDown(db.close);
-    db.execute(
-      'CREATE TABLE metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);',
-    );
-    db.execute("INSERT INTO metadata VALUES('schema_version', '1');");
 
     final coordinator = MigrationCoordinator(
       targetVersion: 3,
