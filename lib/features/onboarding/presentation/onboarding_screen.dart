@@ -289,7 +289,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             ),
             const SizedBox(height: 20),
             const Center(
-              child: Text('Made with care · Sreedevi Nallan Chakravathy ❤️'),
+              child: Text('In honour of Sreedevi Nallan Chakravathy ❤️'),
             ),
           ],
         ),
