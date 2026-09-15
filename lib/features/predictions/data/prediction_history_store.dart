@@ -25,14 +25,8 @@ class PredictionHistoryStore {
     final duplicate = existing.any(
       (record) =>
           record.prediction.algorithmVersion == prediction.algorithmVersion &&
-          _sameDay(
-            record.prediction.mostLikelyDate,
-            prediction.mostLikelyDate,
-          ) &&
-          _sameIntervals(
-            record.prediction.validIntervals,
-            prediction.validIntervals,
-          ),
+          _sameDay(record.prediction.mostLikelyDate, prediction.mostLikelyDate) &&
+          _sameIntervals(record.prediction.validIntervals, prediction.validIntervals),
     );
     if (duplicate) return;
     final payload = await _cipher.encryptJson(_toJson(prediction));
@@ -62,9 +56,7 @@ class PredictionHistoryStore {
     return result;
   }
 
-  Future<PredictionEvaluation> evaluateAgainst(
-    List<DateTime> actualStarts,
-  ) async {
+  Future<PredictionEvaluation> evaluateAgainst(List<DateTime> actualStarts) async {
     final records = await list();
     final outcomes = <PredictionOutcome>[];
     final starts = actualStarts.map(_date).toList()..sort();
@@ -78,9 +70,7 @@ class PredictionHistoryStore {
         }
       }
       if (actual != null) {
-        outcomes.add(
-          PredictionOutcome(prediction: prediction, actualStart: actual),
-        );
+        outcomes.add(PredictionOutcome(prediction: prediction, actualStart: actual));
       }
     }
     return PredictionEvaluator().evaluate(outcomes);
@@ -90,6 +80,7 @@ class PredictionHistoryStore {
     'algorithmVersion': value.algorithmVersion,
     'createdAt': value.createdAt.toUtc().toIso8601String(),
     'estimatedCycleLengthDays': value.estimatedCycleLengthDays,
+    'estimatedPeriodDurationDays': value.estimatedPeriodDurationDays,
     'mostLikelyDate': value.mostLikelyDate.toIso8601String(),
     'windowStart': value.windowStart.toIso8601String(),
     'windowEnd': value.windowEnd.toIso8601String(),
@@ -103,18 +94,14 @@ class PredictionHistoryStore {
     algorithmVersion: json['algorithmVersion'] as String,
     createdAt: DateTime.parse(json['createdAt'] as String).toLocal(),
     estimatedCycleLengthDays: json['estimatedCycleLengthDays'] as int,
+    estimatedPeriodDurationDays: (json['estimatedPeriodDurationDays'] as num?)?.toInt(),
     mostLikelyDate: DateTime.parse(json['mostLikelyDate'] as String),
     windowStart: DateTime.parse(json['windowStart'] as String),
     windowEnd: DateTime.parse(json['windowEnd'] as String),
-    confidence: PredictionConfidence.values.byName(
-      json['confidence'] as String,
-    ),
+    confidence: PredictionConfidence.values.byName(json['confidence'] as String),
     validIntervals: List<int>.from(json['validIntervals'] as List<dynamic>),
-    excludedIntervals: List<int>.from(
-      json['excludedIntervals'] as List<dynamic>,
-    ),
-    medianAbsoluteDeviation: (json['medianAbsoluteDeviation'] as num)
-        .toDouble(),
+    excludedIntervals: List<int>.from(json['excludedIntervals'] as List<dynamic>),
+    medianAbsoluteDeviation: (json['medianAbsoluteDeviation'] as num).toDouble(),
   );
 
   bool _sameIntervals(List<int> a, List<int> b) {
@@ -128,6 +115,5 @@ class PredictionHistoryStore {
   bool _sameDay(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;
 
-  DateTime _date(DateTime value) =>
-      DateTime(value.year, value.month, value.day);
+  DateTime _date(DateTime value) => DateTime(value.year, value.month, value.day);
 }
