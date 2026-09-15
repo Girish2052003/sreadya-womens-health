@@ -44,7 +44,7 @@ enum ObservationKind {
 }
 
 class PeriodEpisode {
-  const PeriodEpisode({
+  PeriodEpisode({
     required this.id,
     required this.start,
     this.end,
