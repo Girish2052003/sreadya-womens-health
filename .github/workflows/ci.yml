@@ -27,7 +27,7 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed lib test tool
       - run: flutter analyze
       - run: flutter test
-      - run: python -m py_compile tool/configure_platforms.py tool/configure_android_tests.py tool/configure_android_release.py tool/privacy_scan.py tool/secret_scan.py tool/generate_sbom.py
+      - run: python -m py_compile tool/configure_platforms.py tool/configure_android_tests.py tool/configure_android_release.py tool/verify_android_signatures.py tool/privacy_scan.py tool/secret_scan.py tool/generate_sbom.py
       - run: python -m pip install pytest
       - run: python -m pytest -q verification/reference
       - run: python tool/privacy_scan.py
@@ -88,7 +88,7 @@ jobs:
             -alias sreva-ci-upload \
             -keyalg RSA \
             -keysize 3072 \
-            -validity 2 \
+            -validity 3650 \
             -dname "CN=Sreva CI, OU=Verification, O=Sreva, C=FI"
       - name: Verify production-signing path with ephemeral key
         env:
@@ -107,11 +107,14 @@ jobs:
           flutter build appbundle --release
           flutter build apk --release
       - name: Verify Android signatures and package artifacts
+        env:
+          SREVA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreva-ci-upload.jks
+          SREVA_ANDROID_KEYSTORE_PASSWORD: sreva-ci-store-pass
+          SREVA_ANDROID_KEY_ALIAS: sreva-ci-upload
         run: |
-          jarsigner -verify -strict -certs build/app/outputs/bundle/release/app-release.aab
-          "$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/apksigner" verify --verbose --print-certs build/app/outputs/flutter-apk/app-release.apk
-          test -s build/app/outputs/bundle/release/app-release.aab
-          test -s build/app/outputs/flutter-apk/app-release.apk
+          python3 tool/verify_android_signatures.py \
+            --aab build/app/outputs/bundle/release/app-release.aab \
+            --apk build/app/outputs/flutter-apk/app-release.apk
       - uses: actions/upload-artifact@v4
         with:
           name: sreva-android-v1-ci-test-signed
