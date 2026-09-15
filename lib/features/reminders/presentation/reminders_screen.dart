@@ -209,12 +209,13 @@ class _ReminderHealthCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<(ReminderPermissionStatus, List<Map<String, Object?>>)>(
+    return FutureBuilder<
+      (ReminderPermissionStatus, List<Map<String, Object?>>)
+    >(
       future: _load(),
       builder: (context, snapshot) {
         final status = snapshot.data?.$1;
-        final pending =
-            snapshot.data?.$2 ?? const <Map<String, Object?>>[];
+        final pending = snapshot.data?.$2 ?? const <Map<String, Object?>>[];
         final next = pending.isEmpty
             ? 'No pending local reminders'
             : '${pending.length} local reminder(s) scheduled';

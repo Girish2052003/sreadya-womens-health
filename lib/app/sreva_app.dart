@@ -42,9 +42,7 @@ final GoRouter _router = GoRouter(
           ],
         ),
         StatefulShellBranch(
-          routes: [
-            GoRoute(path: '/log', builder: (_, _) => const LogScreen()),
-          ],
+          routes: [GoRoute(path: '/log', builder: (_, _) => const LogScreen())],
         ),
         StatefulShellBranch(
           routes: [
@@ -124,11 +122,13 @@ class _SrevaAppState extends ConsumerState<SrevaApp> {
   @override
   Widget build(BuildContext context) {
     ref.watch(reminderReconciliationProvider);
-    final preferences = ref.watch(appPreferencesProvider).when(
-      data: (value) => value,
-      loading: () => const AppPreferences(),
-      error: (_, _) => const AppPreferences(),
-    );
+    final preferences = ref
+        .watch(appPreferencesProvider)
+        .when(
+          data: (value) => value,
+          loading: () => const AppPreferences(),
+          error: (_, _) => const AppPreferences(),
+        );
     final themeMode = switch (preferences.themePreference) {
       ThemePreference.system => ThemeMode.system,
       ThemePreference.light => ThemeMode.light,
