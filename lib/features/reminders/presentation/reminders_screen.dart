@@ -47,9 +47,8 @@ class _RemindersScreenState extends ConsumerState<RemindersScreen> {
       }
     } catch (error) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error.toString())),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error.toString())));
       }
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -73,15 +72,25 @@ class _RemindersScreenState extends ConsumerState<RemindersScreen> {
               SwitchListTile(
                 value: prefs.enabled,
                 title: const Text('Period reminders'),
-                subtitle: const Text('Choose one or more cycle-relative reminders.'),
+                subtitle: const Text(
+                  'Choose one or more cycle-relative reminders.',
+                ),
                 onChanged: (value) => _save(prefs.copyWith(enabled: value)),
               ),
               const SizedBox(height: 8),
-              const Text('Period reminder days', style: TextStyle(fontWeight: FontWeight.w700)),
+              const Text(
+                'Period reminder days',
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
               Wrap(
                 spacing: 8,
                 children: [
-                  for (final entry in const [(7, '7 days'), (3, '3 days'), (1, '1 day'), (0, 'Expected day')])
+                  for (final entry in const [
+                    (7, '7 days'),
+                    (3, '3 days'),
+                    (1, '1 day'),
+                    (0, 'Expected day'),
+                  ])
                     FilterChip(
                       selected: prefs.enabledOffsetsDays.contains(entry.$1),
                       label: Text(entry.$2),
@@ -105,7 +114,8 @@ class _RemindersScreenState extends ConsumerState<RemindersScreen> {
                       ? '${prefs.lateDays} days after the predicted date'
                       : 'Off',
                 ),
-                onChanged: (value) => _save(prefs.copyWith(lateDays: value ? 2 : 0)),
+                onChanged: (value) =>
+                    _save(prefs.copyWith(lateDays: value ? 2 : 0)),
               ),
               if (prefs.lateDays > 0)
                 Slider(
@@ -114,7 +124,8 @@ class _RemindersScreenState extends ConsumerState<RemindersScreen> {
                   max: 7,
                   divisions: 6,
                   label: '${prefs.lateDays} days',
-                  onChanged: (value) => _save(prefs.copyWith(lateDays: value.round())),
+                  onChanged: (value) =>
+                      _save(prefs.copyWith(lateDays: value.round())),
                 ),
               ListTile(
                 title: const Text('Reminder time'),
@@ -127,7 +138,10 @@ class _RemindersScreenState extends ConsumerState<RemindersScreen> {
                 onTap: () async {
                   final value = await showTimePicker(
                     context: context,
-                    initialTime: TimeOfDay(hour: prefs.hour, minute: prefs.minute),
+                    initialTime: TimeOfDay(
+                      hour: prefs.hour,
+                      minute: prefs.minute,
+                    ),
                   );
                   if (value != null) {
                     await _save(
@@ -166,7 +180,9 @@ class _RemindersScreenState extends ConsumerState<RemindersScreen> {
                 label: Text(_busy ? 'Scheduling…' : 'Rebuild local reminders'),
               ),
               const SizedBox(height: 16),
-              _ReminderHealthCard(scheduler: ref.read(reminderSchedulerProvider)),
+              _ReminderHealthCard(
+                scheduler: ref.read(reminderSchedulerProvider),
+              ),
               const SizedBox(height: 24),
               PersonalRemindersPanel(
                 scheduler: ref.read(reminderSchedulerProvider),
@@ -190,7 +206,9 @@ class _ReminderHealthCard extends StatelessWidget {
       future: Future.wait([scheduler.permissionStatus(), scheduler.pending()]),
       builder: (context, snapshot) {
         final values = snapshot.data;
-        final status = values == null ? null : values[0] as ReminderPermissionStatus;
+        final status = values == null
+            ? null
+            : values[0] as ReminderPermissionStatus;
         final pending = values == null
             ? const <Map<String, Object?>>[]
             : values[1] as List<Map<String, Object?>>;

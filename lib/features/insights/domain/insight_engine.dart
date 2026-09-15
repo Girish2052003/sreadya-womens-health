@@ -39,7 +39,8 @@ class InsightEngine {
   CycleSummary? summarizeCycleLengths(List<int> lengths) {
     if (lengths.isEmpty) return null;
     final average = lengths.reduce((a, b) => a + b) / lengths.length;
-    final variance = lengths
+    final variance =
+        lengths
             .map((v) => math.pow(v - average, 2).toDouble())
             .reduce((a, b) => a + b) /
         lengths.length;
@@ -59,21 +60,33 @@ class InsightEngine {
     final ordered = [...periods]..sort((a, b) => a.start.compareTo(b.start));
     final cycleLengths = <int>[];
     for (var i = 1; i < ordered.length; i++) {
-      final days = _date(ordered[i].start).difference(_date(ordered[i - 1].start)).inDays;
+      final days = _date(ordered[i].start)
+          .difference(_date(ordered[i - 1].start))
+          .inDays;
       if (days >= 15 && days <= 90) cycleLengths.add(days);
     }
 
-    final completedDurations = ordered.map((item) => item.durationDays).whereType<int>().where((value) => value > 0).toList();
+    final completedDurations = ordered
+        .map((item) => item.durationDays)
+        .whereType<int>()
+        .where((value) => value > 0)
+        .toList();
     final averageDuration = completedDurations.isEmpty
         ? null
-        : completedDurations.reduce((a, b) => a + b) / completedDurations.length;
+        : completedDurations.reduce((a, b) => a + b) /
+              completedDurations.length;
 
     final flowCounts = <FlowLevel, int>{};
     final observationCounts = <ObservationKind, int>{};
     for (final observation in observations) {
-      observationCounts.update(observation.kind, (value) => value + 1, ifAbsent: () => 1);
+      observationCounts.update(
+        observation.kind,
+        (value) => value + 1,
+        ifAbsent: () => 1,
+      );
       final flow = observation.flowLevel;
-      if (flow != null) flowCounts.update(flow, (value) => value + 1, ifAbsent: () => 1);
+      if (flow != null)
+        flowCounts.update(flow, (value) => value + 1, ifAbsent: () => 1);
     }
 
     final messages = <String>[];
@@ -89,12 +102,18 @@ class InsightEngine {
     for (final entry in timingKinds.entries) {
       final days = _cycleDaysFor(entry.key, ordered, observations);
       if (days.length >= 2) {
-        messages.add(symptomTimingInsight(symptomLabel: entry.value, cycleDays: days));
+        messages.add(
+          symptomTimingInsight(symptomLabel: entry.value, cycleDays: days),
+        );
       }
     }
     if (flowCounts.isNotEmpty) {
-      final top = flowCounts.entries.reduce((a, b) => a.value >= b.value ? a : b);
-      messages.add('${_title(top.key.name)} flow was your most frequently recorded flow level (${top.value} logs). This is a summary of your entries, not a medical interpretation.');
+      final top = flowCounts.entries.reduce(
+        (a, b) => a.value >= b.value ? a : b,
+      );
+      messages.add(
+        '${_title(top.key.name)} flow was your most frequently recorded flow level (${top.value} logs). This is a summary of your entries, not a medical interpretation.',
+      );
     }
 
     return InsightSnapshot(
@@ -132,16 +151,21 @@ class InsightEngine {
     for (final observation in observations.where((item) => item.kind == kind)) {
       PeriodEpisode? latest;
       for (final period in periods) {
-        if (!_date(period.start).isAfter(_date(observation.occurredAt))) latest = period;
+        if (!_date(period.start).isAfter(_date(observation.occurredAt)))
+          latest = period;
       }
       if (latest == null) continue;
-      final day = _date(observation.occurredAt).difference(_date(latest.start)).inDays + 1;
+      final day =
+          _date(observation.occurredAt).difference(_date(latest.start)).inDays +
+          1;
       if (day >= 1 && day <= 90) result.add(day);
     }
     return result;
   }
 
-  DateTime _date(DateTime value) => DateTime(value.year, value.month, value.day);
+  DateTime _date(DateTime value) =>
+      DateTime(value.year, value.month, value.day);
 
-  String _title(String value) => value.isEmpty ? value : '${value[0].toUpperCase()}${value.substring(1)}';
+  String _title(String value) =>
+      value.isEmpty ? value : '${value[0].toUpperCase()}${value.substring(1)}';
 }

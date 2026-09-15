@@ -25,16 +25,20 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
 
     String? predictionWindow;
     if (prediction != null) {
-      predictionWindow = '${DateFormat.MMMd().format(prediction.windowStart)} – ${DateFormat.MMMd().format(prediction.windowEnd)}';
+      predictionWindow =
+          '${DateFormat.MMMd().format(prediction.windowStart)} – ${DateFormat.MMMd().format(prediction.windowEnd)}';
     }
 
     String? cyclePhase;
     if (periods.isNotEmpty) {
       final today = DateTime.now();
       final latest = periods.last.start;
-      final day = DateTime(today.year, today.month, today.day)
-              .difference(DateTime(latest.year, latest.month, latest.day))
-              .inDays +
+      final day =
+          DateTime(
+            today.year,
+            today.month,
+            today.day,
+          ).difference(DateTime(latest.year, latest.month, latest.day)).inDays +
           1;
       if (day > 0) cyclePhase = 'cycle day $day';
     }
@@ -43,7 +47,9 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
     if (pending.isNotEmpty) {
       final millis = pending.first['timestampMillis'];
       if (millis is num) {
-        selectedReminder = DateFormat.yMMMd().add_Hm().format(DateTime.fromMillisecondsSinceEpoch(millis.toInt()));
+        selectedReminder = DateFormat.yMMMd().add_Hm().format(
+          DateTime.fromMillisecondsSinceEpoch(millis.toInt()),
+        );
       } else {
         selectedReminder = 'A local reminder is scheduled';
       }
@@ -51,22 +57,41 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
 
     final today = DateTime.now();
     final todayStart = DateTime(today.year, today.month, today.day);
-    final todayEnd = todayStart.add(const Duration(days: 1)).subtract(const Duration(milliseconds: 1));
+    final todayEnd = todayStart
+        .add(const Duration(days: 1))
+        .subtract(const Duration(milliseconds: 1));
     final wellnessLabels = observations
-        .where((item) => !item.occurredAt.isBefore(todayStart) && !item.occurredAt.isAfter(todayEnd))
-        .where((item) => const {
-              'mood', 'energy', 'sleep', 'stress', 'fatigue',
-            }.contains(item.kind.name))
+        .where(
+          (item) =>
+              !item.occurredAt.isBefore(todayStart) &&
+              !item.occurredAt.isAfter(todayEnd),
+        )
+        .where(
+          (item) => const {
+            'mood',
+            'energy',
+            'sleep',
+            'stress',
+            'fatigue',
+          }.contains(item.kind.name),
+        )
         .map((item) => item.label ?? item.kind.name)
         .toSet()
         .take(3)
         .toList();
-    final selectedWellness = wellnessLabels.isEmpty ? null : wellnessLabels.join(', ');
+    final selectedWellness = wellnessLabels.isEmpty
+        ? null
+        : wellnessLabels.join(', ');
 
-    if (_selected.contains(PartnerShareCategory.prediction) && predictionWindow == null) {
+    if (_selected.contains(PartnerShareCategory.prediction) &&
+        predictionWindow == null) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Add enough cycle history for a prediction before sharing that category.')),
+          const SnackBar(
+            content: Text(
+              'Add enough cycle history for a prediction before sharing that category.',
+            ),
+          ),
         );
       }
       return null;
@@ -93,7 +118,10 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('Review before sharing', style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                'Review before sharing',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               const SizedBox(height: 12),
               SelectableText(text),
               const SizedBox(height: 20),
@@ -101,10 +129,17 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
                 child: Semantics(
                   label: 'QR code containing only the reviewed Sreva partner summary',
                   child: DecoratedBox(
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(12),
-                      child: QrImageView(data: text, version: QrVersions.auto, size: 210),
+                      child: QrImageView(
+                        data: text,
+                        version: QrVersions.auto,
+                        size: 210,
+                      ),
                     ),
                   ),
                 ),
@@ -113,7 +148,9 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
               FilledButton.icon(
                 onPressed: () async {
                   Navigator.pop(context);
-                  await SharePlus.instance.share(ShareParams(text: text, title: 'Sreva shared summary'));
+                  await SharePlus.instance.share(
+                    ShareParams(text: text, title: 'Sreva shared summary'),
+                  );
                 },
                 icon: const Icon(Icons.ios_share),
                 label: const Text('Open system share sheet'),
@@ -135,7 +172,9 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
           const Card(
             child: Padding(
               padding: EdgeInsets.all(16),
-              child: Text('Nothing is shared automatically. The Sreva user selects categories, reviews the exact summary/QR, then explicitly opens the system share sheet.'),
+              child: Text(
+                'Nothing is shared automatically. The Sreva user selects categories, reviews the exact summary/QR, then explicitly opens the system share sheet.',
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -159,16 +198,18 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
             label: const Text('Review summary & QR'),
           ),
           const SizedBox(height: 16),
-          const Text('Sexual activity, fertility tests, private notes and pregnancy data are never part of the V1 partner summary.'),
+          const Text(
+            'Sexual activity, fertility tests, private notes and pregnancy data are never part of the V1 partner summary.',
+          ),
         ],
       ),
     );
   }
 
   String _label(PartnerShareCategory value) => switch (value) {
-        PartnerShareCategory.prediction => 'Predicted period window',
-        PartnerShareCategory.cyclePhase => 'Cycle day',
-        PartnerShareCategory.selectedReminder => 'Selected reminder status',
-        PartnerShareCategory.selectedWellness => 'Selected wellness status',
-      };
+    PartnerShareCategory.prediction => 'Predicted period window',
+    PartnerShareCategory.cyclePhase => 'Cycle day',
+    PartnerShareCategory.selectedReminder => 'Selected reminder status',
+    PartnerShareCategory.selectedWellness => 'Selected wellness status',
+  };
 }

@@ -13,12 +13,15 @@ class PrivacyCenterScreen extends ConsumerStatefulWidget {
   const PrivacyCenterScreen({super.key});
 
   @override
-  ConsumerState<PrivacyCenterScreen> createState() => _PrivacyCenterScreenState();
+  ConsumerState<PrivacyCenterScreen> createState() =>
+      _PrivacyCenterScreenState();
 }
 
 class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
   late Future<PrivacySettings> _settings = PrivacySettingsStore().read();
-  late Future<HealthPlatformStatus> _healthStatus = ref.read(healthPlatformProvider).status();
+  late Future<HealthPlatformStatus> _healthStatus = ref
+      .read(healthPlatformProvider)
+      .status();
 
   Future<void> _save(PrivacySettings next) async {
     await PrivacySettingsStore().write(next);
@@ -32,7 +35,11 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
       if (!await service.isAvailable() || !await service.unlock()) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Configure and successfully unlock with Face ID, Touch ID, or the device passcode before enabling Sreva App Lock.')),
+            const SnackBar(
+              content: Text(
+                'Configure and successfully unlock with Face ID, Touch ID, or the device passcode before enabling Sreva App Lock.',
+              ),
+            ),
           );
         }
         return;
@@ -41,7 +48,10 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
     await _save(current.copyWith(appLockEnabled: enabled));
   }
 
-  Future<void> _setNotificationPrivacy(PrivacySettings current, NotificationPrivacy value) async {
+  Future<void> _setNotificationPrivacy(
+    PrivacySettings current,
+    NotificationPrivacy value,
+  ) async {
     await _save(current.copyWith(notificationPrivacy: value));
     final store = ref.read(reminderPreferencesStoreProvider);
     final reminders = await store.read();
@@ -54,10 +64,18 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete all Sreva health data?'),
-        content: const Text('This permanently removes all periods and health observations from this device. Create a CycleVault backup first if you may need the history later.'),
+        content: const Text(
+          'This permanently removes all periods and health observations from this device. Create a CycleVault backup first if you may need the history later.',
+        ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
-          FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Continue')),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Continue'),
+          ),
         ],
       ),
     );
@@ -66,10 +84,18 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Final confirmation'),
-        content: const Text('There is no developer cloud copy to recover from. Delete the local health history now?'),
+        content: const Text(
+          'There is no developer cloud copy to recover from. Delete the local health history now?',
+        ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep my data')),
-          FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Delete permanently')),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Keep my data'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete permanently'),
+          ),
         ],
       ),
     );
@@ -78,7 +104,9 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
     await repository.replaceAll(periods: const [], observations: const []);
     ref.read(healthActionsProvider).refreshAll();
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Local Sreva health data deleted.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Local Sreva health data deleted.')),
+      );
     }
   }
 
@@ -93,32 +121,58 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
           return ListView(
             padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 32),
             children: [
-              const _PrivacyStatus(icon: Icons.phone_iphone, title: 'Health data location', value: 'This device'),
-              const _PrivacyStatus(icon: Icons.cloud_off_outlined, title: 'Developer health database', value: 'None'),
-              const _PrivacyStatus(icon: Icons.query_stats_outlined, title: 'Behavior analytics', value: 'Disabled'),
-              const _PrivacyStatus(icon: Icons.lock_outline, title: 'Database protection', value: 'SQLCipher + AES-GCM'),
+              const _PrivacyStatus(
+                icon: Icons.phone_iphone,
+                title: 'Health data location',
+                value: 'This device',
+              ),
+              const _PrivacyStatus(
+                icon: Icons.cloud_off_outlined,
+                title: 'Developer health database',
+                value: 'None',
+              ),
+              const _PrivacyStatus(
+                icon: Icons.query_stats_outlined,
+                title: 'Behavior analytics',
+                value: 'Disabled',
+              ),
+              const _PrivacyStatus(
+                icon: Icons.lock_outline,
+                title: 'Database protection',
+                value: 'SQLCipher + AES-GCM',
+              ),
               FutureBuilder<HealthPlatformStatus>(
                 future: _healthStatus,
                 builder: (_, status) => _PrivacyStatus(
                   icon: Icons.health_and_safety_outlined,
                   title: 'Platform health access',
                   value: status.data?.available == true
-                      ? (status.data!.authorizationRequested ? 'User-controlled permission choice requested' : 'Not requested')
+                      ? (status.data!.authorizationRequested
+                            ? 'User-controlled permission choice requested'
+                            : 'Not requested')
                       : 'Not connected',
                 ),
               ),
-              const _PrivacyStatus(icon: Icons.people_outline, title: 'Partner live access', value: 'None — V1 shares only after explicit preview'),
+              const _PrivacyStatus(
+                icon: Icons.people_outline,
+                title: 'Partner live access',
+                value: 'None — V1 shares only after explicit preview',
+              ),
               const SizedBox(height: 16),
               SwitchListTile(
                 value: settings.appLockEnabled,
                 title: const Text('App lock'),
-                subtitle: const Text('Require Face ID, Touch ID, or the device passcode when Sreva locks.'),
+                subtitle: const Text(
+                  'Require Face ID, Touch ID, or the device passcode when Sreva locks.',
+                ),
                 onChanged: (value) => _setAppLock(settings, value),
               ),
               if (settings.appLockEnabled)
                 DropdownButtonFormField<int>(
                   value: settings.autoLockMinutes,
-                  decoration: const InputDecoration(labelText: 'Automatically lock after'),
+                  decoration: const InputDecoration(
+                    labelText: 'Automatically lock after',
+                  ),
                   items: const [
                     DropdownMenuItem(value: 0, child: Text('Immediately')),
                     DropdownMenuItem(value: 1, child: Text('1 minute')),
@@ -126,17 +180,29 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
                     DropdownMenuItem(value: 15, child: Text('15 minutes')),
                   ],
                   onChanged: (value) {
-                    if (value != null) _save(settings.copyWith(autoLockMinutes: value));
+                    if (value != null)
+                      _save(settings.copyWith(autoLockMinutes: value));
                   },
                 ),
               const SizedBox(height: 16),
               DropdownButtonFormField<NotificationPrivacy>(
                 value: settings.notificationPrivacy,
-                decoration: const InputDecoration(labelText: 'Notification privacy'),
+                decoration: const InputDecoration(
+                  labelText: 'Notification privacy',
+                ),
                 items: const [
-                  DropdownMenuItem(value: NotificationPrivacy.maximum, child: Text('Maximum — “You have a reminder.”')),
-                  DropdownMenuItem(value: NotificationPrivacy.balanced, child: Text('Balanced — cycle reminder')),
-                  DropdownMenuItem(value: NotificationPrivacy.detailed, child: Text('Detailed — period timing may appear')),
+                  DropdownMenuItem(
+                    value: NotificationPrivacy.maximum,
+                    child: Text('Maximum — “You have a reminder.”'),
+                  ),
+                  DropdownMenuItem(
+                    value: NotificationPrivacy.balanced,
+                    child: Text('Balanced — cycle reminder'),
+                  ),
+                  DropdownMenuItem(
+                    value: NotificationPrivacy.detailed,
+                    child: Text('Detailed — period timing may appear'),
+                  ),
                 ],
                 onChanged: (value) {
                   if (value != null) _setNotificationPrivacy(settings, value);
@@ -148,7 +214,13 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
                   final available = await AppLockService().isAvailable();
                   if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(available ? 'Device authentication is available.' : 'Device authentication is not configured.')),
+                    SnackBar(
+                      content: Text(
+                        available
+                            ? 'Device authentication is available.'
+                            : 'Device authentication is not configured.',
+                      ),
+                    ),
                   );
                 },
                 icon: const Icon(Icons.face),
@@ -159,28 +231,62 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
                 onPressed: () async {
                   await PrivacyPlatform().setSensitiveScreen(true);
                   if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Sensitive app-switcher protection requested.')));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Sensitive app-switcher protection requested.',
+                        ),
+                      ),
+                    );
                   }
                 },
                 icon: const Icon(Icons.visibility_off_outlined),
                 label: const Text('Protect app-switcher preview now'),
               ),
               const SizedBox(height: 24),
-              Text('Why data is stored', style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                'Why data is stored',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               const SizedBox(height: 8),
               const Card(
-                child: Column(children: [
-                  ListTile(title: Text('Menstrual flow'), subtitle: Text('Stored on this device for cycle history and predictions. Shared with us: No. Delete: Anytime.')),
-                  Divider(height: 1),
-                  ListTile(title: Text('Symptoms and mood'), subtitle: Text('Stored on this device for your diary and observational insights. Shared with us: No. Delete: Anytime.')),
-                  Divider(height: 1),
-                  ListTile(title: Text('Sexual / fertility observations'), subtitle: Text('Optional and local. Partner V1 never includes these categories. Doctor reports exclude private categories by default.')),
-                  Divider(height: 1),
-                  ListTile(title: Text('Predictions'), subtitle: Text('Computed on this device from local cycle history and stored locally for calibration.')),
-                ]),
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text('Menstrual flow'),
+                      subtitle: Text(
+                        'Stored on this device for cycle history and predictions. Shared with us: No. Delete: Anytime.',
+                      ),
+                    ),
+                    Divider(height: 1),
+                    ListTile(
+                      title: Text('Symptoms and mood'),
+                      subtitle: Text(
+                        'Stored on this device for your diary and observational insights. Shared with us: No. Delete: Anytime.',
+                      ),
+                    ),
+                    Divider(height: 1),
+                    ListTile(
+                      title: Text('Sexual / fertility observations'),
+                      subtitle: Text(
+                        'Optional and local. Partner V1 never includes these categories. Doctor reports exclude private categories by default.',
+                      ),
+                    ),
+                    Divider(height: 1),
+                    ListTile(
+                      title: Text('Predictions'),
+                      subtitle: Text(
+                        'Computed on this device from local cycle history and stored locally for calibration.',
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 24),
-              Text('Delete data', style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                'Delete data',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               const SizedBox(height: 8),
               OutlinedButton.icon(
                 onPressed: _wipeAll,
@@ -188,7 +294,9 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
                 label: const Text('Delete all local Sreva health data'),
               ),
               const SizedBox(height: 16),
-              const Text('Face ID and device authentication are controlled by the operating system. Sreva receives only the success/failure result, never biometric templates or the device passcode.'),
+              const Text(
+                'Face ID and device authentication are controlled by the operating system. Sreva receives only the success/failure result, never biometric templates or the device passcode.',
+              ),
             ],
           );
         },
@@ -198,13 +306,21 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
 }
 
 class _PrivacyStatus extends StatelessWidget {
-  const _PrivacyStatus({required this.icon, required this.title, required this.value});
+  const _PrivacyStatus({
+    required this.icon,
+    required this.title,
+    required this.value,
+  });
   final IconData icon;
   final String title;
   final String value;
 
   @override
   Widget build(BuildContext context) => Card(
-        child: ListTile(leading: Icon(icon), title: Text(title), subtitle: Text(value)),
-      );
+    child: ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      subtitle: Text(value),
+    ),
+  );
 }

@@ -1,5 +1,14 @@
-enum ReminderState { disabled, permissionNeeded, scheduled, stale, blocked, error }
+enum ReminderState {
+  disabled,
+  permissionNeeded,
+  scheduled,
+  stale,
+  blocked,
+  error,
+}
+
 enum NotificationPrivacy { maximum, balanced, detailed }
+
 enum ReminderKind {
   periodSevenDays,
   periodThreeDays,
@@ -33,7 +42,6 @@ class ReminderPlan {
   final String? label;
 }
 
-
 class ReminderPlanner {
   ReminderPlan periodBefore({
     required String id,
@@ -44,8 +52,11 @@ class ReminderPlanner {
     NotificationPrivacy privacy = NotificationPrivacy.maximum,
     String? sourcePredictionId,
   }) {
-    final date = DateTime(predictedDate.year, predictedDate.month, predictedDate.day)
-        .subtract(Duration(days: daysBefore));
+    final date = DateTime(
+      predictedDate.year,
+      predictedDate.month,
+      predictedDate.day,
+    ).subtract(Duration(days: daysBefore));
     return ReminderPlan(
       id: id,
       kind: switch (daysBefore) {
@@ -82,15 +93,15 @@ class ReminderPlanner {
   }
 
   String notificationBody(ReminderPlan plan) => switch (plan.privacy) {
-        NotificationPrivacy.maximum => 'You have a reminder.',
-        NotificationPrivacy.balanced => 'Your cycle reminder is ready.',
-        NotificationPrivacy.detailed => switch (plan.kind) {
-            ReminderKind.periodThreeDays => 'Your period may begin in about 3 days.',
-            ReminderKind.periodSevenDays => 'Your period may begin in about 7 days.',
-            ReminderKind.periodOneDay => 'Your period may begin tomorrow.',
-            ReminderKind.periodExpectedDay => 'Your period is expected around today.',
-            ReminderKind.periodLate => 'Your predicted period window has passed.',
-            _ => 'Your health reminder is ready.',
-          },
-      };
+    NotificationPrivacy.maximum => 'You have a reminder.',
+    NotificationPrivacy.balanced => 'Your cycle reminder is ready.',
+    NotificationPrivacy.detailed => switch (plan.kind) {
+      ReminderKind.periodThreeDays => 'Your period may begin in about 3 days.',
+      ReminderKind.periodSevenDays => 'Your period may begin in about 7 days.',
+      ReminderKind.periodOneDay => 'Your period may begin tomorrow.',
+      ReminderKind.periodExpectedDay => 'Your period is expected around today.',
+      ReminderKind.periodLate => 'Your predicted period window has passed.',
+      _ => 'Your health reminder is ready.',
+    },
+  };
 }

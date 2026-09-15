@@ -17,9 +17,12 @@ void main() {
       createdAt: DateTime(2026, 9, 1),
     );
 
-    final result = PredictionEvaluator().evaluate(
-      [PredictionOutcome(prediction: prediction, actualStart: DateTime(2026, 9, 21))],
-    );
+    final result = PredictionEvaluator().evaluate([
+      PredictionOutcome(
+        prediction: prediction,
+        actualStart: DateTime(2026, 9, 21),
+      ),
+    ]);
 
     expect(result.meanAbsoluteErrorDays, 1);
     expect(result.medianAbsoluteErrorDays, 1);

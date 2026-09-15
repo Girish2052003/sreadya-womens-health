@@ -10,7 +10,8 @@ import '../../cycle/domain/cycle_models.dart';
 import '../domain/report_selection.dart';
 
 class DoctorReportService {
-  DoctorReportService({required HealthRepository repository}) : _repository = repository;
+  DoctorReportService({required HealthRepository repository})
+    : _repository = repository;
 
   final HealthRepository _repository;
 
@@ -32,7 +33,9 @@ class DoctorReportService {
           ),
           pw.SizedBox(height: 8),
           pw.Text('${date.format(from)} – ${date.format(to)}'),
-          pw.Text('Generated locally on the user’s device. This report is not a diagnosis.'),
+          pw.Text(
+            'Generated locally on the user’s device. This report is not a diagnosis.',
+          ),
           pw.SizedBox(height: 16),
           if (selection.categories.contains(ReportCategory.periods)) ...[
             pw.Text(
@@ -40,7 +43,10 @@ class DoctorReportService {
               style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
             ),
             ...periods
-                .where((value) => !value.start.isBefore(from) && !value.start.isAfter(to))
+                .where(
+                  (value) =>
+                      !value.start.isBefore(from) && !value.start.isAfter(to),
+                )
                 .map(
                   (value) => pw.Text(
                     '${date.format(value.start)}${value.end == null ? ' – ongoing' : ' – ${date.format(value.end!)} (${value.durationDays} days)'}',
@@ -52,7 +58,9 @@ class DoctorReportService {
             'Selected observations',
             style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
           ),
-          ...observations.where((value) => _include(value, selection)).map(
+          ...observations
+              .where((value) => _include(value, selection))
+              .map(
                 (value) => pw.Text(_humanObservation(value, selection, date)),
               ),
         ],
@@ -79,7 +87,10 @@ class DoctorReportService {
       ['record_type', 'date', 'kind', 'value', 'note'],
       if (selection.categories.contains(ReportCategory.periods))
         ...periods
-            .where((value) => !value.start.isBefore(from) && !value.start.isAfter(to))
+            .where(
+              (value) =>
+                  !value.start.isBefore(from) && !value.start.isAfter(to),
+            )
             .map(
               (value) => [
                 'period',
@@ -89,7 +100,9 @@ class DoctorReportService {
                 '',
               ],
             ),
-      ...observations.where((value) => _include(value, selection)).map(
+      ...observations
+          .where((value) => _include(value, selection))
+          .map(
             (value) => [
               'observation',
               value.occurredAt.toIso8601String(),
@@ -118,17 +131,22 @@ class DoctorReportService {
       return selection.categories.contains(ReportCategory.sexualActivity);
     }
     return switch (observation.kind) {
-      ObservationKind.menstrualFlow => selection.categories.contains(ReportCategory.flow),
+      ObservationKind.menstrualFlow => selection.categories.contains(
+        ReportCategory.flow,
+      ),
       ObservationKind.medication || ObservationKind.supplement =>
         selection.categories.contains(ReportCategory.medications),
-      ObservationKind.basalBodyTemperature =>
-        selection.categories.contains(ReportCategory.temperature),
+      ObservationKind.basalBodyTemperature => selection.categories.contains(
+        ReportCategory.temperature,
+      ),
       ObservationKind.ovulationTest || ObservationKind.cervicalMucus =>
         selection.categories.contains(ReportCategory.ovulation),
       ObservationKind.cramps ||
       ObservationKind.backPain ||
       ObservationKind.headache ||
-      ObservationKind.migraine => selection.categories.contains(ReportCategory.pain),
+      ObservationKind.migraine => selection.categories.contains(
+        ReportCategory.pain,
+      ),
       _ => selection.categories.contains(ReportCategory.symptoms),
     };
   }
@@ -138,11 +156,13 @@ class DoctorReportService {
     ReportSelection selection,
     DateFormat date,
   ) {
-    final value = observation.flowLevel?.name ??
+    final value =
+        observation.flowLevel?.name ??
         observation.severity?.name ??
         observation.numericValue?.toString() ??
         '';
-    final note = selection.categories.contains(ReportCategory.privateNotes) &&
+    final note =
+        selection.categories.contains(ReportCategory.privateNotes) &&
             observation.note != null
         ? ' · ${observation.note}'
         : '';

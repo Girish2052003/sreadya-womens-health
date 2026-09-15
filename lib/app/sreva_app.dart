@@ -27,24 +27,67 @@ final GoRouter _router = GoRouter(
   initialLocation: '/',
   routes: [
     StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) => SrevaShell(navigationShell: navigationShell),
+      builder: (context, state, navigationShell) =>
+          SrevaShell(navigationShell: navigationShell),
       branches: [
-        StatefulShellBranch(routes: [GoRoute(path: '/', builder: (_, __) => const HomeScreen())]),
-        StatefulShellBranch(routes: [GoRoute(path: '/calendar', builder: (_, __) => const CalendarScreen())]),
-        StatefulShellBranch(routes: [GoRoute(path: '/log', builder: (_, __) => const LogScreen())]),
-        StatefulShellBranch(routes: [GoRoute(path: '/insights', builder: (_, __) => const InsightsScreen())]),
-        StatefulShellBranch(routes: [GoRoute(path: '/more', builder: (_, __) => const MoreScreen())]),
+        StatefulShellBranch(
+          routes: [GoRoute(path: '/', builder: (_, __) => const HomeScreen())],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/calendar',
+              builder: (_, __) => const CalendarScreen(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(path: '/log', builder: (_, __) => const LogScreen()),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/insights',
+              builder: (_, __) => const InsightsScreen(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(path: '/more', builder: (_, __) => const MoreScreen()),
+          ],
+        ),
       ],
     ),
-    GoRoute(path: '/more/reminders', builder: (_, __) => const RemindersScreen()),
-    GoRoute(path: '/more/assistant', builder: (_, __) => const AssistantScreen()),
-    GoRoute(path: '/more/life-stage', builder: (_, __) => const LifeStageScreen()),
-    GoRoute(path: '/more/health', builder: (_, __) => const HealthIntegrationScreen()),
+    GoRoute(
+      path: '/more/reminders',
+      builder: (_, __) => const RemindersScreen(),
+    ),
+    GoRoute(
+      path: '/more/assistant',
+      builder: (_, __) => const AssistantScreen(),
+    ),
+    GoRoute(
+      path: '/more/life-stage',
+      builder: (_, __) => const LifeStageScreen(),
+    ),
+    GoRoute(
+      path: '/more/health',
+      builder: (_, __) => const HealthIntegrationScreen(),
+    ),
     GoRoute(path: '/more/reports', builder: (_, __) => const ReportsScreen()),
     GoRoute(path: '/more/partner', builder: (_, __) => const PartnerScreen()),
-    GoRoute(path: '/more/privacy', builder: (_, __) => const PrivacyCenterScreen()),
+    GoRoute(
+      path: '/more/privacy',
+      builder: (_, __) => const PrivacyCenterScreen(),
+    ),
     GoRoute(path: '/more/backup', builder: (_, __) => const BackupScreen()),
-    GoRoute(path: '/more/diagnostics', builder: (_, __) => const DiagnosticsScreen()),
+    GoRoute(
+      path: '/more/diagnostics',
+      builder: (_, __) => const DiagnosticsScreen(),
+    ),
     GoRoute(path: '/more/settings', builder: (_, __) => const SettingsScreen()),
   ],
 );
@@ -60,11 +103,15 @@ class _SrevaAppState extends ConsumerState<SrevaApp> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _consumeNotificationAction());
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _consumeNotificationAction(),
+    );
   }
 
   Future<void> _consumeNotificationAction() async {
-    final action = await ref.read(reminderSchedulerProvider).consumePendingAction();
+    final action = await ref
+        .read(reminderSchedulerProvider)
+        .consumePendingAction();
     if (action != 'periodStarted') return;
     try {
       await ref.read(healthActionsProvider).startPeriod(DateTime.now());
@@ -77,7 +124,8 @@ class _SrevaAppState extends ConsumerState<SrevaApp> {
   @override
   Widget build(BuildContext context) {
     ref.watch(reminderReconciliationProvider);
-    final preferences = ref.watch(appPreferencesProvider).valueOrNull ?? const AppPreferences();
+    final preferences =
+        ref.watch(appPreferencesProvider).valueOrNull ?? const AppPreferences();
     final themeMode = switch (preferences.themePreference) {
       ThemePreference.system => ThemeMode.system,
       ThemePreference.light => ThemeMode.light,
@@ -109,9 +157,12 @@ class _SrevaAppState extends ConsumerState<SrevaApp> {
         useMaterial3: true,
         scaffoldBackgroundColor: const Color(0xFFFFFBFD),
         cardTheme: const CardThemeData(margin: EdgeInsets.zero),
-        inputDecorationTheme: const InputDecorationTheme(border: OutlineInputBorder()),
+        inputDecorationTheme: const InputDecorationTheme(
+          border: OutlineInputBorder(),
+        ),
       ),
       darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
       routerConfig: _router,
     );
-  }}
+  }
+}

@@ -19,7 +19,14 @@ void main() {
     );
 
     expect(report, contains('prediction-v1'));
-    for (final forbidden in ['period', 'symptom', 'sexual', 'pregnancy', 'temperature', 'medication']) {
+    for (final forbidden in [
+      'period',
+      'symptom',
+      'sexual',
+      'pregnancy',
+      'temperature',
+      'medication',
+    ]) {
       expect(report.toLowerCase(), isNot(contains('$forbidden=')));
     }
   });

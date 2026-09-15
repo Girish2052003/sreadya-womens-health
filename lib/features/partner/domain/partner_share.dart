@@ -1,4 +1,9 @@
-enum PartnerShareCategory { prediction, cyclePhase, selectedReminder, selectedWellness }
+enum PartnerShareCategory {
+  prediction,
+  cyclePhase,
+  selectedReminder,
+  selectedWellness,
+}
 
 class PartnerShareGrant {
   const PartnerShareGrant({required this.categories});
@@ -11,16 +16,20 @@ class PartnerShareGrant {
     String? selectedWellness,
   }) {
     final buffer = StringBuffer('Sreva shared summary');
-    if (categories.contains(PartnerShareCategory.prediction) && predictionWindow != null) {
+    if (categories.contains(PartnerShareCategory.prediction) &&
+        predictionWindow != null) {
       buffer.write('\nExpected period window: $predictionWindow');
     }
-    if (categories.contains(PartnerShareCategory.cyclePhase) && cyclePhase != null) {
+    if (categories.contains(PartnerShareCategory.cyclePhase) &&
+        cyclePhase != null) {
       buffer.write('\nCycle: $cyclePhase');
     }
-    if (categories.contains(PartnerShareCategory.selectedReminder) && selectedReminder != null) {
+    if (categories.contains(PartnerShareCategory.selectedReminder) &&
+        selectedReminder != null) {
       buffer.write('\nReminder: $selectedReminder');
     }
-    if (categories.contains(PartnerShareCategory.selectedWellness) && selectedWellness != null) {
+    if (categories.contains(PartnerShareCategory.selectedWellness) &&
+        selectedWellness != null) {
       buffer.write('\nWellness: $selectedWellness');
     }
     buffer.write('\nShared intentionally by the Sreva user.');

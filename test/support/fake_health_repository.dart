@@ -15,12 +15,20 @@ class FakeHealthRepository implements HealthRepository {
   }
 
   @override
-  Future<List<HealthObservation>> listObservations({DateTime? from, DateTime? to}) async => observations
-      .where((value) => (from == null || !value.occurredAt.isBefore(from)) && (to == null || !value.occurredAt.isAfter(to)))
+  Future<List<HealthObservation>> listObservations({
+    DateTime? from,
+    DateTime? to,
+  }) async => observations
+      .where(
+        (value) =>
+            (from == null || !value.occurredAt.isBefore(from)) &&
+            (to == null || !value.occurredAt.isAfter(to)),
+      )
       .toList(growable: false);
 
   @override
-  Future<List<PeriodEpisode>> listPeriods() async => List<PeriodEpisode>.unmodifiable(periods);
+  Future<List<PeriodEpisode>> listPeriods() async =>
+      List<PeriodEpisode>.unmodifiable(periods);
 
   @override
   Future<void> saveObservation(HealthObservation observation) async {

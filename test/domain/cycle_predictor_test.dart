@@ -37,7 +37,10 @@ void main() {
       ];
 
       final prediction = predictor.predict(starts)!;
-      expect(prediction.validIntervals.every((v) => v >= 15 && v <= 90), isTrue);
+      expect(
+        prediction.validIntervals.every((v) => v >= 15 && v <= 90),
+        isTrue,
+      );
       expect(prediction.excludedIntervals, contains(1));
     });
 
@@ -54,7 +57,10 @@ void main() {
         DateTime(2026, 3, 2),
         DateTime(2026, 3, 29),
       ])!;
-      expect(prediction.windowEnd.difference(prediction.windowStart).inDays, greaterThanOrEqualTo(4));
+      expect(
+        prediction.windowEnd.difference(prediction.windowStart).inDays,
+        greaterThanOrEqualTo(4),
+      );
       expect(prediction.confidence, isNot(PredictionConfidence.high));
     });
   });

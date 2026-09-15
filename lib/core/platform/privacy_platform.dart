@@ -13,7 +13,9 @@ class PrivacyPlatform {
 
   Future<void> setSensitiveScreen(bool enabled) async {
     try {
-      await _channel.invokeMethod<void>('setSensitiveScreen', {'enabled': enabled});
+      await _channel.invokeMethod<void>('setSensitiveScreen', {
+        'enabled': enabled,
+      });
     } on MissingPluginException {
       // Production iOS/Android hosts install this channel.
     }

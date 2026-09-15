@@ -66,16 +66,18 @@ class ParsedCommand {
   }
 
   FlowLevel? get flowLevel => switch ((value ?? '').toLowerCase()) {
-        'spotting' => FlowLevel.spotting,
-        'light' => FlowLevel.light,
-        'medium' => FlowLevel.medium,
-        'heavy' => FlowLevel.heavy,
-        _ => null,
-      };
+    'spotting' => FlowLevel.spotting,
+    'light' => FlowLevel.light,
+    'medium' => FlowLevel.medium,
+    'heavy' => FlowLevel.heavy,
+    _ => null,
+  };
 
   ObservationSeverity? get severity {
     final text = (value ?? rawText ?? '').toLowerCase();
-    if (text.contains('severe') || text.contains('very bad') || text.contains('bad cramps')) {
+    if (text.contains('severe') ||
+        text.contains('very bad') ||
+        text.contains('bad cramps')) {
       return ObservationSeverity.severe;
     }
     if (text.contains('moderate')) return ObservationSeverity.moderate;
@@ -85,7 +87,8 @@ class ParsedCommand {
 
   String? get label {
     if (intent == LocalIntent.logFlow) return '${value ?? 'Flow'} flow';
-    if (intent == LocalIntent.addReminder) return _reminderLabel(value ?? rawText ?? 'Health reminder');
+    if (intent == LocalIntent.addReminder)
+      return _reminderLabel(value ?? rawText ?? 'Health reminder');
     final kind = observationKind;
     return kind?.name;
   }
@@ -94,8 +97,17 @@ class ParsedCommand {
 
   String _reminderLabel(String input) {
     var text = input.trim();
-    text = text.replaceFirst(RegExp(r'^remind me(?: to| about)?\s*', caseSensitive: false), '');
-    text = text.replaceAll(RegExp(r'\s+at\s+\d{1,2}(?::\d{2})?\s*(?:am|pm)?\s*$', caseSensitive: false), '');
+    text = text.replaceFirst(
+      RegExp(r'^remind me(?: to| about)?\s*', caseSensitive: false),
+      '',
+    );
+    text = text.replaceAll(
+      RegExp(
+        r'\s+at\s+\d{1,2}(?::\d{2})?\s*(?:am|pm)?\s*$',
+        caseSensitive: false,
+      ),
+      '',
+    );
     return text.trim().isEmpty ? 'Health reminder' : text.trim();
   }
 }
@@ -104,25 +116,70 @@ class LocalIntentParser {
   ParsedCommand parse(String input, {required DateTime now}) {
     final text = input.trim().toLowerCase().replaceAll(RegExp(r'\s+'), ' ');
     final today = DateTime(now.year, now.month, now.day);
-    final date = text.contains('yesterday') ? today.subtract(const Duration(days: 1)) : today;
+    final date = text.contains('yesterday')
+        ? today.subtract(const Duration(days: 1))
+        : today;
 
-    if (text.contains('period') && _containsAny(text, ['started', 'start', 'began', 'begin'])) {
-      return ParsedCommand(intent: LocalIntent.periodStarted, date: date, requiresConfirmation: true, rawText: input);
+    if (text.contains('period') &&
+        _containsAny(text, ['started', 'start', 'began', 'begin'])) {
+      return ParsedCommand(
+        intent: LocalIntent.periodStarted,
+        date: date,
+        requiresConfirmation: true,
+        rawText: input,
+      );
     }
-    if (text.contains('period') && _containsAny(text, ['ended', 'end', 'stopped', 'stop'])) {
-      return ParsedCommand(intent: LocalIntent.periodEnded, date: date, requiresConfirmation: true, rawText: input);
+    if (text.contains('period') &&
+        _containsAny(text, ['ended', 'end', 'stopped', 'stop'])) {
+      return ParsedCommand(
+        intent: LocalIntent.periodEnded,
+        date: date,
+        requiresConfirmation: true,
+        rawText: input,
+      );
     }
     for (final flow in ['spotting', 'light', 'medium', 'heavy']) {
-      if (text.contains(flow) && _containsAny(text, ['flow', 'bleeding', 'yesterday', 'today'])) {
-        return ParsedCommand(intent: LocalIntent.logFlow, date: date, value: flow, requiresConfirmation: true, rawText: input);
+      if (text.contains(flow) &&
+          _containsAny(text, ['flow', 'bleeding', 'yesterday', 'today'])) {
+        return ParsedCommand(
+          intent: LocalIntent.logFlow,
+          date: date,
+          value: flow,
+          requiresConfirmation: true,
+          rawText: input,
+        );
       }
     }
     if (_containsAny(text, [
-      'cramp', 'headache', 'migraine', 'back pain', 'breast', 'bloating', 'acne',
-      'nausea', 'fatigue', 'dizzy', 'dizziness', 'appetite', 'craving', 'sleep',
-      'energy', 'stress', 'mood', 'anxiety', 'irritable', 'irritability', 'libido',
+      'cramp',
+      'headache',
+      'migraine',
+      'back pain',
+      'breast',
+      'bloating',
+      'acne',
+      'nausea',
+      'fatigue',
+      'dizzy',
+      'dizziness',
+      'appetite',
+      'craving',
+      'sleep',
+      'energy',
+      'stress',
+      'mood',
+      'anxiety',
+      'irritable',
+      'irritability',
+      'libido',
     ])) {
-      return ParsedCommand(intent: LocalIntent.logSymptom, date: date, value: text, requiresConfirmation: true, rawText: input);
+      return ParsedCommand(
+        intent: LocalIntent.logSymptom,
+        date: date,
+        value: text,
+        requiresConfirmation: true,
+        rawText: input,
+      );
     }
     if (text.contains('remind me')) {
       final time = _parseTime(text);
@@ -137,17 +194,41 @@ class LocalIntentParser {
         rawText: input,
       );
     }
-    if (_containsAny(text, ['next period', 'when is my period', 'when should my period'])) {
-      return ParsedCommand(intent: LocalIntent.nextPeriodQuery, requiresConfirmation: false, rawText: input);
+    if (_containsAny(text, [
+      'next period',
+      'when is my period',
+      'when should my period',
+    ])) {
+      return ParsedCommand(
+        intent: LocalIntent.nextPeriodQuery,
+        requiresConfirmation: false,
+        rawText: input,
+      );
     }
-    if (_containsAny(text, ['last six periods', 'period history', 'show my periods'])) {
-      return ParsedCommand(intent: LocalIntent.historyQuery, requiresConfirmation: false, rawText: input);
+    if (_containsAny(text, [
+      'last six periods',
+      'period history',
+      'show my periods',
+    ])) {
+      return ParsedCommand(
+        intent: LocalIntent.historyQuery,
+        requiresConfirmation: false,
+        rawText: input,
+      );
     }
-    return ParsedCommand(intent: LocalIntent.unknown, date: date, requiresConfirmation: true, rawText: input);
+    return ParsedCommand(
+      intent: LocalIntent.unknown,
+      date: date,
+      requiresConfirmation: true,
+      rawText: input,
+    );
   }
 
   (int, int)? _parseTime(String text) {
-    final match = RegExp(r'\bat\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b', caseSensitive: false).firstMatch(text);
+    final match = RegExp(
+      r'\bat\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b',
+      caseSensitive: false,
+    ).firstMatch(text);
     if (match == null) return null;
     var hour = int.tryParse(match.group(1) ?? '');
     final minute = int.tryParse(match.group(2) ?? '0') ?? 0;
@@ -162,12 +243,14 @@ class LocalIntentParser {
   }
 
   ReminderKind _reminderKind(String text) {
-    if (_containsAny(text, ['contraception', 'birth control', 'pill'])) return ReminderKind.contraception;
+    if (_containsAny(text, ['contraception', 'birth control', 'pill']))
+      return ReminderKind.contraception;
     if (text.contains('supplement')) return ReminderKind.supplement;
     if (text.contains('ovulation')) return ReminderKind.ovulationTest;
     if (text.contains('pregnancy test')) return ReminderKind.pregnancyTest;
     return ReminderKind.medication;
   }
 
-  bool _containsAny(String text, List<String> values) => values.any(text.contains);
+  bool _containsAny(String text, List<String> values) =>
+      values.any(text.contains);
 }

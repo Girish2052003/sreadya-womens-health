@@ -12,14 +12,15 @@ enum HealthDataCategory {
 
 extension HealthDataCategoryLabel on HealthDataCategory {
   String get label => switch (this) {
-        HealthDataCategory.menstrualFlow => 'Menstrual flow',
-        HealthDataCategory.intermenstrualBleeding => 'Intermenstrual bleeding / spotting',
-        HealthDataCategory.basalBodyTemperature => 'Basal body temperature',
-        HealthDataCategory.cervicalMucus => 'Cervical mucus',
-        HealthDataCategory.ovulationTest => 'Ovulation tests',
-        HealthDataCategory.pregnancyTest => 'Pregnancy tests',
-        HealthDataCategory.sexualActivity => 'Sexual activity',
-      };
+    HealthDataCategory.menstrualFlow => 'Menstrual flow',
+    HealthDataCategory.intermenstrualBleeding =>
+      'Intermenstrual bleeding / spotting',
+    HealthDataCategory.basalBodyTemperature => 'Basal body temperature',
+    HealthDataCategory.cervicalMucus => 'Cervical mucus',
+    HealthDataCategory.ovulationTest => 'Ovulation tests',
+    HealthDataCategory.pregnancyTest => 'Pregnancy tests',
+    HealthDataCategory.sexualActivity => 'Sexual activity',
+  };
 }
 
 class HealthPlatformStatus {
@@ -50,13 +51,17 @@ class HealthPlatform {
       final map = await _channel.invokeMapMethod<String, Object?>('status');
       return HealthPlatformStatus(
         available: map?['available'] == true,
-        authorizationRequested: map?['authorizationRequested'] == true || map?['authorized'] == true,
+        authorizationRequested:
+            map?['authorizationRequested'] == true ||
+            map?['authorized'] == true,
         platformName: map?['platformName']?.toString() ?? 'Health platform',
-        supportedCategories: ((map?['supportedCategories'] as List<Object?>?) ?? const <Object?>[])
-            .map((value) => value.toString())
-            .map(_categoryByName)
-            .whereType<HealthDataCategory>()
-            .toSet(),
+        supportedCategories:
+            ((map?['supportedCategories'] as List<Object?>?) ??
+                    const <Object?>[])
+                .map((value) => value.toString())
+                .map(_categoryByName)
+                .whereType<HealthDataCategory>()
+                .toSet(),
       );
     } on MissingPluginException {
       return const HealthPlatformStatus(
@@ -87,14 +92,20 @@ class HealthPlatform {
   }) async {
     if (categories.isEmpty) return const [];
     try {
-      final rows = await _channel.invokeListMethod<Map<Object?, Object?>>('readHealthRecords', {
-            'categories': categories.map((value) => value.name).toList(),
-            'fromMillis': from.millisecondsSinceEpoch,
-            'toMillis': to.millisecondsSinceEpoch,
-          }) ??
+      final rows =
+          await _channel.invokeListMethod<Map<Object?, Object?>>(
+            'readHealthRecords',
+            {
+              'categories': categories.map((value) => value.name).toList(),
+              'fromMillis': from.millisecondsSinceEpoch,
+              'toMillis': to.millisecondsSinceEpoch,
+            },
+          ) ??
           const [];
       return rows
-          .map((row) => row.map((key, value) => MapEntry(key.toString(), value)))
+          .map(
+            (row) => row.map((key, value) => MapEntry(key.toString(), value)),
+          )
           .toList(growable: false);
     } on MissingPluginException {
       return const [];

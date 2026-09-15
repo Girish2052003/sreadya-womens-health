@@ -25,16 +25,29 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
 
   Future<void> _export() async {
     if (_passphrase.text.length < 12) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Use a recovery passphrase with at least 12 characters.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Use a recovery passphrase with at least 12 characters.',
+          ),
+        ),
+      );
       return;
     }
     setState(() => _busy = true);
     try {
       final service = await ref.read(cycleVaultServiceProvider.future);
       final path = await service.exportToFile(_passphrase.text);
-      await SharePlus.instance.share(ShareParams(files: [XFile(path)], text: 'Encrypted Sreva CycleVault backup. Keep the recovery passphrase separately.'));
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(path)],
+          text: 'Encrypted Sreva CycleVault backup. Keep the recovery passphrase separately.',
+        ),
+      );
     } catch (error) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Backup failed: $error')));
+      if (mounted)
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Backup failed: $error')));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -61,13 +74,18 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
           'Replace all local Sreva health data with the validated backup, or merge only records that are not already present? Replacement is atomic and only happens after validation.',
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
           TextButton(
-            onPressed: () => Navigator.pop(context, CycleVaultRestoreMode.merge),
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () =>
+                Navigator.pop(context, CycleVaultRestoreMode.merge),
             child: const Text('Merge'),
           ),
           FilledButton(
-            onPressed: () => Navigator.pop(context, CycleVaultRestoreMode.replaceAll),
+            onPressed: () =>
+                Navigator.pop(context, CycleVaultRestoreMode.replaceAll),
             child: const Text('Replace from backup'),
           ),
         ],
@@ -97,9 +115,8 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
       }
     } catch (error) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Restore failed: $error')),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Restore failed: $error')));
       }
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -113,15 +130,42 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const Card(child: Padding(padding: EdgeInsets.all(16), child: Text('CycleVault encrypts a portable backup on this device using Argon2id + AES-256-GCM. Sreva never sends the passphrase or backup to our servers.'))),
+          const Card(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                'CycleVault encrypts a portable backup on this device using Argon2id + AES-256-GCM. Sreva never sends the passphrase or backup to our servers.',
+              ),
+            ),
+          ),
           const SizedBox(height: 16),
-          TextField(controller: _passphrase, obscureText: true, enableSuggestions: false, autocorrect: false, decoration: const InputDecoration(labelText: 'Recovery passphrase', helperText: 'At least 12 characters; store it somewhere separate.')),
+          TextField(
+            controller: _passphrase,
+            obscureText: true,
+            enableSuggestions: false,
+            autocorrect: false,
+            decoration: const InputDecoration(
+              labelText: 'Recovery passphrase',
+              helperText:
+                  'At least 12 characters; store it somewhere separate.',
+            ),
+          ),
           const SizedBox(height: 16),
-          FilledButton.icon(onPressed: _busy ? null : _export, icon: const Icon(Icons.backup_outlined), label: const Text('Create encrypted backup')),
+          FilledButton.icon(
+            onPressed: _busy ? null : _export,
+            icon: const Icon(Icons.backup_outlined),
+            label: const Text('Create encrypted backup'),
+          ),
           const SizedBox(height: 8),
-          OutlinedButton.icon(onPressed: _busy ? null : _restore, icon: const Icon(Icons.restore), label: const Text('Restore CycleVault')),
+          OutlinedButton.icon(
+            onPressed: _busy ? null : _restore,
+            icon: const Icon(Icons.restore),
+            label: const Text('Restore CycleVault'),
+          ),
           const SizedBox(height: 16),
-          const Text('If the passphrase is lost, Sreva cannot recover the CycleVault. This is intentional: the developer does not hold a recovery copy of your health data or encryption key.'),
+          const Text(
+            'If the passphrase is lost, Sreva cannot recover the CycleVault. This is intentional: the developer does not hold a recovery copy of your health data or encryption key.',
+          ),
         ],
       ),
     );

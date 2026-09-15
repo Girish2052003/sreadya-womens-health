@@ -6,9 +6,11 @@ import '../../../core/version/app_versions.dart';
 import '../../reminders/data/reminder_scheduler.dart';
 
 class DiagnosticService {
-  DiagnosticService({required HealthVault vault, ReminderScheduler? reminderScheduler})
-      : _vault = vault,
-        _reminders = reminderScheduler ?? ReminderScheduler();
+  DiagnosticService({
+    required HealthVault vault,
+    ReminderScheduler? reminderScheduler,
+  }) : _vault = vault,
+       _reminders = reminderScheduler ?? ReminderScheduler();
 
   final HealthVault _vault;
   final ReminderScheduler _reminders;
@@ -25,7 +27,9 @@ class DiagnosticService {
           reminderEngine: AppVersions.reminderEngine,
           healthAdapter: AppVersions.healthAdapter,
           notificationPermission: permission.description,
-          nextReminderState: pending.isEmpty ? 'none' : 'scheduled:${pending.length}',
+          nextReminderState: pending.isEmpty
+              ? 'none'
+              : 'scheduled:${pending.length}',
           lastMigrationState: 'schema-${_vault.schemaVersion}',
           databaseIntegrity: _vault.integrityCheck(),
         ) +

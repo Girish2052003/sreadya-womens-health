@@ -3,7 +3,7 @@ import '../domain/app_preferences.dart';
 
 class AppPreferencesStore {
   AppPreferencesStore({LocalSettingsStore? settings})
-      : _settings = settings ?? LocalSettingsStore();
+    : _settings = settings ?? LocalSettingsStore();
 
   static const _key = 'sreva.app-preferences.v1';
   final LocalSettingsStore _settings;

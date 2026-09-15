@@ -19,15 +19,16 @@ class PersonalReminder {
   final bool enabled;
 
   Map<String, Object> toJson() => {
-        'id': id,
-        'kind': kind.name,
-        'hour': hour,
-        'minute': minute,
-        'label': label,
-        'enabled': enabled,
-      };
+    'id': id,
+    'kind': kind.name,
+    'hour': hour,
+    'minute': minute,
+    'label': label,
+    'enabled': enabled,
+  };
 
-  factory PersonalReminder.fromJson(Map<String, dynamic> json) => PersonalReminder(
+  factory PersonalReminder.fromJson(Map<String, dynamic> json) =>
+      PersonalReminder(
         id: json['id'] as String,
         kind: ReminderKind.values.byName(json['kind'] as String),
         hour: json['hour'] as int,
@@ -38,19 +39,24 @@ class PersonalReminder {
 }
 
 class PersonalReminderStore {
-  PersonalReminderStore({LocalSettingsStore? settings}) : _settings = settings ?? LocalSettingsStore();
+  PersonalReminderStore({LocalSettingsStore? settings})
+    : _settings = settings ?? LocalSettingsStore();
   static const _key = 'sreva.personal-reminders.v1';
   final LocalSettingsStore _settings;
 
   Future<List<PersonalReminder>> readAll() async {
     return await _settings.readJson<List<PersonalReminder>>(_key, (value) {
           return (value as List<dynamic>)
-              .map((item) => PersonalReminder.fromJson(Map<String, dynamic>.from(item as Map)))
+              .map(
+                (item) => PersonalReminder.fromJson(
+                  Map<String, dynamic>.from(item as Map),
+                ),
+              )
               .toList();
         }) ??
         const [];
   }
 
-  Future<void> writeAll(List<PersonalReminder> reminders) =>
-      _settings.writeJson(_key, reminders.map((value) => value.toJson()).toList());
+  Future<void> writeAll(List<PersonalReminder> reminders) => _settings
+      .writeJson(_key, reminders.map((value) => value.toJson()).toList());
 }

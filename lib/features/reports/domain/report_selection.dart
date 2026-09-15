@@ -14,16 +14,16 @@ class ReportSelection {
   const ReportSelection({required this.categories});
 
   factory ReportSelection.safeDefault() => const ReportSelection(
-        categories: {
-          ReportCategory.periods,
-          ReportCategory.flow,
-          ReportCategory.symptoms,
-          ReportCategory.pain,
-          ReportCategory.medications,
-          ReportCategory.temperature,
-          ReportCategory.ovulation,
-        },
-      );
+    categories: {
+      ReportCategory.periods,
+      ReportCategory.flow,
+      ReportCategory.symptoms,
+      ReportCategory.pain,
+      ReportCategory.medications,
+      ReportCategory.temperature,
+      ReportCategory.ovulation,
+    },
+  );
 
   final Set<ReportCategory> categories;
 

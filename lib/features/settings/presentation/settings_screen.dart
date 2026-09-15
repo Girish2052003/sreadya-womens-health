@@ -19,7 +19,8 @@ class SettingsScreen extends ConsumerWidget {
       appBar: AppBar(title: const Text('Settings & accessibility')),
       body: preferences.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(child: Text('Settings unavailable: $error')),
+        error: (error, _) =>
+            Center(child: Text('Settings unavailable: $error')),
         data: (settings) => ListView(
           padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 24),
           children: [
@@ -27,19 +28,35 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 8),
             SegmentedButton<ThemePreference>(
               segments: const [
-                ButtonSegment(value: ThemePreference.system, label: Text('System'), icon: Icon(Icons.brightness_auto_outlined)),
-                ButtonSegment(value: ThemePreference.light, label: Text('Light'), icon: Icon(Icons.light_mode_outlined)),
-                ButtonSegment(value: ThemePreference.dark, label: Text('Dark'), icon: Icon(Icons.dark_mode_outlined)),
+                ButtonSegment(
+                  value: ThemePreference.system,
+                  label: Text('System'),
+                  icon: Icon(Icons.brightness_auto_outlined),
+                ),
+                ButtonSegment(
+                  value: ThemePreference.light,
+                  label: Text('Light'),
+                  icon: Icon(Icons.light_mode_outlined),
+                ),
+                ButtonSegment(
+                  value: ThemePreference.dark,
+                  label: Text('Dark'),
+                  icon: Icon(Icons.dark_mode_outlined),
+                ),
               ],
               selected: {settings.themePreference},
-              onSelectionChanged: (values) => _save(ref, settings.copyWith(themePreference: values.first)),
+              onSelectionChanged: (values) =>
+                  _save(ref, settings.copyWith(themePreference: values.first)),
             ),
             const SizedBox(height: 12),
             SwitchListTile(
               value: settings.highContrast,
               title: const Text('Higher contrast'),
-              subtitle: const Text('Increase visual contrast while preserving semantic status labels.'),
-              onChanged: (value) => _save(ref, settings.copyWith(highContrast: value)),
+              subtitle: const Text(
+                'Increase visual contrast while preserving semantic status labels.',
+              ),
+              onChanged: (value) =>
+                  _save(ref, settings.copyWith(highContrast: value)),
             ),
             const SizedBox(height: 20),
             Text('Time & units', style: Theme.of(context).textTheme.titleLarge),
@@ -48,12 +65,22 @@ class SettingsScreen extends ConsumerWidget {
               value: settings.clockPreference,
               decoration: const InputDecoration(labelText: 'Clock format'),
               items: const [
-                DropdownMenuItem(value: ClockPreference.system, child: Text('Follow device')),
-                DropdownMenuItem(value: ClockPreference.twelveHour, child: Text('12-hour')),
-                DropdownMenuItem(value: ClockPreference.twentyFourHour, child: Text('24-hour')),
+                DropdownMenuItem(
+                  value: ClockPreference.system,
+                  child: Text('Follow device'),
+                ),
+                DropdownMenuItem(
+                  value: ClockPreference.twelveHour,
+                  child: Text('12-hour'),
+                ),
+                DropdownMenuItem(
+                  value: ClockPreference.twentyFourHour,
+                  child: Text('24-hour'),
+                ),
               ],
               onChanged: (value) {
-                if (value != null) _save(ref, settings.copyWith(clockPreference: value));
+                if (value != null)
+                  _save(ref, settings.copyWith(clockPreference: value));
               },
             ),
             const SizedBox(height: 12),
@@ -61,11 +88,18 @@ class SettingsScreen extends ConsumerWidget {
               value: settings.unitSystem,
               decoration: const InputDecoration(labelText: 'Units'),
               items: const [
-                DropdownMenuItem(value: UnitSystem.metric, child: Text('Metric (°C, kg)')),
-                DropdownMenuItem(value: UnitSystem.imperial, child: Text('Imperial (°F, lb)')),
+                DropdownMenuItem(
+                  value: UnitSystem.metric,
+                  child: Text('Metric (°C, kg)'),
+                ),
+                DropdownMenuItem(
+                  value: UnitSystem.imperial,
+                  child: Text('Imperial (°F, lb)'),
+                ),
               ],
               onChanged: (value) {
-                if (value != null) _save(ref, settings.copyWith(unitSystem: value));
+                if (value != null)
+                  _save(ref, settings.copyWith(unitSystem: value));
               },
             ),
             const SizedBox(height: 20),
@@ -73,18 +107,24 @@ class SettingsScreen extends ConsumerWidget {
               child: ListTile(
                 leading: Icon(Icons.accessibility_new),
                 title: Text('Accessibility'),
-                subtitle: Text('Sreva follows Dynamic Type/text scaling, VoiceOver/TalkBack semantics, one-handed layouts and directional UI.'),
+                subtitle: Text(
+                  'Sreva follows Dynamic Type/text scaling, VoiceOver/TalkBack semantics, one-handed layouts and directional UI.',
+                ),
               ),
             ),
             const Card(
               child: ListTile(
                 leading: Icon(Icons.language),
                 title: Text('Languages'),
-                subtitle: Text('English is the worldwide-v1 baseline. The app uses localization resources so reviewed translation packs can be added without changing health logic.'),
+                subtitle: Text(
+                  'English is the worldwide-v1 baseline. The app uses localization resources so reviewed translation packs can be added without changing health logic.',
+                ),
               ),
             ),
             const SizedBox(height: 16),
-            const Text('Sreva never requires an account for core tracking. Core cycle features remain available without internet.'),
+            const Text(
+              'Sreva never requires an account for core tracking. Core cycle features remain available without internet.',
+            ),
           ],
         ),
       ),

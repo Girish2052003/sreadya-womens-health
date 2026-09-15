@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LocalSettingsStore {
   LocalSettingsStore({FlutterSecureStorage? secureStorage})
-      : _storage = secureStorage ?? const FlutterSecureStorage();
+    : _storage = secureStorage ?? const FlutterSecureStorage();
 
   final FlutterSecureStorage _storage;
 
@@ -27,5 +27,6 @@ class LocalSettingsStore {
       _storage.write(key: key, value: value.toString());
 
   Future<String?> readString(String key) => _storage.read(key: key);
-  Future<void> writeString(String key, String value) => _storage.write(key: key, value: value);
+  Future<void> writeString(String key, String value) =>
+      _storage.write(key: key, value: value);
 }

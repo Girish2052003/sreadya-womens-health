@@ -29,10 +29,16 @@ void main() {
       ReminderKind.periodExpectedDay,
       ReminderKind.periodLate,
     });
-    expect(plans.singleWhere((p) => p.kind == ReminderKind.periodThreeDays).targetLocal,
-        DateTime(2026, 10, 17, 8, 15));
-    expect(plans.singleWhere((p) => p.kind == ReminderKind.periodLate).targetLocal,
-        DateTime(2026, 10, 22, 8, 15));
+    expect(
+      plans
+          .singleWhere((p) => p.kind == ReminderKind.periodThreeDays)
+          .targetLocal,
+      DateTime(2026, 10, 17, 8, 15),
+    );
+    expect(
+      plans.singleWhere((p) => p.kind == ReminderKind.periodLate).targetLocal,
+      DateTime(2026, 10, 22, 8, 15),
+    );
   });
 
   test('moves a reminder out of quiet hours deterministically', () {
@@ -45,12 +51,14 @@ void main() {
       quietEndHour: 7,
     );
 
-    final plan = ReminderPolicy().periodPlans(
-      predictedDate: DateTime(2026, 10, 20),
-      sourcePredictionId: 'prediction-1',
-      settings: settings,
-      now: DateTime(2026, 10, 1),
-    ).single;
+    final plan = ReminderPolicy()
+        .periodPlans(
+          predictedDate: DateTime(2026, 10, 20),
+          sourcePredictionId: 'prediction-1',
+          settings: settings,
+          now: DateTime(2026, 10, 1),
+        )
+        .single;
 
     expect(plan.targetLocal, DateTime(2026, 10, 17, 7));
   });

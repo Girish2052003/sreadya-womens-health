@@ -18,28 +18,36 @@ class LifeStageScreen extends ConsumerWidget {
         data: (current) => ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            const Text('Choose the context that best fits now. Changing modes never deletes your history.'),
+            const Text(
+              'Choose the context that best fits now. Changing modes never deletes your history.',
+            ),
             const SizedBox(height: 12),
             Card(
               child: Column(
-                children: LifeStageMode.values.map((mode) => RadioListTile<LifeStageMode>(
-                  value: mode,
-                  groupValue: current,
-                  title: Text(mode.label),
-                  subtitle: Text(_description(mode)),
-                  onChanged: (value) async {
-                    if (value == null) return;
-                    await ref.read(lifeStageStoreProvider).write(value);
-                    ref.invalidate(lifeStageProvider);
-                  },
-                )).toList(),
+                children: LifeStageMode.values
+                    .map(
+                      (mode) => RadioListTile<LifeStageMode>(
+                        value: mode,
+                        groupValue: current,
+                        title: Text(mode.label),
+                        subtitle: Text(_description(mode)),
+                        onChanged: (value) async {
+                          if (value == null) return;
+                          await ref.read(lifeStageStoreProvider).write(value);
+                          ref.invalidate(lifeStageProvider);
+                        },
+                      ),
+                    )
+                    .toList(),
               ),
             ),
             const SizedBox(height: 16),
             const Card(
               child: Padding(
                 padding: EdgeInsets.all(16),
-                child: Text('Sreva’s life-stage modes organize tracking and reminders. They do not diagnose pregnancy, fertility, menopause, or any health condition.'),
+                child: Text(
+                  'Sreva’s life-stage modes organize tracking and reminders. They do not diagnose pregnancy, fertility, menopause, or any health condition.',
+                ),
               ),
             ),
           ],
@@ -49,13 +57,20 @@ class LifeStageScreen extends ConsumerWidget {
   }
 
   String _description(LifeStageMode mode) => switch (mode) {
-        LifeStageMode.cycleTracking => 'Periods, symptoms, predictions and reminders.',
-        LifeStageMode.tryingToConceive => 'Adds fertility observations, tests, temperature and cervical mucus.',
-        LifeStageMode.pregnancy => 'Pauses cycle prediction and focuses on pregnancy-related personal tracking.',
-        LifeStageMode.postpartum => 'Postpartum recovery context without deleting prior cycles.',
-        LifeStageMode.breastfeeding => 'Breastfeeding context alongside postpartum observations.',
-        LifeStageMode.perimenopause => 'Tracks cycle changes and symptoms with wider prediction uncertainty.',
-        LifeStageMode.menopauseTransition => 'Focuses on symptoms and history instead of routine period prediction.',
-        LifeStageMode.hormonalContraception => 'Records contraception context and relevant reminders.',
-      };
+    LifeStageMode.cycleTracking =>
+      'Periods, symptoms, predictions and reminders.',
+    LifeStageMode.tryingToConceive =>
+      'Adds fertility observations, tests, temperature and cervical mucus.',
+    LifeStageMode.pregnancy => 'Pauses cycle prediction and focuses on pregnancy-related personal tracking.',
+    LifeStageMode.postpartum =>
+      'Postpartum recovery context without deleting prior cycles.',
+    LifeStageMode.breastfeeding =>
+      'Breastfeeding context alongside postpartum observations.',
+    LifeStageMode.perimenopause =>
+      'Tracks cycle changes and symptoms with wider prediction uncertainty.',
+    LifeStageMode.menopauseTransition =>
+      'Focuses on symptoms and history instead of routine period prediction.',
+    LifeStageMode.hormonalContraception =>
+      'Records contraception context and relevant reminders.',
+  };
 }

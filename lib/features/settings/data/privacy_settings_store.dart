@@ -3,7 +3,8 @@ import '../../reminders/domain/reminder_models.dart';
 import '../domain/privacy_settings.dart';
 
 class PrivacySettingsStore {
-  PrivacySettingsStore({LocalSettingsStore? settings}) : _settings = settings ?? LocalSettingsStore();
+  PrivacySettingsStore({LocalSettingsStore? settings})
+    : _settings = settings ?? LocalSettingsStore();
   static const _key = 'sreva.privacy-settings.v1';
   final LocalSettingsStore _settings;
 
@@ -13,7 +14,9 @@ class PrivacySettingsStore {
           return PrivacySettings(
             appLockEnabled: json['appLockEnabled'] as bool? ?? false,
             autoLockMinutes: json['autoLockMinutes'] as int? ?? 1,
-            notificationPrivacy: NotificationPrivacy.values.byName(json['notificationPrivacy'] as String? ?? 'maximum'),
+            notificationPrivacy: NotificationPrivacy.values.byName(
+              json['notificationPrivacy'] as String? ?? 'maximum',
+            ),
             analyticsEnabled: false,
           );
         }) ??
@@ -21,9 +24,9 @@ class PrivacySettingsStore {
   }
 
   Future<void> write(PrivacySettings value) => _settings.writeJson(_key, {
-        'appLockEnabled': value.appLockEnabled,
-        'autoLockMinutes': value.autoLockMinutes,
-        'notificationPrivacy': value.notificationPrivacy.name,
-        'analyticsEnabled': false,
-      });
+    'appLockEnabled': value.appLockEnabled,
+    'autoLockMinutes': value.autoLockMinutes,
+    'notificationPrivacy': value.notificationPrivacy.name,
+    'analyticsEnabled': false,
+  });
 }

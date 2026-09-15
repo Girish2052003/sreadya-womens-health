@@ -9,8 +9,8 @@ class LocalHealthRepository implements HealthRepository {
   LocalHealthRepository({
     required HealthVault vault,
     required VaultCipher cipher,
-  })  : _vault = vault,
-        _cipher = cipher;
+  }) : _vault = vault,
+       _cipher = cipher;
 
   final HealthVault _vault;
   final VaultCipher _cipher;
@@ -39,9 +39,12 @@ class LocalHealthRepository implements HealthRepository {
     for (final period in existing.where((p) => p.id != episode.id)) {
       final aEnd = episode.end ?? episode.start;
       final bEnd = period.end ?? period.start;
-      final overlaps = !aEnd.isBefore(period.start) && !bEnd.isBefore(episode.start);
+      final overlaps =
+          !aEnd.isBefore(period.start) && !bEnd.isBefore(episode.start);
       if (overlaps) {
-        throw StateError('Period episodes cannot overlap without an explicit merge.');
+        throw StateError(
+          'Period episodes cannot overlap without an explicit merge.',
+        );
       }
     }
     await _upsert(episode.id, 'period', _periodToJson(episode));
@@ -49,12 +52,17 @@ class LocalHealthRepository implements HealthRepository {
 
   @override
   Future<void> deletePeriod(String id) async {
-    _vault.database.execute('DELETE FROM encrypted_records WHERE id = ?;', [id]);
+    _vault.database.execute('DELETE FROM encrypted_records WHERE id = ?;', [
+      id,
+    ]);
     _changes.add(null);
   }
 
   @override
-  Future<List<HealthObservation>> listObservations({DateTime? from, DateTime? to}) async {
+  Future<List<HealthObservation>> listObservations({
+    DateTime? from,
+    DateTime? to,
+  }) async {
     final rows = _vault.database.select(
       "SELECT payload FROM encrypted_records WHERE record_class='observation';",
     );
@@ -76,7 +84,9 @@ class LocalHealthRepository implements HealthRepository {
 
   @override
   Future<void> deleteObservation(String id) async {
-    _vault.database.execute('DELETE FROM encrypted_records WHERE id = ?;', [id]);
+    _vault.database.execute('DELETE FROM encrypted_records WHERE id = ?;', [
+      id,
+    ]);
     _changes.add(null);
   }
 
@@ -91,11 +101,17 @@ class LocalHealthRepository implements HealthRepository {
     // the transaction remains short and cannot be suspended across awaits.
     final periodRows = <(String, Uint8List)>[];
     for (final period in periods) {
-      periodRows.add((period.id, await _cipher.encryptJson(_periodToJson(period))));
+      periodRows.add((
+        period.id,
+        await _cipher.encryptJson(_periodToJson(period)),
+      ));
     }
     final observationRows = <(String, Uint8List)>[];
     for (final observation in observations) {
-      observationRows.add((observation.id, await _cipher.encryptJson(_observationToJson(observation))));
+      observationRows.add((
+        observation.id,
+        await _cipher.encryptJson(_observationToJson(observation)),
+      ));
     }
 
     final database = _vault.database;
@@ -116,8 +132,11 @@ class LocalHealthRepository implements HealthRepository {
         );
       }
       final integrity = database.select('PRAGMA integrity_check;');
-      if (integrity.isEmpty || integrity.first.values.first.toString().toLowerCase() != 'ok') {
-        throw StateError('Health Vault integrity check failed during atomic replacement.');
+      if (integrity.isEmpty ||
+          integrity.first.values.first.toString().toLowerCase() != 'ok') {
+        throw StateError(
+          'Health Vault integrity check failed during atomic replacement.',
+        );
       }
       database.execute('COMMIT;');
     } catch (_) {
@@ -138,7 +157,11 @@ class LocalHealthRepository implements HealthRepository {
     }
   }
 
-  Future<void> _upsert(String id, String recordClass, Map<String, Object?> json) async {
+  Future<void> _upsert(
+    String id,
+    String recordClass,
+    Map<String, Object?> json,
+  ) async {
     final encrypted = await _cipher.encryptJson(json);
     _vault.database.execute(
       '''
@@ -155,36 +178,37 @@ class LocalHealthRepository implements HealthRepository {
   }
 
   Map<String, Object?> _periodToJson(PeriodEpisode value) => {
-        'id': value.id,
-        'start': value.start.toIso8601String(),
-        'end': value.end?.toIso8601String(),
-        'source': value.source.name,
-        'externalId': value.externalId,
-      };
+    'id': value.id,
+    'start': value.start.toIso8601String(),
+    'end': value.end?.toIso8601String(),
+    'source': value.source.name,
+    'externalId': value.externalId,
+  };
 
   PeriodEpisode _periodFromJson(Map<String, dynamic> json) => PeriodEpisode(
-        id: json['id'] as String,
-        start: DateTime.parse(json['start'] as String),
-        end: json['end'] == null ? null : DateTime.parse(json['end'] as String),
-        source: RecordSource.values.byName(json['source'] as String? ?? 'app'),
-        externalId: json['externalId'] as String?,
-      );
+    id: json['id'] as String,
+    start: DateTime.parse(json['start'] as String),
+    end: json['end'] == null ? null : DateTime.parse(json['end'] as String),
+    source: RecordSource.values.byName(json['source'] as String? ?? 'app'),
+    externalId: json['externalId'] as String?,
+  );
 
   Map<String, Object?> _observationToJson(HealthObservation value) => {
-        'id': value.id,
-        'kind': value.kind.name,
-        'occurredAt': value.occurredAt.toIso8601String(),
-        'severity': value.severity?.name,
-        'numericValue': value.numericValue,
-        'unit': value.unit,
-        'label': value.label,
-        'note': value.note,
-        'flowLevel': value.flowLevel?.name,
-        'source': value.source.name,
-        'externalId': value.externalId,
-      };
+    'id': value.id,
+    'kind': value.kind.name,
+    'occurredAt': value.occurredAt.toIso8601String(),
+    'severity': value.severity?.name,
+    'numericValue': value.numericValue,
+    'unit': value.unit,
+    'label': value.label,
+    'note': value.note,
+    'flowLevel': value.flowLevel?.name,
+    'source': value.source.name,
+    'externalId': value.externalId,
+  };
 
-  HealthObservation _observationFromJson(Map<String, dynamic> json) => HealthObservation(
+  HealthObservation _observationFromJson(Map<String, dynamic> json) =>
+      HealthObservation(
         id: json['id'] as String,
         kind: ObservationKind.values.byName(json['kind'] as String),
         occurredAt: DateTime.parse(json['occurredAt'] as String),
@@ -195,7 +219,9 @@ class LocalHealthRepository implements HealthRepository {
         unit: json['unit'] as String?,
         label: json['label'] as String?,
         note: json['note'] as String?,
-        flowLevel: json['flowLevel'] == null ? null : FlowLevel.values.byName(json['flowLevel'] as String),
+        flowLevel: json['flowLevel'] == null
+            ? null
+            : FlowLevel.values.byName(json['flowLevel'] as String),
         source: RecordSource.values.byName(json['source'] as String? ?? 'app'),
         externalId: json['externalId'] as String?,
       );

@@ -9,9 +9,8 @@ class PredictionOutcome {
   final CyclePrediction prediction;
   final DateTime actualStart;
 
-  int get signedErrorDays => _date(actualStart)
-      .difference(_date(prediction.mostLikelyDate))
-      .inDays;
+  int get signedErrorDays =>
+      _date(actualStart).difference(_date(prediction.mostLikelyDate)).inDays;
 
   int get absoluteErrorDays => signedErrorDays.abs();
 
@@ -64,16 +63,25 @@ class PredictionEvaluator {
     final signed = outcomes
         .map((value) => value.signedErrorDays.toDouble())
         .toList(growable: false);
-    final early = signed.where((value) => value < 0).map((value) => value.abs()).toList();
+    final early = signed
+        .where((value) => value < 0)
+        .map((value) => value.abs())
+        .toList();
     final late = signed.where((value) => value > 0).toList();
 
     return PredictionEvaluation(
       sampleCount: outcomes.length,
       meanAbsoluteErrorDays: absolute.reduce((a, b) => a + b) / absolute.length,
       medianAbsoluteErrorDays: _median(absolute),
-      windowCoverage: outcomes.where((value) => value.withinWindow).length / outcomes.length,
-      earlyBiasDays: early.isEmpty ? 0 : early.reduce((a, b) => a + b) / early.length,
-      lateBiasDays: late.isEmpty ? 0 : late.reduce((a, b) => a + b) / late.length,
+      windowCoverage:
+          outcomes.where((value) => value.withinWindow).length /
+          outcomes.length,
+      earlyBiasDays: early.isEmpty
+          ? 0
+          : early.reduce((a, b) => a + b) / early.length,
+      lateBiasDays: late.isEmpty
+          ? 0
+          : late.reduce((a, b) => a + b) / late.length,
     );
   }
 

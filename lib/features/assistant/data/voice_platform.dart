@@ -5,7 +5,8 @@ class VoicePlatform {
 
   Future<bool> supportsOfflineRecognition() async {
     try {
-      return await _channel.invokeMethod<bool>('supportsOfflineRecognition') ?? false;
+      return await _channel.invokeMethod<bool>('supportsOfflineRecognition') ??
+          false;
     } on MissingPluginException {
       return false;
     }

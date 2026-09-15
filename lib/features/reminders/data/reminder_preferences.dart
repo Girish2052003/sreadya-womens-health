@@ -48,15 +48,15 @@ class ReminderPreferences {
   }
 
   Map<String, Object> toJson() => {
-        'enabled': enabled,
-        'enabledOffsetsDays': enabledOffsetsDays.toList()..sort(),
-        'lateDays': lateDays,
-        'hour': hour,
-        'minute': minute,
-        'privacy': privacy.name,
-        'quietStartHour': quietStartHour,
-        'quietEndHour': quietEndHour,
-      };
+    'enabled': enabled,
+    'enabledOffsetsDays': enabledOffsetsDays.toList()..sort(),
+    'lateDays': lateDays,
+    'hour': hour,
+    'minute': minute,
+    'privacy': privacy.name,
+    'quietStartHour': quietStartHour,
+    'quietEndHour': quietEndHour,
+  };
 
   factory ReminderPreferences.fromJson(Map<String, dynamic> json) {
     final offsets = (json['enabledOffsetsDays'] as List<dynamic>?)
@@ -84,7 +84,7 @@ class ReminderPreferences {
 
 class ReminderPreferencesStore {
   ReminderPreferencesStore({LocalSettingsStore? settings})
-      : _settings = settings ?? LocalSettingsStore();
+    : _settings = settings ?? LocalSettingsStore();
 
   static const _key = 'sreva.reminder.preferences.v1';
   final LocalSettingsStore _settings;

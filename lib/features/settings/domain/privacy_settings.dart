@@ -18,9 +18,9 @@ class PrivacySettings {
     int? autoLockMinutes,
     NotificationPrivacy? notificationPrivacy,
   }) => PrivacySettings(
-        appLockEnabled: appLockEnabled ?? this.appLockEnabled,
-        autoLockMinutes: autoLockMinutes ?? this.autoLockMinutes,
-        notificationPrivacy: notificationPrivacy ?? this.notificationPrivacy,
-        analyticsEnabled: false,
-      );
+    appLockEnabled: appLockEnabled ?? this.appLockEnabled,
+    autoLockMinutes: autoLockMinutes ?? this.autoLockMinutes,
+    notificationPrivacy: notificationPrivacy ?? this.notificationPrivacy,
+    analyticsEnabled: false,
+  );
 }

@@ -19,7 +19,9 @@ class HealthVault {
   }) async {
     final root = await getApplicationSupportDirectory();
     await Directory(root.path).create(recursive: true);
-    await (privacyPlatform ?? PrivacyPlatform()).excludePathFromBackup(root.path);
+    await (privacyPlatform ?? PrivacyPlatform()).excludePathFromBackup(
+      root.path,
+    );
     final dbPath = p.join(root.path, 'sreva_vault.sqlite3');
 
     final provider = keyProvider ?? DatabaseKeyProvider();
@@ -31,7 +33,8 @@ class HealthVault {
       // SQLCipher requires the key before any operation that reads database pages.
       db.execute('PRAGMA key = "$pragmaKey";');
       final cipher = db.select('PRAGMA cipher_version;');
-      if (cipher.isEmpty || cipher.first.values.first.toString().trim().isEmpty) {
+      if (cipher.isEmpty ||
+          cipher.first.values.first.toString().trim().isEmpty) {
         throw StateError('Encrypted SQLite provider is unavailable.');
       }
       db.select('SELECT count(*) FROM sqlite_master;');
@@ -76,7 +79,9 @@ class HealthVault {
 
   String cipherVersion() {
     final result = database.select('PRAGMA cipher_version;');
-    return result.isEmpty ? 'unavailable' : result.first.values.first.toString();
+    return result.isEmpty
+        ? 'unavailable'
+        : result.first.values.first.toString();
   }
 
   void close() => database.dispose();

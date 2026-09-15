@@ -58,7 +58,8 @@ class PeriodEpisode {
   final RecordSource source;
   final String? externalId;
 
-  int? get durationDays => end == null ? null : end!.difference(start).inDays + 1;
+  int? get durationDays =>
+      end == null ? null : end!.difference(start).inDays + 1;
 }
 
 class HealthObservation {
@@ -89,12 +90,14 @@ class HealthObservation {
   final String? externalId;
 }
 
-
 abstract interface class HealthRepository {
   Future<List<PeriodEpisode>> listPeriods();
   Future<void> savePeriod(PeriodEpisode episode);
   Future<void> deletePeriod(String id);
-  Future<List<HealthObservation>> listObservations({DateTime? from, DateTime? to});
+  Future<List<HealthObservation>> listObservations({
+    DateTime? from,
+    DateTime? to,
+  });
   Future<void> saveObservation(HealthObservation observation);
   Future<void> deleteObservation(String id);
 

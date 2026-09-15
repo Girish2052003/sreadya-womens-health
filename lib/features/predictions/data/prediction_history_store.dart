@@ -14,9 +14,11 @@ class PredictionHistoryRecord {
 }
 
 class PredictionHistoryStore {
-  PredictionHistoryStore({required HealthVault vault, required VaultCipher cipher})
-      : _vault = vault,
-        _cipher = cipher;
+  PredictionHistoryStore({
+    required HealthVault vault,
+    required VaultCipher cipher,
+  }) : _vault = vault,
+       _cipher = cipher;
 
   final HealthVault _vault;
   final VaultCipher _cipher;
@@ -24,10 +26,18 @@ class PredictionHistoryStore {
 
   Future<void> recordIfNew(CyclePrediction prediction) async {
     final existing = await list();
-    final duplicate = existing.any((record) =>
-        record.prediction.algorithmVersion == prediction.algorithmVersion &&
-        _sameDay(record.prediction.mostLikelyDate, prediction.mostLikelyDate) &&
-        _sameIntervals(record.prediction.validIntervals, prediction.validIntervals));
+    final duplicate = existing.any(
+      (record) =>
+          record.prediction.algorithmVersion == prediction.algorithmVersion &&
+          _sameDay(
+            record.prediction.mostLikelyDate,
+            prediction.mostLikelyDate,
+          ) &&
+          _sameIntervals(
+            record.prediction.validIntervals,
+            prediction.validIntervals,
+          ),
+    );
     if (duplicate) return;
     final payload = await _cipher.encryptJson(_toJson(prediction));
     _vault.database.execute(
@@ -56,7 +66,9 @@ class PredictionHistoryStore {
     return result;
   }
 
-  Future<PredictionEvaluation> evaluateAgainst(List<DateTime> actualStarts) async {
+  Future<PredictionEvaluation> evaluateAgainst(
+    List<DateTime> actualStarts,
+  ) async {
     final records = await list();
     final outcomes = <PredictionOutcome>[];
     final starts = actualStarts.map(_date).toList()..sort();
@@ -70,37 +82,44 @@ class PredictionHistoryStore {
         }
       }
       if (actual != null) {
-        outcomes.add(PredictionOutcome(prediction: prediction, actualStart: actual));
+        outcomes.add(
+          PredictionOutcome(prediction: prediction, actualStart: actual),
+        );
       }
     }
     return PredictionEvaluator().evaluate(outcomes);
   }
 
   Map<String, Object?> _toJson(CyclePrediction value) => {
-        'algorithmVersion': value.algorithmVersion,
-        'createdAt': value.createdAt.toUtc().toIso8601String(),
-        'estimatedCycleLengthDays': value.estimatedCycleLengthDays,
-        'mostLikelyDate': value.mostLikelyDate.toIso8601String(),
-        'windowStart': value.windowStart.toIso8601String(),
-        'windowEnd': value.windowEnd.toIso8601String(),
-        'confidence': value.confidence.name,
-        'validIntervals': value.validIntervals,
-        'excludedIntervals': value.excludedIntervals,
-        'medianAbsoluteDeviation': value.medianAbsoluteDeviation,
-      };
+    'algorithmVersion': value.algorithmVersion,
+    'createdAt': value.createdAt.toUtc().toIso8601String(),
+    'estimatedCycleLengthDays': value.estimatedCycleLengthDays,
+    'mostLikelyDate': value.mostLikelyDate.toIso8601String(),
+    'windowStart': value.windowStart.toIso8601String(),
+    'windowEnd': value.windowEnd.toIso8601String(),
+    'confidence': value.confidence.name,
+    'validIntervals': value.validIntervals,
+    'excludedIntervals': value.excludedIntervals,
+    'medianAbsoluteDeviation': value.medianAbsoluteDeviation,
+  };
 
   CyclePrediction _fromJson(Map<String, dynamic> json) => CyclePrediction(
-        algorithmVersion: json['algorithmVersion'] as String,
-        createdAt: DateTime.parse(json['createdAt'] as String).toLocal(),
-        estimatedCycleLengthDays: json['estimatedCycleLengthDays'] as int,
-        mostLikelyDate: DateTime.parse(json['mostLikelyDate'] as String),
-        windowStart: DateTime.parse(json['windowStart'] as String),
-        windowEnd: DateTime.parse(json['windowEnd'] as String),
-        confidence: PredictionConfidence.values.byName(json['confidence'] as String),
-        validIntervals: List<int>.from(json['validIntervals'] as List<dynamic>),
-        excludedIntervals: List<int>.from(json['excludedIntervals'] as List<dynamic>),
-        medianAbsoluteDeviation: (json['medianAbsoluteDeviation'] as num).toDouble(),
-      );
+    algorithmVersion: json['algorithmVersion'] as String,
+    createdAt: DateTime.parse(json['createdAt'] as String).toLocal(),
+    estimatedCycleLengthDays: json['estimatedCycleLengthDays'] as int,
+    mostLikelyDate: DateTime.parse(json['mostLikelyDate'] as String),
+    windowStart: DateTime.parse(json['windowStart'] as String),
+    windowEnd: DateTime.parse(json['windowEnd'] as String),
+    confidence: PredictionConfidence.values.byName(
+      json['confidence'] as String,
+    ),
+    validIntervals: List<int>.from(json['validIntervals'] as List<dynamic>),
+    excludedIntervals: List<int>.from(
+      json['excludedIntervals'] as List<dynamic>,
+    ),
+    medianAbsoluteDeviation: (json['medianAbsoluteDeviation'] as num)
+        .toDouble(),
+  );
 
   bool _sameIntervals(List<int> a, List<int> b) {
     if (a.length != b.length) return false;
@@ -113,5 +132,6 @@ class PredictionHistoryStore {
   bool _sameDay(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;
 
-  DateTime _date(DateTime value) => DateTime(value.year, value.month, value.day);
+  DateTime _date(DateTime value) =>
+      DateTime(value.year, value.month, value.day);
 }

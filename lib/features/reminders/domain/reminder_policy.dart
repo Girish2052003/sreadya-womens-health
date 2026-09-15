@@ -30,7 +30,8 @@ class ReminderPolicy {
     required DateTime now,
   }) {
     final plans = <ReminderPlan>[];
-    final offsets = settings.enabledOffsetsDays.toList()..sort((a, b) => b.compareTo(a));
+    final offsets = settings.enabledOffsetsDays.toList()
+      ..sort((a, b) => b.compareTo(a));
     for (final offset in offsets) {
       final kind = switch (offset) {
         7 => ReminderKind.periodSevenDays,
@@ -40,8 +41,11 @@ class ReminderPolicy {
         _ => null,
       };
       if (kind == null) continue;
-      final day = DateTime(predictedDate.year, predictedDate.month, predictedDate.day)
-          .subtract(Duration(days: offset));
+      final day = DateTime(
+        predictedDate.year,
+        predictedDate.month,
+        predictedDate.day,
+      ).subtract(Duration(days: offset));
       final target = _outsideQuietHours(
         DateTime(day.year, day.month, day.day, settings.hour, settings.minute),
         settings,
@@ -59,10 +63,19 @@ class ReminderPolicy {
     }
 
     if (settings.lateDays > 0) {
-      final lateDay = DateTime(predictedDate.year, predictedDate.month, predictedDate.day)
-          .add(Duration(days: settings.lateDays));
+      final lateDay = DateTime(
+        predictedDate.year,
+        predictedDate.month,
+        predictedDate.day,
+      ).add(Duration(days: settings.lateDays));
       final target = _outsideQuietHours(
-        DateTime(lateDay.year, lateDay.month, lateDay.day, settings.hour, settings.minute),
+        DateTime(
+          lateDay.year,
+          lateDay.month,
+          lateDay.day,
+          settings.hour,
+          settings.minute,
+        ),
         settings,
       );
       if (target.isAfter(now)) {

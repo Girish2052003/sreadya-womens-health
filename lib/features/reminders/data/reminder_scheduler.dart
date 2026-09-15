@@ -3,7 +3,10 @@ import 'package:flutter/services.dart';
 import '../domain/reminder_models.dart';
 
 class ReminderPermissionStatus {
-  const ReminderPermissionStatus({required this.allowed, required this.description});
+  const ReminderPermissionStatus({
+    required this.allowed,
+    required this.description,
+  });
   final bool allowed;
   final String description;
 }
@@ -13,13 +16,18 @@ class ReminderScheduler {
 
   Future<ReminderPermissionStatus> permissionStatus() async {
     try {
-      final value = await _channel.invokeMapMethod<String, Object?>('permissionStatus');
+      final value = await _channel.invokeMapMethod<String, Object?>(
+        'permissionStatus',
+      );
       return ReminderPermissionStatus(
         allowed: value?['allowed'] == true,
         description: value?['description']?.toString() ?? 'unknown',
       );
     } on MissingPluginException {
-      return const ReminderPermissionStatus(allowed: false, description: 'platform adapter unavailable');
+      return const ReminderPermissionStatus(
+        allowed: false,
+        description: 'platform adapter unavailable',
+      );
     }
   }
 
@@ -65,9 +73,14 @@ class ReminderScheduler {
 
   Future<List<Map<String, Object?>>> pending() async {
     try {
-      final values = await _channel.invokeListMethod<Map<Object?, Object?>>('pending') ?? const [];
+      final values =
+          await _channel.invokeListMethod<Map<Object?, Object?>>('pending') ??
+          const [];
       return values
-          .map((entry) => entry.map((key, value) => MapEntry(key.toString(), value)))
+          .map(
+            (entry) =>
+                entry.map((key, value) => MapEntry(key.toString(), value)),
+          )
           .toList(growable: false);
     } on MissingPluginException {
       return const [];

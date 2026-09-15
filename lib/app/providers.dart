@@ -38,12 +38,16 @@ final periodsProvider = FutureProvider<List<PeriodEpisode>>((ref) async {
   return repository.listPeriods();
 });
 
-final observationsProvider = FutureProvider<List<HealthObservation>>((ref) async {
+final observationsProvider = FutureProvider<List<HealthObservation>>((
+  ref,
+) async {
   final repository = await ref.watch(healthRepositoryProvider.future);
   return repository.listObservations();
 });
 
-final predictionHistoryStoreProvider = FutureProvider<PredictionHistoryStore>((ref) async {
+final predictionHistoryStoreProvider = FutureProvider<PredictionHistoryStore>((
+  ref,
+) async {
   final vault = await ref.watch(healthVaultProvider.future);
   return PredictionHistoryStore(vault: vault, cipher: VaultCipher());
 });
@@ -52,7 +56,9 @@ final predictionProvider = FutureProvider<CyclePrediction?>((ref) async {
   final mode = await ref.watch(lifeStageProvider.future);
   if (!LifeStageCapabilities.forMode(mode).predictNextPeriod) return null;
   final periods = await ref.watch(periodsProvider.future);
-  final prediction = CyclePredictor().predict(periods.map((e) => e.start).toList());
+  final prediction = CyclePredictor().predict(
+    periods.map((e) => e.start).toList(),
+  );
   if (prediction != null) {
     final history = await ref.watch(predictionHistoryStoreProvider.future);
     await history.recordIfNew(prediction);
@@ -60,25 +66,50 @@ final predictionProvider = FutureProvider<CyclePrediction?>((ref) async {
   return prediction;
 });
 
+final appPreferencesStoreProvider = Provider<AppPreferencesStore>(
+  (_) => AppPreferencesStore(),
+);
+final appPreferencesProvider = FutureProvider<AppPreferences>(
+  (ref) => ref.watch(appPreferencesStoreProvider).read(),
+);
 
-final appPreferencesStoreProvider = Provider<AppPreferencesStore>((_) => AppPreferencesStore());
-final appPreferencesProvider = FutureProvider<AppPreferences>((ref) => ref.watch(appPreferencesStoreProvider).read());
-
-final personalReminderStoreProvider = Provider<PersonalReminderStore>((_) => PersonalReminderStore());
-final reminderSchedulerProvider = Provider<ReminderScheduler>((_) => ReminderScheduler());
-final reminderPreferencesStoreProvider = Provider<ReminderPreferencesStore>((_) => ReminderPreferencesStore());
-final reminderPreferencesProvider = FutureProvider<ReminderPreferences>((ref) async {
+final personalReminderStoreProvider = Provider<PersonalReminderStore>(
+  (_) => PersonalReminderStore(),
+);
+final reminderSchedulerProvider = Provider<ReminderScheduler>(
+  (_) => ReminderScheduler(),
+);
+final reminderPreferencesStoreProvider = Provider<ReminderPreferencesStore>(
+  (_) => ReminderPreferencesStore(),
+);
+final reminderPreferencesProvider = FutureProvider<ReminderPreferences>((
+  ref,
+) async {
   return ref.watch(reminderPreferencesStoreProvider).read();
 });
-final healthPlatformProvider = Provider<HealthPlatform>((_) => HealthPlatform());
+final healthPlatformProvider = Provider<HealthPlatform>(
+  (_) => HealthPlatform(),
+);
 final voicePlatformProvider = Provider<VoicePlatform>((_) => VoicePlatform());
-final lifeStageStoreProvider = Provider<LifeStageStore>((_) => LifeStageStore());
-final lifeStageProvider = FutureProvider<LifeStageMode>((ref) => ref.watch(lifeStageStoreProvider).read());
-final cycleVaultServiceProvider = FutureProvider<CycleVaultService>((ref) async {
-  return CycleVaultService(repository: await ref.watch(healthRepositoryProvider.future));
+final lifeStageStoreProvider = Provider<LifeStageStore>(
+  (_) => LifeStageStore(),
+);
+final lifeStageProvider = FutureProvider<LifeStageMode>(
+  (ref) => ref.watch(lifeStageStoreProvider).read(),
+);
+final cycleVaultServiceProvider = FutureProvider<CycleVaultService>((
+  ref,
+) async {
+  return CycleVaultService(
+    repository: await ref.watch(healthRepositoryProvider.future),
+  );
 });
-final doctorReportServiceProvider = FutureProvider<DoctorReportService>((ref) async {
-  return DoctorReportService(repository: await ref.watch(healthRepositoryProvider.future));
+final doctorReportServiceProvider = FutureProvider<DoctorReportService>((
+  ref,
+) async {
+  return DoctorReportService(
+    repository: await ref.watch(healthRepositoryProvider.future),
+  );
 });
 
 final reminderReconciliationProvider = FutureProvider<void>((ref) async {
@@ -121,7 +152,6 @@ final reminderReconciliationProvider = FutureProvider<void>((ref) async {
   }
 });
 
-
 class HealthActions {
   HealthActions(this.ref);
   final Ref ref;
@@ -130,7 +160,10 @@ class HealthActions {
   Future<void> startPeriod(DateTime date) async {
     final repository = await ref.read(healthRepositoryProvider.future);
     await repository.savePeriod(
-      PeriodEpisode(id: _uuid.v7(), start: DateTime(date.year, date.month, date.day)),
+      PeriodEpisode(
+        id: _uuid.v7(),
+        start: DateTime(date.year, date.month, date.day),
+      ),
     );
     _refresh();
   }
@@ -141,7 +174,11 @@ class HealthActions {
     if (periods.isEmpty) return;
     final latest = periods.last;
     await repository.savePeriod(
-      PeriodEpisode(id: latest.id, start: latest.start, end: DateTime(date.year, date.month, date.day)),
+      PeriodEpisode(
+        id: latest.id,
+        start: latest.start,
+        end: DateTime(date.year, date.month, date.day),
+      ),
     );
     _refresh();
   }
@@ -198,4 +235,6 @@ class HealthActions {
   }
 }
 
-final healthActionsProvider = Provider<HealthActions>((ref) => HealthActions(ref));
+final healthActionsProvider = Provider<HealthActions>(
+  (ref) => HealthActions(ref),
+);

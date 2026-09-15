@@ -22,20 +22,23 @@ void main() {
     expect(live.periodIds, ['live']);
   });
 
-  test('valid staged restore is the only state passed to atomic replacement', () async {
-    final live = _MemoryStore(periodIds: ['live']);
-    final staged = _MemoryStore(periodIds: ['restored']);
-    final coordinator = RestoreTransactionCoordinator<_MemoryStore>();
+  test(
+    'valid staged restore is the only state passed to atomic replacement',
+    () async {
+      final live = _MemoryStore(periodIds: ['live']);
+      final staged = _MemoryStore(periodIds: ['restored']);
+      final coordinator = RestoreTransactionCoordinator<_MemoryStore>();
 
-    await coordinator.commit(
-      live: live,
-      staged: staged,
-      validate: (store) async => store.valid,
-      replaceLive: (store) async => live.replacedWith = store,
-    );
+      await coordinator.commit(
+        live: live,
+        staged: staged,
+        validate: (store) async => store.valid,
+        replaceLive: (store) async => live.replacedWith = store,
+      );
 
-    expect(live.replacedWith, same(staged));
-  });
+      expect(live.replacedWith, same(staged));
+    },
+  );
 }
 
 class _MemoryStore {

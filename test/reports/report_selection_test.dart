@@ -12,7 +12,11 @@ void main() {
   test('default export excludes sexual activity and private notes', () async {
     final repository = FakeHealthRepository();
     repository.periods.add(
-      PeriodEpisode(id: 'p1', start: DateTime(2026, 9, 1), end: DateTime(2026, 9, 5)),
+      PeriodEpisode(
+        id: 'p1',
+        start: DateTime(2026, 9, 1),
+        end: DateTime(2026, 9, 5),
+      ),
     );
     repository.observations.addAll([
       HealthObservation(

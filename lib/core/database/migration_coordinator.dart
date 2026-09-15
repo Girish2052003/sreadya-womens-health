@@ -38,7 +38,9 @@ class MigrationCoordinator {
       while (version < targetVersion) {
         final step = steps[version];
         if (step == null) {
-          throw StateError('Missing migration step $version -> ${version + 1}.');
+          throw StateError(
+            'Missing migration step $version -> ${version + 1}.',
+          );
         }
         step(database);
         version += 1;

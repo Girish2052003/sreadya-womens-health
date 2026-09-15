@@ -9,9 +9,14 @@ void main() {
     expect(capabilities.preserveHistoricalCycles, isTrue);
   });
 
-  test('TTC enables fertility observations but does not make contraception claims', () {
-    final capabilities = LifeStageCapabilities.forMode(LifeStageMode.tryingToConceive);
-    expect(capabilities.showFertilityObservations, isTrue);
-    expect(capabilities.claimsContraceptiveEffectiveness, isFalse);
-  });
+  test(
+    'TTC enables fertility observations but does not make contraception claims',
+    () {
+      final capabilities = LifeStageCapabilities.forMode(
+        LifeStageMode.tryingToConceive,
+      );
+      expect(capabilities.showFertilityObservations, isTrue);
+      expect(capabilities.claimsContraceptiveEffectiveness, isFalse);
+    },
+  );
 }
