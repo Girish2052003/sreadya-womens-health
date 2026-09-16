@@ -9,9 +9,12 @@ import { AccountFreeWorkspace } from '../../../features/core/AccountFreeWorkspac
 
 const TASK10_CORE_SECTIONS = ['home', 'today', 'log', 'calendar', 'cycle'] as const;
 type Task10CoreSection = (typeof TASK10_CORE_SECTIONS)[number];
+const DEDICATED_WORKSPACE_SECTIONS = new Set(['predictions']);
 
 export function generateStaticParams() {
-  return workspaceSections.map((section) => ({ section }));
+  return workspaceSections
+    .filter((section) => !DEDICATED_WORKSPACE_SECTIONS.has(section))
+    .map((section) => ({ section }));
 }
 
 function activeKey(section: string) {
@@ -26,6 +29,7 @@ function isTask10CoreSection(section: string): section is Task10CoreSection {
 export default async function WorkspaceSection({ params }: { params: Promise<{ section: string }> }) {
   const { section } = await params;
   if (!workspaceSections.includes(section as (typeof workspaceSections)[number])) notFound();
+  if (DEDICATED_WORKSPACE_SECTIONS.has(section)) notFound();
   const key = section as (typeof workspaceSections)[number];
   const title = workspaceTitles[key];
 
