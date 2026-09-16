@@ -52,12 +52,22 @@ test('Task 18 live production desktop/account-free acceptance preflight', async 
 
   await page.goto(live());
   await expect(page.getByRole('heading', { level: 1, name: 'Sreva' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Continue without an account' })).toBeVisible();
+  const continuePrivately = page.getByRole('link', { name: 'Continue without an account' });
+  await expect(continuePrivately).toBeVisible();
   await page.evaluate(async () => {
     if (!('serviceWorker' in navigator)) throw new Error('Service worker unavailable');
     await navigator.serviceWorker.ready;
   });
+  await Promise.all([
+    page.waitForURL(live('app/home/')),
+    continuePrivately.click(),
+  ]);
+  await expect(page.getByRole('heading', { level: 1, name: 'Home' })).toBeVisible();
+  await expect(page.getByText('Encrypted local vault ready')).toBeVisible();
+  await expect(page.getByText(/Account-free · no health telemetry · local authoritative data/)).toBeVisible();
+  await expect(page.getByText('Sign in required')).toHaveCount(0);
   await page.reload();
+  await expect(page.getByText('Encrypted local vault ready')).toBeVisible();
 
   await page.goto(live('install/iphone/'));
   await expect(page.getByRole('heading', { level: 2, name: 'Install Sreva on iPhone' })).toBeVisible();
@@ -131,6 +141,8 @@ test('Task 18 live production desktop/account-free acceptance preflight', async 
   await page.goto(live('app/privacy/'));
   await expect(page.getByRole('heading', { level: 1, name: 'Privacy' })).toBeVisible();
   await expect(page.getByText('Encrypted local vault ready')).toBeVisible();
+  await expect(page.getByText('Privacy center')).toBeVisible();
+  await expect(page.getByText('Truthful boundary')).toBeVisible();
   await expect(page.getByText('Platform health access').locator('..')).toContainText('Not connected');
   await expect(page.getByText(/HealthKit (connected|enabled|synced)/i)).toHaveCount(0);
 
