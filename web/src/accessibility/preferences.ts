@@ -9,6 +9,7 @@ export type AccessibilityPreferences = {
 };
 
 type AccessibilityStorage = Pick<Storage, 'getItem' | 'setItem'>;
+type AccessibilityAttributeTarget = Pick<Element, 'setAttribute'>;
 
 type StoredAccessibilityPreferences = AccessibilityPreferences & {
   version: 1;
@@ -69,4 +70,13 @@ export function accessibilityDataAttributes(
     'data-sreva-motion': preferences.motion,
     'data-sreva-contrast': preferences.contrast,
   };
+}
+
+export function applyAccessibilityPreferences(
+  target: AccessibilityAttributeTarget,
+  preferences: AccessibilityPreferences,
+): void {
+  for (const [name, value] of Object.entries(accessibilityDataAttributes(preferences))) {
+    target.setAttribute(name, value);
+  }
 }
