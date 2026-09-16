@@ -1,0 +1,101 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #fffafb;
+  color: #24191d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: #fffafb;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.task5-home {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(191, 57, 91, 0.12), transparent 34rem),
+    linear-gradient(180deg, #fffdfd 0%, #fff7f9 100%);
+}
+
+.task5-card {
+  width: min(42rem, 100%);
+  padding: clamp(2rem, 6vw, 4rem);
+  border: 1px solid rgba(98, 43, 58, 0.12);
+  border-radius: 2rem;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2rem 5rem rgba(66, 30, 40, 0.08);
+}
+
+.task5-eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8b304d;
+}
+
+.task5-card h1 {
+  margin: 0;
+  font-size: clamp(3rem, 10vw, 5.75rem);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+
+.task5-card p:not(.task5-eyebrow) {
+  max-width: 34rem;
+  margin: 1.5rem 0 2rem;
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: #65535a;
+}
+
+.task5-open {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  background: #7e2344;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.task5-open:focus-visible {
+  outline: 3px solid #24191d;
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
