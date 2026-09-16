@@ -3,6 +3,7 @@ import {
   assertValidHealthObservation,
   assertValidPeriodEpisode,
 } from '../domain/cycle/invariants';
+import type { CycleRepository, ObservationRange } from '../domain/cycle/repository';
 import type { HealthObservation, PeriodEpisode } from '../domain/cycle/types';
 import type { VaultService } from './vault-service';
 
@@ -17,12 +18,7 @@ function observationRecordId(id: string) {
   return `${OBSERVATION_PREFIX}${id}`;
 }
 
-export type ObservationRange = {
-  from?: string;
-  to?: string;
-};
-
-export class HealthVaultRepository {
+export class HealthVaultRepository implements CycleRepository {
   constructor(private readonly vault: VaultService) {}
 
   async listPeriods(): Promise<PeriodEpisode[]> {
