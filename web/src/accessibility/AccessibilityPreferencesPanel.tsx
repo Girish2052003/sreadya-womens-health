@@ -35,7 +35,11 @@ const CONTRAST_CHOICES: Choice<ContrastPreference>[] = [
 
 export function AccessibilityPreferencesPanel({ preferences, saving, onChange, onSave }: Props) {
   return (
-    <section className="sreva-card accessibility-preferences" aria-labelledby="accessibility-preferences-title">
+    <section
+      className="sreva-card accessibility-preferences"
+      aria-labelledby="accessibility-preferences-title"
+      data-testid="accessibility-preferences"
+    >
       <p className="sreva-card__eyebrow">Settings</p>
       <h2 className="sreva-card__title" id="accessibility-preferences-title">
         {messages['accessibility.title']}
