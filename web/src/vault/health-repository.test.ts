@@ -46,4 +46,41 @@ describe('encrypted health repository', () => {
     await repository.deletePeriod(first.id);
     await expect(repository.listPeriods()).resolves.toEqual([]);
   });
+
+  it('supports observation save, inclusive range filtering, same-id update, provenance, and delete', async () => {
+    const persistence = new MemoryPersistence();
+    const vault = new VaultService(persistence);
+    await vault.createOrOpen();
+    const repository = new HealthVaultRepository(vault);
+
+    const first = {
+      id: 'observation-1',
+      kind: 'dailyNote' as const,
+      occurredAt: '2026-09-16T08:00:00.000Z',
+      source: 'healthConnect' as const,
+      note: 'initial',
+    };
+    const outside = {
+      id: 'observation-2',
+      kind: 'cramps' as const,
+      occurredAt: '2026-09-17T08:00:00.000Z',
+      source: 'app' as const,
+      severity: 'moderate' as const,
+    };
+
+    await repository.saveObservation(first);
+    await repository.saveObservation(outside);
+
+    await expect(repository.listObservations({
+      from: '2026-09-16T08:00:00.000Z',
+      to: '2026-09-16T08:00:00.000Z',
+    })).resolves.toEqual([first]);
+
+    const updated = { ...first, note: 'updated' };
+    await repository.saveObservation(updated);
+    await expect(repository.listObservations()).resolves.toEqual([updated, outside]);
+
+    await repository.deleteObservation(first.id);
+    await expect(repository.listObservations()).resolves.toEqual([outside]);
+  });
 });
