@@ -82,7 +82,10 @@ test('CycleVault production restore/export remains account-free, local and atomi
   await page.getByLabel('CycleVault restore passphrase').fill('definitely-wrong-passphrase');
   await page.getByLabel('Acknowledge CycleVault replacement').check();
   await restoreButton.click();
-  await expect(page.getByRole('alert')).toContainText('existing local health data was preserved', { timeout: 30_000 });
+  await expect(page.locator('p.core-error[role="alert"]')).toContainText(
+    'existing local health data was preserved',
+    { timeout: 30_000 },
+  );
   const afterWrongPassphrase = await storedHealthSnapshot(page);
   expect(afterWrongPassphrase.ids).toEqual(restored.ids);
   expect(afterWrongPassphrase.serialized).toEqual(restored.serialized);
