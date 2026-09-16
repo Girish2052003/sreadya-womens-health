@@ -1,0 +1,74 @@
+name: C2 Task 19 E2EE Protocol Gate
+
+on:
+  push:
+    branches:
+      - feat/task19-e2ee-protocol-gate
+    paths:
+      - 'shared/crypto/e2ee-key-hierarchy-v1.md'
+      - 'shared/crypto/interoperability-vectors/e2ee-v1.json'
+      - 'shared/sync/protocol-v1.md'
+      - 'shared/sync/conflict-vectors/v1.json'
+      - 'docs/security/E2EE_THREAT_MODEL.md'
+      - 'docs/security/E2EE_PROTOCOL_REVIEW.md'
+      - 'test/conformance/e2ee_v1_vectors_test.dart'
+      - 'web/src/crypto/e2ee-v1.conformance.test.ts'
+      - 'verification/reference/task19_go/**'
+      - '.github/workflows/c2-task19-verify.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: c2-task19-e2ee-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dart-interop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          flutter-version: '3.47.2'
+          channel: stable
+          cache: true
+      - name: Install locked Flutter dependencies
+        run: flutter pub get
+      - name: Verify E2EE v1 golden vectors in Dart
+        run: flutter test test/conformance/e2ee_v1_vectors_test.dart
+
+  webcrypto-interop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24.21.0'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install locked Web dependencies
+        working-directory: web
+        run: npm ci --ignore-scripts
+      - name: Verify E2EE v1 golden vectors in WebCrypto
+        working-directory: web
+        run: npm test -- --run src/crypto/e2ee-v1.conformance.test.ts
+
+  go-stdlib-interop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Verify E2EE v1 golden vectors in Go standard library
+        working-directory: verification/reference/task19_go
+        run: go test ./...
