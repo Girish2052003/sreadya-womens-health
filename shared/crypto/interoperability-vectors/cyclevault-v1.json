@@ -1,0 +1,48 @@
+{
+  "vectorId": "cyclevault-v1-independent-001",
+  "purpose": "Synthetic non-secret interoperability vector independently constructed from the frozen CycleVault v1 wire contract. Production Dart must validate it before Web implementation is permitted.",
+  "passphrase": "correct horse battery staple",
+  "saltBase64": "AAECAwQFBgcICQoLDA0ODw==",
+  "nonceBase64": "EBESExQVFhcYGRob",
+  "derivedKeyHex": "818259b6310026a8e0dbac5d2e6927abcfdb07b32258fac4f61b18b80f929085",
+  "manifest": {
+    "format": "SREVA-CYCLEVAULT",
+    "formatVersion": 1,
+    "createdAtUtc": "2026-09-16T18:20:00.000Z",
+    "appVersion": "1.0.0",
+    "databaseSchema": 1,
+    "predictionEngine": "prediction-v1",
+    "kdf": "argon2id-m19MiB-t2-p1",
+    "cipher": "aes-256-gcm"
+  },
+  "manifestJson": "{\"format\":\"SREVA-CYCLEVAULT\",\"formatVersion\":1,\"createdAtUtc\":\"2026-09-16T18:20:00.000Z\",\"appVersion\":\"1.0.0\",\"databaseSchema\":1,\"predictionEngine\":\"prediction-v1\",\"kdf\":\"argon2id-m19MiB-t2-p1\",\"cipher\":\"aes-256-gcm\"}",
+  "payload": {
+    "periods": [
+      {
+        "id": "p-vector-1",
+        "start": "2026-08-01T00:00:00.000Z",
+        "end": "2026-08-04T00:00:00.000Z",
+        "source": "app",
+        "externalId": null
+      }
+    ],
+    "observations": [
+      {
+        "id": "o-vector-1",
+        "kind": "cramps",
+        "occurredAt": "2026-08-01T09:00:00.000Z",
+        "severity": "moderate",
+        "numericValue": null,
+        "unit": null,
+        "label": "Cramps",
+        "note": null,
+        "flowLevel": null,
+        "source": "app",
+        "externalId": null
+      }
+    ]
+  },
+  "payloadJson": "{\"periods\":[{\"id\":\"p-vector-1\",\"start\":\"2026-08-01T00:00:00.000Z\",\"end\":\"2026-08-04T00:00:00.000Z\",\"source\":\"app\",\"externalId\":null}],\"observations\":[{\"id\":\"o-vector-1\",\"kind\":\"cramps\",\"occurredAt\":\"2026-08-01T09:00:00.000Z\",\"severity\":\"moderate\",\"numericValue\":null,\"unit\":null,\"label\":\"Cramps\",\"note\":null,\"flowLevel\":null,\"source\":\"app\",\"externalId\":null}]}",
+  "sealedPayloadBase64": "EBESExQVFhcYGRobUhflU6FF1p3YLVEnLU14FZS4VptXnyZTPLWRUD/Te7QIcCwb9D89XUP+CEGHCBsUbNkaIHC8dp+CAlRKl+CYiJvQbyq3GiVuUZta80v7hYu1ZQhjn70DqoOCseeuMyxq6IC9HQfkCQv7lzR0qqw8btHI86nqWR1NKLh1kwLnodDlW7qEzj32XX8k4cOM9jzw2X59j4ZxdqLudim1twjgS09XktW/OURGXoo9IYbAdiVlPgDGes4hkHcKmKLdDMovvTIfeuW8hDTAmZNU447xdRYxLrwfkVbI1S+XThVVDRH19qt+VBGK8GlgKSt5oF+xnQhIwHBp3wHxq1RkWFCKEoXHinzap5/gODcJb3ldYJteFJHIKLbo7ujByFC8Yf+YDtx5O0JZLdeKLl9a+F/egQiZMGXe5I2smmb1vBDsgpgo+znWt8mQek7LysYEibr084+w30E9/LruNzwX5C7Dh5fvmWwa8hXZyPRIE+uQQn6cmvEREQORGA==",
+  "containerJson": "{\"manifest\":{\"format\":\"SREVA-CYCLEVAULT\",\"formatVersion\":1,\"createdAtUtc\":\"2026-09-16T18:20:00.000Z\",\"appVersion\":\"1.0.0\",\"databaseSchema\":1,\"predictionEngine\":\"prediction-v1\",\"kdf\":\"argon2id-m19MiB-t2-p1\",\"cipher\":\"aes-256-gcm\"},\"salt\":\"AAECAwQFBgcICQoLDA0ODw==\",\"sealedPayload\":\"EBESExQVFhcYGRobUhflU6FF1p3YLVEnLU14FZS4VptXnyZTPLWRUD/Te7QIcCwb9D89XUP+CEGHCBsUbNkaIHC8dp+CAlRKl+CYiJvQbyq3GiVuUZta80v7hYu1ZQhjn70DqoOCseeuMyxq6IC9HQfkCQv7lzR0qqw8btHI86nqWR1NKLh1kwLnodDlW7qEzj32XX8k4cOM9jzw2X59j4ZxdqLudim1twjgS09XktW/OURGXoo9IYbAdiVlPgDGes4hkHcKmKLdDMovvTIfeuW8hDTAmZNU447xdRYxLrwfkVbI1S+XThVVDRH19qt+VBGK8GlgKSt5oF+xnQhIwHBp3wHxq1RkWFCKEoXHinzap5/gODcJb3ldYJteFJHIKLbo7ujByFC8Yf+YDtx5O0JZLdeKLl9a+F/egQiZMGXe5I2smmb1vBDsgpgo+znWt8mQek7LysYEibr084+w30E9/LruNzwX5C7Dh5fvmWwa8hXZyPRIE+uQQn6cmvEREQORGA==\"}"
+}
