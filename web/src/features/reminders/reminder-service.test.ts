@@ -28,11 +28,11 @@ const settings: ReminderPolicySettings = {
 describe('prepareReminderSchedule', () => {
   it('derives local reminder plans from the same repository-backed Prediction v1 result', async () => {
     const starts = ['2026-07-28', '2026-08-25', '2026-09-22'];
-    const repository = new FakeRepository(starts.map((date, index) => ({
+    const repository = new FakeRepository(starts.map((date, index): PeriodEpisode => ({
       id: `p-${index}`,
       start: `${date}T00:00:00.000Z`,
       end: `${date}T23:00:00.000Z`,
-      provenance: 'user' as const,
+      source: 'app',
     })));
 
     const result = await prepareReminderSchedule(
@@ -50,7 +50,7 @@ describe('prepareReminderSchedule', () => {
   });
 
   it('returns no reminder plans instead of inventing a date when prediction history is insufficient', async () => {
-    const repository = new FakeRepository([{ id: 'p-1', start: '2026-09-22T00:00:00.000Z', provenance: 'user' }]);
+    const repository = new FakeRepository([{ id: 'p-1', start: '2026-09-22T00:00:00.000Z', source: 'app' }]);
 
     await expect(prepareReminderSchedule(repository, settings, '2026-10-01T00:00:00')).resolves.toEqual({
       prediction: null,
