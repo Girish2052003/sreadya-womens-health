@@ -95,7 +95,7 @@ test('tamper and wrong-key paths fail closed while lock clears the live session'
   await page.getByRole('button', { name: 'Read test record' }).click();
   await expect(page.getByTestId('vault-test-result')).toHaveText('Vault read failed');
 
-  await page.evaluate(async ({ id, row }) => new Promise<void>((resolve, reject) => {
+  await page.evaluate(async (row) => new Promise<void>((resolve, reject) => {
     const request = indexedDB.open('sreva-vault-v1');
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
@@ -106,7 +106,7 @@ test('tamper and wrong-key paths fail closed while lock clears the live session'
       transaction.oncomplete = () => resolve();
       transaction.onerror = () => reject(transaction.error);
     };
-  }), { id: recordId, row: original });
+  }), original);
 
   await page.reload();
   await page.getByRole('button', { name: 'Read test record' }).click();
