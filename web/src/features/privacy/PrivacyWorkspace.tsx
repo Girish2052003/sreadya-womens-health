@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { Card } from '../../components/ui/Card';
 import { StatusChip } from '../../components/ui/StatusChip';
+import type { NotificationPrivacy } from '../../domain/reminders/reminder-policy';
 import { DexieVaultPersistence } from '../../vault/db';
 import { VaultService } from '../../vault/vault-service';
 import { continuePrivately } from '../onboarding/private-onboarding';
@@ -24,6 +25,10 @@ const STATUS_LABELS: Record<keyof WebPrivacyStatus, string> = {
   advertisingProfile: 'Advertising profile',
 };
 
+function notificationPrivacy(value: string): NotificationPrivacy {
+  return value === 'balanced' || value === 'detailed' ? value : 'maximum';
+}
+
 export function PrivacyWorkspace() {
   const [privacy, setPrivacy] = useState<WebPrivacyStatus | null>(null);
   const [vaultStatus, setVaultStatus] = useState('Opening encrypted local vault…');
@@ -39,7 +44,7 @@ export function PrivacyWorkspace() {
       const reminderSettings = await new ReminderSettingsRepository(vault).load();
       if (cancelled) return;
 
-      setPrivacy(buildWebPrivacyStatus({ notificationPrivacy: reminderSettings.privacy }));
+      setPrivacy(buildWebPrivacyStatus({ notificationPrivacy: notificationPrivacy(reminderSettings.privacy) }));
       setVaultStatus('Encrypted local vault ready');
       setReady(true);
     })().catch(() => {
