@@ -103,12 +103,12 @@ test('system reduced motion remains honored and explicit high contrast strengthe
 
   await page.goto(SETTINGS_URL);
   await page.getByLabel('High contrast').check();
-  const contrast = await page.locator('html').evaluate((element) => ({
-    muted: getComputedStyle(element).getPropertyValue('--sreva-muted').trim(),
-    line: getComputedStyle(element).getPropertyValue('--line').trim(),
+  const contrast = await page.getByTestId('accessibility-preferences').evaluate((element) => ({
+    muted: getComputedStyle(document.documentElement).getPropertyValue('--sreva-muted').trim(),
+    resolvedBorderColor: getComputedStyle(element).borderTopColor,
   }));
   expect(contrast.muted).toBe('#3d3035');
-  expect(contrast.line).toBe('rgba(38, 25, 30, 0.38)');
+  expect(contrast.resolvedBorderColor).toBe('rgba(38, 25, 30, 0.38)');
 });
 
 test('Settings passes automated WCAG 2.2 AA-targeted axe review', async ({ page }) => {
