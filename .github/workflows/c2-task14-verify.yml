@@ -1,0 +1,25 @@
+name: C2 Task 14 Verification
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  mobile-cyclevault-v1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          flutter-version: '3.47.2'
+          channel: stable
+          cache: true
+      - name: Install locked Flutter dependencies
+        run: flutter pub get
+      - name: CycleVault v1 interoperability vectors
+        run: flutter test test/conformance/cyclevault_vectors_test.dart
