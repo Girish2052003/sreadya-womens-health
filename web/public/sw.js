@@ -1,6 +1,13 @@
-/* Sreva PWA shell cache. Health workspace responses are deliberately excluded. */
+/* Sreva PWA shell cache. Health payloads are deliberately excluded. */
 const SHELL_CACHE = 'sreva-shell-v1';
 const SHELL_FILES = ['./', './offline.html', './manifest.webmanifest'];
+const OFFLINE_CORE_SHELLS = new Set([
+  'app/home',
+  'app/today',
+  'app/log',
+  'app/calendar',
+  'app/cycle',
+]);
 
 function scopedUrl(relative) {
   return new URL(relative, self.registration.scope).toString();
@@ -13,8 +20,16 @@ function relativePath(url) {
   return pathname.replace(/^\/+/, '');
 }
 
+function normalizedPath(pathname) {
+  return pathname.replace(/\/+$/, '');
+}
+
 function isPrivateWorkspace(pathname) {
   return pathname === 'app' || pathname.startsWith('app/');
+}
+
+function isOfflineCoreShell(pathname) {
+  return OFFLINE_CORE_SHELLS.has(normalizedPath(pathname));
 }
 
 function isSensitiveNetworkSurface(pathname) {
@@ -52,15 +67,32 @@ self.addEventListener('fetch', (event) => {
 
   const pathname = relativePath(url);
 
-  // Never put private workspace or sync/API responses in Cache Storage.
-  if (isPrivateWorkspace(pathname) || isSensitiveNetworkSurface(pathname)) {
+  // API/sync traffic is never cached by the application shell worker.
+  if (isSensitiveNetworkSurface(pathname)) return;
+
+  if (isPrivateWorkspace(pathname)) {
     if (request.mode === 'navigate') {
-      event.respondWith(
-        fetch(request).catch(async () => {
-          const cache = await caches.open(SHELL_CACHE);
+      event.respondWith((async () => {
+        const cache = await caches.open(SHELL_CACHE);
+        try {
+          const response = await fetch(request);
+          const contentType = response.headers.get('content-type') ?? '';
+          // Only the five reviewed, statically exported Task-10 HTML documents may
+          // be retained for offline refresh. They contain application shell only;
+          // health records remain encrypted in IndexedDB and RSC/fetch responses
+          // are not cached here.
+          if (isOfflineCoreShell(pathname) && response.ok && contentType.includes('text/html')) {
+            await cache.put(request, response.clone());
+          }
+          return response;
+        } catch {
+          if (isOfflineCoreShell(pathname)) {
+            const cachedShell = await cache.match(request);
+            if (cachedShell) return cachedShell;
+          }
           return cache.match(scopedUrl('./offline.html'));
-        }),
-      );
+        }
+      })());
     }
     return;
   }
