@@ -69,9 +69,9 @@ def _platforms(capability_id: str) -> dict[str, str]:
         return {"android": "na", "ios": "na", "web": "full", "pwa": "full"}
 
     if family == "HEALTH":
-        if number == 1:  # HealthKit
+        if number == 1:
             return {"android": "na", "ios": "full", "web": "na", "pwa": "na"}
-        if number == 2:  # Health Connect
+        if number == 2:
             return {"android": "full", "ios": "na", "web": "na", "pwa": "na"}
         if number in {3, 4, 5}:
             return {"android": "full", "ios": "full", "web": "na", "pwa": "na"}
@@ -127,26 +127,19 @@ def _privacy(family: str) -> str:
 
 
 def _extract(spec: str) -> tuple[list[tuple[str, str]], list[tuple[str, str]]]:
-    """Extract only the approved Section 1 atomic rows.
+    """Extract only approved Section 1 atomic rows.
 
-    Anchor on the actual frozen section headings so examples later in the
-    specification cannot accidentally be mistaken for registry entries.
+    The frozen spec contains two historical spacing styles: early rows use two
+    spaces after the ID while later rows use one. Accept horizontal whitespace
+    without relying on Markdown examples elsewhere in the document.
     """
-
     atomic_start = spec.index("## 1.1 Cycle and period tracking")
     future_start = spec.index("## 1.19 Future/optional", atomic_start)
     section_two = spec.index("# SECTION 2", future_start)
-
-    launch = re.findall(
-        r"^([A-Z0-9]+-\d{3})\s{2,}(.+?)\s*$",
-        spec[atomic_start:future_start],
-        flags=re.MULTILINE,
-    )
-    future = re.findall(
-        r"^(FUT-\d{3})\s{2,}(.+?)\s*$",
-        spec[future_start:section_two],
-        flags=re.MULTILINE,
-    )
+    row = r"^([A-Z0-9]+-\d{3})[ \t]+(.+?)[ \t]*$"
+    launch = re.findall(row, spec[atomic_start:future_start], flags=re.MULTILINE)
+    future = re.findall(row, spec[future_start:section_two], flags=re.MULTILINE)
+    future = [(item_id, name) for item_id, name in future if item_id.startswith("FUT-")]
     return launch, future
 
 
