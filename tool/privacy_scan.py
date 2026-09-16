@@ -22,7 +22,7 @@ TEXT_EXTENSIONS = {
 }
 HEALTH_TERMS = r'(?:period|symptom|sexual|pregnan|fertility|temperature|medication|note)'
 FORBIDDEN_LOG = re.compile(
-    rf"(?:print|debugPrint|log|logger\.[a-zA-Z]+|console\.(?:log|debug|info|warn|error))\s*\([^\n]*{HEALTH_TERMS}",
+    rf"(?<![A-Za-z0-9_$])(?:print|debugPrint|log|logger\.[a-zA-Z]+|console\.(?:log|debug|info|warn|error))\s*\([^\n]*{HEALTH_TERMS}",
     re.I,
 )
 WEB_TRANSPORT = re.compile(
