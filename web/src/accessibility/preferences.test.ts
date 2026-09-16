@@ -1,0 +1,71 @@
+import { describe, expect, it } from 'vitest';
+
+import {
+  ACCESSIBILITY_STORAGE_KEY,
+  DEFAULT_ACCESSIBILITY_PREFERENCES,
+  accessibilityDataAttributes,
+  loadAccessibilityPreferences,
+  parseAccessibilityPreferences,
+  saveAccessibilityPreferences,
+  type AccessibilityPreferences,
+} from './preferences';
+
+function memoryStorage() {
+  const values = new Map<string, string>();
+  return {
+    values,
+    storage: {
+      getItem(key: string) {
+        return values.get(key) ?? null;
+      },
+      setItem(key: string, value: string) {
+        values.set(key, value);
+      },
+    },
+  };
+}
+
+describe('accessibility preferences', () => {
+  it('defaults safely when no valid versioned preference record exists', () => {
+    expect(parseAccessibilityPreferences(null)).toEqual(DEFAULT_ACCESSIBILITY_PREFERENCES);
+    expect(parseAccessibilityPreferences('not json')).toEqual(DEFAULT_ACCESSIBILITY_PREFERENCES);
+    expect(parseAccessibilityPreferences(JSON.stringify({ version: 2, textScale: 'large' }))).toEqual(
+      DEFAULT_ACCESSIBILITY_PREFERENCES,
+    );
+    expect(
+      parseAccessibilityPreferences(
+        JSON.stringify({ version: 1, textScale: 'huge', motion: 'reduced', contrast: 'high' }),
+      ),
+    ).toEqual(DEFAULT_ACCESSIBILITY_PREFERENCES);
+  });
+
+  it('persists only the reviewed non-health presentation preferences on this device', () => {
+    const { values, storage } = memoryStorage();
+    const preferences: AccessibilityPreferences = {
+      textScale: 'large',
+      motion: 'reduced',
+      contrast: 'high',
+    };
+
+    saveAccessibilityPreferences(preferences, storage);
+
+    expect(loadAccessibilityPreferences(storage)).toEqual(preferences);
+    expect(JSON.parse(values.get(ACCESSIBILITY_STORAGE_KEY)!)).toEqual({ version: 1, ...preferences });
+  });
+
+  it('maps preferences to a constrained document attribute contract', () => {
+    expect(
+      accessibilityDataAttributes({ textScale: 'large', motion: 'reduced', contrast: 'high' }),
+    ).toEqual({
+      'data-sreva-text-scale': 'large',
+      'data-sreva-motion': 'reduced',
+      'data-sreva-contrast': 'high',
+    });
+
+    expect(accessibilityDataAttributes(DEFAULT_ACCESSIBILITY_PREFERENCES)).toEqual({
+      'data-sreva-text-scale': 'normal',
+      'data-sreva-motion': 'system',
+      'data-sreva-contrast': 'system',
+    });
+  });
+});
