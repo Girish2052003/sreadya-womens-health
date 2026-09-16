@@ -13,15 +13,19 @@ export class ObservationActions {
     void this.createId;
   }
 
-  async logObservation(_draft: ObservationDraft): Promise<string> {
+  async logObservation(draft: ObservationDraft): Promise<string> {
+    void draft;
     throw new Error('Task 10 observation actions not implemented.');
   }
 
-  async editObservation(_id: string, _edit: ObservationEdit): Promise<void> {
+  async editObservation(id: string, edit: ObservationEdit): Promise<void> {
+    void id;
+    void edit;
     throw new Error('Task 10 observation actions not implemented.');
   }
 
-  async deleteObservation(_id: string): Promise<void> {
+  async deleteObservation(id: string): Promise<void> {
+    void id;
     throw new Error('Task 10 observation actions not implemented.');
   }
 }
