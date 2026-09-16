@@ -1,51 +1,63 @@
-# Sreva Master Product Specification v1.0
+# Sreva Master Product Specification v1.1 — Mobile Baseline Companion
 
-**Date:** 2026-09-15  
+**Original date:** 2026-09-15  
+**C2 amendment date:** 2026-09-16  
 **Public product name:** Sreva  
 **In honour of:** Sreedevi Girish Nallan Chakravathy  
-**Primary launch device:** iPhone 17  
-**Minimum iOS target:** iOS 17  
-**Platforms:** iOS and Android  
-**Architecture:** Local Sovereign Core + Optional Privacy-Preserving Extensions
+**Mobile platforms:** Android and iOS  
+**Cross-platform product:** Android + iOS + Web/PWA  
+**Architecture:** Local Sovereign Core + Optional End-to-End Encrypted Continuity
+
+> **Authority notice — 16 September 2026:** This file is the detailed Flutter/mobile baseline companion. The authoritative cross-platform constitution is `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`. If this file and that document differ, the 16 September C2 constitution wins. Android, iOS, and Web/PWA are equal first-class Sreva clients; this file must not be interpreted as making Web secondary.
 
 ## 1. Product promise
 
-Sreva is a full women's cycle companion whose intelligence lives with the woman, not in a developer-operated health database. It must be genuinely useful for daily menstrual-cycle management while remaining understandable, private, reliable, and updateable like a production mobile product.
+Sreva is a full women's cycle companion whose personal health intelligence remains with the woman. It must be useful for daily menstrual-cycle management while remaining understandable, private, reliable, accessible, and updateable like a production product.
 
-The app must never present a predicted period date as biologically guaranteed. Predictions are estimates with an explicit likely window and confidence level.
+Predicted period dates are estimates, never biological guarantees. Every prediction presents a likely date/window and confidence semantics defined by the shared Sreva contract.
+
+The mobile Flutter client is one implementation of Sreva. The Web/PWA client uses Next.js/React/TypeScript and must conform to the same canonical health semantics through shared schemas, specifications, capability IDs, and conformance vectors.
 
 ## 2. Architectural laws
 
-1. The user's device is the authoritative reproductive-health datastore.
+1. The local device/browser vault is the authoritative plaintext reproductive-health state.
 2. Core functionality requires no account.
-3. Core functionality requires no internet connection.
+3. Core functionality requires no Internet connection.
 4. Predictions execute locally.
 5. Insights execute locally.
-6. Period reminders use local OS scheduling.
-7. The operator maintains no reproductive-health database for core app operation.
-8. HealthKit / Health Connect integration is granular, explicit, and optional.
-9. Sensitive health values never enter ordinary logs or analytics.
-10. App updates are signed and distributed through platform release channels.
-11. Every database migration is transactional, validated, and preserves history.
-12. V1 is menstrual health tracking and wellness software, not diagnostic software and not a contraception-effectiveness product.
+6. Reminder intent/policy is shared; mobile uses local OS scheduling and Web uses the strongest honest browser/PWA mechanism available.
+7. The operator maintains no **plaintext or developer-decryptable** reproductive-health database. Optional account mode may synchronize ciphertext plus minimum operational metadata, and the operator must not possess the health-vault decryption key.
+8. HealthKit / Health Connect integration is granular, explicit, optional, and platform-specific.
+9. Sensitive health values never enter ordinary logs, analytics, diagnostics, URLs, or crash/session-replay payloads.
+10. Mobile app updates are signed and distributed through platform release channels; Web/PWA updates use the reviewed Web release pipeline.
+11. Every database/vault migration is transactional or equivalently fail-safe, validated, and preserves history.
+12. V1 is menstrual-health tracking and wellness software, not diagnostic software and not a contraception-effectiveness product.
+13. Account-free and account-based modes are equal in core health functionality; account mode adds E2EE continuity only.
+14. Android, iOS, and Web/PWA must conform to the same canonical capability/behavior contract.
 
-## 3. Production technology
+## 3. Production technology — mobile baseline
 
 - Flutter 3.47.2 / Dart 3.13.2.
-- Modular clean architecture, feature-oriented directory structure.
+- Modular clean architecture with feature-oriented directories.
 - Riverpod for state management.
 - Declarative routing.
 - SQLite with Drift for local persistence.
-- SQLCipher-class encrypted database implementation, with a random database key protected by Keychain / Android Keystore.
-- Swift platform adapter for HealthKit, UserNotifications, LocalAuthentication, app-switcher privacy, and other iOS APIs.
-- Kotlin platform adapter for Health Connect, Android notification scheduling, biometrics, boot/time-zone rescheduling, and related APIs.
+- SQLCipher-class encrypted database implementation, with random database key protected by Keychain / Android Keystore.
+- Swift platform adapter for HealthKit, UserNotifications, LocalAuthentication, app-switcher privacy, and iOS APIs.
+- Kotlin platform adapter for Health Connect, Android notification scheduling, biometrics, boot/time-zone rescheduling, and Android APIs.
 - Local PDF and CSV report generation.
-- Local cryptography for CycleVault backups using audited primitives.
+- Local cryptography for CycleVault backups using reviewed primitives.
 - No cloud LLM required for core assistant functions.
 
-## 4. Capability matrix — worldwide v1.0
+Cross-platform additions are owned by the C2 constitution and implementation plan:
 
-The worldwide v1.0 release contains all capability families below. Platform-specific capability is shown only where the operating system supports it.
+- `web/`: Next.js + React + TypeScript Web/PWA client.
+- `shared/`: language-neutral capability registry, schemas, terminology, design tokens, prediction/reminder/crypto/sync vectors.
+- `sync_service/`: optional provider-independent identity/E2EE sync service after protocol review.
+
+## 4. Mobile capability baseline
+
+The existing 22 sections remain the mobile implementation baseline. They map into the newer 18-family / 258-atomic-requirement C2 registry. Completion of a broad section here is not sufficient by itself to claim cross-platform C2 completion.
 
 ### 4.1 Home and onboarding
 
@@ -56,273 +68,183 @@ The worldwide v1.0 release contains all capability families below. Platform-spec
 - Select cycle/life-stage mode.
 - Configure default 3-day reminder and notification privacy.
 - Home summary: predicted date, likely window, confidence, quick log, period started, calendar.
+- Future account onboarding must remain optional and must not gate the above health functionality.
 
 ### 4.2 Cycle and period tracking
 
-- Start period today or on another date.
+- Start period today or another date.
 - End period.
-- Edit or delete historical entries.
-- Flow levels: spotting, light, medium, heavy.
+- Edit/delete historical entries.
+- Flow: spotting/light/medium/heavy.
 - Period-day timeline.
 - Cycle length and period duration.
 - Irregular-cycle support.
-- Month, timeline, and yearly history views.
+- Month/timeline/year views.
 
 ### 4.3 Prediction engine
 
 - Next likely period date.
-- Prediction window.
-- Confidence level.
+- Prediction window and confidence.
 - Recent-cycle weighting.
-- Robust handling of outliers and incomplete cycles.
+- Robust outlier/incomplete-cycle handling.
 - Period-duration estimate.
 - Prediction history and algorithm version.
 - Wider uncertainty for irregular cycles.
-- Local evaluation metrics after actual outcomes are known.
+- Local evaluation metrics after outcomes.
 
 ### 4.4 Reminder engine
 
-- Default 3-day-before reminder.
-- Optional 7-day, 1-day, expected-day, and late reminders.
-- Medication, supplement, contraception, ovulation-test, and pregnancy-test reminders.
-- User-selected reminder time.
-- Quiet hours and snooze.
-- Privacy modes: maximum, balanced, detailed.
-- Rebuild reminders after prediction change, time-zone change, DST change, app update, permission changes, and device reboot where platform permits.
+- Default 3-day reminder; optional 7-day, 1-day, expected-day, late reminders.
+- Medication, supplement, contraception, ovulation-test, pregnancy-test reminders.
+- User-selected time, quiet hours, snooze.
+- Maximum/balanced/detailed privacy modes.
+- Rebuild after prediction/time-zone/DST/update/permission/reboot events where platform permits.
 - Reminder Health diagnostic screen.
+- Shared reminder policy must remain equivalent to Web/PWA even when delivery adapters differ.
 
 ### 4.5 Daily health logging
 
-- Cramps, headache/migraine, back pain, breast tenderness, bloating, acne, nausea, digestion, fatigue, dizziness, appetite/cravings, sleep, energy, stress, mood, anxiety/irritability, libido, vaginal discharge, cervical mucus, basal body temperature, weight, exercise, water, custom symptoms.
-- Severity values and free-text notes.
+Cramps, headache/migraine, back pain, breast tenderness, bloating, acne, nausea, digestion, fatigue, dizziness, appetite/cravings, sleep, energy, stress, mood, anxiety/irritability, libido, vaginal discharge, cervical mucus, basal body temperature, weight, exercise, water, custom symptoms, severity, notes.
 
 ### 4.6 Reproductive observations
 
-- Ovulation-test records.
-- Pregnancy-test records.
-- Basal body temperature.
-- Cervical mucus.
-- Sexual activity and protection-used record, fully optional.
-- Contraception context.
-- Fertility observations.
-- Trying-to-conceive mode.
-- No V1 contraceptive-effectiveness claim.
+Ovulation/pregnancy tests, basal temperature, cervical mucus, optional sexual activity/protection, contraception context, fertility observations, TTC mode, and no V1 contraceptive-effectiveness claim.
 
 ### 4.7 Life-stage modes
 
-- Cycle tracking.
-- Trying to conceive.
-- Pregnancy.
-- Postpartum.
-- Breastfeeding context.
-- Perimenopause.
-- Menopause transition.
-- Hormonal contraception context.
-- Mode changes never delete historical records.
+Cycle tracking, TTC, pregnancy, postpartum, breastfeeding, perimenopause, menopause transition, hormonal contraception. Mode change never deletes history.
 
 ### 4.8 Insights
 
-- Average cycle length and period duration.
-- Cycle variation, shortest/longest cycle.
-- Flow patterns.
-- Symptom, PMS, mood, pain, sleep, and energy trends.
-- Local correlations presented as observations, not causes or diagnoses.
-- Explainable insight source and date range.
+Cycle/period averages, variation, shortest/longest cycle, flow patterns, symptom/PMS/mood/pain/sleep/energy trends, local observational correlations, explainable source/date range. Observation is not diagnosis.
 
 ### 4.9 Doctor / healthcare reports
 
-- User selects date range and data categories.
-- Local PDF and CSV generation.
-- Preview before share.
-- Sexual activity/private notes excluded by default.
-- No server report generation.
+User selects date range/categories; PDF/CSV generated locally; preview before share; sensitive categories excluded by default; no server report generation.
 
 ### 4.10 Ultra-easy interaction
 
-- Tap-based logging.
-- Natural-language local commands such as “my period started yesterday,” “yesterday was heavy,” and “show my last six periods.”
-- Ambiguous commands require confirmation.
-- Voice uses on-device recognition when available; otherwise it is disabled rather than silently uploading sensitive speech.
+Tap logging, local natural-language commands, ambiguity confirmation, and on-device voice recognition where available. Sensitive speech is not silently uploaded.
 
 ### 4.11 Partner sharing
 
-- User-controlled only.
-- V1 zero-backend share through OS share sheet and QR/export summary.
-- Per-category sharing controls.
-- Sexual activity, notes, fertility, pregnancy, or symptom data are never automatically shared.
-- Architecture exposes a `PartnerTransport` interface for a later separately reviewed E2EE live mode.
+User-controlled manual share/QR/export remains the baseline. Category controls exclude sensitive data by default. A future live `PartnerTransport` may reuse the reviewed E2EE continuity layer only after explicit opt-in and security review.
 
 ### 4.12 Platform health integration
 
 - iOS: HealthKit read/write for supported reproductive types with granular authorization.
-- Android: Health Connect read/write for supported reproductive types with granular authorization.
-- Provenance and external IDs prevent duplicate import.
-- Platform health stores are integrations, not the app's authoritative core database.
+- Android: Health Connect read/write for supported types with granular authorization.
+- Provenance/external IDs prevent duplicate import.
+- Platform health stores are integrations, not Sreva's authoritative core vault.
+- Web/PWA has no fake HealthKit/Health Connect adapter; synchronized records may still be viewed through authorized E2EE continuity.
 
 ### 4.13 Accessibility and worldwide readiness
 
-- Light/dark mode.
-- Dynamic text.
-- VoiceOver / TalkBack semantics.
-- High contrast and colour-safe status design.
-- One-handed interaction.
-- Localization architecture.
-- RTL readiness.
-- Locale-specific dates.
-- 12/24-hour time.
-- Metric/imperial support.
-- Offline operation and graceful poor-network behavior.
+Light/dark, dynamic text, VoiceOver/TalkBack semantics, high contrast/colour-safe status, one-handed interaction, localization, RTL, locale dates, 12/24-hour time, metric/imperial, offline operation, graceful poor network.
 
-### 4.14 Privacy center and app lock
+### 4.14 Privacy Center and app lock
 
-- Face ID / Touch ID / Android biometrics where available.
-- PIN fallback architecture.
-- Automatic lock.
-- App-switcher privacy overlay on iOS and equivalent safeguards where available.
-- Notification privacy control.
-- Data-type transparency: location, purpose, sharing, platform integration, delete option.
-- Delete individual records and wipe all Sreva data.
-- No developer health account required.
+Biometrics where available, PIN fallback architecture, automatic lock, app-switcher/sensitive-screen safeguards, notification privacy, data-purpose transparency, record deletion, full local wipe. Account and sync controls added by C2 must appear without weakening no-account mode.
 
 ### 4.15 CycleVault backup and restore
 
-- Local encrypted archive.
-- Versioned manifest.
-- Authenticated encryption.
-- User-chosen destination only after explicit export.
-- Restore decrypts into a temporary database, validates integrity/schema/domain invariants, then atomically replaces live storage.
-- Restore failure leaves original data untouched.
+Local encrypted archive, versioned manifest, authenticated encryption, user-chosen destination, temporary restore state, integrity/schema/domain validation, atomic replacement, failure leaves original data untouched. The current mobile format remains authoritative until cross-platform interoperability vectors prove a compatible Web implementation/evolution.
 
 ### 4.16 Database migrations
 
-- Versioned schema.
-- Local pre-migration recovery state.
-- Transactional migration.
-- SQLite integrity checks and domain validation.
-- Rollback on failure.
-- Tests cover adjacent and skipped-version upgrade paths.
+Versioned schema, local pre-migration recovery state, transactional migration, SQLite integrity/domain validation, rollback, adjacent and skipped-version upgrade tests.
 
 ### 4.17 Diagnostics and crash support
 
-- User-visible diagnostic report contains app/OS/schema/engine versions, permissions, scheduler state, migration status, and integrity status.
-- Diagnostic report contains no health values.
-- Platform-provided aggregate crash diagnostics may be used; no invasive session replay or health-payload telemetry.
+User-visible sanitized diagnostic report contains app/OS/schema/engine versions, permissions, scheduler state, migration/integrity status; never health values. Platform aggregate crash diagnostics may be used only under the no-health-payload rule.
 
 ### 4.18 Update and release system
 
-- Semantic app versioning.
-- Independently version Prediction Engine, Reminder Engine, Backup Format, DB Schema, and Health Adapter.
-- Development -> Wife Alpha -> Closed Beta -> Public Beta -> Production.
-- CI includes static analysis, unit tests, prediction tests, migration tests, native adapter tests, integration tests, dependency scanning, and SBOM generation.
+Semantic app versioning; independently version Prediction Engine, Reminder Engine, Backup Format, DB Schema, Health Adapter. Current native path: Development → Wife Alpha → Closed Beta → Public Beta → Production. Cross-platform release closure additionally requires shared/Web conformance.
 
 ### 4.19 Supply-chain security
 
-- Dependency pinning and lockfiles.
-- Secret scanning and static analysis.
-- Protected production branch when hosted.
-- Signed releases.
-- Least-privilege store credentials.
-- No production signing materials committed to source control.
+Dependency pinning/lockfiles, secret scanning/static analysis, signed releases, least-privilege credentials, no signing materials in source. C2 adds Web/backend dependency and SBOM scanning without removing mobile gates.
 
 ### 4.20 Prediction laboratory
 
-- Synthetic regular and irregular datasets.
-- Boundary datasets.
-- Metrics: MAE, median absolute error, prediction-window coverage, early/late bias, over/under-confidence.
-- Algorithm upgrades require evidence, not marketing language.
+Synthetic regular/irregular/boundary datasets; MAE, median absolute error, window coverage, early/late bias, over/under-confidence. Upgrades require evidence.
 
 ### 4.21 Reminder laboratory
 
-Test at least reboot, DST forward/backward, time-zone change, app killed, offline operation, notification permission revoked/restored, app upgrade, clock changes, prediction edits, early/late starts, leap years, month/year boundaries.
+Reboot, DST forward/back, timezone, app killed, offline, permission revoke/restore, update, clock changes, prediction edits, early/late starts, leap year, month/year boundaries. Web/PWA adds browser capability and Push/service-worker cases.
 
 ### 4.22 Regulatory firewall
 
-- Wellness/tracking copy is separated from medical claims.
-- No disease diagnosis, treatment decision, or contraceptive-effectiveness claim in V1.
-- Any future medical-device functionality requires a separate quality/regulatory programme.
+Wellness/tracking copy stays separate from diagnosis, treatment, disease prediction, and contraception-effectiveness claims. Future medical-device functionality requires a separate quality/regulatory programme.
 
-## 5. Main screen map
+## 5. Mobile screen map and C2 relationship
 
-1. Splash / local vault unlock
-2. Welcome + privacy promise
-3. Onboarding: mode, history, reminder, notification privacy, optional HealthKit
-4. Home
-5. Calendar
-6. Log Today hub
-7. Period editor
-8. Symptoms
-9. Reproductive observations
-10. Medication/reminder manager
-11. Insights
-12. Prediction details
-13. Life-stage mode
-14. Health integrations
-15. Doctor report builder
-16. Partner share builder
-17. Assistant
-18. Backup/restore
-19. Privacy Center
-20. Reminder Health
-21. Diagnostics
-22. Settings / accessibility / localization
+Existing mobile screen map remains valid: vault unlock, welcome/privacy, onboarding, Home, Calendar, Log Today, Period editor, Symptoms/Reproductive observations, Medication/Reminders, Insights, Prediction details, Life stage, Health integrations, Reports, Partner sharing, Assistant, Backup/Restore, Privacy Center, Reminder Health, Diagnostics, Settings/accessibility/localization.
+
+The Web/PWA route map is defined by the C2 constitution. Screen/route naming may differ by platform, but health meaning and capabilities must match.
 
 ## 6. Domain invariants
 
-- A period episode has start <= end when an end exists.
-- Period episodes cannot silently overlap; overlap requires explicit merge/edit resolution.
-- A completed cycle length is the day difference between consecutive period starts and must be positive.
-- Predictions are not generated from malformed or impossible cycles.
-- Prediction output always includes a likely date, a lower/upper window, algorithm version, and confidence.
+- Period start <= end when end exists.
+- Episodes cannot silently overlap; explicit merge/edit resolution is required.
+- Completed cycle length between consecutive period starts is positive.
+- Malformed/impossible cycles do not feed predictions.
+- Prediction output includes likely date, lower/upper window, algorithm version, confidence.
 - Deleting source observations triggers local recomputation.
-- Every user-facing export is explicitly initiated by the user.
-- A diagnostic export never serializes health-table rows.
+- User-facing export is user-initiated.
+- Diagnostic export never serializes health-table rows.
+- Same canonical input/engine version must produce contract-equivalent behavior in Dart and TypeScript implementations.
 
 ## 7. Prediction v1 algorithm
 
 Inputs: valid consecutive period-start dates, newest first, up to the most recent 12 complete cycle intervals.
 
-1. Require two period starts for a point estimate; fewer produces an “insufficient history” state.
+1. Require two period starts for a point estimate; fewer => insufficient history.
 2. Compute cycle intervals.
-3. Reject intervals outside 15–90 days from the estimator but retain records in history.
-4. Calculate the median interval.
-5. Apply recency weighting to intervals using weights 1..N from oldest to newest and compute a weighted mean.
+3. Exclude intervals outside 15–90 days from estimator, while retaining history.
+4. Calculate median interval.
+5. Apply recency weights 1..N oldest→newest and compute weighted mean.
 6. Point estimate = rounded average of median and weighted mean.
 7. Compute median absolute deviation (MAD).
-8. Window half-width = clamp(round(max(2, 1.5 * MAD + dataPenalty)), 2, 10), where dataPenalty is 2 for fewer than 4 valid intervals, 1 for 4–5, otherwise 0.
-9. Confidence: high for >=6 valid intervals and MAD <=2; medium for >=3 valid intervals and MAD <=5; otherwise low.
+8. Window half-width = `clamp(round(max(2, 1.5 * MAD + dataPenalty)), 2, 10)`; dataPenalty = 2 for <4 valid intervals, 1 for 4–5, else 0.
+9. Confidence: high for >=6 valid intervals and MAD <=2; medium for >=3 and MAD <=5; otherwise low.
 10. Prediction = latest start + estimated length.
 
-The algorithm is intentionally interpretable and must be versioned `prediction-v1`.
+Version: `prediction-v1`. Shared JSON vectors will become the cross-platform authority for implementation equivalence.
 
 ## 8. Reminder state machine
 
-States: disabled, permissionNeeded, scheduled, stale, blocked, error.
+States: `disabled`, `permissionNeeded`, `scheduled`, `stale`, `blocked`, `error`.
 
-Events include preferenceChanged, predictionChanged, permissionChanged, timezoneChanged, appLaunched, appUpdated, periodStarted, periodEdited.
+Events: `preferenceChanged`, `predictionChanged`, `permissionChanged`, `timezoneChanged`, `appLaunched`, `appUpdated`, `periodStarted`, `periodEdited`.
 
-A scheduled reminder always stores its logical reminder ID, source prediction ID, target local date/time, privacy mode, and scheduler platform ID.
+A scheduled reminder stores logical reminder ID, source prediction ID, target local date/time, privacy mode, and platform scheduler ID. Web maps the same logical plan to Web/PWA delivery capabilities without claiming native guarantees it does not have.
 
 ## 9. Encryption and key lifecycle
 
-- Generate a random database key on first vault creation.
-- Protect the key using the OS secure keystore/keychain.
-- Never derive the database key solely from a short PIN.
-- Biometric/PIN controls gate access to wrapped key material; implementation follows platform capabilities.
-- CycleVault uses an independent random content-encryption key wrapped by a recovery key derived from a user passphrase using a memory-hard KDF supported by the chosen audited library.
-- Backup passphrase is never stored in plaintext.
+- Generate random mobile database key on first vault creation.
+- Protect with OS secure keystore/keychain.
+- Never derive database key solely from a short PIN.
+- Biometrics/PIN gate wrapped key access according to platform capabilities.
+- Existing CycleVault uses an independent random content-encryption key, AES-256-GCM, and Argon2id-based recovery derivation.
+- Backup/recovery secret is never stored plaintext.
+- C2 E2EE sync key hierarchy is a separate reviewed protocol; it must interoperate across Android/iOS/Web and must not be invented ad hoc inside UI code.
 
 ## 10. Privacy logging policy
 
-Permitted application log fields: event category, non-sensitive error code, app version, schema version, component version, platform, generic state flags.
+Permitted: event category, non-sensitive error code, app/client version, schema/component version, platform, generic state flags.
 
-Forbidden: dates from health records, symptom names tied to a user event, free-text notes, medication names/doses, sexual activity, pregnancy/fertility observations, temperature values, HealthKit/Health Connect payload bodies.
+Forbidden: health dates, user-linked symptom values, notes, medication names/doses, sexual activity, pregnancy/fertility observations, temperatures, HealthKit/Health Connect payload bodies, health search terms, decrypted sync payloads.
 
-## 11. Definition of worldwide v1.0
+## 11. Definition of cross-platform worldwide completion
 
-Worldwide v1.0 is complete only when every capability family in Section 4 is implemented for at least one supported platform and every applicable capability is implemented on the target platform, with unsupported platform-specific adapters disabled clearly rather than simulated.
+A broad mobile capability being implemented is not sufficient to claim global completion. Cross-platform completion follows the 258-ID C2 registry and Definition of Done in the authoritative C2 constitution.
 
-The first distributable focus is iOS. Android shares domain/application code but receives its native adapter verification before Play production release.
+The current distribution priority remains Android for native production release because the Android release pipeline is operational. iOS remains first-class and continuously no-codesign verified until publisher signing/App Store capability exists. Web/PWA is an equal first-class product client and provides a practical iPhone-access path independent of App Store distribution.
 
-## 12. Store and signing boundary
+## 12. Store/signing/sync boundary
 
-Source code and unsigned release artifacts can be produced without store credentials. Installation on an iPhone through TestFlight/App Store requires the owner's Apple Developer membership and signing/App Store Connect configuration. Signing secrets must never be committed to this repository.
+Source and unsigned/native verification artifacts can be produced without store credentials. Native iPhone App Store/TestFlight distribution requires Apple Developer signing/App Store Connect configuration; production Android uses controlled signing/Play release paths. Signing secrets never enter source control.
+
+Optional account/E2EE sync is **not** silently enabled by this documentation change. Before a shipping binary begins transmitting encrypted user health ciphertext to Sreva-operated infrastructure, the release must pass the C2 sync/security protocol gates and the relevant public privacy policy/store declarations must be updated to match actual behavior.
