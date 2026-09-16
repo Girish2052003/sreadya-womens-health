@@ -1,6 +1,6 @@
 # Sreva Web/PWA Local Acceptance — Task 18
 
-**Status:** IN PROGRESS
+**Status:** IN PROGRESS — deployment blocked only by repository Pages enablement
 
 **Task 17 closure baseline:** `79359d0ea10730c4301f4147706184371f7ddc4c`
 
@@ -16,6 +16,26 @@ This evidence file tracks the wife PWA acceptance milestone for the local/accoun
 - [x] Web privacy scan, secret scan, dependency audit, and Web SBOM generation passed on the closure baseline.
 - [x] Cross-browser navigation/accessibility/PWA CI proof passed on the closure baseline.
 - [x] Local encrypted browser-vault and CycleVault browser verification passed on the closure baseline.
+- [x] Task-17 closure baseline was promoted to `main` as a fast-forward with no force and no history rewrite.
+- [x] Task-17 PR #5 is recorded by GitHub as merged at the exact closure SHA.
+- [x] Main-branch Pages build job `105012920402` in run `35161459652` completed successfully and uploaded the `github-pages` artifact.
+- [ ] Main-branch Pages deployment succeeds and exposes the live HTTPS site.
+
+## Current deployment blocker
+
+Main-branch Pages deployment job `105013047207` in run `35161459652` reached `actions/deploy-pages` with the correct artifact and `pages: write` permission, then GitHub returned HTTP 404 with the explicit message:
+
+> Ensure GitHub Pages has been enabled.
+
+This is a repository setting gate, not a Sreva build, routing, privacy, or artifact failure. The GitHub connector available to this workflow does not expose the authenticated repository Pages-enable mutation.
+
+Required repository setting before retry:
+
+1. Open the repository on GitHub.
+2. Open **Settings → Pages**.
+3. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+4. Preserve the existing least-privilege workflow; do not add health/sync/provider secrets to Pages.
+5. Re-run the failed Pages deployment after the setting is enabled.
 
 ## Required Task-18 acceptance
 
@@ -39,7 +59,7 @@ Acceptance must be exercised on an iPhone using Safari / Add to Home Screen and 
 
 ## Deployment gate
 
-The Task-17 Pages workflow is present and its PR-side static build is green. A live production Pages URL is required before the iPhone Safari/Add-to-Home-Screen portion of this milestone can be accepted. Production deployment must come from the reviewed main-branch path; this evidence file does not bypass that gate.
+The Task-17 Pages workflow is present. Its feature-branch static build is green, and the same static build is green after promotion to `main`. The main deployment currently fails only because GitHub Pages is not enabled for this repository. A live production Pages URL is required before the iPhone Safari/Add-to-Home-Screen portion of this milestone can be accepted. Production deployment must come from the reviewed main-branch path; this evidence file does not bypass that gate.
 
 ## Closure rule
 
