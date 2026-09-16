@@ -5,6 +5,10 @@ export type PeriodEpisodeInvariantInput = {
   source: string;
 };
 
-export function assertValidPeriodEpisode(_episode: PeriodEpisodeInvariantInput): void {
-  // Intentionally empty while the Task 9 RED test proves the missing invariant.
+export function assertValidPeriodEpisode(episode: PeriodEpisodeInvariantInput): void {
+  if (episode.end !== undefined && episode.end !== null) {
+    if (Date.parse(episode.end) < Date.parse(episode.start)) {
+      throw new Error('Period end cannot be before start.');
+    }
+  }
 }
