@@ -18,9 +18,10 @@ function normalizedLocale(locale: string): Intl.Locale {
   }
 }
 
-export function messageLocale(_locale?: string | null): MessageLocale {
+export function messageLocale(locale?: string | null): MessageLocale {
   // English is the only reviewed message catalog in Task 15. Formatting may
   // follow another BCP-47 locale, but copy must not pretend a translation exists.
+  if (locale) normalizedLocale(locale);
   return 'en';
 }
 
