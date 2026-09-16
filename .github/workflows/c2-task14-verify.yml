@@ -44,17 +44,23 @@ jobs:
       - name: Strict TypeScript
         working-directory: web
         run: npm run typecheck
-      - name: CycleVault v1 Web conformance
+      - name: Full Web regression and CycleVault domain suite
         working-directory: web
-        run: npm test -- --run src/crypto/cyclevault.conformance.test.ts
+        run: npm test -- --run
+      - name: Production static export
+        working-directory: web
+        run: npm run build
+      - name: Install target browser engines
+        working-directory: web
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Production CycleVault local restore and export proof
+        working-directory: web
+        run: npx playwright test e2e/cyclevault-production.spec.ts --project=chromium
       - name: Static export with CycleVault verification harness
         working-directory: web
         env:
           NEXT_PUBLIC_SREVA_CYCLEVAULT_TEST_HARNESS: '1'
         run: npm run build
-      - name: Install target browser engines
-        working-directory: web
-        run: npx playwright install --with-deps chromium firefox webkit
       - name: CycleVault target-browser vector and resource proof
         working-directory: web
         run: npx playwright test e2e/cyclevault-browser.spec.ts
