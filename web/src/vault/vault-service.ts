@@ -1,6 +1,6 @@
 import { generateVaultKey, openJson, sealJson } from '../crypto/webcrypto';
 import { VaultLock } from './vault-lock';
-import type { VaultPersistence } from './vault-types';
+import type { PersistedVaultRecord, VaultPersistence } from './vault-types';
 
 export const LOCAL_ONLY_DATA_LOSS_WARNING =
   'Browser site data can be erased by browser cleanup, device reset, private-browsing policy, or storage eviction. Keep an encrypted recovery backup when backup is available.';
@@ -42,6 +42,29 @@ export class VaultService {
     const sealed = await sealJson(key, value, recordAad(id));
     await this.persistence.putRecord({ id, sealed });
     this.lockState.remember(id, value);
+  }
+
+  async replaceRecordsAtomically(
+    removeIds: string[],
+    replacements: Array<{ id: string; value: unknown }>,
+  ) {
+    const key = this.requireKey();
+    const replace = this.persistence.replaceRecordsAtomically;
+    if (!replace) {
+      throw new Error('This Sreva vault persistence does not support atomic replacement.');
+    }
+
+    const sealedReplacements: PersistedVaultRecord[] = await Promise.all(
+      replacements.map(async ({ id, value }) => ({
+        id,
+        sealed: await sealJson(key, value, recordAad(id)),
+      })),
+    );
+
+    await replace.call(this.persistence, removeIds, sealedReplacements);
+
+    for (const id of removeIds) this.lockState.forget(id);
+    for (const { id, value } of replacements) this.lockState.remember(id, value);
   }
 
   async read<T>(id: string): Promise<T> {
