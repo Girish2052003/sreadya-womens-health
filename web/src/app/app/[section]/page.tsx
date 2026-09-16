@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation';
 
+import { WorkspaceNav } from '../../../components/navigation/WorkspaceNav';
 import { Card } from '../../../components/ui/Card';
 import { StatusChip } from '../../../components/ui/StatusChip';
-import { WorkspaceNav } from '../../../components/navigation/WorkspaceNav';
+import { VaultLocalOnlyPanel } from '../../../components/vault/VaultLocalOnlyPanel';
 import { workspaceSections, workspaceTitles } from '../../../content/routes';
 
 export function generateStaticParams() {
@@ -31,6 +32,7 @@ export default async function WorkspaceSection({ params }: { params: Promise<{ s
           </div>
           <StatusChip tone="success">Local-first</StatusChip>
         </header>
+        {key === 'vault' ? <VaultLocalOnlyPanel /> : null}
         <div className="workspace-grid">
           <Card eyebrow="Sreva" title={title}>
             <p>This workspace is ready for the capability implementation assigned to this route.</p>
