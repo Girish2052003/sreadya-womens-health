@@ -20,8 +20,7 @@ export default function VaultPage() {
           </div>
           <StatusChip tone="success">Local-first</StatusChip>
         </header>
-        {vaultTestHarness ? <VaultLocalOnlyPanel /> : null}
-        <CycleVaultWorkspace />
+        {vaultTestHarness ? <VaultLocalOnlyPanel /> : <CycleVaultWorkspace />}
       </main>
     </div>
   );
