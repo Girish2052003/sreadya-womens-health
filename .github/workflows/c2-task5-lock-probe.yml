@@ -1,8 +1,8 @@
 name: C2 Task 5 Lock Probe
 
 on:
-  push:
-    branches: [feat/c2-a-g-implementation]
+  pull_request:
+    branches: [main]
 
 permissions:
   contents: read
