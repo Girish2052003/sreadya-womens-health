@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { PublicFooter } from '../../../components/navigation/PublicFooter';
 import { PublicHeader } from '../../../components/navigation/PublicHeader';
+import { InstallGuide, type InstallGuideTarget } from '../../../components/pwa/InstallGuide';
 import { publicPages } from '../../../content/routes';
 
 export function generateStaticParams() {
@@ -14,6 +15,14 @@ export default async function PublicPage({ params }: { params: Promise<{ slug: s
   const key = slug.join('/');
   const page = publicPages.find((candidate) => candidate.slug.join('/') === key);
   if (!page) notFound();
+
+  const installTarget: InstallGuideTarget | null = key === 'install/iphone'
+    ? 'iphone'
+    : key === 'install/android'
+      ? 'android'
+      : key === 'install/pwa'
+        ? 'pwa'
+        : null;
 
   return (
     <div className="public-site">
@@ -28,6 +37,7 @@ export default async function PublicPage({ params }: { params: Promise<{ slug: s
             <Link className="link-button link-button--quiet" href="/how-it-works">How Sreva works</Link>
           </div>
         </section>
+        {installTarget ? <InstallGuide target={installTarget} /> : null}
         <section className="principle-grid" aria-label="Sreva product principles">
           <article><span>01</span><h2>Local first</h2><p>Core health tools remain useful without creating an account.</p></article>
           <article><span>02</span><h2>Private by architecture</h2><p>Health telemetry is not the price of using Sreva.</p></article>
