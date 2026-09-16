@@ -4,6 +4,7 @@ import {
   ACCESSIBILITY_STORAGE_KEY,
   DEFAULT_ACCESSIBILITY_PREFERENCES,
   accessibilityDataAttributes,
+  applyAccessibilityPreferences,
   loadAccessibilityPreferences,
   parseAccessibilityPreferences,
   saveAccessibilityPreferences,
@@ -66,6 +67,27 @@ describe('accessibility preferences', () => {
       'data-sreva-text-scale': 'normal',
       'data-sreva-motion': 'system',
       'data-sreva-contrast': 'system',
+    });
+  });
+
+  it('applies only the reviewed accessibility data attributes to a document target', () => {
+    const applied = new Map<string, string>();
+    const target = {
+      setAttribute(name: string, value: string) {
+        applied.set(name, value);
+      },
+    };
+
+    applyAccessibilityPreferences(target, {
+      textScale: 'large',
+      motion: 'reduced',
+      contrast: 'high',
+    });
+
+    expect(Object.fromEntries(applied)).toEqual({
+      'data-sreva-text-scale': 'large',
+      'data-sreva-motion': 'reduced',
+      'data-sreva-contrast': 'high',
     });
   });
 });
