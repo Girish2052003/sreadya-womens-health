@@ -1,5 +1,6 @@
-# Sreva Master Product Specification v1.1 — Mobile Baseline Companion
+# Sreva Master Product Specification v1.0
 
+**Document role after C2 amendment:** Mobile Baseline Companion, revision 1.1  
 **Original date:** 2026-09-15  
 **C2 amendment date:** 2026-09-16  
 **Public product name:** Sreva  
@@ -7,6 +8,8 @@
 **Mobile platforms:** Android and iOS  
 **Cross-platform product:** Android + iOS + Web/PWA  
 **Architecture:** Local Sovereign Core + Optional End-to-End Encrypted Continuity
+
+> **Compatibility note:** The legacy title `Sreva Master Product Specification v1.0` is intentionally retained because the existing mobile traceability verifier treats that exact title and Sections 4.1–4.22 as a frozen machine-readable anchor. C2 does not silently rewrite that verifier during documentation alignment.
 
 > **Authority notice — 16 September 2026:** This file is the detailed Flutter/mobile baseline companion. The authoritative cross-platform constitution is `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`. If this file and that document differ, the 16 September C2 constitution wins. Android, iOS, and Web/PWA are equal first-class Sreva clients; this file must not be interpreted as making Web secondary.
 
@@ -136,7 +139,7 @@ User-controlled manual share/QR/export remains the baseline. Category controls e
 - Android: Health Connect read/write for supported types with granular authorization.
 - Provenance/external IDs prevent duplicate import.
 - Platform health stores are integrations, not Sreva's authoritative core vault.
-- Web/PWA has no fake HealthKit/Health Connect adapter; synchronized records may still be viewed through authorized E2EE continuity.
+- Web/PWA has no fake HealthKit/Health Connect adapter; synchronized records may still be viewed through authorized E2EE continuity once implemented.
 
 ### 4.13 Accessibility and worldwide readiness
 
@@ -144,7 +147,7 @@ Light/dark, dynamic text, VoiceOver/TalkBack semantics, high contrast/colour-saf
 
 ### 4.14 Privacy Center and app lock
 
-Biometrics where available, PIN fallback architecture, automatic lock, app-switcher/sensitive-screen safeguards, notification privacy, data-purpose transparency, record deletion, full local wipe. Account and sync controls added by C2 must appear without weakening no-account mode.
+Biometrics where available, PIN fallback architecture, automatic lock, app-switcher/sensitive-screen safeguards, notification privacy, data-purpose transparency, record deletion, full local wipe. Account and sync controls added by C2 must appear without weakening local-only/no-account privacy mode.
 
 ### 4.15 CycleVault backup and restore
 
