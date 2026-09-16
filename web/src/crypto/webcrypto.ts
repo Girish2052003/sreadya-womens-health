@@ -9,11 +9,11 @@ function bytesToBase64(bytes: Uint8Array): string {
   return btoa(binary);
 }
 
-function base64ToBytes(value: string): Uint8Array {
+function base64ToArrayBuffer(value: string): ArrayBuffer {
   const binary = atob(value);
-  const bytes = new Uint8Array(binary.length);
+  const bytes = new Uint8Array(new ArrayBuffer(binary.length));
   for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
-  return bytes;
+  return bytes.buffer;
 }
 
 export async function generateVaultKey(): Promise<CryptoKey> {
@@ -62,12 +62,12 @@ export async function openJson<T>(
   const clear = await crypto.subtle.decrypt(
     {
       name: 'AES-GCM',
-      iv: base64ToBytes(envelope.nonce),
+      iv: base64ToArrayBuffer(envelope.nonce),
       additionalData: encoder.encode(expectedAad),
       tagLength: 128,
     },
     key,
-    base64ToBytes(envelope.ciphertext),
+    base64ToArrayBuffer(envelope.ciphertext),
   );
 
   return JSON.parse(decoder.decode(clear)) as T;
