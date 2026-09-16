@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 
 import { PwaBootstrap } from '../components/pwa/PwaBootstrap';
 import './globals.css';
+import './pwa.css';
 
 export const metadata: Metadata = {
   title: 'Sreva — Private, local-first women\'s health',
