@@ -3,14 +3,14 @@ import { expect, test } from '@playwright/test';
 const recordId = 'sreva-e2e-vault-record';
 const sentinel = 'KNOWN-PLAINTEXT-SENTINEL';
 
-async function readRawRecord(page: import('@playwright/test').Page) {
-  return page.evaluate(async (id) => new Promise<Record<string, unknown>>((resolve, reject) => {
+async function readRawRecord(page: import('@playwright/test').Page, id = recordId) {
+  return page.evaluate(async (recordKey) => new Promise<Record<string, unknown>>((resolve, reject) => {
     const request = indexedDB.open('sreva-vault-v1');
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
       const db = request.result;
       const transaction = db.transaction('records', 'readonly');
-      const getRequest = transaction.objectStore('records').get(id);
+      const getRequest = transaction.objectStore('records').get(recordKey);
       getRequest.onerror = () => reject(getRequest.error);
       getRequest.onsuccess = () => resolve(getRequest.result as Record<string, unknown>);
     };
