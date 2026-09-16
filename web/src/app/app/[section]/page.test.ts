@@ -2,12 +2,22 @@ import { describe, expect, it } from 'vitest';
 
 import { generateStaticParams } from './page';
 
+const DEDICATED = [
+  'predictions',
+  'reminders',
+  'life-stage',
+  'insights',
+  'reports',
+  'assistant',
+  'sharing',
+  'privacy',
+] as const;
+
 describe('workspace static route ownership', () => {
-  it('leaves predictions and reminders to their dedicated routes', () => {
+  it('leaves completed capability workspaces to their dedicated routes', () => {
     const sections = generateStaticParams().map(({ section }) => section);
 
-    expect(sections).not.toContain('predictions');
-    expect(sections).not.toContain('reminders');
+    for (const section of DEDICATED) expect(sections).not.toContain(section);
     expect(sections).toContain('home');
     expect(sections).toContain('vault');
   });
