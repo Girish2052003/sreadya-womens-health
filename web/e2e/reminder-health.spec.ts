@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
+import { formatUtcDate } from '../src/features/core/presentation';
+
 type PersistedVaultRecord = {
   id: string;
   sealed: {
@@ -17,15 +19,6 @@ function dateKey(date: Date): string {
     String(date.getUTCMonth() + 1).padStart(2, '0'),
     String(date.getUTCDate()).padStart(2, '0'),
   ].join('-');
-}
-
-function displayCycleCardDate(date: string): string {
-  return new Intl.DateTimeFormat('en-GB', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-    timeZone: 'UTC',
-  }).format(new Date(`${date}T00:00:00Z`));
 }
 
 function offsetDate(days: number): string {
@@ -47,14 +40,8 @@ async function addHistoricalPeriod(page: Page, start: string, end: string) {
   await newest.locator('input[name="end"]').fill(end);
   await newest.getByRole('button', { name: 'Save dates' }).click();
 
-  const expectedHeading = displayCycleCardDate(start);
-  await page.waitForTimeout(250);
-  const headings = await cards.getByRole('heading').allTextContents();
-  const errors = await page.locator('.core-error[role="alert"]').allTextContents();
-  if (!headings.includes(expectedHeading)) {
-    throw new Error(`Cycle edit did not render ${expectedHeading}. Headings: ${headings.join(' | ')}. Errors: ${errors.join(' | ')}`);
-  }
-  expect(errors).toEqual([]);
+  await expect(page.getByRole('heading', { name: formatUtcDate(`${start}T00:00:00.000Z`) })).toBeVisible();
+  await expect(page.locator('.core-error[role="alert"]')).toHaveCount(0);
 }
 
 async function readReminderPreferenceRecord(page: Page) {
