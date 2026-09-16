@@ -18,6 +18,39 @@ function observationRecordId(id: string) {
   return `${OBSERVATION_PREFIX}${id}`;
 }
 
+function failReplacementValidation(): never {
+  throw new Error('Health dataset failed domain validation.');
+}
+
+function validateReplacementDataset(
+  periods: readonly PeriodEpisode[],
+  observations: readonly HealthObservation[],
+) {
+  try {
+    for (const period of periods) assertValidPeriodEpisode(period);
+    for (const observation of observations) assertValidHealthObservation(observation);
+  } catch {
+    failReplacementValidation();
+  }
+
+  const periodIds = new Set<string>();
+  const orderedPeriods = [...periods].sort((left, right) => Date.parse(left.start) - Date.parse(right.start));
+  for (let index = 0; index < orderedPeriods.length; index += 1) {
+    const current = orderedPeriods[index];
+    if (!periodIds.add(current.id)) failReplacementValidation();
+    if (index === 0) continue;
+
+    const previous = orderedPeriods[index - 1];
+    const previousEnd = previous.end ?? previous.start;
+    if (Date.parse(previousEnd) >= Date.parse(current.start)) failReplacementValidation();
+  }
+
+  const observationIds = new Set<string>();
+  for (const observation of observations) {
+    if (!observationIds.add(observation.id)) failReplacementValidation();
+  }
+}
+
 export class HealthVaultRepository implements CycleRepository {
   constructor(private readonly vault: VaultService) {}
 
@@ -59,5 +92,20 @@ export class HealthVaultRepository implements CycleRepository {
 
   async deleteObservation(id: string): Promise<void> {
     await this.vault.delete(observationRecordId(id));
+  }
+
+  async replaceAll(input: { periods: PeriodEpisode[]; observations: HealthObservation[] }): Promise<void> {
+    validateReplacementDataset(input.periods, input.observations);
+
+    const currentIds = await this.vault.listRecordIds();
+    const healthIds = currentIds.filter(
+      (id) => id.startsWith(PERIOD_PREFIX) || id.startsWith(OBSERVATION_PREFIX),
+    );
+    const replacements = [
+      ...input.periods.map((period) => ({ id: periodRecordId(period.id), value: period })),
+      ...input.observations.map((observation) => ({ id: observationRecordId(observation.id), value: observation })),
+    ];
+
+    await this.vault.replaceRecordsAtomically(healthIds, replacements);
   }
 }
