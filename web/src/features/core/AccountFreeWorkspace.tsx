@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { StatusChip } from '../../components/ui/StatusChip';
 import type { HealthObservation, PeriodEpisode } from '../../domain/cycle/types';
+import type { PredictionResult } from '../../domain/prediction/types';
 import { DexieVaultPersistence } from '../../vault/db';
 import { HealthVaultRepository } from '../../vault/health-repository';
 import { VaultService } from '../../vault/vault-service';
@@ -16,6 +17,7 @@ import { HomeCorePanel } from '../home/HomeCorePanel';
 import { continuePrivately } from '../onboarding/private-onboarding';
 import { LogCorePanel } from '../logging/LogCorePanel';
 import { TodayCorePanel } from '../logging/TodayCorePanel';
+import { predictFromRepository } from '../predictions/prediction-service';
 
 export const TASK10_CORE_SECTIONS = ['home', 'today', 'log', 'calendar', 'cycle'] as const;
 export type Task10CoreSection = (typeof TASK10_CORE_SECTIONS)[number];
@@ -38,6 +40,7 @@ export function AccountFreeWorkspace({ section }: { section: Task10CoreSection }
   const [error, setError] = useState('');
   const [periods, setPeriods] = useState<PeriodEpisode[]>([]);
   const [observations, setObservations] = useState<HealthObservation[]>([]);
+  const [prediction, setPrediction] = useState<PredictionResult | null>(null);
   const [revision, setRevision] = useState(0);
   const [calendarMode, setCalendarMode] = useState<CalendarMode>('month');
   const [selectedYear, setSelectedYear] = useState(() => new Date().getFullYear());
@@ -69,12 +72,14 @@ export function AccountFreeWorkspace({ section }: { section: Task10CoreSection }
   }, []);
 
   const refresh = useCallback(async (activeRepository: HealthVaultRepository) => {
-    const [nextPeriods, nextObservations] = await Promise.all([
+    const [nextPeriods, nextObservations, nextPrediction] = await Promise.all([
       activeRepository.listPeriods(),
       activeRepository.listObservations(),
+      predictFromRepository(activeRepository, new Date().toISOString()),
     ]);
     setPeriods(nextPeriods);
     setObservations(nextObservations);
+    setPrediction(nextPrediction);
   }, []);
 
   useEffect(() => {
@@ -147,7 +152,7 @@ export function AccountFreeWorkspace({ section }: { section: Task10CoreSection }
       </div>
       {error ? <p className="core-error" role="alert">{error}</p> : null}
 
-      {section === 'home' ? <HomeCorePanel periods={periods} observations={observations} onStartPeriodToday={startPeriodToday} /> : null}
+      {section === 'home' ? <HomeCorePanel periods={periods} observations={observations} prediction={prediction} onStartPeriodToday={startPeriodToday} /> : null}
       {section === 'today' ? <TodayCorePanel observations={observations} today={today} /> : null}
       {section === 'log' ? <LogCorePanel observations={observations} onLog={logObservation} onDelete={deleteObservation} /> : null}
       {section === 'calendar' ? (
