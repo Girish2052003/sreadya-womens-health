@@ -47,6 +47,12 @@ function downloadBlob(blob: Blob, filename: string) {
   URL.revokeObjectURL(url);
 }
 
+function pdfBlob(bytes: Uint8Array<ArrayBufferLike>): Blob {
+  const ownedBytes = new Uint8Array(bytes.byteLength);
+  ownedBytes.set(bytes);
+  return new Blob([ownedBytes.buffer], { type: 'application/pdf' });
+}
+
 export function ReportsWorkspace() {
   const today = useMemo(() => new Date(), []);
   const defaultFrom = useMemo(() => {
@@ -118,7 +124,7 @@ export function ReportsWorkspace() {
 
   const downloadPdf = async () => {
     const bytes = await buildPdfReport({ periods, observations, selection });
-    downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'sreva-health-report.pdf');
+    downloadBlob(pdfBlob(bytes), 'sreva-health-report.pdf');
   };
 
   return (
