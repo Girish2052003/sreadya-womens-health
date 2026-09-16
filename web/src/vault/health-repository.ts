@@ -2,7 +2,7 @@ import {
   assertPeriodDoesNotOverlap,
   assertValidPeriodEpisode,
 } from '../domain/cycle/invariants';
-import type { PeriodEpisode } from '../domain/cycle/types';
+import type { HealthObservation, PeriodEpisode } from '../domain/cycle/types';
 import type { VaultService } from './vault-service';
 
 const PERIOD_PREFIX = 'health:period:';
@@ -10,6 +10,11 @@ const PERIOD_PREFIX = 'health:period:';
 function periodRecordId(id: string) {
   return `${PERIOD_PREFIX}${id}`;
 }
+
+export type ObservationRange = {
+  from?: string;
+  to?: string;
+};
 
 export class HealthVaultRepository {
   constructor(private readonly vault: VaultService) {}
@@ -29,5 +34,17 @@ export class HealthVaultRepository {
 
   async deletePeriod(id: string): Promise<void> {
     await this.vault.delete(periodRecordId(id));
+  }
+
+  async listObservations(_range: ObservationRange = {}): Promise<HealthObservation[]> {
+    throw new Error('Task 9 observation repository not implemented.');
+  }
+
+  async saveObservation(_observation: HealthObservation): Promise<void> {
+    throw new Error('Task 9 observation repository not implemented.');
+  }
+
+  async deleteObservation(_id: string): Promise<void> {
+    throw new Error('Task 9 observation repository not implemented.');
   }
 }
