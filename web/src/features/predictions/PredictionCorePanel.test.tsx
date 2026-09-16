@@ -21,19 +21,19 @@ describe('PredictionCorePanel', () => {
   it('shows the frozen prediction contract with honest uncertainty', () => {
     render(<PredictionCorePanel prediction={prediction} />);
 
-    expect(screen.getByRole('heading', { name: 'Prediction' })).toBeInTheDocument();
-    expect(screen.getByText('Most likely date')).toBeInTheDocument();
-    expect(screen.getByText('Expected range')).toBeInTheDocument();
-    expect(screen.getByText('Confidence')).toBeInTheDocument();
-    expect(screen.getByText('High')).toBeInTheDocument();
-    expect(screen.getByText(/based on 6 recent valid cycle intervals/i)).toBeInTheDocument();
-    expect(screen.getByText(/estimate, not a guarantee/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Prediction' })).toBeTruthy();
+    expect(screen.getByText('Most likely date')).toBeTruthy();
+    expect(screen.getByText('Expected range')).toBeTruthy();
+    expect(screen.getByText('Confidence')).toBeTruthy();
+    expect(screen.getByText('High')).toBeTruthy();
+    expect(screen.getByText(/based on 6 recent valid cycle intervals/i)).toBeTruthy();
+    expect(screen.getByText(/estimate, not a guarantee/i)).toBeTruthy();
   });
 
   it('does not fabricate a prediction with insufficient history', () => {
     render(<PredictionCorePanel prediction={null} />);
 
-    expect(screen.getByText(/more cycle history is needed/i)).toBeInTheDocument();
-    expect(screen.queryByText('High')).not.toBeInTheDocument();
+    expect(screen.getByText(/more cycle history is needed/i)).toBeTruthy();
+    expect(screen.queryByText('High')).toBeNull();
   });
 });
