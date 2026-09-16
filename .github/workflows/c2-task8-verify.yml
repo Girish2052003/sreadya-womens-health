@@ -1,0 +1,43 @@
+name: C2 Task 8 Verification
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  encrypted-browser-vault:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SREVA_VAULT_TEST_HARNESS: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24.21.0'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install locked dependencies
+        working-directory: web
+        run: npm ci --ignore-scripts
+      - name: Lint and typecheck
+        working-directory: web
+        run: |
+          npm run lint
+          npm run typecheck
+      - name: Unit vault contract
+        working-directory: web
+        run: npm test -- --run src/vault/vault-service.test.ts
+      - name: Static export with isolated vault test harness
+        working-directory: web
+        run: npm run build
+      - name: Install Chromium and WebKit
+        working-directory: web
+        run: npx playwright install --with-deps chromium webkit
+      - name: Real IndexedDB and WebCrypto persistence
+        working-directory: web
+        run: npx playwright test e2e/vault-persistence.spec.ts --project=chromium --project=webkit
