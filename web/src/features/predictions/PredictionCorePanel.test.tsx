@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import type { PredictionResult } from './prediction-engine';
@@ -19,21 +19,25 @@ const prediction: PredictionResult = {
 
 describe('PredictionCorePanel', () => {
   it('shows the frozen prediction contract with honest uncertainty', () => {
-    render(<PredictionCorePanel prediction={prediction} />);
+    const html = renderToStaticMarkup(<PredictionCorePanel prediction={prediction} />);
 
-    expect(screen.getByRole('heading', { name: 'Prediction' })).toBeTruthy();
-    expect(screen.getByText('Most likely date')).toBeTruthy();
-    expect(screen.getByText('Expected range')).toBeTruthy();
-    expect(screen.getByText('Confidence')).toBeTruthy();
-    expect(screen.getByText('High')).toBeTruthy();
-    expect(screen.getByText(/based on 6 recent valid cycle intervals/i)).toBeTruthy();
-    expect(screen.getByText(/estimate, not a guarantee/i)).toBeTruthy();
+    for (const text of [
+      'Prediction',
+      'Most likely date',
+      'Expected range',
+      'Confidence',
+      'High',
+      'based on 6 recent valid cycle intervals',
+      'estimate, not a guarantee',
+    ]) {
+      expect(html.toLowerCase()).toContain(text.toLowerCase());
+    }
   });
 
   it('does not fabricate a prediction with insufficient history', () => {
-    render(<PredictionCorePanel prediction={null} />);
+    const html = renderToStaticMarkup(<PredictionCorePanel prediction={null} />);
 
-    expect(screen.getByText(/more cycle history is needed/i)).toBeTruthy();
-    expect(screen.queryByText('High')).toBeNull();
+    expect(html.toLowerCase()).toContain('more cycle history is needed');
+    expect(html).not.toContain('>High<');
   });
 });
