@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 
+import { AccessibilityPreferencesWorkspace } from '../../../accessibility/AccessibilityPreferencesWorkspace';
 import { WorkspaceNav } from '../../../components/navigation/WorkspaceNav';
 import { Card } from '../../../components/ui/Card';
 import { StatusChip } from '../../../components/ui/StatusChip';
@@ -55,8 +56,9 @@ export default async function WorkspaceSection({ params }: { params: Promise<{ s
         </header>
 
         {isTask10CoreSection(key) ? <AccountFreeWorkspace section={key} /> : null}
+        {key === 'settings' ? <AccessibilityPreferencesWorkspace /> : null}
 
-        {!isTask10CoreSection(key) ? (
+        {!isTask10CoreSection(key) && key !== 'settings' ? (
           <div className="workspace-grid">
             <Card eyebrow="Sreva" title={title}>
               <p>This workspace is ready for the capability implementation assigned to this route.</p>
