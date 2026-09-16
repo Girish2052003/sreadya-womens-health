@@ -46,8 +46,15 @@ async function addHistoricalPeriod(page: Page, start: string, end: string) {
   await newest.locator('input[name="start"]').fill(start);
   await newest.locator('input[name="end"]').fill(end);
   await newest.getByRole('button', { name: 'Save dates' }).click();
-  await expect(page.getByRole('heading', { name: displayCycleCardDate(start) })).toBeVisible();
-  await expect(page.locator('.core-error[role="alert"]')).toHaveCount(0);
+
+  const expectedHeading = displayCycleCardDate(start);
+  await page.waitForTimeout(250);
+  const headings = await cards.getByRole('heading').allTextContents();
+  const errors = await page.locator('.core-error[role="alert"]').allTextContents();
+  if (!headings.includes(expectedHeading)) {
+    throw new Error(`Cycle edit did not render ${expectedHeading}. Headings: ${headings.join(' | ')}. Errors: ${errors.join(' | ')}`);
+  }
+  expect(errors).toEqual([]);
 }
 
 async function readReminderPreferenceRecord(page: Page) {
