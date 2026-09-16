@@ -93,8 +93,13 @@ test('keyboard focus, 200 percent reflow, large text, RTL and long-copy fixtures
 test('system reduced motion remains honored and explicit high contrast strengthens presentation', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  const transitionDuration = await page.locator('.public-header__cta').evaluate((element) => getComputedStyle(element).transitionDuration);
-  expect(transitionDuration).toBe('0.00001s');
+  const transitionDurations = await page.locator('.public-header__cta').evaluate((element) =>
+    getComputedStyle(element).transitionDuration
+      .split(',')
+      .map((duration) => Number.parseFloat(duration)),
+  );
+  expect(transitionDurations.length).toBeGreaterThan(0);
+  expect(transitionDurations.every((seconds) => seconds <= 0.00001)).toBe(true);
 
   await page.goto(SETTINGS_URL);
   await page.getByLabel('High contrast').check();
