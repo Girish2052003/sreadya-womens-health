@@ -46,4 +46,11 @@ export class DexieVaultPersistence implements VaultPersistence {
   async putStoredKey(key: CryptoKey) {
     await this.db.keys.put({ id: 'primary', key });
   }
+
+  async replaceRecordsAtomically(removeIds: string[], replacements: PersistedVaultRecord[]) {
+    await this.db.transaction('rw', this.db.records, async () => {
+      if (removeIds.length > 0) await this.db.records.bulkDelete(removeIds);
+      if (replacements.length > 0) await this.db.records.bulkPut(replacements);
+    });
+  }
 }
