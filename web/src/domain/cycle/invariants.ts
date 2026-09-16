@@ -1,9 +1,16 @@
-import { RECORD_SOURCES } from './types';
+import { OBSERVATION_KINDS, RECORD_SOURCES } from './types';
 
 export type PeriodEpisodeInvariantInput = {
   id: string;
   start: string;
   end?: string | null;
+  source: string;
+};
+
+export type HealthObservationInvariantInput = {
+  id: string;
+  kind: string;
+  occurredAt: string;
   source: string;
 };
 
@@ -17,6 +24,10 @@ function isRecordSource(value: string): boolean {
   return (RECORD_SOURCES as readonly string[]).includes(value);
 }
 
+function isObservationKind(value: string): boolean {
+  return (OBSERVATION_KINDS as readonly string[]).includes(value);
+}
+
 export function assertValidPeriodEpisode(episode: PeriodEpisodeInvariantInput): void {
   const endIsCanonical = episode.end === undefined || episode.end === null || isCanonicalUtcTimestamp(episode.end);
   if (!isCanonicalUtcTimestamp(episode.start) || !endIsCanonical || !isRecordSource(episode.source)) {
@@ -27,6 +38,16 @@ export function assertValidPeriodEpisode(episode: PeriodEpisodeInvariantInput): 
     if (Date.parse(episode.end) < Date.parse(episode.start)) {
       throw new Error('Period end cannot be before start.');
     }
+  }
+}
+
+export function assertValidHealthObservation(observation: HealthObservationInvariantInput): void {
+  if (
+    !isObservationKind(observation.kind)
+    || !isCanonicalUtcTimestamp(observation.occurredAt)
+    || !isRecordSource(observation.source)
+  ) {
+    throw new Error('Health observation does not conform to Sreva HealthObservation v1 schema.');
   }
 }
 
