@@ -5,11 +5,10 @@ import { Card } from '../../../components/ui/Card';
 import { StatusChip } from '../../../components/ui/StatusChip';
 import { VaultLocalOnlyPanel } from '../../../components/vault/VaultLocalOnlyPanel';
 import { workspaceSections, workspaceTitles } from '../../../content/routes';
-import {
-  AccountFreeWorkspace,
-  TASK10_CORE_SECTIONS,
-  type Task10CoreSection,
-} from '../../../features/core/AccountFreeWorkspace';
+import { AccountFreeWorkspace } from '../../../features/core/AccountFreeWorkspace';
+
+const TASK10_CORE_SECTIONS = ['home', 'today', 'log', 'calendar', 'cycle'] as const;
+type Task10CoreSection = (typeof TASK10_CORE_SECTIONS)[number];
 
 export function generateStaticParams() {
   return workspaceSections.map((section) => ({ section }));
