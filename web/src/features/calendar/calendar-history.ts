@@ -7,21 +7,38 @@ export type YearHistoryGroup = {
 };
 
 export class CalendarHistory {
-  constructor(private readonly repository: CycleRepository) {
-    void this.repository;
-  }
+  constructor(private readonly repository: CycleRepository) {}
 
   async month(year: number, month: number): Promise<PeriodEpisode[]> {
-    void year;
-    void month;
-    throw new Error('Task 10 calendar history not implemented.');
+    if (!Number.isInteger(month) || month < 1 || month > 12) {
+      throw new Error(`Invalid calendar month: ${month}`);
+    }
+
+    const periods = await this.repository.listPeriods();
+    return periods
+      .filter((period) => {
+        const start = new Date(period.start);
+        return start.getUTCFullYear() === year && start.getUTCMonth() + 1 === month;
+      })
+      .reverse();
   }
 
   async timeline(): Promise<PeriodEpisode[]> {
-    throw new Error('Task 10 calendar history not implemented.');
+    return (await this.repository.listPeriods()).reverse();
   }
 
   async year(): Promise<YearHistoryGroup[]> {
-    throw new Error('Task 10 calendar history not implemented.');
+    const groups = new Map<number, PeriodEpisode[]>();
+
+    for (const period of await this.repository.listPeriods()) {
+      const year = new Date(period.start).getUTCFullYear();
+      const periods = groups.get(year) ?? [];
+      periods.push(period);
+      groups.set(year, periods);
+    }
+
+    return [...groups.entries()]
+      .sort(([left], [right]) => right - left)
+      .map(([year, periods]) => ({ year, periods }));
   }
 }
