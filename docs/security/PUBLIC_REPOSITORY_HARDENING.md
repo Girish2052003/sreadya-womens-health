@@ -1,113 +1,119 @@
 # Sreva Public Repository Hardening State
 
-**Status date:** 15 September 2026; C2 scope amendment 16 September 2026  
+**Status date:** 15 September 2026  
+**C2 scope amendment:** 16 September 2026  
 **Maintainer:** Girish Nallan Chakravathy  
 **Canonical repository:** `Girish2052003/sreva-womens-health`  
 **Authoritative branch:** `main`
 
-I maintain Sreva as a public source repository while preserving the product's local-first privacy model. Public source visibility does not give the operator access to reproductive-health data.
+> **C2 preservation note:** The complete public-repository controls established on 15 September are preserved below. C2 extends their scope to future Web/PWA/shared-contract/sync-service work; it does not remove the operational details or weaken the native release boundary.
 
-For the **currently implemented `1.0.0+1` mobile baseline**, menstrual and reproductive-health data remains device-local except when the user explicitly chooses an operating-system health integration, export, or encrypted backup path.
+I maintain Sreva as a public source repository while preserving the product's local-first privacy model. Making the source visible does not change Sreva's health-data architecture: menstrual and reproductive-health data remains device-local unless the user explicitly chooses an operating-system health integration, export, or encrypted backup path.
 
-The approved C2 architecture now also permits a **future optional E2EE continuity layer** across Android, iOS and Web/PWA. That future service may receive ciphertext plus minimum operational metadata but must not receive readable health content or possess the health-vault decryption key. This public-repository hardening document does not claim that sync is already implemented or shipping.
+This document records the repository-level controls that must remain intact so future maintenance does not accidentally weaken the release boundary.
 
-This file records repository-level controls that must remain intact so maintenance does not accidentally weaken either the current release boundary or future C2 security requirements.
-
-## Cross-platform authority boundary
-
-The authoritative product architecture is `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`. Android, iOS and Web/PWA are equal first-class clients. Repository hardening must protect all of them without weakening the existing native gates.
-
-The existing Flutter/mobile code and release pipelines remain the current implemented baseline. Web/PWA/shared-contract/sync-service code is introduced only through the approved C2 implementation plan.
+> **C2 interpretation:** the statement above describes the currently implemented `1.0.0+1` mobile data flow. The approved future C2 architecture may add optional E2EE continuity in which authorized clients encrypt health content before upload and Sreva infrastructure stores only ciphertext plus minimum operational metadata without the health-vault decryption key. That future flow is not active merely because it is documented.
 
 ## Hardened workflow boundary
 
-The normal `Sreva CI` workflow is currently verification-only for installable native application binaries. It may compile, test, sign with disposable CI-only keys, and verify Android APK/AAB files, and it may compile the iOS application without production codesigning. It must not upload those ordinary installable CI builds as public Actions artifacts.
+The normal `Sreva CI` workflow is verification-only for installable application binaries. It may compile, test, sign with disposable CI-only keys, and verify Android APK/AAB files, and it may compile the iOS application without production codesigning. It must not upload those installable CI builds as public Actions artifacts.
 
 Normal CI may publish non-secret verification evidence such as the CycloneDX SBOM and `pubspec.lock`.
 
 The Android production and family-preview workflows are separate, manually dispatched release paths. They are guarded so release jobs run only in the canonical repository on `refs/heads/main`. Both release paths use environment-scoped secrets, disable persisted checkout credentials, and remove decoded keystores and plaintext release staging material in an `always()` cleanup step.
 
-Future Web/Pages workflows must use only the minimum permissions needed for static deployment. Static browser bundles must never receive sync-service credentials, SMS/email provider secrets, recovery keys, vault secrets, signing secrets, or administrator credentials.
-
 ## Public artifact boundary
 
 A public repository makes Actions metadata and artifacts more visible, so signed Android release files are not uploaded as plaintext Actions artifacts.
 
-Before upload, each controlled Android release workflow packages its APK/AAB, internal SHA-256 checksums, SBOM, and lockfile into a tar archive and encrypts that archive with AES-256-CBC using PBKDF2 and 200,000 iterations. Only the encrypted `.tar.gz.enc` payload is uploaded.
+Before upload, each controlled release workflow packages its APK/AAB, internal SHA-256 checksums, SBOM, and lockfile into a tar archive and encrypts that archive with AES-256-CBC using PBKDF2 and 200,000 iterations. Only the encrypted `.tar.gz.enc` payload is uploaded.
 
-Required encryption secrets are intentionally absent from Git:
+The required encryption secrets are intentionally absent from Git:
 
 - production environment: `SREVA_PRODUCTION_ARTIFACT_PASSWORD`
 - family-preview environment: `SREVA_PREVIEW_ARTIFACT_PASSWORD`
 
-Existing Android signing secrets remain environment-scoped and must never be copied into issues, commits, logs, documentation, or chat transcripts.
+The existing Android signing secrets also remain environment-scoped and must never be copied into issues, commits, logs, documentation, or chat transcripts.
 
-Authorized local decryption uses the separately held artifact password. Password values are never documented here.
+To decrypt an authorized downloaded production payload locally, the maintainer can place the production artifact password in a local environment variable and run an equivalent command to:
+
+```bash
+openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 \
+  -in sreva-1.0.0+1-production-release.tar.gz.enc \
+  -out sreva-1.0.0+1-production-release.tar.gz \
+  -pass env:SREVA_PRODUCTION_ARTIFACT_PASSWORD
+```
+
+Use the corresponding preview password variable for the family-preview payload. Password values are never documented here.
 
 ## Supply-chain controls
 
-GitHub Actions dependencies in `.github/workflows/` are pinned to immutable 40-character commit SHAs. Human-readable major-version comments are documentation only. Upgrades deliberately update the pinned SHA and pass hardening regression tests.
+GitHub Actions dependencies in `.github/workflows/` are pinned to immutable 40-character commit SHAs. Human-readable major-version comments are retained only as documentation. A version upgrade must deliberately update the pinned SHA and pass the hardening regression tests.
 
-Workflow token permissions remain least-privilege. A future workflow must not request broader permissions unless necessary, separately reviewed, and documented.
+Workflow token permissions are kept at `contents: read`. A future workflow must not request broader permissions unless that permission is necessary, separately reviewed, and documented.
 
-Public pull requests must never receive release-signing, artifact-encryption, backend, or account-provider secrets. Release workflows remain environment-scoped.
-
-C2 implementation adds separate Web/npm, shared-contract, and later Go/backend dependency/SBOM/security gates. These are additive; they do not replace existing mobile controls.
+Public pull requests must never be given release-signing or artifact-encryption secrets. Release workflows remain `workflow_dispatch`-only and environment-scoped.
 
 ## Machine-enforced non-regression
 
-`verification/reference/test_public_repository_hardening.py` currently checks the native public-repository security boundary, including that:
+`verification/reference/test_public_repository_hardening.py` checks the public-repository security boundary. Among other invariants, it verifies that:
 
-- normal CI does not publish ordinary installable application artifacts;
+- normal CI does not publish installable application artifacts;
 - external Actions are commit-SHA pinned;
 - controlled Android release workflows are canonical-repository/main-only;
 - checkout credentials do not persist in those release workflows;
 - decoded keystores are cleaned up even after failure;
-- signed public Actions release payloads are encrypted before upload; and
-- this public security posture is documented from `README.md` and `SECURITY.md`.
+- signed public Actions payloads are encrypted before upload; and
+- this public security posture remains documented from both `README.md` and `SECURITY.md`.
 
-During C2 implementation, equivalent tests must be extended for Web/Pages and any sync-service workflows, including browser-bundle secret exclusion and least-privilege deployment permissions.
+The existing Sreva verification suite remains authoritative for product behavior, distribution identity, privacy, release closure, and the worldwide-v1 capability contract. Repository hardening must not weaken or bypass those checks.
 
-The historical 22-family mobile traceability remains valid evidence for its recorded mobile scope. C2 product closure uses the newer 258-ID cross-platform traceability; the historical mobile closure must not be mistaken for Web/E2EE closure.
+## Deliberate non-changes
 
-## Deliberate non-changes in this documentation alignment
-
-This architecture/documentation reconciliation does **not** change:
+This hardening does **not** change:
 
 - Sreva's Flutter product code in `lib/`;
 - Android native capability templates in `platform_templates/android/`;
 - iOS native capability templates in `platform_templates/ios/`;
 - production package identity `com.sreva.health.sreva`;
 - family-preview package identity `com.sreva.health.sreva.preview`;
-- current `1.0.0+1` local-only runtime data flow;
-- repository dedication/provenance; or
-- v1 wellness/tracking regulatory boundary.
+- the local-sovereign health-data architecture;
+- the repository dedication/provenance; or
+- the v1 wellness/tracking boundary.
 
-It **does** clarify that the future C2 product extends the local-sovereign core with optional ciphertext-only E2EE continuity, subject to separate protocol, implementation, privacy and release gates.
-
-No software license is added by this security change. Public visibility alone is not a grant of rights beyond any license later explicitly added.
+No software license is added by this security change. Public visibility alone should not be interpreted as a grant of rights beyond any license that may later be explicitly added to the repository.
 
 ## GitHub settings outside version-controlled files
 
-Repository settings are not fully enforceable from source. The hardening review reported `main` as unprotected and no repository rulesets at that time. Keep the following as explicit administration requirements:
+Repository settings are not fully enforceable from source files. At the time this hardening pass began, GitHub reported `main` as unprotected and reported no repository rulesets. The maintainer should therefore keep the following settings as explicit repository-administration requirements:
 
-1. Protect `main` or create an equivalent ruleset so PRs and required Sreva CI checks gate merges.
-2. Keep the default Actions `GITHUB_TOKEN` read-only unless a workflow has a reviewed need for write access.
-3. Do not allow fork-originated workflows to receive repository/environment secrets.
-4. Enable secret scanning and push protection where available.
-5. Keep `android-production` and `android-family-preview` environments restricted to intentional release use, with required reviewers where practical.
-6. Add equivalent environment/secret separation for future sync-service deployment; static Web/Pages deployment must not share those secrets.
+1. Protect `main` or create an equivalent repository ruleset so pull requests and required Sreva CI checks gate merges.
+2. Keep the default Actions `GITHUB_TOKEN` permission read-only unless a workflow has a reviewed need for write access.
+3. Do not allow fork-originated workflows to receive repository or environment secrets.
+4. Enable GitHub secret scanning and push protection where the account/repository plan makes those controls available.
+5. Keep the `android-production` and `android-family-preview` environments restricted to intentional release use, and add required-reviewer protection when practical.
 
 ## Maintenance rule
 
-Before changing release workflows, signing configuration, repository visibility, artifact handling, CI permissions, Web deployment, identity/sync infrastructure, or recovery handling, read this file together with:
+Before changing release workflows, signing configuration, repository visibility, artifact handling, or CI permissions, read this file together with `SECURITY.md`, `docs/verification/ANDROID_FORMAL_CLOSURE.md`, and `docs/android/DISTRIBUTION_IDENTITY_BOUNDARY.md`.
 
-- `SECURITY.md`;
-- `PRIVACY.md`;
-- `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`;
-- `docs/verification/ANDROID_FORMAL_CLOSURE.md`; and
-- the applicable platform release runbook.
+If a proposed change would expose signing material, publish plaintext signed binaries from routine public CI, weaken the canonical release guard, broaden workflow token privileges without justification, or bypass the Sreva verification gates, treat it as a release-blocking regression rather than a convenience change.
 
-Treat exposure of signing material, backend/recovery secrets, plaintext signed binaries from routine public CI, readable health payloads, weakened canonical release guards, unjustified workflow permissions, or bypassed Sreva verification gates as release-blocking regressions.
+## C2 cross-platform hardening extension
+
+When `web/`, `shared/`, or `sync_service/` is introduced under the approved C2 implementation programme, all controls above remain in force and the following are additive:
+
+1. **Static Web/Pages secrets:** anything in the browser bundle is public. Pages/static-build jobs must never receive sync-service credentials, SMS/email provider secrets, vault/recovery secrets, administrator keys, or native signing secrets.
+2. **Least-privilege Pages deployment:** static Pages deployment may use the minimum reviewed `pages: write` / `id-token: write` permissions only in the deployment job; unrelated jobs remain least-privilege.
+3. **Pull-request isolation:** fork/PR jobs must not receive production backend, verification-provider, release, recovery, or artifact-encryption secrets.
+4. **Backend environment separation:** future development/staging/production sync environments are separate. Real production reproductive-health records/ciphertext must not be copied into test/staging as convenient fixtures; tests use synthetic or explicitly created test accounts/data.
+5. **Browser privacy gates:** CI expands to catch plaintext health data in URLs, caches, service-worker storage, logs, analytics, and browser fixtures; no session replay or health-payload telemetry is introduced.
+6. **Web/backend supply chain:** npm/Go lock/dependency/SBOM/vulnerability/license/static-analysis gates are additive to current Flutter/mobile checks.
+7. **Protocol review:** production sync/recovery cryptography is prohibited until the versioned E2EE key hierarchy/protocol, threat model, and cross-platform interoperability vectors pass the dedicated security gate.
+8. **C2 traceability:** the historical 22-family verifier remains mobile-baseline evidence. Cross-platform completion requires the 258-ID registry with explicit implemented/verified/adapted/N/A evidence rather than silently treating mobile closure as Web/sync closure.
+9. **No plaintext health backend:** compromise of a future sync database must not reveal readable menstrual/reproductive-health content by design; server schema/API must operate on opaque identifiers, versions, ciphertext, wrapped key material, and minimum operational metadata only.
+10. **Recovery separation:** email/SMS account recovery and operational provider data must never create a hidden server-side path to decrypt an old health vault.
+
+Before changing Web deployment, identity/sync infrastructure, recovery handling, or cross-platform cryptography, read this file together with `SECURITY.md`, `PRIVACY.md`, the C2 architecture constitution, the applicable release runbook, and the E2EE threat/protocol documents created by the implementation gate.
 
 — **Girish Nallan Chakravathy**
