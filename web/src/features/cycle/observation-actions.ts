@@ -8,24 +8,37 @@ export class ObservationActions {
   constructor(
     private readonly repository: CycleRepository,
     private readonly createId: () => string = () => crypto.randomUUID(),
-  ) {
-    void this.repository;
-    void this.createId;
-  }
+  ) {}
 
   async logObservation(draft: ObservationDraft): Promise<string> {
-    void draft;
-    throw new Error('Task 10 observation actions not implemented.');
+    const id = this.createId();
+    await this.repository.saveObservation({
+      id,
+      ...draft,
+      source: 'app',
+    });
+    return id;
   }
 
   async editObservation(id: string, edit: ObservationEdit): Promise<void> {
-    void id;
-    void edit;
-    throw new Error('Task 10 observation actions not implemented.');
+    const observation = await this.requireObservation(id);
+    await this.repository.saveObservation({
+      ...observation,
+      ...edit,
+      id,
+      source: observation.source,
+    });
   }
 
   async deleteObservation(id: string): Promise<void> {
-    void id;
-    throw new Error('Task 10 observation actions not implemented.');
+    await this.repository.deleteObservation(id);
+  }
+
+  private async requireObservation(id: string): Promise<HealthObservation> {
+    const observation = (await this.repository.listObservations()).find((candidate) => candidate.id === id);
+    if (observation === undefined) {
+      throw new Error(`Observation not found: ${id}`);
+    }
+    return observation;
   }
 }
