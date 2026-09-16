@@ -36,3 +36,17 @@ test('rejects inclusive overlap with another period episode', () => {
     ),
   ).toThrowError('Period episodes cannot overlap without an explicit merge.');
 });
+
+test('rejects non-UTC period timestamps and unsupported provenance', () => {
+  expect(() => assertValidPeriodEpisode({
+    id: 'period-offset',
+    start: '2026-09-16T08:00:00+03:00',
+    source: 'app',
+  })).toThrowError('Period episode does not conform to Sreva PeriodEpisode v1 schema.');
+
+  expect(() => assertValidPeriodEpisode({
+    id: 'period-source',
+    start: '2026-09-16T08:00:00.000Z',
+    source: 'remoteApi',
+  })).toThrowError('Period episode does not conform to Sreva PeriodEpisode v1 schema.');
+});
