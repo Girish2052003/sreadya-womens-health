@@ -6,10 +6,12 @@ import 'package:sreva/features/predictions/domain/cycle_predictor.dart';
 
 void main() {
   test('prediction-v1 matches every shared golden vector', () {
-    final file = File(
-      'shared/prediction/test-vectors/prediction-v1.json',
+    final file = File('shared/prediction/test-vectors/prediction-v1.json');
+    expect(
+      file.existsSync(),
+      isTrue,
+      reason: 'shared prediction vectors missing',
     );
-    expect(file.existsSync(), isTrue, reason: 'shared prediction vectors missing');
 
     final payload = jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
     expect(payload['version'], 'prediction-v1');

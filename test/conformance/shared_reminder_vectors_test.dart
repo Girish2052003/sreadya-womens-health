@@ -8,7 +8,11 @@ import 'package:sreva/features/reminders/domain/reminder_policy.dart';
 void main() {
   test('reminder policy matches every shared golden vector', () {
     final file = File('shared/reminders/test-vectors/reminder-v1.json');
-    expect(file.existsSync(), isTrue, reason: 'shared reminder vectors missing');
+    expect(
+      file.existsSync(),
+      isTrue,
+      reason: 'shared reminder vectors missing',
+    );
 
     final payload = jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
     expect(payload['version'], 'reminder-v1');
@@ -50,10 +54,7 @@ void main() {
           reason: vector['id'] as String,
         );
         expect(actual[index].privacy.name, expected[index]['privacy']);
-        expect(
-          actual[index].sourcePredictionId,
-          vector['sourcePredictionId'],
-        );
+        expect(actual[index].sourcePredictionId, vector['sourcePredictionId']);
       }
     }
   });
@@ -73,9 +74,7 @@ void main() {
         daysBefore: (vector['daysBefore'] as num).toInt(),
         hour: 8,
         minute: 0,
-        privacy: NotificationPrivacy.values.byName(
-          vector['privacy'] as String,
-        ),
+        privacy: NotificationPrivacy.values.byName(vector['privacy'] as String),
       );
       expect(planner.notificationBody(plan), vector['body']);
     }
