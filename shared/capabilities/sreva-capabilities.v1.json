@@ -1,0 +1,5728 @@
+{
+  "contract": "SREVA C2 Capability Registry",
+  "version": 1,
+  "source": "docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md#section-1--master-capability-contract",
+  "launch_requirement_count": 258,
+  "launch_family_count": 18,
+  "families": [
+    {
+      "prefix": "CYC",
+      "name": "Cycle and periods",
+      "count": 15
+    },
+    {
+      "prefix": "PRED",
+      "name": "Predictions",
+      "count": 14
+    },
+    {
+      "prefix": "REM",
+      "name": "Reminders",
+      "count": 24
+    },
+    {
+      "prefix": "LOG",
+      "name": "Daily logging",
+      "count": 26
+    },
+    {
+      "prefix": "REPRO",
+      "name": "Reproductive observations",
+      "count": 10
+    },
+    {
+      "prefix": "LIFE",
+      "name": "Life stages",
+      "count": 9
+    },
+    {
+      "prefix": "INS",
+      "name": "Insights",
+      "count": 16
+    },
+    {
+      "prefix": "RPT",
+      "name": "Reports",
+      "count": 13
+    },
+    {
+      "prefix": "INT",
+      "name": "Interaction / assistant",
+      "count": 9
+    },
+    {
+      "prefix": "PART",
+      "name": "Partner sharing",
+      "count": 10
+    },
+    {
+      "prefix": "HEALTH",
+      "name": "Health integrations",
+      "count": 9
+    },
+    {
+      "prefix": "A11Y",
+      "name": "Accessibility / worldwide",
+      "count": 15
+    },
+    {
+      "prefix": "PRIV",
+      "name": "Privacy",
+      "count": 21
+    },
+    {
+      "prefix": "VAULT",
+      "name": "Vault / backup / migration",
+      "count": 14
+    },
+    {
+      "prefix": "DIAG",
+      "name": "Diagnostics",
+      "count": 11
+    },
+    {
+      "prefix": "ID",
+      "name": "Identity / recovery",
+      "count": 13
+    },
+    {
+      "prefix": "SYNC",
+      "name": "E2EE sync / devices",
+      "count": 15
+    },
+    {
+      "prefix": "WEB",
+      "name": "Web / PWA",
+      "count": 14
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "CYC-001",
+      "name": "One-tap \"Period started today\"",
+      "family": "CYC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "CYC-002",
+      "name": "End current period",
+      "family": "CYC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "CYC-003",
+      "name": "Backdate or correct period dates",
+      "family": "CYC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "CYC-004",
+      "name": "Flow logging: spotting/light/medium/heavy",
+      "family": "CYC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "CYC-005",
+      "name": "Period-duration tracking",
+      "family": "CYC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "CYC-006",
+      "name": "Cycle-length tracking",
+      "family": "CYC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "CYC-007",
+      "name": "Previous-period history",
+      "family": "CYC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "CYC-008",
+      "name": "Irregular-cycle support",
+      "family": "CYC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "CYC-009",
+      "name": "Monthly calendar",
+      "family": "CYC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "CYC-010",
+      "name": "Timeline view",
+      "family": "CYC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "CYC-011",
+      "name": "Year view",
+      "family": "CYC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "CYC-012",
+      "name": "Historical editing",
+      "family": "CYC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "CYC-013",
+      "name": "Cycle/period notes",
+      "family": "CYC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "CYC-014",
+      "name": "Automatic cycle statistics",
+      "family": "CYC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "CYC-015",
+      "name": "Never force a 28-day-cycle assumption",
+      "family": "CYC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRED-001",
+      "name": "Next expected period",
+      "family": "PRED",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRED-002",
+      "name": "Expected period window",
+      "family": "PRED",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRED-003",
+      "name": "Prediction confidence",
+      "family": "PRED",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRED-004",
+      "name": "Cycle-length trend",
+      "family": "PRED",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRED-005",
+      "name": "Period-duration prediction",
+      "family": "PRED",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRED-006",
+      "name": "PMS window",
+      "family": "PRED",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRED-007",
+      "name": "Ovulation estimate where enabled",
+      "family": "PRED",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRED-008",
+      "name": "Fertile-window estimate where enabled",
+      "family": "PRED",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRED-009",
+      "name": "Automatic recalculation when health history changes",
+      "family": "PRED",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRED-010",
+      "name": "Wider uncertainty windows for irregular cycles",
+      "family": "PRED",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRED-011",
+      "name": "Prediction history",
+      "family": "PRED",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRED-012",
+      "name": "Algorithm version stored with prediction",
+      "family": "PRED",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRED-013",
+      "name": "Prediction input snapshot/reference",
+      "family": "PRED",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRED-014",
+      "name": "Prediction accuracy evaluation against outcomes",
+      "family": "PRED",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-001",
+      "name": "Default three-day-before-period reminder",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-002",
+      "name": "Optional seven-day reminder",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-003",
+      "name": "Optional one-day reminder",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-004",
+      "name": "Expected-period-day reminder",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-005",
+      "name": "Late-period reminder",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-006",
+      "name": "Medication reminders",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-007",
+      "name": "Contraceptive reminders",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-008",
+      "name": "Supplement reminders",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-009",
+      "name": "Ovulation-test reminders",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-010",
+      "name": "Pregnancy-test reminders",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-011",
+      "name": "User-selected notification time",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-012",
+      "name": "Quiet hours",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-013",
+      "name": "Snooze",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-014",
+      "name": "\"Period started\" notification action where supported",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-015",
+      "name": "Time-zone-aware scheduling",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-016",
+      "name": "Daylight-saving-aware scheduling",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-017",
+      "name": "Automatic rescheduling when prediction changes",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-018",
+      "name": "Notification-permission health check",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-019",
+      "name": "Discreet notification contents",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-020",
+      "name": "Detailed notification contents only when opted in",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-021",
+      "name": "Reminder Health dashboard",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-022",
+      "name": "Next scheduled reminder visibility",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-023",
+      "name": "Rebuild plan after relevant reboot/time/update/permission events where supported",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REM-024",
+      "name": "Adaptive Android/iOS/PWA/browser delivery mechanism",
+      "family": "REM",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-001",
+      "name": "Cramps",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-002",
+      "name": "Headache/migraine",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-003",
+      "name": "Back pain",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-004",
+      "name": "Breast tenderness",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-005",
+      "name": "Bloating",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-006",
+      "name": "Acne",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-007",
+      "name": "Nausea",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-008",
+      "name": "Digestion",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-009",
+      "name": "Fatigue",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-010",
+      "name": "Dizziness",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-011",
+      "name": "Appetite/cravings",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-012",
+      "name": "Sleep",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-013",
+      "name": "Energy",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-014",
+      "name": "Stress",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-015",
+      "name": "Mood",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-016",
+      "name": "Anxiety/irritability",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-017",
+      "name": "Libido",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-018",
+      "name": "Vaginal discharge",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-019",
+      "name": "Cervical mucus",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-020",
+      "name": "Basal body temperature",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-021",
+      "name": "Weight",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-022",
+      "name": "Exercise",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-023",
+      "name": "Water",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-024",
+      "name": "Custom symptoms",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-025",
+      "name": "Severity scales",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LOG-026",
+      "name": "Notes",
+      "family": "LOG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REPRO-001",
+      "name": "Ovulation-test recording",
+      "family": "REPRO",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REPRO-002",
+      "name": "Pregnancy-test recording",
+      "family": "REPRO",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REPRO-003",
+      "name": "Basal-temperature fertility observations",
+      "family": "REPRO",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REPRO-004",
+      "name": "Cervical-mucus observations",
+      "family": "REPRO",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REPRO-005",
+      "name": "Sexual-activity logging",
+      "family": "REPRO",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REPRO-006",
+      "name": "Protection-used logging",
+      "family": "REPRO",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REPRO-007",
+      "name": "Contraception context",
+      "family": "REPRO",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REPRO-008",
+      "name": "Fertility observations",
+      "family": "REPRO",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REPRO-009",
+      "name": "Pregnancy-planning context",
+      "family": "REPRO",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "REPRO-010",
+      "name": "No certified avoid-pregnancy claim in initial release",
+      "family": "REPRO",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LIFE-001",
+      "name": "Regular-cycle mode",
+      "family": "LIFE",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LIFE-002",
+      "name": "Trying-to-conceive mode",
+      "family": "LIFE",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LIFE-003",
+      "name": "Pregnancy mode",
+      "family": "LIFE",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LIFE-004",
+      "name": "Postpartum mode",
+      "family": "LIFE",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LIFE-005",
+      "name": "Breastfeeding context",
+      "family": "LIFE",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LIFE-006",
+      "name": "Perimenopause mode",
+      "family": "LIFE",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LIFE-007",
+      "name": "Menopause-transition tracking",
+      "family": "LIFE",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LIFE-008",
+      "name": "Hormonal-contraception context",
+      "family": "LIFE",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "LIFE-009",
+      "name": "Changing mode never deletes previous history",
+      "family": "LIFE",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-001",
+      "name": "Average cycle length",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-002",
+      "name": "Average period duration",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-003",
+      "name": "Cycle variation",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-004",
+      "name": "Shortest cycle",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-005",
+      "name": "Longest cycle",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-006",
+      "name": "Flow patterns",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-007",
+      "name": "Symptom trends",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-008",
+      "name": "PMS patterns",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-009",
+      "name": "Mood trends",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-010",
+      "name": "Pain trends",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-011",
+      "name": "Sleep correlations",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-012",
+      "name": "Historical graphs",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-013",
+      "name": "Personal pattern observations",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-014",
+      "name": "Explain where an insight came from",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-015",
+      "name": "Never invent medical explanations",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INS-016",
+      "name": "Prediction-accuracy insight/history",
+      "family": "INS",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "RPT-001",
+      "name": "Select report date range",
+      "family": "RPT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "RPT-002",
+      "name": "Select included categories",
+      "family": "RPT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "RPT-003",
+      "name": "Generate concise cycle-history report",
+      "family": "RPT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "RPT-004",
+      "name": "Period dates",
+      "family": "RPT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "RPT-005",
+      "name": "Flow history",
+      "family": "RPT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "RPT-006",
+      "name": "Pain/symptom history",
+      "family": "RPT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "RPT-007",
+      "name": "Temperature/ovulation observations",
+      "family": "RPT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "RPT-008",
+      "name": "Optional notes",
+      "family": "RPT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "RPT-009",
+      "name": "CSV export",
+      "family": "RPT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "RPT-010",
+      "name": "PDF export",
+      "family": "RPT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "RPT-011",
+      "name": "Preview report before sharing",
+      "family": "RPT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "RPT-012",
+      "name": "Generate report locally",
+      "family": "RPT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "RPT-013",
+      "name": "User decides exactly what is exported",
+      "family": "RPT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INT-001",
+      "name": "Tap-based interaction",
+      "family": "INT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INT-002",
+      "name": "Text interaction",
+      "family": "INT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INT-003",
+      "name": "Voice interaction where supported",
+      "family": "INT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INT-004",
+      "name": "Natural-language command box",
+      "family": "INT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INT-005",
+      "name": "Local structured intent extraction",
+      "family": "INT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INT-006",
+      "name": "Confirmation when ambiguous",
+      "family": "INT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INT-007",
+      "name": "Ask questions about personal history",
+      "family": "INT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INT-008",
+      "name": "Create reminders using natural language",
+      "family": "INT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "INT-009",
+      "name": "Search historical records",
+      "family": "INT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PART-001",
+      "name": "Completely opt-in partner mode",
+      "family": "PART",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PART-002",
+      "name": "Granular sharing grant",
+      "family": "PART",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PART-003",
+      "name": "Share predicted period",
+      "family": "PART",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PART-004",
+      "name": "Share cycle phase",
+      "family": "PART",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PART-005",
+      "name": "Share selected reminders",
+      "family": "PART",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PART-006",
+      "name": "Share selected wellness status",
+      "family": "PART",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PART-007",
+      "name": "Sensitive categories excluded by default",
+      "family": "PART",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PART-008",
+      "name": "Revoke access immediately",
+      "family": "PART",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PART-009",
+      "name": "Manual/zero-backend sharing path",
+      "family": "PART",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PART-010",
+      "name": "E2EE live-sharing transport interface",
+      "family": "PART",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "HEALTH-001",
+      "name": "Apple HealthKit integration",
+      "family": "HEALTH",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "na",
+        "ios": "full",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "platform-adapter",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "HEALTH-002",
+      "name": "Android Health Connect integration",
+      "family": "HEALTH",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "na",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "platform-adapter",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "HEALTH-003",
+      "name": "Import supported reproductive-health records",
+      "family": "HEALTH",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "platform-adapter",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "HEALTH-004",
+      "name": "Export supported records where platform permits",
+      "family": "HEALTH",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "platform-adapter",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "HEALTH-005",
+      "name": "Explicit granular permissions",
+      "family": "HEALTH",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "platform-adapter",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "HEALTH-006",
+      "name": "Record provenance/source tracking",
+      "family": "HEALTH",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "platform-adapter",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "HEALTH-007",
+      "name": "External record ID/revision tracking",
+      "family": "HEALTH",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "platform-adapter",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "HEALTH-008",
+      "name": "Duplicate prevention/deduplication",
+      "family": "HEALTH",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "platform-adapter",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "HEALTH-009",
+      "name": "Sreva vault remains authoritative application datastore",
+      "family": "HEALTH",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "platform-adapter",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "A11Y-001",
+      "name": "Dark mode",
+      "family": "A11Y",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "product-accessibility",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "A11Y-002",
+      "name": "Light mode",
+      "family": "A11Y",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "product-accessibility",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "A11Y-003",
+      "name": "Dynamic text/scaling",
+      "family": "A11Y",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "product-accessibility",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "A11Y-004",
+      "name": "Screen-reader support",
+      "family": "A11Y",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "product-accessibility",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "A11Y-005",
+      "name": "Colour-blind-safe states",
+      "family": "A11Y",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "product-accessibility",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "A11Y-006",
+      "name": "One-handed mobile interaction",
+      "family": "A11Y",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "product-accessibility",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "A11Y-007",
+      "name": "Low-literacy/easy-language mode",
+      "family": "A11Y",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "product-accessibility",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "A11Y-008",
+      "name": "RTL languages",
+      "family": "A11Y",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "product-accessibility",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "A11Y-009",
+      "name": "Localization infrastructure",
+      "family": "A11Y",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "product-accessibility",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "A11Y-010",
+      "name": "Metric/imperial settings",
+      "family": "A11Y",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "product-accessibility",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "A11Y-011",
+      "name": "Locale-specific dates",
+      "family": "A11Y",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "product-accessibility",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "A11Y-012",
+      "name": "12/24-hour time",
+      "family": "A11Y",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "product-accessibility",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "A11Y-013",
+      "name": "Offline operation",
+      "family": "A11Y",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "product-accessibility",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "A11Y-014",
+      "name": "Poor-network resilience",
+      "family": "A11Y",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "product-accessibility",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "A11Y-015",
+      "name": "High-contrast presentation",
+      "family": "A11Y",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "product-accessibility",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-001",
+      "name": "Biometric app lock",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-002",
+      "name": "PIN fallback",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-003",
+      "name": "Hide sensitive notification contents",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-004",
+      "name": "Offline-only operation",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-005",
+      "name": "Full no-account mode",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-006",
+      "name": "Delete individual records",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-007",
+      "name": "Delete account",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-008",
+      "name": "Export all user data",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-009",
+      "name": "Review permissions",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-010",
+      "name": "Review connected devices",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-011",
+      "name": "Review partner access",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-012",
+      "name": "Revoke partner access",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-013",
+      "name": "Session/device management",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-014",
+      "name": "Automatic lock",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-015",
+      "name": "App-switcher preview protection",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-016",
+      "name": "Clipboard restrictions where supported",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-017",
+      "name": "Sensitive-screen protection where supported",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "adapted",
+        "pwa": "adapted"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-018",
+      "name": "Maximum/Balanced/Detailed notification privacy",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-019",
+      "name": "\"Why is this stored?\" transparency",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-020",
+      "name": "No health payload in ordinary logs/analytics",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "PRIV-021",
+      "name": "No advertising profile from reproductive-health data",
+      "family": "PRIV",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "VAULT-001",
+      "name": "Encrypted local health vault",
+      "family": "VAULT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "VAULT-002",
+      "name": "Device-protected encryption key",
+      "family": "VAULT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "VAULT-003",
+      "name": "Encrypted CycleVault backup",
+      "family": "VAULT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "VAULT-004",
+      "name": "Versioned backup format",
+      "family": "VAULT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "VAULT-005",
+      "name": "Backup integrity metadata",
+      "family": "VAULT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "VAULT-006",
+      "name": "User-selected backup destination",
+      "family": "VAULT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "VAULT-007",
+      "name": "Restore integrity validation",
+      "family": "VAULT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "VAULT-008",
+      "name": "Schema-compatibility validation",
+      "family": "VAULT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "VAULT-009",
+      "name": "Atomic restore",
+      "family": "VAULT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "VAULT-010",
+      "name": "Pre-migration snapshot",
+      "family": "VAULT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "VAULT-011",
+      "name": "Transactional database migration",
+      "family": "VAULT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "VAULT-012",
+      "name": "Rollback on migration failure",
+      "family": "VAULT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "VAULT-013",
+      "name": "Support users skipping application versions",
+      "family": "VAULT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "VAULT-014",
+      "name": "Health-vault integrity check",
+      "family": "VAULT",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "optional-e2ee",
+      "privacy_class": "health-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "DIAG-001",
+      "name": "User-generated sanitized diagnostic export",
+      "family": "DIAG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "operational-no-health-payload",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "DIAG-002",
+      "name": "Preview diagnostic report before sharing",
+      "family": "DIAG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "operational-no-health-payload",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "DIAG-003",
+      "name": "App version",
+      "family": "DIAG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "operational-no-health-payload",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "DIAG-004",
+      "name": "Database-schema version",
+      "family": "DIAG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "operational-no-health-payload",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "DIAG-005",
+      "name": "Prediction-engine version",
+      "family": "DIAG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "operational-no-health-payload",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "DIAG-006",
+      "name": "Reminder-engine version",
+      "family": "DIAG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "operational-no-health-payload",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "DIAG-007",
+      "name": "Health-adapter version/status",
+      "family": "DIAG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "operational-no-health-payload",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "DIAG-008",
+      "name": "Notification state",
+      "family": "DIAG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "operational-no-health-payload",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "DIAG-009",
+      "name": "Last migration status",
+      "family": "DIAG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "operational-no-health-payload",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "DIAG-010",
+      "name": "Integrity-check status",
+      "family": "DIAG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "operational-no-health-payload",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "DIAG-011",
+      "name": "Never include health payloads by default",
+      "family": "DIAG",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "required-core",
+      "sync": "not-required",
+      "privacy_class": "operational-no-health-payload",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "ID-001",
+      "name": "Full account-free Sreva experience",
+      "family": "ID",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "identity",
+      "privacy_class": "identity-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "ID-002",
+      "name": "Full account-based Sreva experience",
+      "family": "ID",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "identity",
+      "privacy_class": "identity-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "ID-003",
+      "name": "Email-only account permitted",
+      "family": "ID",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "identity",
+      "privacy_class": "identity-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "ID-004",
+      "name": "Mobile-number-only account permitted",
+      "family": "ID",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "identity",
+      "privacy_class": "identity-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "ID-005",
+      "name": "Email + mobile-number account permitted",
+      "family": "ID",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "identity",
+      "privacy_class": "identity-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "ID-006",
+      "name": "Mobile number remains optional",
+      "family": "ID",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "identity",
+      "privacy_class": "identity-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "ID-007",
+      "name": "Passkey setup/sign-in",
+      "family": "ID",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "adapted",
+        "ios": "adapted",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "identity",
+      "privacy_class": "identity-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "ID-008",
+      "name": "Trusted-device approval",
+      "family": "ID",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "adapted",
+        "ios": "adapted",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "identity",
+      "privacy_class": "identity-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "ID-009",
+      "name": "Emergency recovery key",
+      "family": "ID",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "identity",
+      "privacy_class": "identity-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "ID-010",
+      "name": "Email may recover account identity",
+      "family": "ID",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "identity",
+      "privacy_class": "identity-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "ID-011",
+      "name": "SMS may recover account identity",
+      "family": "ID",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "identity",
+      "privacy_class": "identity-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "ID-012",
+      "name": "Email/SMS alone cannot decrypt old vault",
+      "family": "ID",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "identity",
+      "privacy_class": "identity-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "ID-013",
+      "name": "Account-free and account modes remain equal-class",
+      "family": "ID",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "identity",
+      "privacy_class": "identity-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "SYNC-001",
+      "name": "End-to-end encrypted multi-device sync",
+      "family": "SYNC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "e2ee-continuity",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "SYNC-002",
+      "name": "Android ↔ iOS ↔ Web continuity",
+      "family": "SYNC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "e2ee-continuity",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "SYNC-003",
+      "name": "Server stores health content only as ciphertext",
+      "family": "SYNC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "e2ee-continuity",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "SYNC-004",
+      "name": "Encrypt locally before synchronization",
+      "family": "SYNC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "e2ee-continuity",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "SYNC-005",
+      "name": "Decrypt locally after synchronization",
+      "family": "SYNC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "e2ee-continuity",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "SYNC-006",
+      "name": "Trusted-device list",
+      "family": "SYNC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "e2ee-continuity",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "SYNC-007",
+      "name": "Rename trusted device",
+      "family": "SYNC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "e2ee-continuity",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "SYNC-008",
+      "name": "Remove/revoke device",
+      "family": "SYNC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "e2ee-continuity",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "SYNC-009",
+      "name": "Pause synchronization",
+      "family": "SYNC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "e2ee-continuity",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "SYNC-010",
+      "name": "Disable synchronization",
+      "family": "SYNC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "e2ee-continuity",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "SYNC-011",
+      "name": "Last successful sync state",
+      "family": "SYNC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "e2ee-continuity",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "SYNC-012",
+      "name": "Pending-change state",
+      "family": "SYNC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "e2ee-continuity",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "SYNC-013",
+      "name": "Deterministic/conflict-safe reconciliation",
+      "family": "SYNC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "e2ee-continuity",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "SYNC-014",
+      "name": "New-device approval/key transfer",
+      "family": "SYNC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "e2ee-continuity",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "SYNC-015",
+      "name": "Infrastructure cannot decrypt health vault",
+      "family": "SYNC",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "full",
+        "ios": "full",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "networked",
+      "sync": "e2ee-continuity",
+      "privacy_class": "security-sensitive",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "WEB-001",
+      "name": "Full browser-based Sreva client",
+      "family": "WEB",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "mixed",
+      "sync": "optional",
+      "privacy_class": "public-or-local-private",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "WEB-002",
+      "name": "Installable PWA",
+      "family": "WEB",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "mixed",
+      "sync": "optional",
+      "privacy_class": "public-or-local-private",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "WEB-003",
+      "name": "Standalone Home Screen/Desktop experience",
+      "family": "WEB",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "mixed",
+      "sync": "optional",
+      "privacy_class": "public-or-local-private",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "WEB-004",
+      "name": "Offline PWA application shell",
+      "family": "WEB",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "mixed",
+      "sync": "optional",
+      "privacy_class": "public-or-local-private",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "WEB-005",
+      "name": "Encrypted browser-local health vault",
+      "family": "WEB",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "mixed",
+      "sync": "optional",
+      "privacy_class": "public-or-local-private",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "WEB-006",
+      "name": "Web Push where supported",
+      "family": "WEB",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "mixed",
+      "sync": "optional",
+      "privacy_class": "public-or-local-private",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "WEB-007",
+      "name": "Browser/in-app reminder fallback",
+      "family": "WEB",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "mixed",
+      "sync": "optional",
+      "privacy_class": "public-or-local-private",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "WEB-008",
+      "name": "Easy iPhone PWA-install guidance",
+      "family": "WEB",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "mixed",
+      "sync": "optional",
+      "privacy_class": "public-or-local-private",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "WEB-009",
+      "name": "Easy Android/PWA-install guidance",
+      "family": "WEB",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "mixed",
+      "sync": "optional",
+      "privacy_class": "public-or-local-private",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "WEB-010",
+      "name": "Responsive desktop/tablet/mobile layouts",
+      "family": "WEB",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "mixed",
+      "sync": "optional",
+      "privacy_class": "public-or-local-private",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "WEB-011",
+      "name": "Shareable/deep-linkable public pages",
+      "family": "WEB",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "mixed",
+      "sync": "optional",
+      "privacy_class": "public-or-local-private",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "WEB-012",
+      "name": "Seamless public-site → private-workspace transition",
+      "family": "WEB",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "mixed",
+      "sync": "optional",
+      "privacy_class": "public-or-local-private",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "WEB-013",
+      "name": "Android download/store entry",
+      "family": "WEB",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "mixed",
+      "sync": "optional",
+      "privacy_class": "public-or-local-private",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "WEB-014",
+      "name": "Native iOS store entry when available",
+      "family": "WEB",
+      "launch_status": "contract",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "full",
+        "pwa": "full"
+      },
+      "offline": "mixed",
+      "sync": "optional",
+      "privacy_class": "public-or-local-private",
+      "tests_required": [
+        "contract",
+        "platform-conformance",
+        "privacy"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "FUT-001",
+      "name": "Apple Watch / Wear OS logging",
+      "family": "FUT",
+      "launch_status": "future",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "future-review",
+      "sync": "future-review",
+      "privacy_class": "future-review",
+      "tests_required": [
+        "design-review"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "FUT-002",
+      "name": "Home-screen widgets",
+      "family": "FUT",
+      "launch_status": "future",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "future-review",
+      "sync": "future-review",
+      "privacy_class": "future-review",
+      "tests_required": [
+        "design-review"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "FUT-003",
+      "name": "Siri / App Intents",
+      "family": "FUT",
+      "launch_status": "future",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "future-review",
+      "sync": "future-review",
+      "privacy_class": "future-review",
+      "tests_required": [
+        "design-review"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "FUT-004",
+      "name": "Android shortcuts",
+      "family": "FUT",
+      "launch_status": "future",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "future-review",
+      "sync": "future-review",
+      "privacy_class": "future-review",
+      "tests_required": [
+        "design-review"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "FUT-005",
+      "name": "Advanced secure AI wellness assistant",
+      "family": "FUT",
+      "launch_status": "future",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "future-review",
+      "sync": "future-review",
+      "privacy_class": "future-review",
+      "tests_required": [
+        "design-review"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "FUT-006",
+      "name": "Clinician portal",
+      "family": "FUT",
+      "launch_status": "future",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "future-review",
+      "sync": "future-review",
+      "privacy_class": "future-review",
+      "tests_required": [
+        "design-review"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "FUT-007",
+      "name": "Expanded family-planning features",
+      "family": "FUT",
+      "launch_status": "future",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "future-review",
+      "sync": "future-review",
+      "privacy_class": "future-review",
+      "tests_required": [
+        "design-review"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "FUT-008",
+      "name": "Clinician-reviewed educational library",
+      "family": "FUT",
+      "launch_status": "future",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "future-review",
+      "sync": "future-review",
+      "privacy_class": "future-review",
+      "tests_required": [
+        "design-review"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "FUT-009",
+      "name": "Regional healthcare resources",
+      "family": "FUT",
+      "launch_status": "future",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "future-review",
+      "sync": "future-review",
+      "privacy_class": "future-review",
+      "tests_required": [
+        "design-review"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "FUT-010",
+      "name": "On-device personalized ML",
+      "family": "FUT",
+      "launch_status": "future",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "future-review",
+      "sync": "future-review",
+      "privacy_class": "future-review",
+      "tests_required": [
+        "design-review"
+      ],
+      "marketing_eligible": false
+    },
+    {
+      "id": "FUT-011",
+      "name": "Research participation with separate explicit consent",
+      "family": "FUT",
+      "launch_status": "future",
+      "platforms": {
+        "android": "na",
+        "ios": "na",
+        "web": "na",
+        "pwa": "na"
+      },
+      "offline": "future-review",
+      "sync": "future-review",
+      "privacy_class": "future-review",
+      "tests_required": [
+        "design-review"
+      ],
+      "marketing_eligible": false
+    }
+  ]
+}
