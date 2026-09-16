@@ -18,4 +18,5 @@ export interface VaultPersistence {
   listRecords(): Promise<PersistedVaultRecord[]>;
   getStoredKey(): Promise<CryptoKey | null>;
   putStoredKey(key: CryptoKey): Promise<void>;
+  replaceRecordsAtomically?(removeIds: string[], replacements: PersistedVaultRecord[]): Promise<void>;
 }
