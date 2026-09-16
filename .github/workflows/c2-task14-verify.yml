@@ -38,6 +38,23 @@ jobs:
       - name: Install locked Web dependencies
         working-directory: web
         run: npm ci --ignore-scripts
-      - name: CycleVault v1 Web conformance RED/GREEN gate
+      - name: Lint
+        working-directory: web
+        run: npm run lint
+      - name: Strict TypeScript
+        working-directory: web
+        run: npm run typecheck
+      - name: CycleVault v1 Web conformance
         working-directory: web
         run: npm test -- --run src/crypto/cyclevault.conformance.test.ts
+      - name: Static export with CycleVault verification harness
+        working-directory: web
+        env:
+          NEXT_PUBLIC_SREVA_CYCLEVAULT_TEST_HARNESS: '1'
+        run: npm run build
+      - name: Install target browser engines
+        working-directory: web
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: CycleVault target-browser vector and resource proof
+        working-directory: web
+        run: npx playwright test e2e/cyclevault-browser.spec.ts
