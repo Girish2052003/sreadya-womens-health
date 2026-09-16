@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "contractStatus": "contract",
+  "authority": "docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md",
+  "purpose": "Cross-platform symbolic design contract. Exact colour values remain unfrozen until logo-informed WCAG contrast review.",
+  "colorRoles": [
+    {
+      "name": "sreva-crimson",
+      "category": "brand",
+      "intent": "Primary deep Sreva accent for high-emphasis brand moments.",
+      "review": "pending_contrast_review"
+    },
+    {
+      "name": "sreva-rose",
+      "category": "brand",
+      "intent": "Secondary warm Sreva accent.",
+      "review": "pending_contrast_review"
+    },
+    {
+      "name": "sreva-pink",
+      "category": "brand",
+      "intent": "Supporting expressive Sreva accent used with restraint.",
+      "review": "pending_contrast_review"
+    },
+    {
+      "name": "sreva-blush",
+      "category": "brand_surface",
+      "intent": "Soft supporting brand surface.",
+      "review": "pending_contrast_review"
+    },
+    {
+      "name": "sreva-pearl",
+      "category": "surface",
+      "intent": "Warm light surface role.",
+      "review": "pending_contrast_review"
+    },
+    {
+      "name": "sreva-ink",
+      "category": "content",
+      "intent": "High-emphasis content and text role.",
+      "review": "pending_contrast_review"
+    },
+    {
+      "name": "sreva-muted",
+      "category": "content",
+      "intent": "Lower-emphasis supporting content role.",
+      "review": "pending_contrast_review"
+    },
+    {
+      "name": "success",
+      "category": "semantic_state",
+      "intent": "Successful or completed state; never the only state signal.",
+      "review": "pending_contrast_review"
+    },
+    {
+      "name": "warning",
+      "category": "semantic_state",
+      "intent": "Warning or caution state; never the only state signal.",
+      "review": "pending_contrast_review"
+    },
+    {
+      "name": "danger",
+      "category": "semantic_state",
+      "intent": "Error, destructive, or safety-critical state; never the only state signal.",
+      "review": "pending_contrast_review"
+    },
+    {
+      "name": "info",
+      "category": "semantic_state",
+      "intent": "Informational state; never the only state signal.",
+      "review": "pending_contrast_review"
+    }
+  ],
+  "accessibility": {
+    "contrastTarget": "WCAG_2_2_AA",
+    "colorOnlyStateAllowed": false,
+    "exactColorValuesFrozen": false,
+    "worldwideTypographyRequired": true,
+    "largeTextAndZoomRequired": true
+  },
+  "spacing": {
+    "space.xs": 4,
+    "space.sm": 8,
+    "space.md": 16,
+    "space.lg": 24,
+    "space.xl": 32
+  },
+  "radius": {
+    "radius.sm": 8,
+    "radius.md": 12,
+    "radius.lg": 20,
+    "radius.pill": 999
+  },
+  "motion": {
+    "motion.instantMs": 0,
+    "motion.fastMs": 120,
+    "motion.standardMs": 200,
+    "motion.slowMs": 320,
+    "principle": "motion_explains_state_not_decoration",
+    "reducedMotionPolicy": "remove_nonessential_motion"
+  }
+}

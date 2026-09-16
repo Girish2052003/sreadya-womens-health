@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "contractStatus": "contract",
+  "authority": "docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md",
+  "purpose": "Initial Sreva product-claim boundary. This contract records what the current product programme may and may not claim; regulated functionality requires a separate future programme and validation path.",
+  "allowedInitialScope": [
+    "cycle_and_menstrual_health_tracking",
+    "wellness_observations",
+    "reminders",
+    "estimates_with_uncertainty",
+    "personal_history"
+  ],
+  "rules": [
+    {
+      "id": "REG-BOUNDARY-001",
+      "claim": "diagnosis",
+      "launchStatus": "forbidden_without_separate_regulated_programme",
+      "affirmativeClaimAllowed": false,
+      "statement": "Sreva observations and pattern summaries must not be presented as a medical diagnosis.",
+      "capabilityRefs": ["INS-013", "INS-014", "INS-015"]
+    },
+    {
+      "id": "REG-BOUNDARY-002",
+      "claim": "treatment_recommendation",
+      "launchStatus": "forbidden_without_separate_regulated_programme",
+      "affirmativeClaimAllowed": false,
+      "statement": "The initial Sreva programme must not present wellness tracking or personal-history output as a treatment recommendation.",
+      "capabilityRefs": ["INS-015", "RPT-012"]
+    },
+    {
+      "id": "REG-BOUNDARY-003",
+      "claim": "certified_contraception_effectiveness",
+      "launchStatus": "forbidden_without_separate_regulated_programme",
+      "affirmativeClaimAllowed": false,
+      "statement": "The initial release must not claim certified contraception effectiveness or present estimates as an avoid-pregnancy guarantee.",
+      "capabilityRefs": ["REPRO-010", "LIFE-008"]
+    },
+    {
+      "id": "REG-BOUNDARY-004",
+      "claim": "disease_prediction",
+      "launchStatus": "forbidden_without_separate_regulated_programme",
+      "affirmativeClaimAllowed": false,
+      "statement": "Cycle, symptom, and wellness patterns must not be marketed as disease prediction.",
+      "capabilityRefs": ["PRED-003", "INS-013", "INS-015"]
+    },
+    {
+      "id": "REG-BOUNDARY-005",
+      "claim": "clinical_fertility_guarantee",
+      "launchStatus": "forbidden_without_separate_regulated_programme",
+      "affirmativeClaimAllowed": false,
+      "statement": "Ovulation or fertile-window estimates must not be presented as a clinical fertility guarantee.",
+      "capabilityRefs": ["PRED-007", "PRED-008", "REPRO-008", "REPRO-009"]
+    }
+  ],
+  "principles": {
+    "observationIsDiagnosis": false,
+    "predictionUncertaintyMustBeShown": true,
+    "regulatedFunctionalityRequiresSeparateProgramme": true
+  }
+}

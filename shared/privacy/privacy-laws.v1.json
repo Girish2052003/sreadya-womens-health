@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "contractStatus": "contract",
+  "authority": "docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md",
+  "rules": [
+    {
+      "id": "PRIV-LAW-001",
+      "key": "account_free_equality",
+      "normative": true,
+      "statement": "Account-free Sreva remains a complete first-class health experience; account mode may add encrypted continuity and recovery convenience but not stronger core health features.",
+      "capabilityRefs": ["PRIV-005", "ID-001", "ID-002", "ID-013"]
+    },
+    {
+      "id": "PRIV-LAW-002",
+      "key": "local_health_intelligence",
+      "normative": true,
+      "statement": "Predictions, personal insights, interpretation, and reports remain client-side; remote synchronization infrastructure is not a health-intelligence engine.",
+      "capabilityRefs": ["PRED-001", "INS-013", "RPT-012", "SYNC-004", "SYNC-005"]
+    },
+    {
+      "id": "PRIV-LAW-003",
+      "key": "no_health_telemetry",
+      "normative": true,
+      "statement": "Sensitive reproductive-health values must not enter ordinary analytics, crash telemetry, debugging logs, or advertising profiles.",
+      "capabilityRefs": ["PRIV-020", "PRIV-021", "DIAG-011"]
+    },
+    {
+      "id": "PRIV-LAW-004",
+      "key": "ciphertext_only_optional_sync",
+      "normative": true,
+      "statement": "Optional synchronization encrypts sensitive health content on an authorized client before transmission; Sreva-operated infrastructure stores ciphertext plus only minimum operational metadata and cannot read the health content.",
+      "optional": true,
+      "serverReadableHealthContent": false,
+      "universalOperatorDecryptionSecretAllowed": false,
+      "capabilityRefs": ["SYNC-001", "SYNC-003", "SYNC-004", "SYNC-005"]
+    },
+    {
+      "id": "PRIV-LAW-005",
+      "key": "vault_recovery_boundary",
+      "normative": true,
+      "statement": "Email or SMS may recover account identity but must not independently decrypt old health history; vault recovery depends on an authorized trusted-device path or the user-held recovery key.",
+      "emailOrSmsAloneDecryptsOldVault": false,
+      "authorizedRecoveryFactors": ["trusted_device", "user_held_recovery_key"],
+      "identityRecoveryMayUse": ["passkey", "email", "sms"],
+      "capabilityRefs": ["ID-007", "ID-008", "ID-009", "ID-010", "ID-011", "ID-012"]
+    },
+    {
+      "id": "PRIV-LAW-006",
+      "key": "explicit_partner_permissions",
+      "normative": true,
+      "statement": "Partner sharing is completely opt-in, granular, and revocable; there is no automatic spouse or partner access model.",
+      "grantModel": "opt_in_granular_revocable",
+      "capabilityRefs": ["PART-001", "PART-002", "PART-007", "PART-008", "PRIV-011", "PRIV-012"]
+    },
+    {
+      "id": "PRIV-LAW-007",
+      "key": "explicit_health_platform_permissions",
+      "normative": true,
+      "statement": "HealthKit and Health Connect access is optional, granular, and explicit; Sreva's vault remains the authoritative application datastore.",
+      "permissionModel": "optional_granular_explicit",
+      "capabilityRefs": ["HEALTH-001", "HEALTH-002", "HEALTH-005", "HEALTH-009", "PRIV-009"]
+    }
+  ]
+}
