@@ -27,21 +27,21 @@
       "description": "Canonical transport timestamp encoded as UTC RFC3339."
     },
     "severity": {
-      "type": ["string", "null"],
-      "enum": ["mild", "moderate", "severe", null]
+      "type": "string",
+      "enum": ["mild", "moderate", "severe"]
     },
-    "numericValue": {"type": ["number", "null"]},
-    "unit": {"type": ["string", "null"]},
-    "label": {"type": ["string", "null"]},
-    "note": {"type": ["string", "null"]},
+    "numericValue": {"type": "number"},
+    "unit": {"type": "string"},
+    "label": {"type": "string"},
+    "note": {"type": "string"},
     "flowLevel": {
-      "type": ["string", "null"],
-      "enum": ["spotting", "light", "medium", "heavy", null]
+      "type": "string",
+      "enum": ["spotting", "light", "medium", "heavy"]
     },
     "source": {
       "type": "string",
       "enum": ["app", "healthKit", "healthConnect", "cycleVault"]
     },
-    "externalId": {"type": ["string", "null"]}
+    "externalId": {"type": "string"}
   }
 }
