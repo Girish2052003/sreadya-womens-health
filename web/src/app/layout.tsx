@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { AccessibilityBootstrap } from '../accessibility/AccessibilityBootstrap';
 import { PwaBootstrap } from '../components/pwa/PwaBootstrap';
 import './globals.css';
+import './accessibility.css';
 import './pwa.css';
 import './vault.css';
 
