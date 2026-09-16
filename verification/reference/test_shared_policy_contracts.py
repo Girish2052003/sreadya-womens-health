@@ -17,25 +17,30 @@ def _read(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def test_design_tokens_define_symbolic_cross_platform_roles_without_freezing_raw_colours() -> None:
+def test_design_tokens_define_approved_symbolic_roles_without_freezing_raw_colours() -> None:
     payload = _read(TOKENS)
     assert payload["version"] == 1
     roles = {entry["name"] for entry in payload["colorRoles"]}
     assert {
-        "brand.primary",
-        "brand.onPrimary",
-        "surface.canvas",
-        "surface.card",
-        "text.primary",
-        "text.secondary",
-        "state.success",
-        "state.warning",
-        "state.error",
-        "state.info",
-        "focus.ring",
+        "sreva-crimson",
+        "sreva-rose",
+        "sreva-pink",
+        "sreva-blush",
+        "sreva-pearl",
+        "sreva-ink",
+        "sreva-muted",
+        "success",
+        "warning",
+        "danger",
+        "info",
     } <= roles
     assert not RAW_COLOUR.search(json.dumps(payload["colorRoles"], sort_keys=True))
-    assert all(entry["review"] == "pending_contrast_review" for entry in payload["colorRoles"])
+    assert all(
+        entry["review"] == "pending_contrast_review"
+        for entry in payload["colorRoles"]
+    )
+    assert payload["accessibility"]["contrastTarget"] == "WCAG_2_2_AA"
+    assert payload["accessibility"]["colorOnlyStateAllowed"] is False
 
     assert {"space.xs", "space.sm", "space.md", "space.lg", "space.xl"} <= set(
         payload["spacing"]
@@ -100,7 +105,9 @@ def test_regulatory_boundary_forbids_unvalidated_medical_and_contraception_claim
     assert set(required) <= set(rules)
     for rule_id, claim in required.items():
         assert rules[rule_id]["claim"] == claim
-        assert rules[rule_id]["launchStatus"] == "forbidden_without_separate_regulated_programme"
+        assert rules[rule_id]["launchStatus"] == (
+            "forbidden_without_separate_regulated_programme"
+        )
         assert rules[rule_id]["affirmativeClaimAllowed"] is False
 
     assert payload["allowedInitialScope"] == [
