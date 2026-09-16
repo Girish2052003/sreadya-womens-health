@@ -1,0 +1,58 @@
+name: C2 Task 12 Verification
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  web-reminder-v1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24.21.0'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install locked dependencies
+        working-directory: web
+        run: npm ci --ignore-scripts
+      - name: Lint
+        working-directory: web
+        run: npm run lint
+      - name: Strict TypeScript
+        working-directory: web
+        run: npm run typecheck
+      - name: Reminder v1 and regression Vitest suite
+        working-directory: web
+        run: npm test -- --run
+      - name: Static export with dedicated reminders route
+        working-directory: web
+        run: npm run build
+      - name: Install Chromium
+        working-directory: web
+        run: npx playwright install --with-deps chromium
+      - name: Account-free Reminder Health browser proof
+        working-directory: web
+        run: npx playwright test e2e/reminder-health.spec.ts --project=chromium
+
+  mobile-reminder-v1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          flutter-version: '3.47.2'
+          channel: stable
+          cache: true
+      - name: Install locked Flutter dependencies
+        run: flutter pub get
+      - name: Shared reminder-v1 golden vectors
+        run: flutter test test/conformance/shared_reminder_vectors_test.dart
