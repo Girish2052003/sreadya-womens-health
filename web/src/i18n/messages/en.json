@@ -1,0 +1,14 @@
+{
+  "accessibility.title": "Accessibility",
+  "accessibility.summary": "Adjust reading and motion preferences on this device.",
+  "accessibility.textSize": "Text size",
+  "accessibility.textSize.normal": "Standard",
+  "accessibility.textSize.large": "Large",
+  "accessibility.motion": "Motion",
+  "accessibility.motion.system": "Follow system",
+  "accessibility.motion.reduced": "Reduce motion",
+  "accessibility.contrast": "Contrast",
+  "accessibility.contrast.system": "Follow system",
+  "accessibility.contrast.high": "High contrast",
+  "accessibility.saved": "Accessibility preferences saved on this device."
+}
