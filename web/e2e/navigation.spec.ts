@@ -19,7 +19,7 @@ test('private workspace deep links expose the calm five-item primary navigation'
   await expect(page.getByRole('heading', { level: 1, name: 'Home' })).toBeVisible();
   const nav = page.getByRole('navigation', { name: 'Sreva workspace' });
   for (const item of ['Home', 'Today', 'Log', 'Calendar', 'More']) {
-    await expect(nav.getByRole('link', { name: item })).toBeVisible();
+    await expect(nav.getByRole('link', { name: item, exact: true })).toBeVisible();
   }
 
   await page.goto('/app/privacy/');
