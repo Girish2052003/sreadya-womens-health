@@ -37,7 +37,8 @@ function validateReplacementDataset(
   const orderedPeriods = [...periods].sort((left, right) => Date.parse(left.start) - Date.parse(right.start));
   for (let index = 0; index < orderedPeriods.length; index += 1) {
     const current = orderedPeriods[index];
-    if (!periodIds.add(current.id)) failReplacementValidation();
+    if (periodIds.has(current.id)) failReplacementValidation();
+    periodIds.add(current.id);
     if (index === 0) continue;
 
     const previous = orderedPeriods[index - 1];
@@ -47,7 +48,8 @@ function validateReplacementDataset(
 
   const observationIds = new Set<string>();
   for (const observation of observations) {
-    if (!observationIds.add(observation.id)) failReplacementValidation();
+    if (observationIds.has(observation.id)) failReplacementValidation();
+    observationIds.add(observation.id);
   }
 }
 
