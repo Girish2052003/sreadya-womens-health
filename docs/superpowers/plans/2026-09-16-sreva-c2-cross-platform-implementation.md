@@ -27,7 +27,7 @@
 - No sensitive health value in logs, analytics, URLs, service-worker caches, CI fixtures, browser telemetry, or server plaintext.
 - Account-free remains a complete first-class health experience.
 - Optional account/sync is never required for cycle tracking, predictions, insights, reports, reminders, or local backup.
-- No production sync cryptography until Task 14 protocol gate is explicitly passed.
+- No production sync cryptography until **Task 19 — E2EE protocol design gate** is explicitly passed.
 - No real SMS/email provider secret or production provider account is required for local/Web phases. Identity adapters remain test/local until the provider/deployment gate.
 - Current Android package/signing/release pipelines remain intact.
 - Current iOS no-codesign verification remains intact.
