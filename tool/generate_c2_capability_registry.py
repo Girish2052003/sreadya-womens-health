@@ -127,8 +127,14 @@ def _privacy(family: str) -> str:
 
 
 def _extract(spec: str) -> tuple[list[tuple[str, str]], list[tuple[str, str]]]:
-    atomic_start = spec.index("# 1.4 Atomic registry")
-    future_start = spec.index("# 1.5 Future capabilities", atomic_start)
+    """Extract only the approved Section 1 atomic rows.
+
+    Anchor on the actual frozen section headings so examples later in the
+    specification cannot accidentally be mistaken for registry entries.
+    """
+
+    atomic_start = spec.index("## 1.1 Cycle and period tracking")
+    future_start = spec.index("## 1.19 Future/optional", atomic_start)
     section_two = spec.index("# SECTION 2", future_start)
 
     launch = re.findall(
@@ -189,7 +195,7 @@ def main() -> None:
     payload = {
         "contract": "SREVA C2 Capability Registry",
         "version": 1,
-        "source": "docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md#14-atomic-registry",
+        "source": "docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md#section-1--master-capability-contract",
         "launch_requirement_count": 258,
         "launch_family_count": 18,
         "families": [
