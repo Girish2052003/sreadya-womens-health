@@ -4,8 +4,10 @@ import type { NotificationCapability } from '../../pwa/notification-capability';
 
 function titleCase(value: string): string {
   return value
-    .split('-')
-    .map((part) => part.length === 0 ? part : `${part[0].toUpperCase()}${part.slice(1)}`)
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .split(/[-\s]+/)
+    .filter(Boolean)
+    .map((part) => `${part[0].toUpperCase()}${part.slice(1)}`)
     .join(' ');
 }
 
