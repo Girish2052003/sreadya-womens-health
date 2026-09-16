@@ -6,6 +6,7 @@ import { CalendarCorePanel } from '../calendar/CalendarCorePanel';
 import { CycleCorePanel } from '../cycle/CycleCorePanel';
 import { HomeCorePanel } from '../home/HomeCorePanel';
 import { LogCorePanel } from '../logging/LogCorePanel';
+import type { PredictionResult } from '../predictions/prediction-engine';
 import { TodayCorePanel } from '../logging/TodayCorePanel';
 
 const periods: PeriodEpisode[] = [{
@@ -24,19 +25,41 @@ const observations: HealthObservation[] = [{
   source: 'app',
 }];
 
+const prediction: PredictionResult = {
+  algorithmVersion: 'prediction-v1',
+  estimatedCycleLengthDays: 28,
+  estimatedPeriodDurationDays: 5,
+  mostLikelyDate: '2026-10-08',
+  windowStart: '2026-10-06',
+  windowEnd: '2026-10-10',
+  confidence: 'high',
+  validIntervals: [28, 28, 28, 28, 28, 28],
+  excludedIntervals: [],
+  medianAbsoluteDeviation: 0,
+};
+
 const noop = vi.fn();
 
-describe('Task 10 account-free workspace panels', () => {
-  it('renders Home as a real local summary with a one-tap period action', () => {
+describe('account-free workspace panels', () => {
+  it('renders Home as a real local summary with current local prediction intelligence', () => {
     const html = renderToStaticMarkup(
-      <HomeCorePanel periods={periods} observations={observations} onStartPeriodToday={noop} />,
+      <HomeCorePanel
+        periods={periods}
+        observations={observations}
+        prediction={prediction}
+        onStartPeriodToday={noop}
+      />,
     );
 
     expect(html).toContain('Private local summary');
     expect(html).toContain('Period started today');
     expect(html).toContain('1 recorded period');
     expect(html).toContain('1 local observation');
-    expect(html).toContain('Predictions stay local');
+    expect(html).toContain('Most likely');
+    expect(html).toContain('8 Oct 2026');
+    expect(html).toContain('6 Oct 2026 – 10 Oct 2026');
+    expect(html).toContain('High confidence');
+    expect(html).not.toContain('added in the next governed task');
   });
 
   it('renders Today from local observations without implying diagnosis', () => {
