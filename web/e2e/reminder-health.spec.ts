@@ -19,6 +19,15 @@ function dateKey(date: Date): string {
   ].join('-');
 }
 
+function displayDate(date: string): string {
+  return new Intl.DateTimeFormat('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(`${date}T00:00:00Z`));
+}
+
 function offsetDate(days: number): string {
   const date = new Date();
   date.setUTCHours(12, 0, 0, 0);
@@ -27,14 +36,17 @@ function offsetDate(days: number): string {
 }
 
 async function addHistoricalPeriod(page: Page, start: string, end: string) {
-  await page.getByRole('button', { name: 'Period started today' }).click();
-  await expect(page.getByText('Saved locally · encrypted')).toBeVisible();
+  const cards = page.locator('.core-period-card');
+  const before = await cards.count();
 
-  const newest = page.locator('.core-period-card').first();
+  await page.getByRole('button', { name: 'Period started today' }).click();
+  await expect(cards).toHaveCount(before + 1);
+
+  const newest = cards.first();
   await newest.locator('input[name="start"]').fill(start);
   await newest.locator('input[name="end"]').fill(end);
   await newest.getByRole('button', { name: 'Save dates' }).click();
-  await expect(page.getByText('Saved locally · encrypted')).toBeVisible();
+  await expect(newest.getByRole('heading', { name: displayDate(start) })).toBeVisible();
 }
 
 async function readReminderPreferenceRecord(page: Page) {
