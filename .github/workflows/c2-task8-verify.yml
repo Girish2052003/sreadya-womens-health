@@ -11,7 +11,7 @@ jobs:
   encrypted-browser-vault:
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_SREVA_CYCLEVAULT_TEST_HARNESS: '1'
+      NEXT_PUBLIC_SREVA_VAULT_TEST_HARNESS: '1'
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
