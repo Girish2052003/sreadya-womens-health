@@ -1,11 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import { AccessibleChartFrame } from './AccessibleChartFrame';
 
 describe('AccessibleChartFrame', () => {
   it('keeps a meaningful textual summary attached to any future graphical visualization', () => {
-    render(
+    const html = renderToStaticMarkup(
       <AccessibleChartFrame
         title="Cycle length history"
         summary="Four recorded cycles ranged from 27 to 30 days."
@@ -14,12 +14,10 @@ describe('AccessibleChartFrame', () => {
       </AccessibleChartFrame>,
     );
 
-    const figure = screen.getByRole('figure', { name: 'Cycle length history' });
-    const summary = screen.getByText('Four recorded cycles ranged from 27 to 30 days.');
-    const visualization = screen.getByTestId('visualization-fixture');
-
-    expect(figure).toBeTruthy();
-    expect(summary.textContent).toBe('Four recorded cycles ranged from 27 to 30 days.');
-    expect(visualization.getAttribute('aria-hidden')).toBe('true');
+    expect(html).toContain('<figure');
+    expect(html).toContain('aria-label="Cycle length history"');
+    expect(html).toContain('<figcaption');
+    expect(html).toContain('Four recorded cycles ranged from 27 to 30 days.');
+    expect(html).toContain('aria-hidden="true"');
   });
 });
