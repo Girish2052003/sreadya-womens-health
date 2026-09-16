@@ -120,4 +120,36 @@ describe('encrypted health repository', () => {
 
     expect(persistence.records.size).toBe(0);
   });
+
+  it('keeps repository health payloads out of persisted IndexedDB-style records and keys', async () => {
+    const persistence = new MemoryPersistence();
+    const vault = new VaultService(persistence);
+    await vault.createOrOpen();
+    const repository = new HealthVaultRepository(vault);
+    const sentinel = 'SREVA-PRIVATE-HEALTH-SENTINEL-9A7C';
+
+    await repository.savePeriod({
+      id: 'period-ciphertext-proof',
+      start: '2026-09-01T00:00:00.000Z',
+      end: '2026-09-03T00:00:00.000Z',
+      source: 'app',
+    });
+    await repository.saveObservation({
+      id: 'observation-ciphertext-proof',
+      kind: 'dailyNote',
+      occurredAt: '2026-09-02T09:00:00.000Z',
+      source: 'app',
+      note: sentinel,
+    });
+
+    const persistedRecords = JSON.stringify([...persistence.records.values()]);
+    const persistedKeys = [...persistence.records.keys()].join('|');
+
+    expect(persistedRecords).not.toContain(sentinel);
+    expect(persistedRecords).not.toContain('2026-09-01T00:00:00.000Z');
+    expect(persistedRecords).not.toContain('2026-09-02T09:00:00.000Z');
+    expect(persistedKeys).not.toContain(sentinel);
+    expect(persistedKeys).not.toContain('2026-09-01T00:00:00.000Z');
+    expect(persistedKeys).not.toContain('2026-09-02T09:00:00.000Z');
+  });
 });
