@@ -11,6 +11,7 @@ const DEDICATED = [
   'assistant',
   'sharing',
   'privacy',
+  'vault',
 ] as const;
 
 describe('workspace static route ownership', () => {
@@ -19,6 +20,5 @@ describe('workspace static route ownership', () => {
 
     for (const section of DEDICATED) expect(sections).not.toContain(section);
     expect(sections).toContain('home');
-    expect(sections).toContain('vault');
   });
 });
