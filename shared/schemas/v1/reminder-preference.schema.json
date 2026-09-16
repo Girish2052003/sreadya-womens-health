@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sreva.local/v1/reminder-preference.schema.json",
+  "title": "Sreva ReminderPreference v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "enabled", "privacy", "localTime", "timeZone"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "kind": {
+      "type": "string",
+      "enum": [
+        "periodSevenDays", "periodThreeDays", "periodOneDay", "periodExpectedDay",
+        "periodLate", "medication", "contraception", "supplement",
+        "ovulationTest", "pregnancyTest"
+      ]
+    },
+    "enabled": {"type": "boolean"},
+    "privacy": {"type": "string", "enum": ["maximum", "balanced", "detailed"]},
+    "localTime": {
+      "type": "string",
+      "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$",
+      "description": "User-selected wall-clock time; not converted to a fixed UTC instant."
+    },
+    "timeZone": {
+      "type": "string",
+      "minLength": 1,
+      "description": "IANA timezone identifier used to preserve local wall-clock reminder semantics."
+    },
+    "quietHours": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": {"type": "string", "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"},
+            "end": {"type": "string", "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"}
+          }
+        },
+        {"type": "null"}
+      ]
+    }
+  }
+}

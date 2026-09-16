@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sreva.local/v1/report-selection.schema.json",
+  "title": "Sreva ReportSelection v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["categories"],
+  "properties": {
+    "categories": {
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": [
+          "periods", "flow", "symptoms", "pain", "medications",
+          "temperature", "ovulation", "privateNotes", "sexualActivity"
+        ]
+      }
+    },
+    "fromDate": {"type": ["string", "null"], "format": "date"},
+    "toDate": {"type": ["string", "null"], "format": "date"}
+  }
+}

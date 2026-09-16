@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sreva.local/v1/device-record.schema.json",
+  "title": "Sreva DeviceRecord v1",
+  "$comment": "This pre-protocol domain record intentionally does not choose E2EE algorithms or key formats. Task 19 owns the cryptographic protocol freeze.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "platform", "trustState", "createdAt", "protocolVersion"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "displayName": {"type": ["string", "null"]},
+    "platform": {"type": "string", "enum": ["android", "ios", "web", "pwa"]},
+    "trustState": {"type": "string", "enum": ["pending", "trusted", "revoked"]},
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$",
+      "description": "Device registration timestamp encoded as UTC RFC3339."
+    },
+    "lastSeenAt": {
+      "anyOf": [
+        {"type": "string", "format": "date-time", "pattern": "Z$"},
+        {"type": "null"}
+      ],
+      "description": "Optional operational timestamp encoded as UTC RFC3339; it carries no health semantics."
+    },
+    "protocolVersion": {"type": "integer", "minimum": 1}
+  }
+}

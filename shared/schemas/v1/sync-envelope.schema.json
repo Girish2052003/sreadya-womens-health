@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sreva.local/v1/sync-envelope.schema.json",
+  "title": "Sreva SyncEnvelope v1",
+  "$comment": "Transport metadata is deliberately health-semantic-free. Algorithm selection remains gated by the Task 19 E2EE protocol review.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "envelopeId", "recordId", "sourceDeviceId", "version", "sequence",
+    "createdAt", "nonce", "ciphertext"
+  ],
+  "properties": {
+    "envelopeId": {"type": "string", "minLength": 1},
+    "recordId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque client-generated identifier; it must not encode a health category."
+    },
+    "sourceDeviceId": {"type": "string", "minLength": 1},
+    "version": {"type": "integer", "minimum": 1},
+    "sequence": {"type": "integer", "minimum": 0},
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$",
+      "description": "Operational envelope timestamp encoded as UTC RFC3339."
+    },
+    "nonce": {"type": "string", "contentEncoding": "base64", "minLength": 1},
+    "ciphertext": {"type": "string", "contentEncoding": "base64", "minLength": 1}
+  }
+}

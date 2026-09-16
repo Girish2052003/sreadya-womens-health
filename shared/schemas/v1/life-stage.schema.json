@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sreva.local/v1/life-stage.schema.json",
+  "title": "Sreva LifeStage v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["mode"],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": [
+        "cycleTracking", "tryingToConceive", "pregnancy", "postpartum",
+        "breastfeeding", "perimenopause", "menopauseTransition",
+        "hormonalContraception"
+      ]
+    },
+    "selectedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$",
+      "description": "Optional transport timestamp encoded as UTC RFC3339."
+    }
+  }
+}

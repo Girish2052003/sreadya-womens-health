@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sreva.local/v1/prediction.schema.json",
+  "title": "Sreva Prediction v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "algorithmVersion", "createdAt", "estimatedCycleLengthDays",
+    "mostLikelyDate", "windowStart", "windowEnd", "confidence",
+    "validIntervals", "excludedIntervals", "medianAbsoluteDeviation"
+  ],
+  "properties": {
+    "algorithmVersion": {"type": "string", "const": "prediction-v1"},
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$",
+      "description": "Prediction creation timestamp encoded as UTC RFC3339."
+    },
+    "estimatedCycleLengthDays": {"type": "integer", "minimum": 15, "maximum": 90},
+    "estimatedPeriodDurationDays": {
+      "anyOf": [
+        {"type": "integer", "minimum": 1, "maximum": 14},
+        {"type": "null"}
+      ]
+    },
+    "mostLikelyDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Calendar date; deliberately not a timezone-shiftable instant."
+    },
+    "windowStart": {"type": "string", "format": "date"},
+    "windowEnd": {"type": "string", "format": "date"},
+    "confidence": {"type": "string", "enum": ["low", "medium", "high"]},
+    "validIntervals": {
+      "type": "array",
+      "items": {"type": "integer", "minimum": 15, "maximum": 90},
+      "maxItems": 12
+    },
+    "excludedIntervals": {
+      "type": "array",
+      "items": {"type": "integer"}
+    },
+    "medianAbsoluteDeviation": {"type": "number", "minimum": 0}
+  }
+}

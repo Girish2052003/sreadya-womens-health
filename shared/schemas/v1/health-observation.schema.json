@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sreva.local/v1/health-observation.schema.json",
+  "title": "Sreva HealthObservation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "occurredAt", "source"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "kind": {
+      "type": "string",
+      "enum": [
+        "menstrualFlow", "cramps", "headache", "migraine", "backPain",
+        "breastTenderness", "bloating", "acne", "nausea", "digestion",
+        "fatigue", "dizziness", "appetite", "cravings", "sleep", "energy",
+        "stress", "mood", "anxiety", "irritability", "libido",
+        "vaginalDischarge", "cervicalMucus", "basalBodyTemperature", "weight",
+        "exercise", "water", "custom", "ovulationTest", "pregnancyTest",
+        "sexualActivity", "protection", "contraception", "medication",
+        "supplement", "dailyNote"
+      ]
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$",
+      "description": "Canonical transport timestamp encoded as UTC RFC3339."
+    },
+    "severity": {
+      "type": ["string", "null"],
+      "enum": ["mild", "moderate", "severe", null]
+    },
+    "numericValue": {"type": ["number", "null"]},
+    "unit": {"type": ["string", "null"]},
+    "label": {"type": ["string", "null"]},
+    "note": {"type": ["string", "null"]},
+    "flowLevel": {
+      "type": ["string", "null"],
+      "enum": ["spotting", "light", "medium", "heavy", null]
+    },
+    "source": {
+      "type": "string",
+      "enum": ["app", "healthKit", "healthConnect", "cycleVault"]
+    },
+    "externalId": {"type": ["string", "null"]}
+  }
+}

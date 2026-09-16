@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "locale": "en",
+  "terms": {
+    "periodEpisode": {
+      "label": "Period episode",
+      "definition": "A user-controlled menstrual period record with a start time, an optional end time while open, and provenance."
+    },
+    "flow": {
+      "label": "Menstrual flow",
+      "definition": "A recorded flow observation using the canonical levels spotting, light, medium, or heavy."
+    },
+    "observationKind": {
+      "label": "Health observation kind",
+      "definition": "The canonical cross-platform category assigned to a locally recorded health or wellbeing observation."
+    },
+    "lifeStage": {
+      "label": "Life stage",
+      "definition": "The user-selected Sreva mode that adapts relevant product behaviour while preserving historical cycle records."
+    },
+    "predictionConfidence": {
+      "label": "Prediction confidence",
+      "definition": "A low, medium, or high evidence label produced by prediction-v1 from available cycle-history consistency; it is not a guarantee."
+    },
+    "reminderPrivacy": {
+      "label": "Reminder privacy",
+      "definition": "The amount of health detail allowed in reminder text: maximum, balanced, or detailed."
+    },
+    "accountFreeMode": {
+      "label": "Account-free mode",
+      "definition": "The first-class Sreva mode in which core health functionality works locally without creating or requiring an online account."
+    },
+    "accountMode": {
+      "label": "Account mode",
+      "definition": "An optional identity mode that may add encrypted cross-device continuity without making core health functionality superior to account-free mode."
+    },
+    "encryptedSync": {
+      "label": "Encrypted sync",
+      "definition": "Optional cross-device continuity in which reproductive-health content is encrypted on clients and the service is designed to handle ciphertext plus minimum operational metadata only."
+    },
+    "trustedDevice": {
+      "label": "Trusted device",
+      "definition": "A device explicitly authorized under the future reviewed continuity protocol to participate in the user's encrypted Sreva vault."
+    },
+    "recoveryKey": {
+      "label": "Recovery key",
+      "definition": "A user-controlled recovery secret defined by the reviewed continuity protocol; email or phone identity alone must not decrypt historical vault contents."
+    }
+  }
+}
