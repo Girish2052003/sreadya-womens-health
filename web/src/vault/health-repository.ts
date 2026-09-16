@@ -1,5 +1,6 @@
 import {
   assertPeriodDoesNotOverlap,
+  assertValidHealthObservation,
   assertValidPeriodEpisode,
 } from '../domain/cycle/invariants';
 import type { HealthObservation, PeriodEpisode } from '../domain/cycle/types';
@@ -56,6 +57,7 @@ export class HealthVaultRepository {
   }
 
   async saveObservation(observation: HealthObservation): Promise<void> {
+    assertValidHealthObservation(observation);
     await this.vault.write(observationRecordId(observation.id), observation);
   }
 
