@@ -52,7 +52,9 @@ test('IndexedDB contains ciphertext only and a non-extractable WebCrypto key', a
       };
     };
   }));
-  expect(keyMetadata).toEqual({ extractable: false, algorithm: 'AES-GCM', usages: ['encrypt', 'decrypt'] });
+  expect(keyMetadata.extractable).toBe(false);
+  expect(keyMetadata.algorithm).toBe('AES-GCM');
+  expect([...keyMetadata.usages].sort()).toEqual(['decrypt', 'encrypt']);
 
   await page.reload();
   await page.getByRole('button', { name: 'Read test record' }).click();
