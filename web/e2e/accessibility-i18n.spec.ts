@@ -1,0 +1,118 @@
+import AxeBuilder from '@axe-core/playwright';
+import { expect, test } from '@playwright/test';
+
+const SETTINGS_URL = '/app/settings/';
+
+async function hasHorizontalOverflow(page: import('@playwright/test').Page): Promise<boolean> {
+  return page.evaluate(() => {
+    const root = document.documentElement;
+    const body = document.body;
+    return Math.max(root.scrollWidth, body.scrollWidth) > root.clientWidth + 1;
+  });
+}
+
+test('accessibility preferences apply immediately and persist locally', async ({ page }) => {
+  const offOriginRequests: string[] = [];
+  page.on('request', (request) => {
+    const url = new URL(request.url());
+    if (url.origin !== 'http://127.0.0.1:3000') offOriginRequests.push(request.url());
+  });
+
+  await page.goto(SETTINGS_URL);
+  await expect(page.getByRole('heading', { name: 'Settings', level: 1 })).toBeVisible();
+  await expect(page.getByTestId('accessibility-preferences')).toBeVisible();
+
+  await page.getByLabel('Large').check();
+  await page.getByLabel('Reduce motion').check();
+  await page.getByLabel('High contrast').check();
+
+  const root = page.locator('html');
+  await expect(root).toHaveAttribute('data-sreva-text-scale', 'large');
+  await expect(root).toHaveAttribute('data-sreva-motion', 'reduced');
+  await expect(root).toHaveAttribute('data-sreva-contrast', 'high');
+
+  await page.getByRole('button', { name: 'Save accessibility preferences' }).click();
+  await expect(page.getByRole('status')).toContainText('Accessibility preferences saved on this device.');
+
+  const stored = await page.evaluate(() => localStorage.getItem('sreva:accessibility:v1'));
+  expect(JSON.parse(stored!)).toEqual({
+    version: 1,
+    textScale: 'large',
+    motion: 'reduced',
+    contrast: 'high',
+  });
+
+  await page.reload();
+  await expect(page.getByLabel('Large')).toBeChecked();
+  await expect(page.getByLabel('Reduce motion')).toBeChecked();
+  await expect(page.getByLabel('High contrast')).toBeChecked();
+  await expect(root).toHaveAttribute('data-sreva-text-scale', 'large');
+  await expect(root).toHaveAttribute('data-sreva-motion', 'reduced');
+  await expect(root).toHaveAttribute('data-sreva-contrast', 'high');
+  expect(offOriginRequests).toEqual([]);
+});
+
+test('keyboard focus, 200 percent reflow, large text, RTL and long-copy fixtures stay usable', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto(SETTINGS_URL);
+
+  await page.keyboard.press('Tab');
+  const focusEvidence = await page.evaluate(() => {
+    const active = document.activeElement as HTMLElement | null;
+    if (!active) return null;
+    const style = getComputedStyle(active);
+    return {
+      tagName: active.tagName,
+      outlineStyle: style.outlineStyle,
+      outlineWidth: style.outlineWidth,
+    };
+  });
+  expect(focusEvidence).not.toBeNull();
+  expect(['A', 'BUTTON', 'INPUT']).toContain(focusEvidence!.tagName);
+  expect(focusEvidence!.outlineStyle).not.toBe('none');
+  expect(Number.parseFloat(focusEvidence!.outlineWidth)).toBeGreaterThanOrEqual(2);
+
+  expect(await hasHorizontalOverflow(page)).toBe(false);
+
+  await page.getByLabel('Large').check();
+  const rootFontSize = await page.locator('html').evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+  expect(rootFontSize).toBeGreaterThanOrEqual(20);
+  expect(await hasHorizontalOverflow(page)).toBe(false);
+
+  await page.evaluate(() => {
+    document.documentElement.dir = 'rtl';
+    const title = document.querySelector('[data-testid="accessibility-preferences"] h2');
+    if (title) {
+      title.textContent = Array.from({ length: 9 }, () => 'Long localized accessibility preference wording').join(' ');
+    }
+  });
+  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  expect(await hasHorizontalOverflow(page)).toBe(false);
+});
+
+test('system reduced motion remains honored and explicit high contrast strengthens presentation', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  const transitionDuration = await page.locator('.public-header__cta').evaluate((element) => getComputedStyle(element).transitionDuration);
+  expect(transitionDuration).toBe('0.00001s');
+
+  await page.goto(SETTINGS_URL);
+  await page.getByLabel('High contrast').check();
+  const contrast = await page.locator('html').evaluate((element) => ({
+    muted: getComputedStyle(element).getPropertyValue('--sreva-muted').trim(),
+    line: getComputedStyle(element).getPropertyValue('--line').trim(),
+  }));
+  expect(contrast.muted).toBe('#3d3035');
+  expect(contrast.line).toBe('rgba(38, 25, 30, 0.38)');
+});
+
+test('Settings passes automated WCAG 2.2 AA-targeted axe review', async ({ page }) => {
+  await page.goto(SETTINGS_URL);
+  await expect(page.getByTestId('accessibility-preferences')).toBeVisible();
+
+  const results = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+    .analyze();
+
+  expect(results.violations).toEqual([]);
+});
