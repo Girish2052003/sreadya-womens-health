@@ -22,6 +22,9 @@ jobs:
       - name: Install locked dependencies
         working-directory: web
         run: npm ci --ignore-scripts
-      - name: Run Task 9 cycle-domain RED directly
+      - name: Strict TypeScript
         working-directory: web
-        run: npm test -- --run src/domain/cycle/invariants.test.ts src/domain/cycle/types.test.ts src/vault/health-repository.test.ts
+        run: npm run typecheck
+      - name: Run Task 9 focused tests
+        working-directory: web
+        run: npm test -- --run src/domain/cycle/invariants.test.ts src/domain/cycle/types.test.ts src/domain/cycle/schema-conformance.test.ts src/vault/health-repository.test.ts
