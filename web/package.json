@@ -1,18 +1,37 @@
 {
-  "name": "sreva-web-red-harness",
-  "version": "0.0.0",
+  "name": "sreva-web",
+  "version": "0.1.0",
   "private": true,
+  "type": "module",
   "engines": {
     "node": "24.21.0"
   },
   "scripts": {
-    "test": "vitest"
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "build": "next build",
+    "e2e": "playwright test"
   },
   "dependencies": {
+    "ajv": "8.20.0",
+    "dexie": "4.4.6",
+    "next": "16.3.3",
+    "pdf-lib": "1.17.1",
     "react": "19.3",
     "react-dom": "19.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.63.0",
+    "@testing-library/react": "16.3.3",
+    "@types/node": "24",
+    "@types/react": "19",
+    "@types/react-dom": "19",
+    "axe-core": "4.13.0",
+    "eslint": "10.10.0",
+    "eslint-config-next": "16.3.3",
+    "typescript": "6.0.3",
     "vitest": "5.0.0"
   }
 }
