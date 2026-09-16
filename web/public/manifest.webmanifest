@@ -1,0 +1,21 @@
+{
+  "name": "Sreva",
+  "short_name": "Sreva",
+  "description": "A privacy-first, local-first women’s cycle and menstrual health companion.",
+  "id": "./",
+  "start_url": "./app/home/",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fffaf8",
+  "theme_color": "#75153a",
+  "orientation": "any",
+  "categories": ["health", "lifestyle"],
+  "icons": [
+    {
+      "src": "./sreva-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
