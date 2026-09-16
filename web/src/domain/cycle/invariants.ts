@@ -12,3 +12,10 @@ export function assertValidPeriodEpisode(episode: PeriodEpisodeInvariantInput): 
     }
   }
 }
+
+export function assertPeriodDoesNotOverlap(
+  _candidate: PeriodEpisodeInvariantInput,
+  _existing: readonly PeriodEpisodeInvariantInput[],
+): void {
+  // Intentionally empty while the Task 9 RED test proves the overlap guard.
+}
