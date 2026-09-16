@@ -1,0 +1,51 @@
+{
+  "version": "local-intent-v1",
+  "now": "2026-09-15T09:00:00.000Z",
+  "cases": [
+    {
+      "id": "period-started-yesterday",
+      "input": "My period started yesterday",
+      "expected": { "intent": "periodStarted", "date": "2026-09-14", "requiresConfirmation": true }
+    },
+    {
+      "id": "period-ended-today",
+      "input": "My period ended today",
+      "expected": { "intent": "periodEnded", "date": "2026-09-15", "requiresConfirmation": true }
+    },
+    {
+      "id": "heavy-flow-yesterday",
+      "input": "Yesterday was heavy",
+      "expected": { "intent": "logFlow", "date": "2026-09-14", "value": "heavy", "flowLevel": "heavy", "requiresConfirmation": true }
+    },
+    {
+      "id": "severe-cramps",
+      "input": "I have severe cramps today",
+      "expected": { "intent": "logSymptom", "date": "2026-09-15", "observationKind": "cramps", "severity": "severe", "requiresConfirmation": true }
+    },
+    {
+      "id": "medication-reminder",
+      "input": "Remind me to take medicine at 8:30 pm",
+      "expected": { "intent": "addReminder", "date": "2026-09-15", "reminderKind": "medication", "reminderHour": 20, "reminderMinute": 30, "requiresConfirmation": true }
+    },
+    {
+      "id": "contraception-reminder",
+      "input": "Remind me to take my pill at 7 am",
+      "expected": { "intent": "addReminder", "date": "2026-09-15", "reminderKind": "contraception", "reminderHour": 7, "reminderMinute": 0, "requiresConfirmation": true }
+    },
+    {
+      "id": "next-period-query",
+      "input": "When is my next period?",
+      "expected": { "intent": "nextPeriodQuery", "requiresConfirmation": false }
+    },
+    {
+      "id": "history-query",
+      "input": "Show my last six periods",
+      "expected": { "intent": "historyQuery", "requiresConfirmation": false }
+    },
+    {
+      "id": "ambiguous-unknown",
+      "input": "It feels different",
+      "expected": { "intent": "unknown", "date": "2026-09-15", "requiresConfirmation": true }
+    }
+  ]
+}
