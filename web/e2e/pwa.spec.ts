@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+// Task 7 RED is intentionally behavioral: the current client has no manifest, service worker or install guide yet.
 test('manifest identifies Sreva as a standalone account-free Web app', async ({ request }) => {
   const response = await request.get('/manifest.webmanifest');
   expect(response.ok()).toBeTruthy();
