@@ -9,7 +9,7 @@ import { AccountFreeWorkspace } from '../../../features/core/AccountFreeWorkspac
 
 const TASK10_CORE_SECTIONS = ['home', 'today', 'log', 'calendar', 'cycle'] as const;
 type Task10CoreSection = (typeof TASK10_CORE_SECTIONS)[number];
-const DEDICATED_WORKSPACE_SECTIONS = new Set(['predictions']);
+const DEDICATED_WORKSPACE_SECTIONS = new Set(['predictions', 'reminders']);
 
 export function generateStaticParams() {
   return workspaceSections
