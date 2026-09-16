@@ -1,0 +1,176 @@
+{
+  "format": "sreva-sync-conflict-vectors-v1",
+  "version": 1,
+  "note": "Synthetic protocol-state fixtures only; no real health data.",
+  "cases": [
+    {
+      "id": "independent-objects-merge",
+      "description": "Two devices update different opaque objects from the same cursor.",
+      "input": {
+        "server": {"obj_A": 3, "obj_B": 9},
+        "events": [
+          {"eventId": "evt_101", "objectId": "obj_A", "baseRevision": 3, "operation": "upsert", "sourceDevice": "dev_A"},
+          {"eventId": "evt_102", "objectId": "obj_B", "baseRevision": 9, "operation": "upsert", "sourceDevice": "dev_B"}
+        ]
+      },
+      "expected": {
+        "evt_101": "commit-revision-4",
+        "evt_102": "commit-revision-10",
+        "conflict": false
+      }
+    },
+    {
+      "id": "same-object-concurrent-updates",
+      "description": "Two devices independently update the same object from revision 4.",
+      "input": {
+        "server": {"obj_C": 4},
+        "events": [
+          {"eventId": "evt_201", "objectId": "obj_C", "baseRevision": 4, "operation": "upsert", "sourceDevice": "dev_A"},
+          {"eventId": "evt_202", "objectId": "obj_C", "baseRevision": 4, "operation": "upsert", "sourceDevice": "dev_B"}
+        ]
+      },
+      "expected": {
+        "firstAccepted": "commit-revision-5",
+        "secondAccepted": "preserve-concurrent-branch",
+        "clientResolution": "required-after-decrypt",
+        "serverMayChooseHealthWinner": false
+      }
+    },
+    {
+      "id": "idempotent-byte-equivalent-retry",
+      "description": "The same event is retried after the acknowledgement was lost.",
+      "input": {
+        "existingEventId": "evt_301",
+        "existingEnvelopeDigest": "sha256:synthetic-A",
+        "retryEventId": "evt_301",
+        "retryEnvelopeDigest": "sha256:synthetic-A"
+      },
+      "expected": {
+        "result": "return-existing-acknowledgement",
+        "newLogicalEvent": false
+      }
+    },
+    {
+      "id": "duplicate-event-mutated-envelope",
+      "description": "An already-used event ID is presented with different bytes.",
+      "input": {
+        "existingEventId": "evt_302",
+        "existingEnvelopeDigest": "sha256:synthetic-B",
+        "retryEventId": "evt_302",
+        "retryEnvelopeDigest": "sha256:synthetic-C"
+      },
+      "expected": {
+        "result": "reject-integrity-protocol-violation",
+        "newLogicalEvent": false
+      }
+    },
+    {
+      "id": "stale-base-revision",
+      "description": "A delayed device sends an edit based on an old object revision.",
+      "input": {
+        "serverRevision": 12,
+        "event": {"eventId": "evt_401", "objectId": "obj_D", "baseRevision": 8, "operation": "upsert"}
+      },
+      "expected": {
+        "result": "preserve-as-conflict-or-stale-branch",
+        "silentOverwrite": false,
+        "clientResolution": "required-after-decrypt"
+      }
+    },
+    {
+      "id": "tombstone-versus-stale-edit",
+      "description": "A tombstone is current while another device submits an edit based on the pre-delete revision.",
+      "input": {
+        "serverRevision": 6,
+        "serverOperation": "tombstone",
+        "event": {"eventId": "evt_501", "objectId": "obj_E", "baseRevision": 5, "operation": "upsert"}
+      },
+      "expected": {
+        "result": "preserve-conflict",
+        "silentResurrection": false,
+        "clientResolution": "required-after-decrypt"
+      }
+    },
+    {
+      "id": "out-of-order-delivery",
+      "description": "Revision-producing events arrive at a client out of server order.",
+      "input": {
+        "eventsReceived": [
+          {"eventId": "evt_602", "objectId": "obj_F", "baseRevision": 2, "committedRevision": 3},
+          {"eventId": "evt_601", "objectId": "obj_F", "baseRevision": 1, "committedRevision": 2}
+        ]
+      },
+      "expected": {
+        "result": "buffer-or-apply-by-revision-graph",
+        "finalRevision": 3,
+        "dropBecauseArrivalOrder": false
+      }
+    },
+    {
+      "id": "revoked-device-push",
+      "description": "A revoked device attempts a future mutation.",
+      "input": {"deviceId": "dev_revoked", "deviceState": "revoked", "eventId": "evt_701"},
+      "expected": {"result": "reject-authorization", "challengeIssued": false}
+    },
+    {
+      "id": "revoked-device-pull",
+      "description": "A revoked device attempts to fetch future sync generations.",
+      "input": {"deviceId": "dev_revoked", "deviceState": "revoked", "cursor": "cursor_17"},
+      "expected": {"result": "reject-authorization", "ciphertextReturned": false}
+    },
+    {
+      "id": "cross-account-substitution",
+      "description": "Ciphertext created for one account is presented in another account context.",
+      "input": {"envelopeAccount": "acct_A", "requestAccount": "acct_B"},
+      "expected": {
+        "outerAuthorization": "reject",
+        "clientCryptographicFallback": "aes-gcm-authentication-failure-due-to-aad"
+      }
+    },
+    {
+      "id": "cross-vault-substitution",
+      "description": "An envelope is copied between vault IDs under the same account.",
+      "input": {"envelopeVault": "vault_A", "targetVault": "vault_B"},
+      "expected": {
+        "outerAuthorization": "reject",
+        "clientCryptographicFallback": "aes-gcm-authentication-failure-due-to-aad"
+      }
+    },
+    {
+      "id": "ciphertext-tamper",
+      "description": "One ciphertext or authentication-tag bit is changed.",
+      "input": {"mutation": "single-bit"},
+      "expected": {"result": "aes-gcm-authentication-failure", "plaintextApplied": false}
+    },
+    {
+      "id": "aad-metadata-tamper",
+      "description": "Authenticated event metadata is changed while ciphertext stays unchanged.",
+      "input": {"changedField": "baseRevision"},
+      "expected": {"result": "aes-gcm-authentication-failure", "plaintextApplied": false}
+    },
+    {
+      "id": "challenge-replay",
+      "description": "A valid signed request is replayed after its one-time challenge was consumed.",
+      "input": {"challengeState": "used"},
+      "expected": {"result": "reject-authorization", "newMutation": false}
+    },
+    {
+      "id": "enrollment-replay",
+      "description": "A consumed trusted-device enrollment is reused.",
+      "input": {"enrollmentState": "consumed"},
+      "expected": {"result": "reject-enrollment", "newDeviceAuthorized": false}
+    },
+    {
+      "id": "expired-enrollment",
+      "description": "A target presents a transfer envelope after enrollment expiry.",
+      "input": {"enrollmentState": "expired"},
+      "expected": {"result": "reject-enrollment", "newDeviceAuthorized": false}
+    },
+    {
+      "id": "unsupported-suite-downgrade",
+      "description": "A peer attempts to relabel or negotiate an unsupported/older suite implicitly.",
+      "input": {"requestedSuite": "UNKNOWN-OR-DOWNGRADED"},
+      "expected": {"result": "fail-closed", "implicitDowngrade": false}
+    }
+  ]
+}
