@@ -1,3 +1,5 @@
+import { RECORD_SOURCES } from './types';
+
 export type PeriodEpisodeInvariantInput = {
   id: string;
   start: string;
@@ -5,7 +7,22 @@ export type PeriodEpisodeInvariantInput = {
   source: string;
 };
 
+const CANONICAL_UTC_DATE_TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
+
+function isCanonicalUtcTimestamp(value: string): boolean {
+  return CANONICAL_UTC_DATE_TIME.test(value) && Number.isFinite(Date.parse(value));
+}
+
+function isRecordSource(value: string): boolean {
+  return (RECORD_SOURCES as readonly string[]).includes(value);
+}
+
 export function assertValidPeriodEpisode(episode: PeriodEpisodeInvariantInput): void {
+  const endIsCanonical = episode.end === undefined || episode.end === null || isCanonicalUtcTimestamp(episode.end);
+  if (!isCanonicalUtcTimestamp(episode.start) || !endIsCanonical || !isRecordSource(episode.source)) {
+    throw new Error('Period episode does not conform to Sreva PeriodEpisode v1 schema.');
+  }
+
   if (episode.end !== undefined && episode.end !== null) {
     if (Date.parse(episode.end) < Date.parse(episode.start)) {
       throw new Error('Period end cannot be before start.');
