@@ -45,11 +45,11 @@ describe('encrypted partner grant repository', () => {
     const persistence = new MemoryPersistence();
     const vault = new VaultService(persistence);
     await vault.createOrOpen();
-    await vault.write('sharing:partner-grant:bad', {
+    await vault.write('sharing:partner-grants:v1', [{
       id: 'bad',
       categories: ['sexualActivity'],
       createdAt: '2026-09-16T17:00:00.000Z',
-    });
+    }]);
     const repository = new PartnerGrantRepository(vault);
 
     await expect(repository.list()).rejects.toThrow('Invalid partner grant.');
