@@ -1,5 +1,11 @@
 # Sreva Worldwide v1.0 Implementation Plan
 
+> **C2 preservation amendment — 16 September 2026:** This file is preserved as the complete historical Flutter/mobile implementation plan. The original task descriptions, interfaces, tests, and release steps below are intentionally retained rather than compressed or rewritten. They remain useful implementation provenance and mobile-baseline detail.
+>
+> The authoritative cross-platform architecture is `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`, and the authoritative forward implementation programme is `docs/superpowers/plans/2026-09-16-sreva-c2-cross-platform-implementation.md`. If this historical mobile plan conflicts with those C2 documents, C2 wins. Android, iOS, and Web/PWA are equal first-class Sreva clients; account mode adds optional E2EE continuity rather than superior health functionality.
+>
+> **Historical-status note:** The unchecked boxes below reproduce the original 15 September plan and MUST NOT be interpreted as the current repository completion state. Current implementation/verification evidence is recorded by the repository tests, CI, traceability tooling, and closure ledgers. Preserving the boxes keeps the original engineering intent intact.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Build Sreva as a local-first iOS/Android women's cycle companion implementing the complete v1.0 capability matrix while keeping reproductive-health processing on-device.
@@ -20,6 +26,13 @@
 - V1 makes no disease-diagnosis, treatment or contraceptive-effectiveness claim.
 - All local schema changes are transactional and versioned.
 - Store signing keys and real health data are never committed.
+
+### C2 interpretation of the historical constraints
+
+- “iOS/Android” above describes the scope of this historical mobile plan, not the current product boundary; Web/PWA is now an equal first-class client.
+- “No account/operator backend” remains true for **core health functionality**. The approved C2 extension permits an optional account/E2EE sync service that stores only ciphertext plus minimum operational metadata and cannot decrypt the health vault.
+- The mobile implementation remains authoritative evidence for its implemented behavior, but semantic cross-platform authority moves to language-neutral shared contracts, schemas, capability IDs, and conformance vectors.
+- Nothing in this file authorizes production E2EE cryptography; that work is gated by the reviewed C2 E2EE protocol task.
 
 ---
 
@@ -217,3 +230,11 @@
 - [ ] Build unsigned iOS release artifact on macOS CI when repository is hosted; sign/TestFlight only with owner-provided Apple credentials.
 - [ ] Build Android release artifact and run closed-track validation before Play production.
 - [ ] Commit `release: complete Sreva v1 readiness`.
+
+---
+
+## C2 forward handoff
+
+The historical tasks above are preserved in full. The C2 programme does **not** discard or restart them. It treats their implemented Flutter/mobile outputs as a mature first-class baseline, then adds language-neutral contracts, Web/PWA, and optional reviewed E2EE continuity without rewriting verified mobile behavior merely for symmetry.
+
+Forward implementation authority: `docs/superpowers/plans/2026-09-16-sreva-c2-cross-platform-implementation.md`.

@@ -1,5 +1,7 @@
 # Sreva Worldwide v1 Formal Closure Ledger
 
+> **C2 scope notice — 16 September 2026:** The historical evidence ledger below is preserved verbatim in substance for the Flutter/mobile v1 baseline and Android production pipeline. It does **not** prove the later Web/PWA, account, passkey, E2EE sync, trusted-device, or recovery-key capabilities. Those require the separate C2 258-ID cross-platform closure programme. This scope notice narrows future interpretation; it does not rewrite the evidence that was recorded.
+
 Status: **FORMAL CLOSURE — evidence-backed and fail-closed.**
 
 Release candidate: Sreva `1.0.0+1`
@@ -29,6 +31,8 @@ This ledger is itself subject to the evidence law at the end of this file: the f
 11. Database migrations preserve and validate existing history or fail safely.
 12. Medical/contraceptive claims remain outside v1 unless separately validated and regulated.
 
+> **C2 interpretation of law 7:** for the recorded v1 release, no Sreva reproductive-health sync backend existed. The later approved C2 extension still prohibits a plaintext or developer-decryptable reproductive-health database; optional future infrastructure may hold ciphertext plus minimum operational metadata only after its own security/release gates pass.
+
 ## Worldwide v1.0 capability contract
 
 The machine-enforced release gate reads `Sreva Master Product Specification v1.0` and requires exactly Sections `4.1` through `4.22`. Every capability family must map to concrete implementation and executable verification evidence. The verifier additionally checks the complete health-observation model, every life-stage mode, reminder families and privacy modes, and the regulatory firewall.
@@ -36,6 +40,8 @@ The machine-enforced release gate reads `Sreva Master Product Specification v1.0
 Required verifier result:
 
 `22/22 worldwide v1.0 capability families traced to implementation and evidence.`
+
+> After C2, that historical output is evidence for the 22-family mobile baseline only. It is not a substitute for the future 258-ID Android/iOS/Web/PWA closure.
 
 ## Mandatory source and product evidence
 
@@ -162,3 +168,5 @@ Actual Google Play upload requires the publisher's real Google Play account acce
 ## Evidence law
 
 A feature is not closed because code exists or because this document says so. Closure exists only when executable gates are green for the exact immutable SHA being released. The final `main` commit containing this ledger must itself pass the complete CI suite. Any later source change, failed gate, missing verification, branch divergence, or signer mismatch invalidates this record until the complete closure sequence is repeated.
+
+> **C2 non-projection rule:** The evidence law above remains binding. The later C2 Web/PWA/account/sync scope must obtain its own 258-ID cross-platform closure and cannot borrow this historical 22-family ledger as proof.

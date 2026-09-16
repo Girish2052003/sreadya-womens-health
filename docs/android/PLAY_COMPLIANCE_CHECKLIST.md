@@ -1,5 +1,7 @@
 # Sreva Google Play Compliance Checklist
 
+> **C2 scope note — 16 September 2026:** This checklist preserves the complete Android/Google Play requirements for the currently implemented local-first `1.0.0+1` release. Android is now one of three equal first-class Sreva clients. The approved future E2EE continuity architecture does not change the declarations for a binary that does not ship that data flow. A sync-enabled Android release must satisfy the additional C2 gate at the end of this file before any Play-track submission.
+
 This file tracks store-facing requirements that sit outside normal unit tests. The repository must keep the implementation and this checklist consistent.
 
 ## Product classification
@@ -174,3 +176,23 @@ The following actions cannot be proven by repository code alone and must be comp
 - final Play review and rollout.
 
 Repository formal closure means Sreva is engineered and release-pipeline-ready for these account actions; it does not fabricate evidence that an external Play Console action has happened when it has not.
+
+---
+
+## Additional mandatory gate for a future sync-enabled Android release
+
+The approved C2 architecture does **not** authorize Sreva to turn sync on silently. Before any Android binary that sends encrypted health ciphertext to Sreva-operated infrastructure enters any Play track:
+
+- the reviewed versioned E2EE key hierarchy and sync protocol must be frozen;
+- Android/Web/iOS interoperability vectors applicable to that release must pass;
+- server authorization, replay, revoked-device, and cross-account tests must pass;
+- account authentication must remain separate from health-vault decryption;
+- trusted-device and recovery-key loss/recovery cases must pass;
+- account-free core health functionality must remain available;
+- the privacy policy must accurately disclose account identifiers, server-visible minimum metadata, ciphertext sync, trusted devices, recovery-key limits, retention/deletion, and the fact that Sreva infrastructure lacks the vault-decryption key;
+- Play Data Safety and Health app declarations must be re-evaluated against the **exact** sync-enabled binary and dependency set;
+- SMS/email verification metadata must be reviewed if those channels are enabled;
+- Privacy Center must show sync/device/server boundaries truthfully;
+- applicable 258-ID C2 traceability must be implemented and verified.
+
+Until all of those conditions are met, the Android release remains local-only with Sreva sync disabled.

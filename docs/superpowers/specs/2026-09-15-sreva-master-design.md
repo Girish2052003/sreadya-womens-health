@@ -1,5 +1,11 @@
 # Sreva Master Product Specification v1.0
 
+> **C2 preservation amendment — 16 September 2026:** The original 15 September mobile specification below is retained in full as the detailed Flutter/mobile baseline and as a machine-readable compatibility anchor for the existing 22-family verifier. Its historical details are intentionally not compressed or erased.
+>
+> The authoritative cross-platform constitution is `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`. Where the historical statements below conflict with the approved C2 architecture, the C2 constitution wins. In particular: Android, iOS, and Web/PWA are now equal first-class clients; account-free and account-based health experiences are equal-class; optional account mode may add E2EE ciphertext synchronization; and “no developer-operated reproductive-health database” now means no **plaintext or developer-decryptable** reproductive-health database. Core health functionality still requires no account or network.
+>
+> **Compatibility note:** The exact title `Sreva Master Product Specification v1.0` and Sections `4.1`–`4.22` are preserved because current mobile traceability tooling depends on them. Historical launch-device/distribution wording below is provenance, not a product-wide priority rule after C2.
+
 **Date:** 2026-09-15  
 **Public product name:** Sreva  
 **In honour of:** Sreedevi Girish Nallan Chakravathy  
@@ -28,6 +34,14 @@ The app must never present a predicted period date as biologically guaranteed. P
 10. App updates are signed and distributed through platform release channels.
 11. Every database migration is transactional, validated, and preserves history.
 12. V1 is menstrual health tracking and wellness software, not diagnostic software and not a contraception-effectiveness product.
+
+### C2 interpretation of the historical architectural laws
+
+- Laws 1–5 remain binding: plaintext health state and personal intelligence remain local to authorized clients; core health functionality needs no account/network.
+- Law 6 remains the native-mobile mechanism. C2 preserves one reminder intent/policy while Web/PWA uses honest browser-adapted delivery.
+- Law 7 is extended, not discarded: optional sync may store ciphertext and minimum operational metadata, while Sreva infrastructure must not possess the health-vault decryption key.
+- Laws 8–12 remain binding. Web/PWA does not fake HealthKit/Health Connect; health telemetry remains prohibited; migrations/updates remain safe; medical/contraceptive boundaries remain intact.
+- C2 adds language-neutral capability/schema/crypto/sync contracts and conformance vectors so the mobile implementation and Web/PWA cannot silently diverge.
 
 ## 3. Production technology
 
@@ -326,3 +340,17 @@ The first distributable focus is iOS. Android shares domain/application code but
 ## 12. Store and signing boundary
 
 Source code and unsigned release artifacts can be produced without store credentials. Installation on an iPhone through TestFlight/App Store requires the owner's Apple Developer membership and signing/App Store Connect configuration. Signing secrets must never be committed to this repository.
+
+---
+
+## 13. C2 cross-platform amendment map
+
+The historical specification above remains valuable as the exact mobile product contract that produced the current Flutter implementation. C2 extends it rather than replacing its substance:
+
+- Sections 4.1–4.22 map into the C2 18-family / 258-atomic-requirement registry.
+- Section 5 remains the mobile screen map; C2 adds the public Web routes and private Web workspace while preserving the same product meanings.
+- Sections 6–10 become sources for shared invariants, prediction/reminder vectors, crypto-format interoperability, and privacy-law contracts.
+- Section 11 is superseded only for **cross-platform completion claims**: C2 completion requires applicable 258-ID evidence across Android/iOS/Web/PWA rather than merely broad mobile-family coverage.
+- Section 12 remains true for native signing; Web/PWA has its separate reviewed static/deployment path, and optional sync is separately security-gated.
+
+No original mobile requirement is discarded merely because C2 introduces a new client or sync option.

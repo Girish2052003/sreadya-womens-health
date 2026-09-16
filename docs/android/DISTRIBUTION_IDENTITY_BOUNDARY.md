@@ -1,5 +1,7 @@
 # Sreva Distribution Identity Boundary
 
+> **C2 scope note — 16 September 2026:** This original Android distribution-identity boundary is preserved in full. Android is now one of three equal first-class Sreva clients alongside iOS and Web/PWA. The authoritative cross-platform constitution is `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`. This file governs Android production/family-preview identity only and must not be read as limiting the wider Sreva product architecture.
+
 This document freezes the release boundary shared by the public-production and family-preview Android builds.
 
 ## Product identity
@@ -26,3 +28,5 @@ This boundary protects family privacy without erasing the project's origin from 
 ## Non-regression rule
 
 A distribution-identity change must not remove, disable, weaken, relabel, or silently bypass Sreva's implemented core capability families or architectural laws. Any future intentional product-scope change requires its own reviewed specification change and verification evidence.
+
+Under C2, those architectural laws include the cross-platform shared contract and parity rules. The production/preview identity distinction still must not create a reduced Sreva edition.

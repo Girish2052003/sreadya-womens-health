@@ -1,13 +1,18 @@
 # Sreva Public Repository Hardening State
 
 **Status date:** 15 September 2026  
+**C2 scope amendment:** 16 September 2026  
 **Maintainer:** Girish Nallan Chakravathy  
 **Canonical repository:** `Girish2052003/sreva-womens-health`  
 **Authoritative branch:** `main`
 
+> **C2 preservation note:** The complete public-repository controls established on 15 September are preserved below. C2 extends their scope to future Web/PWA/shared-contract/sync-service work; it does not remove the operational details or weaken the native release boundary.
+
 I maintain Sreva as a public source repository while preserving the product's local-first privacy model. Making the source visible does not change Sreva's health-data architecture: menstrual and reproductive-health data remains device-local unless the user explicitly chooses an operating-system health integration, export, or encrypted backup path.
 
 This document records the repository-level controls that must remain intact so future maintenance does not accidentally weaken the release boundary.
+
+> **C2 interpretation:** the statement above describes the currently implemented `1.0.0+1` mobile data flow. The approved future C2 architecture may add optional E2EE continuity in which authorized clients encrypt health content before upload and Sreva infrastructure stores only ciphertext plus minimum operational metadata without the health-vault decryption key. That future flow is not active merely because it is documented.
 
 ## Hardened workflow boundary
 
@@ -93,5 +98,22 @@ Repository settings are not fully enforceable from source files. At the time thi
 Before changing release workflows, signing configuration, repository visibility, artifact handling, or CI permissions, read this file together with `SECURITY.md`, `docs/verification/ANDROID_FORMAL_CLOSURE.md`, and `docs/android/DISTRIBUTION_IDENTITY_BOUNDARY.md`.
 
 If a proposed change would expose signing material, publish plaintext signed binaries from routine public CI, weaken the canonical release guard, broaden workflow token privileges without justification, or bypass the Sreva verification gates, treat it as a release-blocking regression rather than a convenience change.
+
+## C2 cross-platform hardening extension
+
+When `web/`, `shared/`, or `sync_service/` is introduced under the approved C2 implementation programme, all controls above remain in force and the following are additive:
+
+1. **Static Web/Pages secrets:** anything in the browser bundle is public. Pages/static-build jobs must never receive sync-service credentials, SMS/email provider secrets, vault/recovery secrets, administrator keys, or native signing secrets.
+2. **Least-privilege Pages deployment:** static Pages deployment may use the minimum reviewed `pages: write` / `id-token: write` permissions only in the deployment job; unrelated jobs remain least-privilege.
+3. **Pull-request isolation:** fork/PR jobs must not receive production backend, verification-provider, release, recovery, or artifact-encryption secrets.
+4. **Backend environment separation:** future development/staging/production sync environments are separate. Real production reproductive-health records/ciphertext must not be copied into test/staging as convenient fixtures; tests use synthetic or explicitly created test accounts/data.
+5. **Browser privacy gates:** CI expands to catch plaintext health data in URLs, caches, service-worker storage, logs, analytics, and browser fixtures; no session replay or health-payload telemetry is introduced.
+6. **Web/backend supply chain:** npm/Go lock/dependency/SBOM/vulnerability/license/static-analysis gates are additive to current Flutter/mobile checks.
+7. **Protocol review:** production sync/recovery cryptography is prohibited until the versioned E2EE key hierarchy/protocol, threat model, and cross-platform interoperability vectors pass the dedicated security gate.
+8. **C2 traceability:** the historical 22-family verifier remains mobile-baseline evidence. Cross-platform completion requires the 258-ID registry with explicit implemented/verified/adapted/N/A evidence rather than silently treating mobile closure as Web/sync closure.
+9. **No plaintext health backend:** compromise of a future sync database must not reveal readable menstrual/reproductive-health content by design; server schema/API must operate on opaque identifiers, versions, ciphertext, wrapped key material, and minimum operational metadata only.
+10. **Recovery separation:** email/SMS account recovery and operational provider data must never create a hidden server-side path to decrypt an old health vault.
+
+Before changing Web deployment, identity/sync infrastructure, recovery handling, or cross-platform cryptography, read this file together with `SECURITY.md`, `PRIVACY.md`, the C2 architecture constitution, the applicable release runbook, and the E2EE threat/protocol documents created by the implementation gate.
 
 — **Girish Nallan Chakravathy**
