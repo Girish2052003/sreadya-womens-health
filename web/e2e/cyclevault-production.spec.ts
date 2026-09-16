@@ -91,7 +91,7 @@ test('CycleVault production restore/export remains account-free, local and atomi
   expect(afterWrongPassphrase.serialized).toEqual(restored.serialized);
 
   const exportPassphrase = 'fresh browser backup passphrase';
-  await page.getByLabel('CycleVault export passphrase').fill(exportPassphrase);
+  await page.getByLabel('CycleVault export passphrase', { exact: true }).fill(exportPassphrase);
   await page.getByLabel('Confirm CycleVault export passphrase').fill(exportPassphrase);
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Download encrypted backup' }).click();
