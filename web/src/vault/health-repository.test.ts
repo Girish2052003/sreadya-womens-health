@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import type { HealthObservation } from '../domain/cycle/types';
 import { VaultService } from './vault-service';
 import type { PersistedVaultRecord, VaultPersistence } from './vault-types';
 import { HealthVaultRepository } from './health-repository';
@@ -82,5 +83,41 @@ describe('encrypted health repository', () => {
 
     await repository.deleteObservation(first.id);
     await expect(repository.listObservations()).resolves.toEqual([outside]);
+  });
+
+  it('rejects observations outside the frozen v1 kind, UTC, and provenance contract', async () => {
+    const persistence = new MemoryPersistence();
+    const vault = new VaultService(persistence);
+    await vault.createOrOpen();
+    const repository = new HealthVaultRepository(vault);
+
+    const invalidKind = {
+      id: 'observation-invalid-kind',
+      kind: 'inventedSymptom',
+      occurredAt: '2026-09-16T08:00:00.000Z',
+      source: 'app',
+    } as unknown as HealthObservation;
+    await expect(repository.saveObservation(invalidKind))
+      .rejects.toThrow('Health observation does not conform to Sreva HealthObservation v1 schema.');
+
+    const invalidTimestamp = {
+      id: 'observation-invalid-time',
+      kind: 'dailyNote',
+      occurredAt: '2026-09-16T08:00:00+03:00',
+      source: 'app',
+    } as unknown as HealthObservation;
+    await expect(repository.saveObservation(invalidTimestamp))
+      .rejects.toThrow('Health observation does not conform to Sreva HealthObservation v1 schema.');
+
+    const invalidSource = {
+      id: 'observation-invalid-source',
+      kind: 'dailyNote',
+      occurredAt: '2026-09-16T08:00:00.000Z',
+      source: 'remoteApi',
+    } as unknown as HealthObservation;
+    await expect(repository.saveObservation(invalidSource))
+      .rejects.toThrow('Health observation does not conform to Sreva HealthObservation v1 schema.');
+
+    expect(persistence.records.size).toBe(0);
   });
 });
