@@ -23,3 +23,21 @@ jobs:
         run: flutter pub get
       - name: CycleVault v1 interoperability vectors
         run: flutter test test/conformance/cyclevault_vectors_test.dart
+
+  web-cyclevault-v1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24.21.0'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install locked Web dependencies
+        working-directory: web
+        run: npm ci --ignore-scripts
+      - name: CycleVault v1 Web conformance RED/GREEN gate
+        working-directory: web
+        run: npm test -- --run src/crypto/cyclevault.conformance.test.ts
