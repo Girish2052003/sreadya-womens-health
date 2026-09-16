@@ -27,7 +27,8 @@ PATTERNS = {
 TEXT_EXTENSIONS = {
     ".dart", ".kt", ".kts", ".swift", ".py", ".yaml", ".yml", ".json",
     ".md", ".html", ".txt", ".arb", ".xml", ".plist", ".properties",
-    ".gradle", ".sh", ".ps1", ".toml",
+    ".gradle", ".sh", ".ps1", ".toml", ".ts", ".tsx", ".js", ".jsx",
+    ".mjs", ".cjs", ".css",
 }
 
 
