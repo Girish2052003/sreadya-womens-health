@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
+import { AccessibilityBootstrap } from '../accessibility/AccessibilityBootstrap';
 import { PwaBootstrap } from '../components/pwa/PwaBootstrap';
 import './globals.css';
 import './pwa.css';
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <meta name="apple-mobile-web-app-title" content="Sreva" />
       </head>
       <body>
+        <AccessibilityBootstrap />
         <PwaBootstrap />
         {children}
       </body>
