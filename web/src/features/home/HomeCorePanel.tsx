@@ -3,15 +3,22 @@ import Link from 'next/link';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import type { HealthObservation, PeriodEpisode } from '../../domain/cycle/types';
-import { formatUtcDate, observationLabel } from '../core/presentation';
+import type { PredictionResult } from '../../domain/prediction/types';
+import { formatUtcDate, observationLabel, titleCase } from '../core/presentation';
+
+function predictionDate(value: string): string {
+  return formatUtcDate(`${value}T00:00:00.000Z`);
+}
 
 export function HomeCorePanel({
   periods,
   observations,
+  prediction,
   onStartPeriodToday,
 }: {
   periods: PeriodEpisode[];
   observations: HealthObservation[];
+  prediction: PredictionResult | null;
   onStartPeriodToday: () => void;
 }) {
   const latestPeriod = periods.at(-1);
@@ -39,8 +46,16 @@ export function HomeCorePanel({
         <Link className="workspace-text-link" href="/app/today">See today</Link>
       </Card>
 
-      <Card eyebrow="Local intelligence" title="Predictions stay local">
-        <p>Prediction Engine v1 is added in the next governed task. This screen does not invent a date before that shared conformance gate is complete.</p>
+      <Card eyebrow="Local intelligence" title={prediction ? `Most likely · ${predictionDate(prediction.mostLikelyDate)}` : 'More cycle history needed'}>
+        {prediction ? (
+          <>
+            <p>{predictionDate(prediction.windowStart)} – {predictionDate(prediction.windowEnd)}</p>
+            <p>{titleCase(prediction.confidence)} confidence · based on {prediction.validIntervals.length} recent valid cycle intervals.</p>
+          </>
+        ) : (
+          <p>Sreva will calculate an estimate locally after enough valid cycle history is available.</p>
+        )}
+        <Link className="workspace-text-link" href="/app/predictions">Open predictions</Link>
       </Card>
     </div>
   );
