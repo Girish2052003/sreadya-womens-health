@@ -14,8 +14,21 @@ export function assertValidPeriodEpisode(episode: PeriodEpisodeInvariantInput): 
 }
 
 export function assertPeriodDoesNotOverlap(
-  _candidate: PeriodEpisodeInvariantInput,
-  _existing: readonly PeriodEpisodeInvariantInput[],
+  candidate: PeriodEpisodeInvariantInput,
+  existing: readonly PeriodEpisodeInvariantInput[],
 ): void {
-  // Intentionally empty while the Task 9 RED test proves the overlap guard.
+  const candidateStart = Date.parse(candidate.start);
+  const candidateEnd = Date.parse(candidate.end ?? candidate.start);
+
+  for (const period of existing) {
+    if (period.id === candidate.id) continue;
+
+    const periodStart = Date.parse(period.start);
+    const periodEnd = Date.parse(period.end ?? period.start);
+    const overlaps = candidateEnd >= periodStart && periodEnd >= candidateStart;
+
+    if (overlaps) {
+      throw new Error('Period episodes cannot overlap without an explicit merge.');
+    }
+  }
 }
