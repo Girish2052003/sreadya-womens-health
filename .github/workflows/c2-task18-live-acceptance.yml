@@ -8,7 +8,6 @@ on:
       - 'web/e2e/task18-live-acceptance.spec.ts'
       - 'web/playwright.live.config.ts'
       - '.github/workflows/c2-task18-live-acceptance.yml'
-      - 'docs/verification/WEB_PWA_LOCAL_ACCEPTANCE.md'
   workflow_dispatch:
 
 permissions:
