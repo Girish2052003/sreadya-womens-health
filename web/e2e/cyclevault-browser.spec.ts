@@ -1,6 +1,19 @@
+import { readFileSync } from 'node:fs';
+
 import { expect, test } from '@playwright/test';
 
-import vector from '../../shared/crypto/interoperability-vectors/cyclevault-v1.json';
+const vector = JSON.parse(
+  readFileSync(
+    new URL('../../shared/crypto/interoperability-vectors/cyclevault-v1.json', import.meta.url),
+    'utf8',
+  ),
+) as {
+  passphrase: string;
+  saltBase64: string;
+  derivedKeyHex: string;
+  containerJson: string;
+  payload: unknown;
+};
 
 test('CycleVault v1 exact vector derives and decrypts inside the target browser', async ({ page }, testInfo) => {
   await page.goto('/app/vault/');
