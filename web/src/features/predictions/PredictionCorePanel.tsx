@@ -21,7 +21,7 @@ export function PredictionCorePanel({ prediction }: { prediction: PredictionResu
         <Card eyebrow="Local estimate" title="Prediction">
           <p>More cycle history is needed before Sreva can calculate a meaningful estimate.</p>
           <p className="workspace-note">
-            Record at least two period starts. Sreva will use your own history and will not assume a 28-day cycle.
+            No date is invented. Record at least two period starts; Sreva will use your own history and will not assume a 28-day cycle.
           </p>
         </Card>
       </div>
