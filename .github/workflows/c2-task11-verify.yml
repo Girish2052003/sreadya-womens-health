@@ -34,6 +34,12 @@ jobs:
       - name: Static export with dedicated predictions route
         working-directory: web
         run: npm run build
+      - name: Install Chromium
+        working-directory: web
+        run: npx playwright install --with-deps chromium
+      - name: Account-free local prediction browser proof
+        working-directory: web
+        run: npx playwright test e2e/prediction-local.spec.ts --project=chromium
 
   mobile-prediction-v1:
     runs-on: ubuntu-latest
