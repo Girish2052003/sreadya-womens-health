@@ -21,16 +21,18 @@ The authoritative cross-platform architecture is `docs/superpowers/specs/2026-09
 9. Account authentication is not health-vault decryption. Email/SMS recovery alone must not unlock old E2EE health history.
 10. Sreva infrastructure must not hold a universal/developer-accessible key capable of decrypting users' reproductive-health vaults.
 
-## E2EE protocol gate
+## Implemented E2EE continuity boundary
 
-The C2 architecture permits optional encrypted synchronization, but it does **not** authorize improvising production cryptography.
+Optional encrypted continuity is implemented behind the reviewed C2 protocol boundary. An authorized client encrypts health content before network transmission. The service operates on ciphertext, wrapped key/recovery material, and minimum operational metadata required for account/device authorization, versioning, sequencing, replay protection, synchronization, and revocation.
 
-Before production sync code is implemented/shipped, the repository must contain and review:
+The server may know opaque account/device/object identifiers, public device-verification material, sizes, versions/revisions, minimum timestamps, and authorization/revocation state. It must not parse or store readable reproductive-health payloads. Sreva infrastructure does not possess the health-vault decryption key.
+
+The frozen protocol includes:
 
 - a versioned cross-platform key hierarchy;
 - per-device cryptographic identity and enrollment semantics;
 - trusted-device authorization;
-- user-held recovery-key semantics;
+- independent user-held recovery-key semantics;
 - server-visible metadata boundaries;
 - revocation and rotation behavior;
 - replay/tamper/cross-account-substitution protections;
@@ -38,11 +40,11 @@ Before production sync code is implemented/shipped, the repository must contain 
 - Android ↔ iOS ↔ Web interoperability vectors;
 - threat-model and protocol-review evidence.
 
-If an established, maintained primitive/library combination cannot meet the Android/iOS/Web requirement, implementation must stop for a focused security review rather than inventing custom cryptography inside application/UI code.
+Passkey/account authentication and email/SMS account recovery are separate from vault decryption. A trusted device or independent recovery key is required for old-vault continuity. Loss of every trusted device plus the recovery key can make the old encrypted vault unrecoverable.
 
 ## Web/PWA security boundary
 
-The Web client is browser-native Next.js/React/TypeScript and therefore has additional attack surfaces. Security review must include at least:
+The Web client is browser-native Next.js/React/TypeScript and therefore has additional attack surfaces. Security review includes at least:
 
 - XSS and unsafe HTML/script injection;
 - CSP/security-header posture at production hosting;
@@ -58,11 +60,28 @@ The Web client is browser-native Next.js/React/TypeScript and therefore has addi
 
 Anything shipped in the browser bundle is treated as public. Backend/service credentials, private keys, provider secrets, and administrative tokens never belong in Web build variables.
 
-## Optional sync-service security boundary
+## Sync-service security boundary
 
-The future sync service may store only opaque account/device identifiers, ciphertext/wrapped key material, versions, minimum timestamps/operational metadata, and authorization state required by the reviewed protocol. Its schema/API must not grow readable fields such as period dates, symptoms, pregnancy state, sexual activity, fertility observations, medication details, notes, or prediction results.
+The sync service may store only opaque account/device identifiers, ciphertext/wrapped key material, versions, minimum timestamps/operational metadata, and authorization state required by the reviewed protocol. Its schema/API must not grow readable fields such as period dates, symptoms, pregnancy state, sexual activity, fertility observations, medication details, notes, or prediction results.
 
-Authorization, concurrency, replay protection, revoked-device handling, and cross-account isolation are mandatory test areas.
+Authorization, concurrency, replay protection, revoked-device handling, cross-account isolation, idempotency, ciphertext limits, and truthful account deletion are mandatory test areas.
+
+Account deletion may remove server-controlled state but must never claim remote erasure of former-device copies or user-controlled exports/backups.
+
+## Sync-enabled release declaration gate
+
+A **sync-enabled release** is blocked if its shipping behavior and its public disclosures disagree. Any mismatch between the implementation and the public/in-app privacy policy, Privacy Center, support text, or an applicable store declaration is a **release blocker**.
+
+Before such a release:
+
+1. Run the complete protocol, interoperability, account/device/recovery, sync-service, mobile-adapter, Web, and cross-platform traceability gates.
+2. Review the privacy policy and in-product wording against the actual enabled data flows.
+3. Re-evaluate Google Play Data Safety and Health app declarations using the **exact release binary** and dependency lockfiles.
+4. When native iOS distribution is active, re-evaluate Apple App Privacy disclosures against the same exact release behavior and dependency set.
+5. Review email/SMS provider metadata only if those provider channels are enabled in that release.
+6. Preserve account-free core health functionality and prove disabling sync leaves the local vault usable.
+
+Repository CI can prove repository-controlled tests and documents. It cannot prove that an external Play Console/App Store Connect form, publisher identity step, production provider account, or final store review has been completed.
 
 ## Public repository release boundary
 
@@ -76,6 +95,6 @@ The maintained public-repository protection state and release-boundary rationale
 
 ## Verification rule
 
-Existing mobile security/CI gates remain mandatory. C2 work adds shared-contract, Web/PWA, browser-security, and later sync-service gates; it must not replace a stronger existing mobile gate with a weaker generic one.
+Existing mobile security/CI gates remain mandatory. C2 shared-contract, Web/PWA, sync-service, account/recovery, traceability, and release-policy gates are additive; none replaces a stronger existing gate with a weaker generic one.
 
 Do not publish vulnerability reports containing secrets, real health data, signing material, recovery material, or private user exports in a public issue.
