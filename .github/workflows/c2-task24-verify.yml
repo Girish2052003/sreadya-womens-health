@@ -39,12 +39,17 @@ jobs:
           cache: true
       - run: flutter pub get
       - name: Verify Task 24 formatting
-        run: >-
-          dart format --output=none --set-exit-if-changed
-          lib/core/crypto/e2ee
-          lib/features/account
-          lib/features/sync
-          test/conformance/e2ee_vectors_mobile_test.dart
+        run: |
+          dart format \
+            lib/core/crypto/e2ee \
+            lib/features/account \
+            lib/features/sync \
+            test/conformance/e2ee_vectors_mobile_test.dart
+          git diff --color=never --exit-code -- \
+            lib/core/crypto/e2ee \
+            lib/features/account \
+            lib/features/sync \
+            test/conformance/e2ee_vectors_mobile_test.dart
       - name: Analyze complete Flutter client
         run: flutter analyze
       - name: Verify shared E2EE and sync vectors through production mobile adapters
