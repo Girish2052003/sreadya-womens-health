@@ -134,7 +134,7 @@ void main() {
         final vector = await _loadObject(_syncVectorPath);
         final cases = (vector['cases'] as List<dynamic>)
             .cast<Map<String, dynamic>>();
-        final same = cases.single(
+        final same = cases.singleWhere(
           (entry) => entry['id'] == 'idempotent-byte-equivalent-retry',
         );
         final sameInput = same['input'] as Map<String, dynamic>;
@@ -149,7 +149,7 @@ void main() {
           DuplicateEventDecision.returnExistingAcknowledgement,
         );
 
-        final changed = cases.single(
+        final changed = cases.singleWhere(
           (entry) => entry['id'] == 'duplicate-event-mutated-envelope',
         );
         final changedInput = changed['input'] as Map<String, dynamic>;
@@ -172,7 +172,7 @@ void main() {
         final vector = await _loadObject(_syncVectorPath);
         final cases = (vector['cases'] as List<dynamic>)
             .cast<Map<String, dynamic>>();
-        final stale = cases.single(
+        final stale = cases.singleWhere(
           (entry) => entry['id'] == 'stale-base-revision',
         );
         final staleInput = stale['input'] as Map<String, dynamic>;
@@ -185,7 +185,7 @@ void main() {
           isTrue,
         );
 
-        final downgrade = cases.single(
+        final downgrade = cases.singleWhere(
           (entry) => entry['id'] == 'unsupported-suite-downgrade',
         );
         final downgradeInput = downgrade['input'] as Map<String, dynamic>;

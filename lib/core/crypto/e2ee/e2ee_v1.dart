@@ -20,8 +20,9 @@ Uint8List lp16Frame(Iterable<List<int>> fields) {
 Uint8List _utf8(String value) => Uint8List.fromList(utf8.encode(value));
 
 void _requireNonEmpty(String value, String label) {
-  if (value.isEmpty)
+  if (value.isEmpty) {
     throw ArgumentError.value(value, label, 'must not be empty');
+  }
 }
 
 void _requireLength(List<int> value, int length, String label) {

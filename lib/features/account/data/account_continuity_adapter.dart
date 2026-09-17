@@ -3,9 +3,9 @@ import 'native_passkey_adapter.dart';
 
 class MobileAccountContinuityAdapter {
   MobileAccountContinuityAdapter({
-    required AccountIdentityTransport transport,
+    required AccountIdentityTransport identityTransport,
     NativePasskeyAdapter? passkeys,
-  }) : _transport = transport,
+  }) : _transport = identityTransport,
        _passkeys = passkeys ?? NativePasskeyAdapter();
 
   final AccountIdentityTransport _transport;

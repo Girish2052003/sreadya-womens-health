@@ -48,12 +48,12 @@ class SecureSyncRandomSource implements SyncRandomSource {
 
 class EncryptedMobileSyncAdapter {
   EncryptedMobileSyncAdapter({
-    required VaultRootSecretProvider rootSecrets,
-    required EncryptedSyncOutbox outbox,
+    required VaultRootSecretProvider rootSecretProvider,
+    required EncryptedSyncOutbox encryptedOutbox,
     E2eeV1Crypto? crypto,
     SyncRandomSource? random,
-  }) : _rootSecrets = rootSecrets,
-       _outbox = outbox,
+  }) : _rootSecrets = rootSecretProvider,
+       _outbox = encryptedOutbox,
        _crypto = crypto ?? E2eeV1Crypto(),
        _random = random ?? SecureSyncRandomSource();
 
