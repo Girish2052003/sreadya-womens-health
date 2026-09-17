@@ -20,7 +20,7 @@ jobs:
           python-version: '3.12'
       - name: Generate explicit 258-ID evidence ledger
         run: python tool/generate_cross_platform_evidence.py
-      - name: Patch main release CI with the Task 25 verifier
+      - name: Patch main release CI in the verification workspace
         shell: bash
         run: |
           python - <<'PY'
@@ -53,14 +53,14 @@ jobs:
         run: |
           python -m pip install pytest
           python -m pytest -q verification/reference/test_cross_platform_traceability.py
-      - name: Commit the validated generated artifacts
+      - name: Commit the validated generated ledger
         shell: bash
         run: |
           git config user.name 'Sreva Task 25 CI'
           git config user.email 'actions@users.noreply.github.com'
-          git add shared/capabilities/evidence.v1.json .github/workflows/ci.yml
+          git add shared/capabilities/evidence.v1.json
           if git diff --cached --quiet; then
-            echo 'Task 25 generated artifacts already current.'
+            echo 'Task 25 generated ledger already current.'
             exit 0
           fi
           git commit -m 'verification: materialize explicit 258-id traceability ledger'
