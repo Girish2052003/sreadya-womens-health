@@ -79,6 +79,18 @@ func (f *fakeRepository) Commit(_ context.Context, envelope Envelope, ack Ack) e
 	return nil
 }
 
+type fakeAtomicRepository struct {
+	*fakeRepository
+	ack         Ack
+	err         error
+	atomicCalls int
+}
+
+func (f *fakeAtomicRepository) CommitEnvelope(_ context.Context, _ Envelope) (Ack, error) {
+	f.atomicCalls++
+	return f.ack, f.err
+}
+
 func validEnvelope() Envelope {
 	return Envelope{
 		AccountID:        "acct-a",
@@ -112,6 +124,33 @@ func TestPushCommitsMatchingBaseAsNextRevision(t *testing.T) {
 	}
 	if repository.commits != 1 {
 		t.Fatalf("commit count = %d, want 1", repository.commits)
+	}
+}
+
+func TestPushUsesRepositoryAtomicCommitWhenAvailable(t *testing.T) {
+	base := newFakeRepository()
+	repository := &fakeAtomicRepository{
+		fakeRepository: base,
+		ack: Ack{
+			EventID:           "evt-1",
+			CommittedRevision: 41,
+			Conflict:          true,
+		},
+	}
+	service := NewService(repository, fakeAuthorizer{}, 1024)
+
+	ack, err := service.Push(context.Background(), Session{AccountID: "acct-a"}, validEnvelope())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if repository.atomicCalls != 1 {
+		t.Fatalf("atomic commit calls = %d, want 1", repository.atomicCalls)
+	}
+	if base.commits != 0 {
+		t.Fatalf("fallback commit calls = %d, want 0", base.commits)
+	}
+	if ack.CommittedRevision != 41 || !ack.Conflict {
+		t.Fatalf("ack = %+v, want atomic repository acknowledgement", ack)
 	}
 }
 
