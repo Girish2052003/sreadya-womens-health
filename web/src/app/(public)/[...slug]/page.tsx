@@ -4,7 +4,12 @@ import { notFound } from 'next/navigation';
 import { PublicFooter } from '../../../components/navigation/PublicFooter';
 import { PublicHeader } from '../../../components/navigation/PublicHeader';
 import { InstallGuide, type InstallGuideTarget } from '../../../components/pwa/InstallGuide';
-import { privacyPolicyIntro, privacyPolicyLastUpdated, privacyPolicySections } from '../../../content/privacy-policy';
+import {
+  privacyPolicyIntro,
+  privacyPolicyLastUpdated,
+  privacyPolicyLastUpdatedLabel,
+  privacyPolicySections,
+} from '../../../content/privacy-policy';
 import { publicPages } from '../../../content/routes';
 
 export function generateStaticParams() {
@@ -42,7 +47,7 @@ export default async function PublicPage({ params }: { params: Promise<{ slug: s
         {installTarget ? <InstallGuide target={installTarget} /> : null}
         {isPrivacyPolicy ? (
           <section className="policy-document" aria-label="Sreva Privacy Policy">
-            <p className="public-eyebrow">Last updated: {privacyPolicyLastUpdated}</p>
+            <p className="public-eyebrow">{privacyPolicyLastUpdatedLabel}: {privacyPolicyLastUpdated}</p>
             <p className="public-lede">{privacyPolicyIntro}</p>
             {privacyPolicySections.map((section) => (
               <article key={section.title}>
