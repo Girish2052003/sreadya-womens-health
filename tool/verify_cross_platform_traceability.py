@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail closed unless every Sreva C2 launch capability resolves to platform evidence."""
+"""Fail closed unless the explicit 258-ID / 1,032-cell Task 25 ledger is valid."""
 
 from __future__ import annotations
 
@@ -8,18 +8,26 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-REGISTRY = ROOT / "shared/capabilities/sreva-capabilities.v1.json"
-LEDGER = ROOT / "shared/capabilities/evidence.v1.json"
+REGISTRY = ROOT / "shared" / "capabilities" / "sreva-capabilities.v1.json"
+LEDGER = ROOT / "shared" / "capabilities" / "evidence.v1.json"
 PLATFORMS = ("android", "ios", "web", "pwa")
-STATUSES = {"implemented", "verified"}
-EVIDENCE_PREFIXES = ("test/", "verification/reference/", "web/", ".github/workflows/", "platform_templates/", "sync_service/")
+ALLOWED_APPLICABILITY = {"full", "adapted", "na"}
+ALLOWED_STATUSES = {"verified", "implemented", "na"}
+EVIDENCE_PREFIXES = (
+    "test/",
+    "verification/reference/",
+    "web/",
+    ".github/workflows/",
+    "platform_templates/",
+    "sync_service/",
+)
 
 
 def fail(message: str) -> None:
     raise SystemExit(f"Cross-platform traceability failed: {message}")
 
 
-def load(path: Path) -> dict:
+def load_object(path: Path) -> dict:
     if not path.is_file() or path.stat().st_size == 0:
         fail(f"missing or empty artifact: {path.relative_to(ROOT)}")
     try:
@@ -47,86 +55,134 @@ def safe_file(relative: object, capability_id: str, platform: str) -> str:
     return relative
 
 
-def trace_for(ledger: dict, capability_id: str, family: str, platform: str) -> dict:
-    overrides = ledger.get("overrides")
-    profiles = ledger.get("profiles")
-    if not isinstance(overrides, dict) or not isinstance(profiles, dict):
-        fail("ledger profiles/overrides must be objects")
-    capability_override = overrides.get(capability_id, {})
-    if not isinstance(capability_override, dict):
-        fail(f"{capability_id} override must be an object")
-    candidate = capability_override.get(platform)
-    if candidate is None:
-        family_profile = profiles.get(family)
-        if not isinstance(family_profile, dict):
-            fail(f"{capability_id} has no family trace profile")
-        surface = "mobile" if platform in {"android", "ios"} else "web"
-        candidate = family_profile.get(surface)
-    if not isinstance(candidate, dict):
-        fail(f"{capability_id}/{platform} has no trace profile")
-    if set(candidate) != {"implementation", "evidence"}:
-        fail(f"{capability_id}/{platform} trace must define implementation and evidence")
-    return candidate
-
-
 def main() -> None:
-    registry = load(REGISTRY)
-    ledger = load(LEDGER)
+    registry = load_object(REGISTRY)
+    ledger = load_object(LEDGER)
+
+    if ledger.get("contract") != "SREVA C2 Cross-Platform Evidence Ledger":
+        fail("ledger contract identifier changed")
+    if ledger.get("version") != 1:
+        fail("ledger version must be 1")
     if ledger.get("registry") != "shared/capabilities/sreva-capabilities.v1.json":
         fail("ledger registry pointer changed")
-    status = ledger.get("applicable_status")
-    if status not in STATUSES:
-        fail("ledger applicable_status must be implemented or verified")
+
     records = registry.get("capabilities")
+    rows = ledger.get("capabilities")
     if not isinstance(records, list):
         fail("registry capabilities must be a list")
-    launch = [record for record in records if isinstance(record, dict) and isinstance(record.get("id"), str) and not record["id"].startswith("FUT-")]
-    if len(launch) != 258 or len({record["id"] for record in launch}) != 258:
-        fail("registry must contain exactly 258 unique launch IDs")
-    adapted_rationales = ledger.get("adapted_rationales")
-    na_rationales = ledger.get("na_rationales")
-    if not isinstance(adapted_rationales, dict) or not isinstance(na_rationales, dict):
-        fail("ledger adapted_rationales/na_rationales must be objects")
+    if not isinstance(rows, list):
+        fail("ledger capabilities must be a list")
+
+    launch = [
+        record
+        for record in records
+        if isinstance(record, dict)
+        and isinstance(record.get("id"), str)
+        and not record["id"].startswith("FUT-")
+    ]
+    if len(launch) != 258:
+        fail(f"registry must contain exactly 258 launch IDs, got {len(launch)}")
+    registry_ids = [record["id"] for record in launch]
+    if len(set(registry_ids)) != 258:
+        fail("registry launch IDs must be unique")
+
+    if len(rows) != 258:
+        fail(f"ledger must contain exactly 258 rows, got {len(rows)}")
+    ledger_ids = [row.get("id") if isinstance(row, dict) else None for row in rows]
+    if ledger_ids != registry_ids:
+        fail("ledger IDs/order must exactly match the frozen registry")
+    if len(set(ledger_ids)) != 258:
+        fail("ledger IDs must be unique")
+
+    registry_by_id = {record["id"]: record for record in launch}
     status_counts: Counter[str] = Counter()
     applicability_counts: Counter[str] = Counter()
-    for record in launch:
-        capability_id = record["id"]
-        family = capability_id.split("-", 1)[0]
-        platforms = record.get("platforms")
-        if not isinstance(platforms, dict) or set(platforms) != set(PLATFORMS):
+
+    for row in rows:
+        capability_id = row["id"]
+        if set(row) != {"id", "platforms"}:
+            fail(f"{capability_id} row must contain only id and platforms")
+        platform_cells = row["platforms"]
+        if not isinstance(platform_cells, dict) or set(platform_cells) != set(PLATFORMS):
+            fail(f"{capability_id} must contain exactly android/ios/web/pwa cells")
+
+        expected_platforms = registry_by_id[capability_id].get("platforms")
+        if not isinstance(expected_platforms, dict) or set(expected_platforms) != set(PLATFORMS):
             fail(f"{capability_id} registry platform contract is invalid")
+
         for platform in PLATFORMS:
-            applicability = platforms[platform]
-            applicability_counts[str(applicability)] += 1
-            if applicability == "na":
-                rationale = na_rationales.get(capability_id, na_rationales.get(family, ""))
-                if not isinstance(rationale, str) or not rationale.strip():
-                    fail(f"{capability_id}/{platform} N/A cell lacks rationale")
-                status_counts["na"] += 1
-                continue
-            if applicability not in {"full", "adapted"}:
+            cell = platform_cells[platform]
+            if not isinstance(cell, dict):
+                fail(f"{capability_id}/{platform} cell must be an object")
+            required = {"applicability", "status", "implementation", "evidence", "rationale"}
+            if set(cell) != required:
+                fail(f"{capability_id}/{platform} cell fields changed")
+
+            applicability = cell["applicability"]
+            status = cell["status"]
+            implementation = cell["implementation"]
+            evidence = cell["evidence"]
+            rationale = cell["rationale"]
+
+            if applicability not in ALLOWED_APPLICABILITY:
                 fail(f"{capability_id}/{platform} has invalid applicability {applicability!r}")
-            trace = trace_for(ledger, capability_id, family, platform)
-            implementation = trace["implementation"]
-            evidence = trace["evidence"]
-            if not isinstance(implementation, list) or not implementation:
+            if applicability != expected_platforms[platform]:
+                fail(
+                    f"{capability_id}/{platform} applicability mismatch: "
+                    f"ledger={applicability!r}, registry={expected_platforms[platform]!r}"
+                )
+            if status not in ALLOWED_STATUSES:
+                fail(f"{capability_id}/{platform} has invalid status {status!r}")
+            if not isinstance(implementation, list):
+                fail(f"{capability_id}/{platform} implementation must be a list")
+            if not isinstance(evidence, list):
+                fail(f"{capability_id}/{platform} evidence must be a list")
+            if not isinstance(rationale, str):
+                fail(f"{capability_id}/{platform} rationale must be a string")
+
+            applicability_counts[applicability] += 1
+            status_counts[status] += 1
+
+            if applicability == "na":
+                if status != "na":
+                    fail(f"{capability_id}/{platform} N/A applicability requires status=na")
+                if implementation or evidence:
+                    fail(f"{capability_id}/{platform} N/A cell must not claim implementation/evidence")
+                if not rationale.strip():
+                    fail(f"{capability_id}/{platform} N/A cell lacks rationale")
+                continue
+
+            if status not in {"implemented", "verified"}:
+                fail(f"{capability_id}/{platform} applicable cell lacks implementation status")
+            if not implementation:
                 fail(f"{capability_id}/{platform} has no implementation trace")
-            if not isinstance(evidence, list) or not evidence:
-                fail(f"{capability_id}/{platform} has no executable evidence trace")
+            if not evidence:
+                fail(f"{capability_id}/{platform} has no evidence trace")
+            if applicability == "adapted" and not rationale.strip():
+                fail(f"{capability_id}/{platform} adapted cell lacks rationale")
+
             for relative in implementation:
                 safe_file(relative, capability_id, platform)
             for relative in evidence:
                 path = safe_file(relative, capability_id, platform)
                 if not path.startswith(EVIDENCE_PREFIXES):
-                    fail(f"{capability_id}/{platform} evidence is outside approved evidence homes: {path}")
-            if applicability == "adapted":
-                rationale = adapted_rationales.get(family, "")
-                if not isinstance(rationale, str) or not rationale.strip():
-                    fail(f"{capability_id}/{platform} adapted cell lacks rationale")
-            status_counts[status] += 1
+                    fail(
+                        f"{capability_id}/{platform} evidence is outside approved evidence homes: {path}"
+                    )
+
     if sum(status_counts.values()) != 1032:
         fail("platform-cell accounting is incomplete")
-    print("cross-platform traceability: " f"258/258 launch IDs resolved; 1032/1032 platform cells explicit; " f"implemented={status_counts['implemented']}; verified={status_counts['verified']}; " f"na={status_counts['na']}; adapted={applicability_counts['adapted']}")
+    if sum(applicability_counts.values()) != 1032:
+        fail("applicability accounting is incomplete")
+
+    print(
+        "cross-platform traceability: "
+        "258/258 launch IDs explicit; 1032/1032 platform cells explicit; "
+        f"implemented={status_counts['implemented']}; "
+        f"verified={status_counts['verified']}; "
+        f"na={status_counts['na']}; "
+        f"adapted={applicability_counts['adapted']}"
+    )
 
 
 if __name__ == "__main__":

@@ -38,6 +38,10 @@ jobs:
       - run: python -m pytest -q verification/reference
       - name: Verify exhaustive worldwide-v1 traceability
         run: python tool/verify_v1_traceability.py
+      - name: Verify deterministic Task 25 evidence ledger
+        run: python tool/generate_cross_platform_evidence.py --check
+      - name: Verify explicit 258-ID cross-platform traceability
+        run: python tool/verify_cross_platform_traceability.py
       - name: Fail on release backlog markers
         run: python tool/release_backlog_scan.py
       - run: python tool/privacy_scan.py
