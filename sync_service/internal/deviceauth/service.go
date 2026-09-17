@@ -18,9 +18,7 @@ var (
 	ErrChallengeExpired = errors.New("device challenge expired")
 	ErrChallengeScope   = errors.New("device challenge scope mismatch")
 	ErrInvalidSignature = errors.New("invalid device signature")
-	ErrInvalidKey       = errors.New("invalid device signing key")
 	ErrInvalidSuite     = errors.New("unsupported device signature suite")
-	ErrFrameTooLarge    = errors.New("device-auth transcript field exceeds lp16 limit")
 )
 
 const signatureSuite = "Ed25519"
@@ -116,15 +114,12 @@ func (s *Service) Verify(ctx context.Context, request Request) error {
 	if record.SignatureSuite != signatureSuite {
 		return ErrInvalidSuite
 	}
-	if len(record.PublicSigningKey) != ed25519.PublicKeySize {
-		return ErrInvalidKey
-	}
 	if len(request.Signature) != ed25519.SignatureSize {
 		return ErrInvalidSignature
 	}
 
 	transcript := Transcript(scope, request.Challenge)
-	if transcript == nil || !ed25519.Verify(ed25519.PublicKey(record.PublicSigningKey), transcript, request.Signature) {
+	if transcript == nil || !ed25519.Verify(ed25519.PublicKey(record.PublicSigningKey[:]), transcript, request.Signature) {
 		return ErrInvalidSignature
 	}
 	return nil
