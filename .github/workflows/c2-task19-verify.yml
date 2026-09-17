@@ -1,8 +1,11 @@
 name: C2 Task 19 E2EE Protocol Gate
 
 on:
+  pull_request:
+    branches: [main]
   push:
     branches:
+      - main
       - feat/task19-e2ee-protocol-gate
       - feat/task23-trusted-device-recovery
     paths:

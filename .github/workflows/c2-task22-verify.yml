@@ -1,8 +1,11 @@
 name: C2 Task 22 Ciphertext Sync API
 
 on:
+  pull_request:
+    branches: [main]
   push:
     branches:
+      - main
       - feat/task22-ciphertext-sync-api
     paths:
       - 'sync_service/**'

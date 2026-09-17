@@ -1,8 +1,11 @@
 name: C2 Task 20 Sync Service Scaffold
 
 on:
+  pull_request:
+    branches: [main]
   push:
     branches:
+      - main
       - feat/task20-sync-service-scaffold
     paths:
       - 'sync_service/**'

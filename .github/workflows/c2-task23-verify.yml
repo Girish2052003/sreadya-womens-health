@@ -1,8 +1,11 @@
 name: C2 Task 23 Trusted Device Recovery
 
 on:
+  pull_request:
+    branches: [main]
   push:
     branches:
+      - main
       - feat/task23-trusted-device-recovery
     paths:
       - 'sync_service/**'
