@@ -21,9 +21,11 @@ const (
 )
 
 type Record struct {
-	DeviceID  string
-	AccountID string
-	State     State
+	DeviceID         string
+	AccountID        string
+	State            State
+	PublicSigningKey []byte
+	SignatureSuite   string
 }
 
 type Lookup interface {
