@@ -1,49 +1,83 @@
 # Sreva Privacy Architecture
 
+Last reviewed: 17 September 2026
+
 Sreva's core promise is simple: **the user's reproductive-health data is not a developer-readable health database.**
 
-## Current implemented release boundary
+## Shipping privacy boundary
 
-The currently implemented Flutter mobile baseline stores core cycle/health data locally on the user's device. Prediction, insight generation, reminder planning, doctor-report generation, and natural-language command parsing are designed to operate locally. Core health functionality does not require a Sreva account or network connection.
+Sreva has two equal first-class ways to use the product:
 
-The current `1.0.0+1` mobile runtime does **not** silently operate a Sreva health-sync backend merely because an optional encrypted-continuity architecture has now been approved for future implementation.
+- **Account-free / sync off:** core health functionality works from the user's encrypted local vault without an account or network connection.
+- **Optional account continuity / sync on:** an authorized client encrypts health content before it leaves that client. Sreva's synchronization infrastructure stores ciphertext, wrapped key material, and only the minimum operational metadata required for account/device authorization and synchronization.
 
-Platform health integrations are optional and permission-scoped. User-controlled exports leave the application only after explicit share/export action.
+Account mode does not unlock stronger health features. Disabling sync must not disable local Sreva, erase the local vault, or force the user to create another account.
 
-## Approved C2 privacy architecture
+Predictions, insights, reminder planning, doctor-report generation, and natural-language health interpretation remain client-side. The sync service is continuity infrastructure, not a health-intelligence engine.
 
-Sreva is now designed as one product with three equal first-class clients: Android, iOS, and Web/PWA. Account-free and account-based experiences retain the same core health capabilities.
+## What optional continuity can expose to Sreva infrastructure
 
-An optional future account mode may add end-to-end encrypted continuity between authorized devices. If enabled after implementation and release review:
+A sync-enabled release may expose operational information needed to run the encrypted service, such as:
 
-- health content is encrypted on the authorized client before synchronization;
-- the sync service stores ciphertext plus only the minimum operational metadata needed for synchronization/device management;
-- Sreva infrastructure must not possess the key required to decrypt the user's reproductive-health vault;
-- email/SMS account recovery must not by itself decrypt old health history;
-- trusted-device approval and a user-held recovery key form the vault-recovery boundary;
-- losing every trusted device and the recovery key can make the old encrypted vault unrecoverable;
-- disabling sync must not disable local core Sreva.
+- opaque account, device, vault, object, event, and synchronization identifiers;
+- device authorization/revocation state and public device-verification material;
+- ciphertext and wrapped recovery/key envelopes;
+- ciphertext sizes;
+- protocol/schema versions, revision/version counters, and synchronization ordering;
+- minimum timestamps needed for synchronization, authorization, replay protection, and service operation.
 
-This means “no developer reproductive-health database” is interpreted precisely as **no plaintext or developer-decryptable reproductive-health database**. Optional ciphertext synchronization does not authorize Sreva to inspect menstrual history.
+It must not expose readable period dates, flow, symptoms, sexual activity, fertility observations, pregnancy state, medication details, private notes, prediction inputs/results, or report contents to the synchronization service.
+
+Sreva infrastructure **does not possess the health-vault decryption key** and must not hold a universal or developer-accessible secret capable of deriving it.
+
+## Account identity is not vault decryption
+
+Passkeys and account sessions authorize account access. Where a release enables verified email or SMS recovery, those channels may help recover the account identity, but **email or SMS alone cannot decrypt an old encrypted health vault**.
+
+Preferred continuity for a new device is approval by an existing trusted device. Emergency vault recovery uses the independent user-held recovery key. If every trusted device and the recovery key are lost, Sreva can restore account control but cannot decrypt the previous health vault. The user may start a new vault; there is no hidden administrator recovery key.
+
+Production email/SMS provider deployment is a separate release concern. If such providers are enabled, their address/number and delivery metadata must be reviewed and disclosed for that exact release. Repository implementation does not by itself prove a provider account has been configured.
+
+## Retention and deletion
+
+Local records remain under the user's device controls until edited, deleted, wiped, uninstalled, or replaced by a validated restore.
+
+For account continuity, server-side account/device state, wrapped recovery material, and synchronized ciphertext remain only for the service purposes documented for the active account. The implemented account-deletion boundary removes server-side account and synchronized ciphertext state controlled by Sreva. It **cannot remotely erase former device copies**, user-created exports, CycleVault backups, screenshots, or copies already sent to another destination. Those copies must be deleted where they are stored.
+
+Revoking a device blocks future authorized synchronization; it does not make a false claim that historical local copies on that device were remotely destroyed.
 
 ## Account-free equality
 
-No-account mode remains a complete health experience. It includes the local encrypted vault and applicable cycle tracking, logging, predictions, insights, reports, reminders, privacy controls, and backup functionality. Account mode adds encrypted continuity/recovery conveniences, not stronger health features.
+Account-free Sreva remains a complete health experience. It includes the encrypted local vault and applicable cycle tracking, logging, predictions, insights, reports, reminders, privacy controls, and backup functionality. Optional account mode adds encrypted continuity/recovery convenience only.
+
+An account-free user can later enable account continuity without re-entering health history. A user can disable sync and continue locally.
 
 ## Web/PWA privacy boundary
 
-The approved Web/PWA client must use application-layer encryption for sensitive browser persistence. Health records must not be placed in plaintext `localStorage`, sensitive URLs/query strings, analytics, session replay, ordinary logs, or service-worker caches.
+The Web/PWA client uses application-layer encryption for sensitive browser persistence. Health records must not be placed in plaintext `localStorage`, sensitive URLs/query strings, analytics, session replay, ordinary logs, or service-worker caches.
 
-Browser security must be described accurately: WebCrypto/WebAuthn/browser storage protections are not automatically equivalent to Android Keystore or Apple Keychain/Secure Enclave. Platform differences may change the protection mechanism, not the product's privacy intent.
+Browser security is described accurately: WebCrypto/WebAuthn/browser storage protections are not automatically equivalent to Android Keystore or Apple Keychain/Secure Enclave. Platform differences may change the protection mechanism, not the product privacy promise.
+
+## Health integrations, sharing, and backups
+
+Health Connect and Apple Health integration are optional and permission-scoped. Platform health stores remain separate systems under their own platform rules.
+
+Reports, partner summaries, CycleVault backups, and other exports leave Sreva only after explicit user action. CycleVault backup encryption and its user-held passphrase remain separate from account-continuity recovery.
+
+## Diagnostics and telemetry
+
+Sreva does not use advertising SDKs, behavioral analytics, remote session replay, or developer health-payload telemetry as the price of using the product. Diagnostics are restricted to reviewed operational metadata and must not contain readable reproductive-health payloads.
 
 ## Third-party/platform reality
 
-Sreva must not claim that no third party ever processes any device or account metadata. Apple/Google may process store downloads, operating-system backups, platform health records, push-delivery metadata, or user-selected share destinations under their own terms. Email/SMS verification providers may process delivery metadata if account recovery is enabled in a future release.
+Sreva does not claim that no third party ever processes any device or account metadata. Apple/Google may process store downloads, operating-system backups, platform health records, notification-delivery metadata, or user-selected share destinations under their own terms. Verification providers may process delivery metadata if enabled for a release.
 
 The enforceable product claim is narrower and stronger: **Sreva's operator does not receive readable reproductive-health content for core operation or optional E2EE continuity.**
 
 ## Release-gate rule
 
-The approved E2EE/account architecture is **not yet a statement of currently shipping data flow**. Before any released client actually transmits encrypted user-health ciphertext to Sreva-operated infrastructure, the implementation must pass the C2 protocol/security/conformance gates and every applicable public privacy policy, Google Play Data Safety/health declaration, Apple privacy disclosure, and support document must be updated to describe the exact shipping behavior.
+Any sync-enabled release is blocked unless the implementation, this architecture, the public and in-app privacy policy, Privacy Center, support text, and applicable store declarations describe the same shipping behavior.
+
+Before release, Google Play Data Safety/Health app declarations and, when native iOS distribution is active, Apple App Privacy disclosures must be re-evaluated against the **exact release binary and dependency set**. Repository CI verifies repository-controlled evidence; it does not fabricate proof that an external store-console submission or provider configuration has occurred.
 
 Authoritative C2 architecture: `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`.
