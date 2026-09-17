@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	stdsync "sync"
+	"time"
 )
 
 var (
@@ -36,6 +37,7 @@ type Envelope struct {
 	Nonce            []byte
 	CiphertextAndTag []byte
 	EnvelopeDigest   []byte
+	CreatedAt         time.Time
 }
 
 type Ack struct {
