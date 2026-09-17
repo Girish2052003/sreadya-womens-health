@@ -3,6 +3,7 @@ package sync
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
 	"encoding/base64"
 	"errors"
 	"net/http"
@@ -53,9 +54,10 @@ func TestPushHandlerAcceptsOpaqueEnvelopeFromBodyOnly(t *testing.T) {
 	api := &fakeSyncAPI{pushAck: Ack{EventID: "evt-1", CommittedRevision: 7}}
 	handler := newSignedTestHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}})
 	ciphertext := []byte("opaque-health-ciphertext")
-	digest := bytes.Repeat([]byte{0x33}, 32)
+	clientDigest := bytes.Repeat([]byte{0x33}, 32)
 	createdAt := "2026-09-17T01:42:00Z"
-	body := `{"account_id":"acct-a","vault_id":"vault-a","event_id":"evt-1","object_id":"obj-1","source_device_id":"dev-a","key_epoch":1,"protocol_version":1,"suite_id":"SREVA-E2EE-V1-ED25519","schema_id":"opaque-schema-v1","base_revision":6,"operation":"upsert","kdf_salt":"` + base64.StdEncoding.EncodeToString(bytes.Repeat([]byte{0x11}, 32)) + `","nonce":"` + base64.StdEncoding.EncodeToString(bytes.Repeat([]byte{0x22}, 12)) + `","ciphertext_and_tag":"` + base64.StdEncoding.EncodeToString(ciphertext) + `","envelope_digest":"` + base64.StdEncoding.EncodeToString(digest) + `","created_at":"` + createdAt + `"}`
+	body := `{"account_id":"acct-a","vault_id":"vault-a","event_id":"evt-1","object_id":"obj-1","source_device_id":"dev-a","key_epoch":1,"protocol_version":1,"suite_id":"SREVA-E2EE-V1-ED25519","schema_id":"opaque-schema-v1","base_revision":6,"operation":"upsert","kdf_salt":"` + base64.StdEncoding.EncodeToString(bytes.Repeat([]byte{0x11}, 32)) + `","nonce":"` + base64.StdEncoding.EncodeToString(bytes.Repeat([]byte{0x22}, 12)) + `","ciphertext_and_tag":"` + base64.StdEncoding.EncodeToString(ciphertext) + `","envelope_digest":"` + base64.StdEncoding.EncodeToString(clientDigest) + `","created_at":"` + createdAt + `"}`
+	wantDigest := sha256.Sum256([]byte(body))
 
 	request := httptest.NewRequest(http.MethodPost, "/v1/sync/push", strings.NewReader(body))
 	request.Header.Set("Content-Type", "application/json")
@@ -69,7 +71,7 @@ func TestPushHandlerAcceptsOpaqueEnvelopeFromBodyOnly(t *testing.T) {
 	if api.pushSession.AccountID != "acct-a" || api.pushSession.DeviceID != "dev-a" {
 		t.Fatalf("resolved session = %+v", api.pushSession)
 	}
-	if api.pushEnvelope.EventID != "evt-1" || !bytes.Equal(api.pushEnvelope.CiphertextAndTag, ciphertext) || !bytes.Equal(api.pushEnvelope.EnvelopeDigest, digest) {
+	if api.pushEnvelope.EventID != "evt-1" || !bytes.Equal(api.pushEnvelope.CiphertextAndTag, ciphertext) || !bytes.Equal(api.pushEnvelope.EnvelopeDigest, wantDigest[:]) {
 		t.Fatalf("opaque envelope changed at HTTP boundary: %+v", api.pushEnvelope)
 	}
 	wantCreatedAt, err := time.Parse(time.RFC3339, createdAt)
