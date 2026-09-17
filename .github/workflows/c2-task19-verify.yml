@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feat/task19-e2ee-protocol-gate
+      - feat/task23-trusted-device-recovery
     paths:
       - 'shared/crypto/e2ee-key-hierarchy-v1.md'
       - 'shared/crypto/interoperability-vectors/e2ee-v1.json'
@@ -13,6 +14,8 @@ on:
       - 'docs/security/E2EE_PROTOCOL_REVIEW.md'
       - 'test/conformance/e2ee_v1_vectors_test.dart'
       - 'web/src/crypto/e2ee-v1.conformance.test.ts'
+      - 'web/src/account/**'
+      - 'sync_service/**'
       - 'verification/reference/task19_go/**'
       - '.github/workflows/c2-task19-verify.yml'
   workflow_dispatch:
@@ -55,9 +58,12 @@ jobs:
       - name: Install locked Web dependencies
         working-directory: web
         run: npm ci --ignore-scripts
-      - name: Verify E2EE v1 golden vectors in WebCrypto
+      - name: Typecheck Task 23 Web protocol boundary
         working-directory: web
-        run: npm test -- --run src/crypto/e2ee-v1.conformance.test.ts
+        run: npm run typecheck
+      - name: Verify E2EE v1 and Task 23 WebCrypto flows
+        working-directory: web
+        run: npm test -- --run src/crypto/e2ee-v1.conformance.test.ts src/account/recovery.test.ts src/account/trusted-devices.test.ts
 
   go-stdlib-interop:
     runs-on: ubuntu-latest
@@ -72,3 +78,9 @@ jobs:
       - name: Verify E2EE v1 golden vectors in Go standard library
         working-directory: verification/reference/task19_go
         run: go test ./...
+      - name: Verify Task 23 service packages
+        working-directory: sync_service
+        run: go test ./...
+      - name: Vet Task 23 service packages
+        working-directory: sync_service
+        run: go vet ./...
