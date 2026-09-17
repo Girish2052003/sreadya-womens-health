@@ -37,6 +37,9 @@ func NewRouter(persistence store.Store, options ...RouterOption) http.Handler {
 	if cfg.identity != nil {
 		registerIdentityRoutes(router, cfg.identity)
 	}
+	if cfg.continuity != nil && cfg.continuitySessions != nil && cfg.continuityDeviceAuth != nil {
+		registerContinuityRoutes(router, cfg.continuity, cfg.continuitySessions, cfg.continuityDeviceAuth)
+	}
 
 	return router
 }
