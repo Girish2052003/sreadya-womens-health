@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { deriveRecoveryWrapKey, unwrapRecoveryEnvelope, type RecoveryEnvelope } from './recovery';
 
 // Task-23 RED sentinel: production recovery crypto is intentionally absent at this commit.
+// The dedicated gate must fail on ./recovery before production implementation begins.
 type VectorFile = {
   suiteId: string;
   common: { accountId: string; vaultId: string; keyEpoch: number; vaultRootSecretHex: string };
