@@ -142,26 +142,42 @@ func (s *Store) Close() error {
 	return nil
 }
 
-// Device returns only the opaque account/device authorization state required by
-// the sync authorization layer.
+// Device returns the opaque authorization state and public signing identity
+// required by the sync authorization layer. Private signing material is never
+// stored by the service.
 func (s *Store) Device(ctx context.Context, deviceID string) (devices.Record, error) {
 	db, err := s.database()
 	if err != nil {
 		return devices.Record{}, err
 	}
-	var accountID, state string
+	var accountID, state, signatureSuite string
+	var publicSigningKey []byte
 	err = db.QueryRow(ctx, `
-SELECT account_id, state
+SELECT account_id,
+       state,
+       public_signing_key,
+       signature_suite
 FROM devices
 WHERE device_id = $1
-`, deviceID).Scan(&accountID, &state)
+`, deviceID).Scan(&accountID, &state, &publicSigningKey, &signatureSuite)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return devices.Record{}, devices.ErrDeviceNotFound
 	}
 	if err != nil {
 		return devices.Record{}, err
 	}
-	return devices.Record{DeviceID: deviceID, AccountID: accountID, State: devices.State(state)}, nil
+	if len(publicSigningKey) != 0 && len(publicSigningKey) != len(devices.Record{}.PublicSigningKey) {
+		return devices.Record{}, errors.New("stored device signing key has invalid length")
+	}
+	var key [32]byte
+	copy(key[:], publicSigningKey)
+	return devices.Record{
+		DeviceID:         deviceID,
+		AccountID:        accountID,
+		State:            devices.State(state),
+		PublicSigningKey: key,
+		SignatureSuite:   signatureSuite,
+	}, nil
 }
 
 // VaultAccount returns the account owner of an opaque vault identifier.
