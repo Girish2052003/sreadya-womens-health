@@ -37,7 +37,7 @@ type Envelope struct {
 	Nonce            []byte
 	CiphertextAndTag []byte
 	EnvelopeDigest   []byte
-	CreatedAt         time.Time
+	CreatedAt        time.Time
 }
 
 type Ack struct {
@@ -62,6 +62,10 @@ type Repository interface {
 	ExistingEvent(context.Context, string) ([]byte, Ack, bool, error)
 	CurrentRevision(context.Context, string, string) (int64, error)
 	Commit(context.Context, Envelope, Ack) error
+}
+
+type AtomicRepository interface {
+	CommitEnvelope(context.Context, Envelope) (Ack, error)
 }
 
 type PullRepository interface {
@@ -101,9 +105,13 @@ func (s *Service) Push(ctx context.Context, session Session, envelope Envelope) 
 		return Ack{}, ErrCrossAccount
 	}
 
-	// Revision allocation, event-id idempotency and commit are one service-level
-	// critical section. The persistence adapter can later strengthen this with a
-	// database transaction/advisory lock without changing the protocol boundary.
+	// Durable repositories own revision allocation and idempotency atomically so
+	// concurrent service instances cannot assign the same object revision.
+	if atomicRepository, ok := s.repository.(AtomicRepository); ok {
+		return atomicRepository.CommitEnvelope(ctx, envelope)
+	}
+
+	// Lightweight/in-memory repositories use the service-level critical section.
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
