@@ -75,14 +75,21 @@ function decodeCreationOptions(value: unknown): PublicKeyCredentialCreationOptio
   const rp = record(source.rp, 'passkey relying party');
   if (!Array.isArray(source.pubKeyCredParams)) throw new Error('Invalid Sreva passkey parameters.');
 
+  const rpEntity: PublicKeyCredentialRpEntity = {
+    name: nonEmptyString(rp.name, 'passkey relying-party name'),
+    ...(rp.id === undefined ? {} : { id: nonEmptyString(rp.id, 'passkey relying-party id') }),
+  };
+  const userEntity: PublicKeyCredentialUserEntity = {
+    id: decodeBase64Url(user.id, 'passkey user id'),
+    name: nonEmptyString(user.name, 'passkey user name'),
+    displayName: nonEmptyString(user.displayName, 'passkey user display name'),
+  };
+
   return {
     ...source,
     challenge: decodeBase64Url(source.challenge, 'passkey challenge'),
-    rp: rp as PublicKeyCredentialRpEntity,
-    user: {
-      ...user,
-      id: decodeBase64Url(user.id, 'passkey user id'),
-    } as PublicKeyCredentialUserEntity,
+    rp: rpEntity,
+    user: userEntity,
     pubKeyCredParams: source.pubKeyCredParams as PublicKeyCredentialParameters[],
     excludeCredentials: decodeDescriptors(source.excludeCredentials, 'passkey excluded credentials'),
   } as PublicKeyCredentialCreationOptions;
