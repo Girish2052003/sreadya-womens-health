@@ -9,76 +9,125 @@ import 'package:sreva/features/cycle/domain/cycle_models.dart';
 void main() {
   const passphrase = 'task27 synthetic recovery passphrase';
 
-  test('truncated CycleVault is rejected while existing information survives', () async {
-    final source = _MemoryRepository(
-      periods: [PeriodEpisode(id: 'synthetic-source', start: DateTime(2026, 8, 1))],
-    );
-    final bytes = await CycleVaultService(repository: source).exportBytes(passphrase);
-    final truncated = bytes.sublist(0, bytes.length ~/ 2);
-    final target = _MemoryRepository(
-      periods: [PeriodEpisode(id: 'existing-information', start: DateTime(2026, 7, 1))],
-    );
+  test(
+    'truncated CycleVault is rejected while existing information survives',
+    () async {
+      final source = _MemoryRepository(
+        periods: [
+          PeriodEpisode(
+            id: 'synthetic-source',
+            start: DateTime(2026, 8, 1),
+          ),
+        ],
+      );
+      final bytes = await CycleVaultService(
+        repository: source,
+      ).exportBytes(passphrase);
+      final truncated = bytes.sublist(0, bytes.length ~/ 2);
+      final target = _MemoryRepository(
+        periods: [
+          PeriodEpisode(
+            id: 'existing-information',
+            start: DateTime(2026, 7, 1),
+          ),
+        ],
+      );
 
-    await expectLater(
-      CycleVaultService(repository: target).restoreBytes(truncated, passphrase),
-      throwsA(anything),
-    );
-    expect(target.periods.single.id, 'existing-information');
-  });
+      await expectLater(
+        CycleVaultService(repository: target).restoreBytes(
+          truncated,
+          passphrase,
+        ),
+        throwsA(anything),
+      );
+      expect(target.periods.single.id, 'existing-information');
+    },
+  );
 
-  test('corrupt CycleVault encoding is rejected while existing information survives', () async {
-    final target = _MemoryRepository(
-      periods: [PeriodEpisode(id: 'existing-information', start: DateTime(2026, 7, 1))],
-    );
-    final corrupt = utf8.encode('{"manifest":{"formatVersion":1},"sealedPayload":"%%%corrupt%%%"}');
+  test(
+    'corrupt CycleVault encoding is rejected while existing information survives',
+    () async {
+      final target = _MemoryRepository(
+        periods: [
+          PeriodEpisode(
+            id: 'existing-information',
+            start: DateTime(2026, 7, 1),
+          ),
+        ],
+      );
+      final corrupt = utf8.encode(
+        '{"manifest":{"formatVersion":1},"sealedPayload":"%%%corrupt%%%"}',
+      );
 
-    await expectLater(
-      CycleVaultService(repository: target).restoreBytes(corrupt, passphrase),
-      throwsA(anything),
-    );
-    expect(target.periods.single.id, 'existing-information');
-  });
+      await expectLater(
+        CycleVaultService(repository: target).restoreBytes(corrupt, passphrase),
+        throwsA(anything),
+      );
+      expect(target.periods.single.id, 'existing-information');
+    },
+  );
 
-  test('future schema CycleVault is rejected before existing information changes', () async {
-    final source = _MemoryRepository(
-      periods: [PeriodEpisode(id: 'synthetic-source', start: DateTime(2026, 8, 1))],
-    );
-    final bytes = await CycleVaultService(repository: source).exportBytes(passphrase);
-    final outer = jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
-    final manifest = Map<String, dynamic>.from(outer['manifest'] as Map);
-    manifest['formatVersion'] = 999;
-    outer['manifest'] = manifest;
-    final futureSchema = utf8.encode(jsonEncode(outer));
-    final target = _MemoryRepository(
-      periods: [PeriodEpisode(id: 'existing-information', start: DateTime(2026, 7, 1))],
-    );
+  test(
+    'future schema CycleVault is rejected before existing information changes',
+    () async {
+      final source = _MemoryRepository(
+        periods: [
+          PeriodEpisode(
+            id: 'synthetic-source',
+            start: DateTime(2026, 8, 1),
+          ),
+        ],
+      );
+      final bytes = await CycleVaultService(
+        repository: source,
+      ).exportBytes(passphrase);
+      final outer = jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
+      final manifest = Map<String, dynamic>.from(outer['manifest'] as Map);
+      manifest['formatVersion'] = 999;
+      outer['manifest'] = manifest;
+      final futureSchema = utf8.encode(jsonEncode(outer));
+      final target = _MemoryRepository(
+        periods: [
+          PeriodEpisode(
+            id: 'existing-information',
+            start: DateTime(2026, 7, 1),
+          ),
+        ],
+      );
 
-    await expectLater(
-      CycleVaultService(repository: target).restoreBytes(futureSchema, passphrase),
-      throwsFormatException,
-    );
-    expect(target.periods.single.id, 'existing-information');
-  });
+      await expectLater(
+        CycleVaultService(repository: target).restoreBytes(
+          futureSchema,
+          passphrase,
+        ),
+        throwsFormatException,
+      );
+      expect(target.periods.single.id, 'existing-information');
+    },
+  );
 
-  test('rollback leaves existing information untouched after staged validation failure', () async {
-    final existing = _StagedStore('existing-information', valid: true);
-    final candidate = _StagedStore('synthetic-corrupt-restore', valid: false);
-    _StagedStore? replaced;
-    final coordinator = RestoreTransactionCoordinator<_StagedStore>();
+  test(
+    'rollback leaves existing information untouched after staged validation failure',
+    () async {
+      final existing = _StagedStore('existing-information', valid: true);
+      final candidate = _StagedStore('synthetic-corrupt-restore', valid: false);
+      _StagedStore? replaced;
+      final coordinator = RestoreTransactionCoordinator<_StagedStore>();
 
-    await expectLater(
-      coordinator.commit(
-        live: existing,
-        staged: candidate,
-        validate: (store) async => store.valid,
-        replaceLive: (store) async => replaced = store,
-      ),
-      throwsStateError,
-    );
+      await expectLater(
+        coordinator.commit(
+          live: existing,
+          staged: candidate,
+          validate: (store) async => store.valid,
+          replaceLive: (store) async => replaced = store,
+        ),
+        throwsStateError,
+      );
 
-    expect(existing.label, 'existing-information');
-    expect(replaced, isNull);
-  });
+      expect(existing.label, 'existing-information');
+      expect(replaced, isNull);
+    },
+  );
 }
 
 class _StagedStore {
