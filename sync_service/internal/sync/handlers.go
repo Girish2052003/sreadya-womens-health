@@ -11,7 +11,7 @@ import (
 
 type SyncAPI interface {
 	Push(context.Context, Session, Envelope) (Ack, error)
-	Pull(context.Context, Session, string, int64, int) ([]StoredEvent, error)
+	Pull(context.Context, Session, string, string, int) (PullPage, error)
 }
 
 type SessionResolver interface {
@@ -57,6 +57,11 @@ type storedEventJSON struct {
 	envelopeJSON
 	CommittedRevision int64 `json:"committed_revision"`
 	Conflict          bool  `json:"conflict"`
+}
+
+type pullPageJSON struct {
+	Events     []storedEventJSON `json:"events"`
+	NextCursor string            `json:"next_cursor"`
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -107,31 +112,27 @@ func (h *Handler) handlePull(w http.ResponseWriter, r *http.Request, session Ses
 		writeError(w, http.StatusBadRequest, "invalid request")
 		return
 	}
-	afterRevision, err := strconv.ParseInt(query.Get("after_revision"), 10, 64)
-	if err != nil || afterRevision < 0 {
-		writeError(w, http.StatusBadRequest, "invalid request")
-		return
-	}
+	cursor := query.Get("cursor")
 	limit64, err := strconv.ParseInt(query.Get("limit"), 10, 32)
 	if err != nil || limit64 < 1 || limit64 > 1000 {
 		writeError(w, http.StatusBadRequest, "invalid request")
 		return
 	}
 
-	events, err := h.api.Pull(r.Context(), session, vaultID, afterRevision, int(limit64))
+	page, err := h.api.Pull(r.Context(), session, vaultID, cursor, int(limit64))
 	if err != nil {
 		writeAPIError(w, err)
 		return
 	}
-	response := make([]storedEventJSON, 0, len(events))
-	for _, event := range events {
-		response = append(response, storedEventJSON{
+	events := make([]storedEventJSON, 0, len(page.Events))
+	for _, event := range page.Events {
+		events = append(events, storedEventJSON{
 			envelopeJSON:      envelopeToJSON(event.Envelope),
 			CommittedRevision: event.CommittedRevision,
 			Conflict:          event.Conflict,
 		})
 	}
-	writeJSON(w, http.StatusOK, response)
+	writeJSON(w, http.StatusOK, pullPageJSON{Events: events, NextCursor: page.NextCursor})
 }
 
 func (wire envelopeJSON) envelope() Envelope {
