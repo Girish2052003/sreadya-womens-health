@@ -66,7 +66,8 @@ final class SrevaCredentialBridge: NSObject, ASAuthorizationControllerDelegate, 
                 name: userName,
                 userID: userID
             )
-            if let excluded = options["excludeCredentials"] as? [[String: Any]] {
+            if #available(iOS 17.4, *),
+               let excluded = options["excludeCredentials"] as? [[String: Any]] {
                 request.excludedCredentials = excluded.compactMap { descriptor in
                     guard let id = descriptor["id"] as? String,
                           let bytes = base64URLDecode(id) else { return nil }
