@@ -1,0 +1,43 @@
+name: C2 Task 20 Sync Service Scaffold
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches:
+      - main
+      - feat/task20-sync-service-scaffold
+    paths:
+      - 'sync_service/**'
+      - '.github/workflows/c2-task20-verify.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: c2-task20-sync-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  go-scaffold:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Verify pinned Go module lock
+        working-directory: sync_service
+        run: |
+          go mod tidy
+          git diff --exit-code -- go.mod go.sum
+      - name: Verify provider-independent sync scaffold
+        working-directory: sync_service
+        run: go test ./...
+      - name: Vet sync scaffold
+        working-directory: sync_service
+        run: go vet ./...
