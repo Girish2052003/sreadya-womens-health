@@ -39,6 +39,11 @@ func (f *fakeSignedDeviceAuth) Verify(_ context.Context, request deviceauth.Requ
 	return f.verifyErr
 }
 
+func signedTestHeaders(request *http.Request) {
+	request.Header.Set("X-Sreva-Device-Challenge", "test-challenge")
+	request.Header.Set("X-Sreva-Device-Signature", base64.StdEncoding.EncodeToString([]byte{1}))
+}
+
 func TestTask22ChallengePushUsesAuthenticatedSessionAndExactBodyDigest(t *testing.T) {
 	authz := &fakeSignedDeviceAuth{issueValue: "challenge-push"}
 	handler := NewHandler(&fakeSyncAPI{}, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}}, authz)
