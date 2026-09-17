@@ -39,6 +39,10 @@ func (f *fakeSignedDeviceAuth) Verify(_ context.Context, request deviceauth.Requ
 	return f.verifyErr
 }
 
+func newSignedTestHandler(api SyncAPI, sessions SessionResolver) http.Handler {
+	return NewHandler(api, sessions, &fakeSignedDeviceAuth{})
+}
+
 func signedTestHeaders(request *http.Request) {
 	request.Header.Set("X-Sreva-Device-Challenge", "test-challenge")
 	request.Header.Set("X-Sreva-Device-Signature", base64.StdEncoding.EncodeToString([]byte{1}))
