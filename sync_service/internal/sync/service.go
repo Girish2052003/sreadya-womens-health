@@ -53,6 +53,11 @@ type StoredEvent struct {
 	Conflict          bool
 }
 
+type PullPage struct {
+	Events     []StoredEvent
+	NextCursor string
+}
+
 type DeviceAuthorizer interface {
 	Authorize(context.Context, string, string) error
 }
@@ -69,7 +74,7 @@ type AtomicRepository interface {
 }
 
 type PullRepository interface {
-	EventsAfter(context.Context, string, int64, int) ([]StoredEvent, error)
+	EventsAfter(context.Context, string, string, int) (PullPage, error)
 }
 
 type Service struct {
@@ -142,26 +147,26 @@ func (s *Service) Push(ctx context.Context, session Session, envelope Envelope) 
 	return ack, nil
 }
 
-func (s *Service) Pull(ctx context.Context, session Session, vaultID string, afterRevision int64, limit int) ([]StoredEvent, error) {
+func (s *Service) Pull(ctx context.Context, session Session, vaultID, cursor string, limit int) (PullPage, error) {
 	if limit < 1 || limit > 1000 {
-		return nil, ErrInvalidPullLimit
+		return PullPage{}, ErrInvalidPullLimit
 	}
 	if session.AccountID == "" {
-		return nil, ErrCrossAccount
+		return PullPage{}, ErrCrossAccount
 	}
 	if err := s.authorizer.Authorize(ctx, session.AccountID, session.DeviceID); err != nil {
-		return nil, err
+		return PullPage{}, err
 	}
 	vaultAccount, err := s.repository.VaultAccount(ctx, vaultID)
 	if err != nil {
-		return nil, err
+		return PullPage{}, err
 	}
 	if vaultAccount != session.AccountID {
-		return nil, ErrCrossAccount
+		return PullPage{}, ErrCrossAccount
 	}
 	pullRepository, ok := s.repository.(PullRepository)
 	if !ok {
-		return nil, ErrPullUnsupported
+		return PullPage{}, ErrPullUnsupported
 	}
-	return pullRepository.EventsAfter(ctx, vaultID, afterRevision, limit)
+	return pullRepository.EventsAfter(ctx, vaultID, cursor, limit)
 }
