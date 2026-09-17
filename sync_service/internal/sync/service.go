@@ -12,6 +12,7 @@ var (
 	ErrCrossAccount     = errors.New("sync envelope crosses account boundary")
 	ErrEnvelopeTooLarge = errors.New("ciphertext envelope exceeds size limit")
 	ErrEventIDReuse     = errors.New("event id reused with different envelope")
+	ErrInvalidCursor    = errors.New("invalid opaque sync cursor")
 	ErrInvalidPullLimit = errors.New("pull limit must be between 1 and 1000")
 	ErrPullUnsupported  = errors.New("repository does not support pull")
 )
