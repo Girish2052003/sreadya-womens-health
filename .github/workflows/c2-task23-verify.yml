@@ -1,0 +1,68 @@
+name: C2 Task 23 Trusted Device Recovery
+
+on:
+  push:
+    branches:
+      - feat/task23-trusted-device-recovery
+    paths:
+      - 'sync_service/**'
+      - 'web/src/account/**'
+      - 'web/src/app/app/account/**'
+      - 'web/src/app/app/devices/**'
+      - 'web/src/app/app/recovery/**'
+      - 'web/src/app/app/sync/**'
+      - 'shared/crypto/**'
+      - '.github/workflows/c2-task23-verify.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: c2-task23-recovery-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  go-account-recovery:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Verify pinned Go module lock
+        working-directory: sync_service
+        run: |
+          go mod tidy
+          git diff -- go.mod go.sum
+          git diff --exit-code -- go.mod go.sum
+      - name: Verify identity device recovery service
+        working-directory: sync_service
+        run: go test ./...
+      - name: Vet identity device recovery service
+        working-directory: sync_service
+        run: go vet ./...
+
+  web-account-recovery:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24.21.0'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install locked Web dependencies
+        working-directory: web
+        run: npm ci --ignore-scripts
+      - name: Typecheck Web account recovery boundary
+        working-directory: web
+        run: npm run typecheck
+      - name: Test Web account recovery boundary
+        working-directory: web
+        run: npm test -- --run
