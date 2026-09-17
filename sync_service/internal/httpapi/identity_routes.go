@@ -4,9 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 )
+
+const passkeySessionHeader = "X-Sreva-Passkey-Session"
 
 type IdentityRequest struct {
 	AccountID string `json:"account_id"`
@@ -32,6 +35,8 @@ type IdentityAPI interface {
 	CreateIdentity(context.Context, IdentityRequest) error
 	BeginPasskeyRegistration(context.Context, string) (PasskeyBeginResult, error)
 	BeginPasskeyLogin(context.Context) (PasskeyBeginResult, error)
+	FinishPasskeyRegistration(context.Context, string, *http.Request) error
+	FinishPasskeyLogin(context.Context, string, *http.Request) (string, error)
 	ListDevices(context.Context, string) ([]DeviceSummary, error)
 }
 
@@ -75,6 +80,19 @@ func registerIdentityRoutes(router chi.Router, api IdentityAPI) {
 		writeJSON(w, http.StatusOK, result)
 	})
 
+	router.Post("/v1/auth/passkeys/register/finish", func(w http.ResponseWriter, r *http.Request) {
+		sessionID := strings.TrimSpace(r.Header.Get(passkeySessionHeader))
+		if sessionID == "" {
+			writeStatus(w, http.StatusBadRequest, "missing_passkey_session")
+			return
+		}
+		if err := api.FinishPasskeyRegistration(r.Context(), sessionID, r); err != nil {
+			writeStatus(w, http.StatusBadRequest, "passkey_registration_rejected")
+			return
+		}
+		writeStatus(w, http.StatusOK, "verified")
+	})
+
 	router.Post("/v1/auth/passkeys/login/begin", func(w http.ResponseWriter, r *http.Request) {
 		result, err := api.BeginPasskeyLogin(r.Context())
 		if err != nil {
@@ -82,6 +100,20 @@ func registerIdentityRoutes(router chi.Router, api IdentityAPI) {
 			return
 		}
 		writeJSON(w, http.StatusOK, result)
+	})
+
+	router.Post("/v1/auth/passkeys/login/finish", func(w http.ResponseWriter, r *http.Request) {
+		sessionID := strings.TrimSpace(r.Header.Get(passkeySessionHeader))
+		if sessionID == "" {
+			writeStatus(w, http.StatusBadRequest, "missing_passkey_session")
+			return
+		}
+		accountID, err := api.FinishPasskeyLogin(r.Context(), sessionID, r)
+		if err != nil || strings.TrimSpace(accountID) == "" {
+			writeStatus(w, http.StatusBadRequest, "passkey_login_rejected")
+			return
+		}
+		writeJSON(w, http.StatusOK, map[string]string{"account_id": accountID})
 	})
 
 	router.Get("/v1/accounts/{accountID}/devices", func(w http.ResponseWriter, r *http.Request) {
