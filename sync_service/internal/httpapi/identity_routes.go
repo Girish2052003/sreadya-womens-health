@@ -41,7 +41,10 @@ type IdentityAPI interface {
 }
 
 type routerConfig struct {
-	identity IdentityAPI
+	identity             IdentityAPI
+	continuity           ContinuityAPI
+	continuitySessions   ContinuitySessionResolver
+	continuityDeviceAuth ContinuityDeviceAuthorizer
 }
 
 type RouterOption func(*routerConfig)
