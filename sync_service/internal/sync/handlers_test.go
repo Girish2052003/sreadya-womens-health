@@ -7,7 +7,6 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
-	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -30,9 +29,9 @@ type fakeSyncAPI struct {
 
 	pullSession Session
 	pullVault   string
-	pullAfter   int64
+	pullCursor  string
 	pullLimit   int
-	pullEvents  []StoredEvent
+	pullPage    PullPage
 	pullErr     error
 }
 
@@ -42,12 +41,12 @@ func (f *fakeSyncAPI) Push(_ context.Context, session Session, envelope Envelope
 	return f.pushAck, f.pushErr
 }
 
-func (f *fakeSyncAPI) Pull(_ context.Context, session Session, vaultID string, afterRevision int64, limit int) ([]StoredEvent, error) {
+func (f *fakeSyncAPI) Pull(_ context.Context, session Session, vaultID, cursor string, limit int) (PullPage, error) {
 	f.pullSession = session
 	f.pullVault = vaultID
-	f.pullAfter = afterRevision
+	f.pullCursor = cursor
 	f.pullLimit = limit
-	return f.pullEvents, f.pullErr
+	return f.pullPage, f.pullErr
 }
 
 func TestPushHandlerAcceptsOpaqueEnvelopeFromBodyOnly(t *testing.T) {
@@ -105,39 +104,59 @@ func TestPushHandlerDoesNotReflectCiphertextOnAuthorizationFailure(t *testing.T)
 	}
 }
 
-func TestPullHandlerUsesOpaqueCursorAndReturnsOpaqueEventsNoStore(t *testing.T) {
-	api := &fakeSyncAPI{pullEvents: []StoredEvent{{
-		Envelope: Envelope{VaultID: "vault-a", EventID: "evt-8", ObjectID: "obj-1", CiphertextAndTag: []byte("opaque-8")},
-		CommittedRevision: 8,
-		Conflict:          true,
-	}}}
+func TestPullHandlerPassesOpaqueCursorAndReturnsNextCursorNoStore(t *testing.T) {
+	api := &fakeSyncAPI{pullPage: PullPage{
+		Events: []StoredEvent{{
+			Envelope: Envelope{VaultID: "vault-a", EventID: "evt-8", ObjectID: "obj-1", CiphertextAndTag: []byte("opaque-8")},
+			CommittedRevision: 8,
+			Conflict:          true,
+		}},
+		NextCursor: "opaque-cursor-8",
+	}}
 	handler := NewHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}})
-	request := httptest.NewRequest(http.MethodGet, "/v1/sync/pull?vault_id=vault-a&after_revision=7&limit=25", nil)
+	request := httptest.NewRequest(http.MethodGet, "/v1/sync/pull?vault_id=vault-a&cursor=opaque-cursor-7&limit=25", nil)
 	response := httptest.NewRecorder()
 	handler.ServeHTTP(response, request)
 
 	if response.Code != http.StatusOK {
 		t.Fatalf("status=%d body=%s", response.Code, response.Body.String())
 	}
-	if api.pullVault != "vault-a" || api.pullAfter != 7 || api.pullLimit != 25 {
-		t.Fatalf("pull args vault=%q after=%d limit=%d", api.pullVault, api.pullAfter, api.pullLimit)
+	if api.pullVault != "vault-a" || api.pullCursor != "opaque-cursor-7" || api.pullLimit != 25 {
+		t.Fatalf("pull args vault=%q cursor=%q limit=%d", api.pullVault, api.pullCursor, api.pullLimit)
 	}
 	body := response.Body.String()
 	if !strings.Contains(body, `"event_id":"evt-8"`) || !strings.Contains(body, `"committed_revision":8`) || !strings.Contains(body, base64.StdEncoding.EncodeToString([]byte("opaque-8"))) {
 		t.Fatalf("opaque pull body=%s", body)
+	}
+	if !strings.Contains(body, `"next_cursor":"opaque-cursor-8"`) {
+		t.Fatalf("next cursor missing from pull body=%s", body)
 	}
 	if response.Header().Get("Cache-Control") != "no-store" {
 		t.Fatalf("Cache-Control=%q, want no-store", response.Header().Get("Cache-Control"))
 	}
 }
 
-func TestPullHandlerRejectsNonNumericCursorOrLimit(t *testing.T) {
+func TestPullHandlerAllowsEmptyCursorForInitialSync(t *testing.T) {
+	api := &fakeSyncAPI{pullPage: PullPage{NextCursor: "opaque-cursor-1"}}
+	handler := NewHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}})
+	request := httptest.NewRequest(http.MethodGet, "/v1/sync/pull?vault_id=vault-a&limit=25", nil)
+	response := httptest.NewRecorder()
+	handler.ServeHTTP(response, request)
+
+	if response.Code != http.StatusOK {
+		t.Fatalf("status=%d body=%s", response.Code, response.Body.String())
+	}
+	if api.pullCursor != "" {
+		t.Fatalf("initial cursor=%q, want empty", api.pullCursor)
+	}
+}
+
+func TestPullHandlerRejectsInvalidLimitOrMissingVault(t *testing.T) {
 	api := &fakeSyncAPI{}
 	handler := NewHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}})
 	for _, path := range []string{
-		"/v1/sync/pull?vault_id=vault-a&after_revision=not-a-number&limit=25",
-		"/v1/sync/pull?vault_id=vault-a&after_revision=7&limit=nope",
-		"/v1/sync/pull?vault_id=&after_revision=7&limit=25",
+		"/v1/sync/pull?vault_id=vault-a&cursor=opaque-cursor-7&limit=nope",
+		"/v1/sync/pull?vault_id=&cursor=opaque-cursor-7&limit=25",
 	} {
 		request := httptest.NewRequest(http.MethodGet, path, nil)
 		response := httptest.NewRecorder()
@@ -151,7 +170,7 @@ func TestPullHandlerRejectsNonNumericCursorOrLimit(t *testing.T) {
 func TestHandlerRejectsMissingAuthenticatedSession(t *testing.T) {
 	api := &fakeSyncAPI{}
 	handler := NewHandler(api, fakeSessionResolver{err: errors.New("no authenticated session")})
-	request := httptest.NewRequest(http.MethodGet, "/v1/sync/pull?vault_id=vault-a&after_revision=0&limit="+strconv.Itoa(25), nil)
+	request := httptest.NewRequest(http.MethodGet, "/v1/sync/pull?vault_id=vault-a&limit=25", nil)
 	response := httptest.NewRecorder()
 	handler.ServeHTTP(response, request)
 	if response.Code != http.StatusUnauthorized {
