@@ -10,7 +10,11 @@ void main() {
   test('E2EE v1 recovery, transfer, and event vectors decrypt in Dart', () async {
     final vector = await _loadVector();
 
-    for (final name in ['recoveryEnvelope', 'trustedDeviceTransfer', 'syncEvent']) {
+    for (final name in [
+      'recoveryEnvelope',
+      'trustedDeviceTransfer',
+      'syncEvent',
+    ]) {
       final entry = vector[name] as Map<String, dynamic>;
       final ikm = _hexBytes(entry['ikmHex'] as String);
       final salt = _hexBytes(entry['saltHex'] as String);
