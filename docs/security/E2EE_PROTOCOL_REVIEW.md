@@ -1,6 +1,6 @@
 # Sreva E2EE Protocol v1 — Task-19 Review
 
-**Review status:** IN PROGRESS until the exact final Task-19 branch head passes the three-client conformance workflow.
+**Review status:** INTERNAL DESIGN GATE PASS based on the three-client candidate verification recorded below. The closure commit that contains this ledger status must itself pass the same exact-head workflow before merge.
 
 **Scope:** internal engineering design gate for optional account/E2EE continuity. This is not a third-party cryptographic audit, certification, penetration test, or formal proof.
 
@@ -60,39 +60,49 @@ Dedicated run `35165172453` produced the intended RED state:
 - WebCrypto: three envelope checks remained green; Ed25519 check failed because `publicKeyHex` was absent;
 - Go: Ed25519 check failed because the decoded public key length was zero.
 
-That failure is the required test-first evidence for this primitive migration. It is not treated as a product/security failure after the vector is supplied; the GREEN requirement remains a fresh exact-head three-client run.
+That failure is the required test-first evidence for this primitive migration. The original Task-19 vector-absent RED run remains `35163839113` on `70792f767005a186a1179f53314182375e628738`, where all three conformance consumers existed before the first vector was added.
 
-The original Task-19 vector-absent RED run remains `35163839113` on `70792f767005a186a1179f53314182375e628738`, where all three conformance consumers existed before the first vector was added.
+## 5. Candidate GREEN evidence
 
-## 5. Key separation and server boundary
+Commit `8fef5837f8714fa240eb04335d4e48662138f1de` supplied the Ed25519 suite, regenerated suite-bound HKDF/AAD/ciphertext bytes, and aligned the protocol/threat documentation without changing the frozen privacy model.
+
+Dedicated run `35165475298` executed the same canonical fixture independently in all three target environments and completed the conformance step successfully in:
+
+- Dart/Flutter: PASS;
+- WebCrypto: PASS;
+- Go 1.27.1 standard library: PASS.
+
+This is the evidence used to mark the internal protocol design gate PASS. A fresh run on the closure-ledger commit remains the repository merge gate; no later task may weaken this requirement.
+
+## 6. Key separation and server boundary
 
 VRS, RS, TS, device signing private keys, and existing local-storage keys are independent roles. No password, email, phone, OTP, session token, or passkey credential becomes VRS/RS/TS input. HKDF info and AES-GCM AAD bind account/vault/enrollment/device/event/object/revision/operation/suite context. The server receives no VRS/RS/TS or health plaintext.
 
-## 6. Nonce/key rules
+## 7. Nonce/key rules
 
 AES-GCM requires nonce uniqueness for a key. v1 derives separate recovery, transfer, and per-event keys while still requiring fresh random 96-bit nonces. Production code must never reuse vector material. Retries resend the original immutable envelope; they do not re-encrypt under a reused event key/nonce. Recovery/transfer re-wrapping uses fresh salt and nonce.
 
-## 7. Authentication and replay
+## 8. Authentication and replay
 
 TLS remains mandatory. Sensitive mutations bind account ID, device ID, method, path, single-use challenge, and SHA-256 request-body digest into a canonical transcript signed directly with Ed25519. Challenges are scoped, expiring, and one-use. Event IDs provide idempotency; same ID with changed bytes is rejected. Enrollment IDs are scoped, expiring, and one-use.
 
 Ed25519 public keys use the raw 32-byte format and signatures use the raw 64-byte format. The protocol does not use Ed25519ph and does not add a second whole-transcript pre-hash.
 
-## 8. Conflict/data-loss rules
+## 9. Conflict/data-loss rules
 
 The service cannot decrypt health content and therefore cannot choose a health-semantic conflict winner. Independent objects may converge. Stale/concurrent same-object updates are preserved instead of silently overwriting. Tombstone versus stale edit cannot silently resurrect data. Invalid/tampered remote data never replaces local authoritative health state. Local health capture continues during sync outage. `shared/sync/conflict-vectors/v1.json` records deterministic expectations.
 
-## 9. Recovery and trusted-device transfer
+## 10. Recovery and trusted-device transfer
 
 Emergency recovery requires account identity authentication **and** the independent user-held RS. Server-stored recovery material is unusable for VRS decryption without RS. If every trusted device and RS are lost, support can recover identity but not the old encrypted vault.
 
 Preferred new-device provisioning uses a direct one-time TS delivered by QR after explicit trusted-device approval. QR contains enrollment metadata + TS, not VRS or health plaintext. Production UX must use short expiry, source/target identity, cancellation, one-time consume, and secret clearing.
 
-## 10. Compromise boundaries
+## 11. Compromise boundaries
 
 Server/database compromise can expose ciphertext, wrapped envelopes, Ed25519 public keys, opaque IDs, sizes, timestamps, revisions, counts, and revocation state, but should not expose VRS/RS/TS/private signing keys/health plaintext. A malicious server can still deny, reorder, suppress, or delete service copies. Client compromise while unlocked remains outside what E2EE can hide from equivalent-privilege malicious code.
 
-## 11. Interoperability gate
+## 12. Interoperability gate
 
 Canonical fixture: `shared/crypto/interoperability-vectors/e2ee-v1.json`.
 
@@ -104,12 +114,10 @@ Independent consumers:
 
 Dedicated workflow: `.github/workflows/c2-task19-verify.yml`.
 
-This review may change to **INTERNAL DESIGN GATE PASS** only after a fresh run on the exact final Task-19 branch head reports all three jobs successful.
-
-## 12. Required negatives in Tasks 20–24
+## 13. Required negatives in Tasks 20–24
 
 Implementation tasks must test wrong VRS/RS/TS; ciphertext/tag/AAD tamper; account/vault/device/object substitution; used/expired challenges and enrollments; revoked-device push/pull/approval; stale/duplicate event handling; conflicts/tombstones; body/signature mismatch; unsupported suite/version/key epoch; account recovery without RS; and failed decrypt/schema validation preserving current local state.
 
-## 13. Open boundaries before production rollout
+## 14. Open boundaries before production rollout
 
-Even a Task-19 internal pass is only permission to implement the protocol. Later release gates still require implementation review of actual Dart/Web/Go adapters; server authorization/concurrency/fuzz testing; browser XSS/CSP/service-worker and supply-chain review; privacy/logging scans; recovery/enrollment abuse testing; shipping-policy/store-disclosure alignment; and external specialist review where feasible before broad production exposure.
+Task-19 internal pass is permission to implement the protocol, not a production-security certification. Later release gates still require implementation review of actual Dart/Web/Go adapters; server authorization/concurrency/fuzz testing; browser XSS/CSP/service-worker and supply-chain review; privacy/logging scans; recovery/enrollment abuse testing; shipping-policy/store-disclosure alignment; and external specialist review where feasible before broad production exposure.
