@@ -51,6 +51,16 @@ func mustHex(t *testing.T, value string) []byte {
 	return decoded
 }
 
+func mustKey(t *testing.T, value []byte) [32]byte {
+	t.Helper()
+	if len(value) != ed25519.PublicKeySize {
+		t.Fatalf("public key length=%d", len(value))
+	}
+	var key [32]byte
+	copy(key[:], value)
+	return key
+}
+
 func TestVerifyMatchesFrozenTask19DeviceAuthenticationVector(t *testing.T) {
 	now := time.Date(2026, 9, 17, 2, 30, 0, 0, time.UTC)
 	challenges := &fakeChallenges{}
@@ -58,7 +68,7 @@ func TestVerifyMatchesFrozenTask19DeviceAuthenticationVector(t *testing.T) {
 		DeviceID:         "dev_target_B2",
 		AccountID:        "acct_test_7Q3V",
 		State:            devices.StateActive,
-		PublicSigningKey: mustHex(t, "03a107bff3ce10be1d70dd18e74bc09967e4d6309ba50d5f1ddc8664125531b8"),
+		PublicSigningKey: mustKey(t, mustHex(t, "03a107bff3ce10be1d70dd18e74bc09967e4d6309ba50d5f1ddc8664125531b8")),
 		SignatureSuite:   "Ed25519",
 	}}
 	service := NewService(challenges, lookup, func() time.Time { return now }, func() (string, error) {
@@ -107,7 +117,7 @@ func TestVerifyRejectsReplayExpiryScopeAndInvalidSignature(t *testing.T) {
 		DeviceID:         "dev-a",
 		AccountID:        "acct-a",
 		State:            devices.StateActive,
-		PublicSigningKey: publicKey,
+		PublicSigningKey: mustKey(t, publicKey),
 		SignatureSuite:   "Ed25519",
 	}}
 
