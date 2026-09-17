@@ -2,11 +2,26 @@ package sync
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"io"
 	"net/http"
+	"net/url"
 	"strconv"
+	"strings"
 	"time"
+
+	"sreva.dev/sync_service/internal/deviceauth"
+)
+
+const challengeTTL = 2 * time.Minute
+
+const (
+	challengeHeader = "X-Sreva-Device-Challenge"
+	signatureHeader = "X-Sreva-Device-Signature"
 )
 
 type SyncAPI interface {
@@ -18,13 +33,31 @@ type SessionResolver interface {
 	Resolve(*http.Request) (Session, error)
 }
 
-type Handler struct {
-	api      SyncAPI
-	sessions SessionResolver
+type SignedDeviceAuthorizer interface {
+	Issue(context.Context, deviceauth.Scope, time.Duration) (string, error)
+	Verify(context.Context, deviceauth.Request) error
 }
 
-func NewHandler(api SyncAPI, sessions SessionResolver) http.Handler {
-	return &Handler{api: api, sessions: sessions}
+type Handler struct {
+	api        SyncAPI
+	sessions   SessionResolver
+	deviceAuth SignedDeviceAuthorizer
+}
+
+func NewHandler(api SyncAPI, sessions SessionResolver, deviceAuth SignedDeviceAuthorizer) http.Handler {
+	return &Handler{api: api, sessions: sessions, deviceAuth: deviceAuth}
+}
+
+type challengeRequestJSON struct {
+	Action     string `json:"action"`
+	BodySHA256 string `json:"body_sha256"`
+	VaultID    string `json:"vault_id"`
+	Cursor     string `json:"cursor"`
+	Limit      int    `json:"limit"`
+}
+
+type challengeResponseJSON struct {
+	Challenge string `json:"challenge"`
 }
 
 type envelopeJSON struct {
@@ -74,21 +107,100 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	switch {
+	case r.Method == http.MethodPost && r.URL.Path == "/v1/sync/challenge":
+		h.handleChallenge(w, r, session)
 	case r.Method == http.MethodPost && r.URL.Path == "/v1/sync/push":
 		h.handlePush(w, r, session)
 	case r.Method == http.MethodGet && r.URL.Path == "/v1/sync/pull":
 		h.handlePull(w, r, session)
-	case r.URL.Path == "/v1/sync/push" || r.URL.Path == "/v1/sync/pull":
+	case r.URL.Path == "/v1/sync/challenge" || r.URL.Path == "/v1/sync/push" || r.URL.Path == "/v1/sync/pull":
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
 	default:
 		writeError(w, http.StatusNotFound, "not found")
 	}
 }
 
-func (h *Handler) handlePush(w http.ResponseWriter, r *http.Request, session Session) {
-	var wire envelopeJSON
+func (h *Handler) handleChallenge(w http.ResponseWriter, r *http.Request, session Session) {
+	if h.deviceAuth == nil {
+		writeError(w, http.StatusInternalServerError, "request failed")
+		return
+	}
+
+	var wire challengeRequestJSON
 	if err := json.NewDecoder(r.Body).Decode(&wire); err != nil {
 		writeError(w, http.StatusBadRequest, "invalid request")
+		return
+	}
+
+	var scope deviceauth.Scope
+	switch wire.Action {
+	case "sync.push":
+		digest, err := hex.DecodeString(wire.BodySHA256)
+		if err != nil || len(digest) != sha256.Size {
+			writeError(w, http.StatusBadRequest, "invalid request")
+			return
+		}
+		scope = deviceauth.Scope{
+			AccountID:  session.AccountID,
+			DeviceID:   session.DeviceID,
+			Action:     "sync.push",
+			Method:     http.MethodPost,
+			Path:       "/v1/sync/push",
+			BodySHA256: digest,
+		}
+	case "sync.pull":
+		if wire.VaultID == "" || wire.Limit < 1 || wire.Limit > 1000 {
+			writeError(w, http.StatusBadRequest, "invalid request")
+			return
+		}
+		digest := sha256.Sum256(nil)
+		scope = deviceauth.Scope{
+			AccountID:  session.AccountID,
+			DeviceID:   session.DeviceID,
+			Action:     "sync.pull",
+			Method:     http.MethodGet,
+			Path:       canonicalPullTarget(wire.VaultID, wire.Cursor, wire.Limit),
+			BodySHA256: digest[:],
+		}
+	default:
+		writeError(w, http.StatusBadRequest, "invalid request")
+		return
+	}
+
+	challenge, err := h.deviceAuth.Issue(r.Context(), scope, challengeTTL)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "request failed")
+		return
+	}
+	writeJSON(w, http.StatusOK, challengeResponseJSON{Challenge: challenge})
+}
+
+func (h *Handler) handlePush(w http.ResponseWriter, r *http.Request, session Session) {
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request")
+		return
+	}
+	digest := sha256.Sum256(body)
+	if err := h.verifySignedRequest(r, deviceauth.Scope{
+		AccountID:  session.AccountID,
+		DeviceID:   session.DeviceID,
+		Action:     "sync.push",
+		Method:     http.MethodPost,
+		Path:       "/v1/sync/push",
+		BodySHA256: digest[:],
+	}); err != nil {
+		writeError(w, http.StatusUnauthorized, "unauthorized")
+		return
+	}
+
+	var wire envelopeJSON
+	if err := json.Unmarshal(body, &wire); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request")
+		return
+	}
+	if wire.SourceDeviceID != session.DeviceID {
+		writeError(w, http.StatusForbidden, "forbidden")
 		return
 	}
 
@@ -118,8 +230,21 @@ func (h *Handler) handlePull(w http.ResponseWriter, r *http.Request, session Ses
 		writeError(w, http.StatusBadRequest, "invalid request")
 		return
 	}
+	limit := int(limit64)
+	digest := sha256.Sum256(nil)
+	if err := h.verifySignedRequest(r, deviceauth.Scope{
+		AccountID:  session.AccountID,
+		DeviceID:   session.DeviceID,
+		Action:     "sync.pull",
+		Method:     http.MethodGet,
+		Path:       canonicalPullTarget(vaultID, cursor, limit),
+		BodySHA256: digest[:],
+	}); err != nil {
+		writeError(w, http.StatusUnauthorized, "unauthorized")
+		return
+	}
 
-	page, err := h.api.Pull(r.Context(), session, vaultID, cursor, int(limit64))
+	page, err := h.api.Pull(r.Context(), session, vaultID, cursor, limit)
 	if err != nil {
 		writeAPIError(w, err)
 		return
@@ -133,6 +258,34 @@ func (h *Handler) handlePull(w http.ResponseWriter, r *http.Request, session Ses
 		})
 	}
 	writeJSON(w, http.StatusOK, pullPageJSON{Events: events, NextCursor: page.NextCursor})
+}
+
+func (h *Handler) verifySignedRequest(r *http.Request, scope deviceauth.Scope) error {
+	if h.deviceAuth == nil {
+		return deviceauth.ErrInvalidSignature
+	}
+	challenge := strings.TrimSpace(r.Header.Get(challengeHeader))
+	signatureText := strings.TrimSpace(r.Header.Get(signatureHeader))
+	if challenge == "" || signatureText == "" {
+		return deviceauth.ErrInvalidSignature
+	}
+	signature, err := base64.StdEncoding.DecodeString(signatureText)
+	if err != nil {
+		return deviceauth.ErrInvalidSignature
+	}
+	return h.deviceAuth.Verify(r.Context(), deviceauth.Request{
+		Scope:     scope,
+		Challenge: challenge,
+		Signature: signature,
+	})
+}
+
+func canonicalPullTarget(vaultID, cursor string, limit int) string {
+	query := url.Values{}
+	query.Set("cursor", cursor)
+	query.Set("limit", strconv.Itoa(limit))
+	query.Set("vault_id", vaultID)
+	return "/v1/sync/pull?" + query.Encode()
 }
 
 func (wire envelopeJSON) envelope() Envelope {
