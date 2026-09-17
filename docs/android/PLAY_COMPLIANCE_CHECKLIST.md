@@ -1,8 +1,8 @@
 # Sreva Google Play Compliance Checklist
 
-> **C2 release-policy note — 17 September 2026:** This checklist covers both local-only Android candidates and candidates that enable optional E2EE continuity. Account-free core health functionality remains first-class in either case. A sync-enabled candidate must pass the additional gate below before any Play-track submission; repository verification does not fabricate external Play Console evidence.
+> **C2 release-policy note — 17 September 2026:** This checklist preserves the complete Android/Google Play requirements while covering both local-only candidates and candidates that enable optional E2EE continuity. Android remains one of three equal first-class Sreva clients. Account-free core health functionality remains first-class in either mode. A sync-enabled Android release must satisfy the additional C2 gate at the end of this file before any Play-track submission. Repository verification does not fabricate external Play Console evidence.
 
-This file tracks store-facing requirements that sit outside normal unit tests. The repository must keep the implementation, public/in-app privacy wording and this checklist consistent.
+This file tracks store-facing requirements that sit outside normal unit tests. The repository must keep the implementation and this checklist consistent.
 
 ## Product classification
 
@@ -17,11 +17,11 @@ This file tracks store-facing requirements that sit outside normal unit tests. T
 - Minimum Android API: 26.
 - Compile SDK: API 36.
 - Target SDK: API 36.
-- Package must be registered under applicable Android developer-verification requirements before release.
+- Package must be registered under current Android developer verification requirements before the applicable deadline.
 - Play App Signing must be enabled before first public release.
 - Developer-held upload key must be different from Android debug signing.
 
-## Health Connect permissions
+## Health Connect permissions in Sreva
 
 The Android host declares only the supported reproductive categories required by implemented features:
 
@@ -36,22 +36,23 @@ Permissions are requested at runtime only after explicit user action. Revocation
 
 ## Privacy-policy requirements
 
-- Full privacy policy is available inside Sreva Privacy Center / in-app policy UI.
-- The public Android policy source is maintained in `docs/android/privacy-policy.html`.
+- Full privacy policy is available inside Sreva Privacy Center and the in-app Privacy Policy screen.
+- The public policy source is maintained in `docs/android/privacy-policy.html`.
 - Before Play submission, publish that page at a publicly accessible, non-geofenced, non-PDF URL.
 - Enter that exact URL in Play Console App content > Privacy policy.
 - Keep the public policy and in-app policy materially synchronized.
 
 The policy must explain, as applicable to the exact build:
 
-- health data accessed/stored and its purposes;
-- local/account-free storage model;
+- health data accessed/stored;
+- purposes;
+- account-free/local storage model;
 - optional client-encrypted ciphertext continuity;
 - server-visible minimum operational metadata and account/device state;
 - trusted-device and recovery-key boundaries;
 - Health Connect use;
 - explicit sharing/export behavior;
-- retention and deletion, including limits on former-device/export erasure;
+- retention and deletion, including the limit that Sreva cannot remotely erase former-device/export copies;
 - backup behavior;
 - security practices;
 - diagnostics;
@@ -59,9 +60,9 @@ The policy must explain, as applicable to the exact build:
 
 ## Data Safety review
 
-Before each store submission, compare the Play Data Safety questionnaire against the **exact release binary and dependency lockfiles**.
+Before each store submission, compare the Play Data Safety questionnaire against the exact release binary and dependency lockfile.
 
-Common Sreva privacy properties:
+Common Sreva architecture properties:
 
 - no advertising SDK;
 - no behavioral analytics SDK;
@@ -71,7 +72,7 @@ Common Sreva privacy properties:
 - exports/shares occur only after user action;
 - Health Connect is optional and permission-scoped.
 
-For a local-only build, health history is not sent to Sreva sync infrastructure. For a sync-enabled build, authorized clients encrypt health content before transmission and the service receives ciphertext plus minimum operational metadata; Sreva infrastructure lacks the health-vault decryption key.
+For a local-only build, reproductive-health history is processed locally and is not transmitted to Sreva sync infrastructure. For a sync-enabled build, authorized clients encrypt health content before transmission and the service receives ciphertext plus minimum operational metadata; Sreva infrastructure lacks the health-vault decryption key.
 
 Do not mechanically answer "no data collected" without checking Google's current definitions for on-device processing, account/device metadata, Health Connect, user-initiated sharing, crash diagnostics, store telemetry, and any newly added dependency.
 
@@ -84,6 +85,8 @@ Before the first Health Connect permission request, Sreva must explain:
 - why the requested categories are useful;
 - that core Sreva data remains under the application's local privacy boundary;
 - that access can be revoked in Android settings.
+
+The native Health Connect rationale activity and onboarding/Health Integration screens implement this disclosure boundary.
 
 ## Health-data use restrictions
 
@@ -102,37 +105,74 @@ Partner sharing remains explicit and user-controlled. Sensitive categories are n
 
 Store listing text and screenshots must not imply certainty or medical approval that the product does not have.
 
-Required concepts must match the exact released mode: private/local-first core; estimates, not guarantees; optional Health Connect; user-controlled exports/backups; and, if enabled, optional E2EE continuity without operator-readable health content.
+Required concepts:
+
+- private/local-first cycle companion;
+- on-device cycle prediction;
+- estimates, not guarantees;
+- local reminders;
+- optional Health Connect;
+- user-controlled exports/backups;
+- no operator-readable reproductive-health database for core operation or optional E2EE continuity;
+- if sync is enabled, optional encrypted continuity with the health-vault decryption key unavailable to Sreva infrastructure.
 
 Avoid claims such as "medically accurate contraception", "guaranteed ovulation", "diagnoses PCOS", or equivalent wording.
 
-## Repository-controlled release gates
+## Release gates
 
-A production upload is blocked unless applicable repository-controlled gates are green, including:
+A production upload is blocked unless all applicable items are true:
 
-- `main` CI;
-- OSV/dependency review;
-- CycloneDX SBOM generation;
-- privacy and credential scans;
-- Flutter tests and reference/closure tests;
-- Android Kotlin native tests;
-- release AAB/APK build and signature verification;
-- release checksums;
-- version-code monotonicity;
-- release notes review;
-- physical-device acceptance when required.
+- `main` CI is green;
+- OSV scan is green or every finding has a reviewed documented disposition;
+- CycloneDX SBOM generated;
+- privacy scan green;
+- Flutter tests green;
+- reference/closure tests green;
+- Android Kotlin native tests green;
+- production AAB successfully built with the upload key;
+- AAB signature verification green;
+- production APK signature verification green;
+- release checksums generated;
+- version code greater than every prior Play upload;
+- Health apps declaration reviewed;
+- Data Safety answers reviewed against the exact binary/dependencies;
+- privacy policy URL live;
+- package registration/identity verification complete;
+- release notes reviewed;
+- physical-device smoke test complete;
+- for a sync-enabled candidate, the Task-26 release-policy contract and additional C2 gate below are green.
 
 ## Physical Android acceptance pass
 
-Before production rollout, verify on at least one supported physical Android phone: fresh install; onboarding/privacy; period editing; logging; prediction/confidence; reminders/timezone/reboot; permission changes; app lock; private notifications; Health Connect where available; CycleVault export/restore; report share; observation deletion; full local wipe; offline operation; and upgrade from a previous production build once one exists.
+Before production rollout, verify on at least one supported physical Android phone:
+
+- fresh install;
+- first-run privacy/onboarding;
+- period start/end/edit/delete;
+- flow and symptom logging;
+- prediction window/confidence;
+- default 3-day reminder;
+- timezone change;
+- reboot reminder reconstruction;
+- notification permission revoke/restore;
+- app lock and Sreva PIN fallback;
+- private notification modes;
+- Health Connect permission request/read/write where available;
+- CycleVault export and restore;
+- report preview and share;
+- individual observation deletion;
+- full local wipe;
+- offline operation;
+- upgrade from the previous production build once one exists;
+- when sync is enabled: account sign-in, trusted-device approval, encrypted sync, pause/disable sync, recovery-key restore and device revocation.
 
 A physical-device failure blocks rollout even when CI is green.
 
-## External account/store-state boundary
+## External account-state boundary
 
-The following are **external** actions and cannot be proven by repository code alone:
+The following **external** actions cannot be proven by repository code alone and must be completed in the publisher's Google/Play account before production submission:
 
-- Google Play developer identity verification;
+- developer identity verification;
 - Play package-name registration;
 - Play App Signing enrollment;
 - production upload-key secret installation;
@@ -142,24 +182,24 @@ The following are **external** actions and cannot be proven by repository code a
 - content rating/target-audience declarations;
 - final Play review and rollout.
 
-Repository formal closure means Sreva is engineered and release-pipeline-ready for these actions; it does not claim they happened when they have not.
+Repository formal closure means Sreva is engineered and release-pipeline-ready for these account actions; it does not fabricate evidence that an external Play Console action has happened when it has not.
 
 ---
 
-## Mandatory gate for a sync-enabled Android release candidate
+## Additional mandatory gate for a sync-enabled Android release
 
-The C2 continuity implementation does not authorize a shipping binary to turn sync on silently. Before any Android binary that sends encrypted health ciphertext to Sreva-operated infrastructure enters any Play track:
+The implemented C2 continuity stack does **not** authorize Sreva to turn sync on silently. Before any Android binary that sends encrypted health ciphertext to Sreva-operated infrastructure enters any Play track:
 
-- freeze and review the versioned E2EE key hierarchy and sync protocol;
-- pass applicable Android ↔ iOS ↔ Web interoperability vectors;
-- pass server authorization, replay, revoked-device, cross-account and ciphertext-limit tests;
-- prove account authentication alone cannot derive/decrypt the health-vault key;
-- pass trusted-device and recovery-key loss/recovery cases;
-- preserve full account-free core health functionality and local use after disabling sync;
-- ensure public and in-app privacy policy text accurately discloses opaque account/device identifiers, server-visible minimum operational metadata, ciphertext sync, trusted devices, recovery-key limits, retention/deletion, and the fact that Sreva infrastructure lacks the health-vault decryption key;
-- re-evaluate Play Data Safety and Health app declarations against the **exact sync-enabled binary and dependency set**;
-- review email/SMS verification metadata if those channels are actually enabled;
-- make Privacy Center show sync/device/server boundaries truthfully;
-- pass applicable 258-ID C2 traceability and Task-26 policy-contract checks.
+- the reviewed versioned E2EE key hierarchy and sync protocol must be frozen;
+- Android/Web/iOS interoperability vectors applicable to that release must pass;
+- server authorization, replay, revoked-device, cross-account and ciphertext-limit tests must pass;
+- account authentication must remain separate from health-vault decryption;
+- trusted-device and recovery-key loss/recovery cases must pass;
+- account-free core health functionality must remain available and disabling sync must leave local Sreva usable;
+- the public and in-app privacy policy must accurately disclose opaque account/device identifiers, server-visible minimum operational metadata, ciphertext sync, trusted devices, recovery-key limits, retention/deletion, the former-device/export deletion limitation, and the fact that Sreva infrastructure lacks the vault-decryption key;
+- Play Data Safety and Health app declarations must be re-evaluated against the **exact sync-enabled binary and dependency set**;
+- SMS/email verification metadata must be reviewed if those channels are actually enabled;
+- Privacy Center must show sync/device/server boundaries truthfully;
+- applicable 258-ID C2 traceability and the Task-26 policy contract must pass.
 
-If any repository-controlled item is incomplete, keep the Android release local-only with Sreva sync disabled. If an external Play Console item is incomplete, do not submit or roll out the affected release.
+Until all repository-controlled conditions are met, the Android release remains local-only with Sreva sync disabled. If a required external Play Console action is incomplete, do not submit or roll out the affected release.
