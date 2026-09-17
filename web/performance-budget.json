@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "budgets": {
+    "total_static_bytes": 6291456,
+    "public_html_bytes": 262144,
+    "app_shell_html_bytes": 393216,
+    "largest_static_asset_bytes": 1572864
+  }
+}

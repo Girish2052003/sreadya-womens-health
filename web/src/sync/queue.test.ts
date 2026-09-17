@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
   SyncQueue,
@@ -111,6 +111,34 @@ describe('SyncQueue', () => {
 
     await reopened.resume();
     await expect(reopened.isPaused()).resolves.toBe(false);
+  });
+
+  it('preserves a synthetic event across a 30-day offline interval and reconnect with no silent loss', async () => {
+    vi.useFakeTimers();
+    try {
+      const persistence = new MemorySyncQueuePersistence();
+      vi.setSystemTime(new Date('2026-08-01T00:00:00Z'));
+      const beforeOffline = new SyncQueue(persistence);
+      await beforeOffline.enqueue({
+        eventId: 'evt-30-day-offline',
+        vaultId: 'vault-a',
+        body: bytes('opaque-synthetic-ciphertext'),
+      });
+      await beforeOffline.setCursor('cursor-before-offline');
+
+      vi.setSystemTime(new Date('2026-08-31T00:00:00Z'));
+      const reconnect = new SyncQueue(persistence);
+
+      expect((await reconnect.listPending()).map((event) => event.eventId)).toEqual([
+        'evt-30-day-offline',
+      ]);
+      await expect(reconnect.getCursor()).resolves.toBe('cursor-before-offline');
+      expect(new TextDecoder().decode((await reconnect.peekPending())?.body)).toBe(
+        'opaque-synthetic-ciphertext',
+      );
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('disable clears only sync queue/cursor state through the sync persistence boundary', async () => {
