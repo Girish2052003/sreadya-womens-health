@@ -16,7 +16,7 @@ export const publicPages: PublicPage[] = [
   { slug: ['doctor-reports'], title: 'Doctor Reports', eyebrow: 'You choose what leaves', summary: 'Create deliberate, user-selected reports for appointments instead of silently exporting your health history.' },
   { slug: ['privacy'], title: 'Privacy', eyebrow: 'Private by architecture', summary: 'Account-free equality, local intelligence and no health telemetry are product laws, not marketing toggles.' },
   { slug: ['security'], title: 'Security', eyebrow: 'Fail closed', summary: 'Sreva separates local vault protection, optional continuity and release security with explicit trust boundaries.' },
-  { slug: ['sync'], title: 'Sync', eyebrow: 'Optional continuity', summary: 'Sync is optional. Production continuity will ship only after its reviewed end-to-end encryption gate closes.' },
+  { slug: ['sync'], title: 'Sync', eyebrow: 'Optional continuity', summary: 'Optional end-to-end encrypted continuity keeps health content encrypted before it leaves an authorized client while account-free Sreva remains complete.' },
   { slug: ['accessibility'], title: 'Accessibility', eyebrow: 'Readable worldwide', summary: 'Keyboard access, strong contrast, zoom, reduced motion and text alternatives are first-class requirements.' },
   { slug: ['download'], title: 'Download', eyebrow: 'Choose your client', summary: 'Sreva is designed as one product across Android, iPhone and an installable Web experience.' },
   { slug: ['install', 'iphone'], title: 'Install on iPhone', eyebrow: 'Sreva on iOS', summary: 'Use the native iOS client when available, or follow the reviewed PWA installation path for the Web client.' },
@@ -25,7 +25,7 @@ export const publicPages: PublicPage[] = [
   { slug: ['help'], title: 'Help', eyebrow: 'Clear answers', summary: 'Get practical guidance for local data, backups, privacy controls, permissions and safe recovery.' },
   { slug: ['about'], title: 'About', eyebrow: 'Built with care', summary: 'Sreva is a privacy-first women’s health product designed around dignity, calm interaction and user control.' },
   { slug: ['release-notes'], title: 'Release Notes', eyebrow: 'What changed', summary: 'Release notes make meaningful product, privacy and compatibility changes visible.' },
-  { slug: ['privacy-policy'], title: 'Privacy Policy', eyebrow: 'Plain-language policy', summary: 'The public policy documents what Sreva does, what it does not collect, and where optional services create separate boundaries.' },
+  { slug: ['privacy-policy'], title: 'Privacy Policy', eyebrow: 'Plain-language policy', summary: 'Read how local account-free use and optional end-to-end encrypted continuity handle health content, operational metadata, recovery, retention and deletion.' },
   { slug: ['terms'], title: 'Terms', eyebrow: 'Product terms', summary: 'Terms are kept separate from health guidance and never expand Sreva into unvalidated diagnostic or contraception claims.' },
   { slug: ['security-report'], title: 'Security Report', eyebrow: 'Responsible disclosure', summary: 'Security reporting follows the repository disclosure process without asking users to expose health records.' },
 ];
