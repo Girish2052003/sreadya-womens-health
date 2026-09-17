@@ -51,7 +51,7 @@ func (f *fakeSyncAPI) Pull(_ context.Context, session Session, vaultID, cursor s
 
 func TestPushHandlerAcceptsOpaqueEnvelopeFromBodyOnly(t *testing.T) {
 	api := &fakeSyncAPI{pushAck: Ack{EventID: "evt-1", CommittedRevision: 7}}
-	handler := NewHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}})
+	handler := newSignedTestHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}})
 	ciphertext := []byte("opaque-health-ciphertext")
 	digest := bytes.Repeat([]byte{0x33}, 32)
 	createdAt := "2026-09-17T01:42:00Z"
@@ -59,6 +59,7 @@ func TestPushHandlerAcceptsOpaqueEnvelopeFromBodyOnly(t *testing.T) {
 
 	request := httptest.NewRequest(http.MethodPost, "/v1/sync/push", strings.NewReader(body))
 	request.Header.Set("Content-Type", "application/json")
+	signedTestHeaders(request)
 	response := httptest.NewRecorder()
 	handler.ServeHTTP(response, request)
 
@@ -88,11 +89,12 @@ func TestPushHandlerAcceptsOpaqueEnvelopeFromBodyOnly(t *testing.T) {
 
 func TestPushHandlerDoesNotReflectCiphertextOnAuthorizationFailure(t *testing.T) {
 	api := &fakeSyncAPI{pushErr: ErrCrossAccount}
-	handler := NewHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}})
+	handler := newSignedTestHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}})
 	secretCiphertext := "DO_NOT_REFLECT_THIS_CIPHERTEXT"
 	body := `{"account_id":"acct-b","vault_id":"vault-b","event_id":"evt-1","object_id":"obj-1","source_device_id":"dev-a","ciphertext_and_tag":"` + base64.StdEncoding.EncodeToString([]byte(secretCiphertext)) + `"}`
 
 	request := httptest.NewRequest(http.MethodPost, "/v1/sync/push", strings.NewReader(body))
+	signedTestHeaders(request)
 	response := httptest.NewRecorder()
 	handler.ServeHTTP(response, request)
 
@@ -113,8 +115,9 @@ func TestPullHandlerPassesOpaqueCursorAndReturnsNextCursorNoStore(t *testing.T) 
 		}},
 		NextCursor: "opaque-cursor-8",
 	}}
-	handler := NewHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}})
+	handler := newSignedTestHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}})
 	request := httptest.NewRequest(http.MethodGet, "/v1/sync/pull?vault_id=vault-a&cursor=opaque-cursor-7&limit=25", nil)
+	signedTestHeaders(request)
 	response := httptest.NewRecorder()
 	handler.ServeHTTP(response, request)
 
@@ -138,8 +141,9 @@ func TestPullHandlerPassesOpaqueCursorAndReturnsNextCursorNoStore(t *testing.T) 
 
 func TestPullHandlerAllowsEmptyCursorForInitialSync(t *testing.T) {
 	api := &fakeSyncAPI{pullPage: PullPage{NextCursor: "opaque-cursor-1"}}
-	handler := NewHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}})
+	handler := newSignedTestHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}})
 	request := httptest.NewRequest(http.MethodGet, "/v1/sync/pull?vault_id=vault-a&limit=25", nil)
+	signedTestHeaders(request)
 	response := httptest.NewRecorder()
 	handler.ServeHTTP(response, request)
 
@@ -153,7 +157,7 @@ func TestPullHandlerAllowsEmptyCursorForInitialSync(t *testing.T) {
 
 func TestPullHandlerRejectsInvalidLimitOrMissingVault(t *testing.T) {
 	api := &fakeSyncAPI{}
-	handler := NewHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}})
+	handler := newSignedTestHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}})
 	for _, path := range []string{
 		"/v1/sync/pull?vault_id=vault-a&cursor=opaque-cursor-7&limit=nope",
 		"/v1/sync/pull?vault_id=&cursor=opaque-cursor-7&limit=25",
@@ -169,7 +173,7 @@ func TestPullHandlerRejectsInvalidLimitOrMissingVault(t *testing.T) {
 
 func TestHandlerRejectsMissingAuthenticatedSession(t *testing.T) {
 	api := &fakeSyncAPI{}
-	handler := NewHandler(api, fakeSessionResolver{err: errors.New("no authenticated session")})
+	handler := newSignedTestHandler(api, fakeSessionResolver{err: errors.New("no authenticated session")})
 	request := httptest.NewRequest(http.MethodGet, "/v1/sync/pull?vault_id=vault-a&limit=25", nil)
 	response := httptest.NewRecorder()
 	handler.ServeHTTP(response, request)
