@@ -1,5 +1,6 @@
 name: Integration Dart Format Diagnostic
 
+# Temporary diagnostic only; remove before merge.
 on:
   push:
     branches:
