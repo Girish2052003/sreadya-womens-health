@@ -1,0 +1,25 @@
+name: Task 27 Dart Format Diagnostic
+
+on:
+  push:
+    branches: [task27-release-hardening]
+    paths:
+      - '.github/workflows/task27-dart-format-diagnostic.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  format-show:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
+        with:
+          flutter-version: '3.47.2'
+          channel: stable
+          cache: true
+      - name: Print canonical Dart 3.13 formatting
+        run: dart format --output=show test/hardening/task27_recovery_hardening_test.dart
