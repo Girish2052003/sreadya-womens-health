@@ -2,6 +2,8 @@ package auth
 
 import (
 	"bytes"
+	"errors"
+	"net/http/httptest"
 	"reflect"
 	"strings"
 	"testing"
@@ -114,5 +116,82 @@ func TestPasskeyServiceBeginsDiscoverableLogin(t *testing.T) {
 	}
 	if session.Challenge == "" {
 		t.Fatal("login session challenge must be populated by WebAuthn")
+	}
+}
+
+func TestPasskeyServiceFinishRegistrationConsumesCeremonyBeforeValidation(t *testing.T) {
+	now := time.Date(2026, 9, 17, 1, 0, 0, 0, time.UTC)
+	sessions := NewSessionStore(
+		func() time.Time { return now },
+		func() (string, error) { return "registration-finish-session", nil },
+	)
+	service, err := NewPasskeyService(PasskeyConfig{
+		RPID:          "example.com",
+		RPDisplayName: "Sreva",
+		RPOrigins:     []string{"https://example.com"},
+	}, sessions)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	user := PasskeyUser{
+		ID:          []byte("0123456789abcdef"),
+		Name:        "wife@example.com",
+		DisplayName: "Sreva User",
+	}
+	_, sessionID, err := service.BeginRegistration(user)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	badResponse := httptest.NewRequest("POST", "/finish", strings.NewReader(`{}`))
+	badResponse.Header.Set("Content-Type", "application/json")
+	if _, err = service.FinishRegistration(sessionID, user, badResponse); err == nil {
+		t.Fatal("malformed authenticator response must fail validation")
+	}
+	if errors.Is(err, ErrSessionReplay) {
+		t.Fatalf("first finish attempt unexpectedly reported replay: %v", err)
+	}
+
+	replay := httptest.NewRequest("POST", "/finish", strings.NewReader(`{}`))
+	replay.Header.Set("Content-Type", "application/json")
+	if _, err = service.FinishRegistration(sessionID, user, replay); !errors.Is(err, ErrSessionReplay) {
+		t.Fatalf("second finish attempt error = %v, want ErrSessionReplay", err)
+	}
+}
+
+func TestPasskeyServiceFinishDiscoverableLoginConsumesCeremonyBeforeValidation(t *testing.T) {
+	now := time.Date(2026, 9, 17, 1, 0, 0, 0, time.UTC)
+	sessions := NewSessionStore(
+		func() time.Time { return now },
+		func() (string, error) { return "login-finish-session", nil },
+	)
+	service, err := NewPasskeyService(PasskeyConfig{
+		RPID:          "example.com",
+		RPDisplayName: "Sreva",
+		RPOrigins:     []string{"https://example.com"},
+	}, sessions)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, sessionID, err := service.BeginPasskeyLogin()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	badResponse := httptest.NewRequest("POST", "/finish", strings.NewReader(`{}`))
+	badResponse.Header.Set("Content-Type", "application/json")
+	if _, _, err = service.FinishPasskeyLogin(sessionID, nil, badResponse); err == nil {
+		t.Fatal("malformed authenticator response must fail validation")
+	}
+	if errors.Is(err, ErrSessionReplay) {
+		t.Fatalf("first finish attempt unexpectedly reported replay: %v", err)
+	}
+
+	replay := httptest.NewRequest("POST", "/finish", strings.NewReader(`{}`))
+	replay.Header.Set("Content-Type", "application/json")
+	if _, _, err = service.FinishPasskeyLogin(sessionID, nil, replay); !errors.Is(err, ErrSessionReplay) {
+		t.Fatalf("second finish attempt error = %v, want ErrSessionReplay", err)
 	}
 }
