@@ -200,7 +200,7 @@ describe('SignedSyncClient push', () => {
         : new Response('SECRET SERVER DETAIL', { status: 503 });
     };
 
-    const error = await makeClient({ queue, signer: new CapturingSigner(), fetchImpl }).uploadNext().catch((value) => value);
+    const error = await makeClient({ queue, signer: new CapturingSigner(), fetchImpl }).uploadNext().catch((value: unknown) => value);
     expect(error).toBeInstanceOf(SyncTransportError);
     expect(String(error)).not.toContain('SECRET SERVER DETAIL');
     expect((await queue.peekPending())?.body).toEqual(body);
