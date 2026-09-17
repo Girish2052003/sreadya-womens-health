@@ -3,6 +3,7 @@ export type PrivacyPolicySection = {
   body: string;
 };
 
+export const privacyPolicyLastUpdatedLabel = 'Last updated';
 export const privacyPolicyLastUpdated = '17 September 2026';
 
 export const privacyPolicyIntro =
