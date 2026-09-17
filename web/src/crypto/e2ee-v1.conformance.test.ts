@@ -26,12 +26,16 @@ type VectorFile = {
 
 const vectorPath = resolve(process.cwd(), '../shared/crypto/interoperability-vectors/e2ee-v1.json');
 
-function bytes(hexValue: string): Uint8Array {
+function bytes(hexValue: string): Uint8Array<ArrayBuffer> {
   if (hexValue.length % 2 !== 0) throw new Error('Invalid hex length');
-  return Uint8Array.from(hexValue.match(/.{2}/g)?.map((value) => Number.parseInt(value, 16)) ?? []);
+  const output = new Uint8Array(hexValue.length / 2);
+  for (let i = 0; i < output.length; i += 1) {
+    output[i] = Number.parseInt(hexValue.slice(i * 2, i * 2 + 2), 16);
+  }
+  return output;
 }
 
-function hex(value: ArrayBuffer | Uint8Array): string {
+function hex(value: ArrayBuffer | Uint8Array<ArrayBuffer>): string {
   return Array.from(value instanceof Uint8Array ? value : new Uint8Array(value))
     .map((part) => part.toString(16).padStart(2, '0'))
     .join('');
@@ -41,7 +45,7 @@ async function loadVector(): Promise<VectorFile> {
   return JSON.parse(await readFile(vectorPath, 'utf8')) as VectorFile;
 }
 
-async function derive(entry: EnvelopeVector): Promise<Uint8Array> {
+async function derive(entry: EnvelopeVector): Promise<Uint8Array<ArrayBuffer>> {
   const key = await crypto.subtle.importKey('raw', bytes(entry.ikmHex), 'HKDF', false, ['deriveBits']);
   const derived = await crypto.subtle.deriveBits(
     {
@@ -56,7 +60,10 @@ async function derive(entry: EnvelopeVector): Promise<Uint8Array> {
   return new Uint8Array(derived);
 }
 
-async function decrypt(entry: EnvelopeVector, keyBytes: Uint8Array): Promise<Uint8Array> {
+async function decrypt(
+  entry: EnvelopeVector,
+  keyBytes: Uint8Array<ArrayBuffer>,
+): Promise<Uint8Array<ArrayBuffer>> {
   const key = await crypto.subtle.importKey('raw', keyBytes, { name: 'AES-GCM' }, false, ['decrypt']);
   const clear = await crypto.subtle.decrypt(
     {
