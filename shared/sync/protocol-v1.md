@@ -10,19 +10,7 @@ Account-free Sreva remains complete. Enabling, disabling, losing, or interruptin
 
 ## 2. Server-visible model
 
-The service may persist only what the reviewed protocol requires:
-
-- opaque account ID;
-- opaque vault ID;
-- opaque device ID and device public signing key;
-- device authorization/revocation state;
-- opaque object/event/enrollment IDs;
-- protocol version, suite ID and key epoch;
-- ciphertext/encrypted envelopes and non-secret salt/nonce values;
-- schema identifier that describes encrypted record envelope compatibility but not medical content;
-- revision/version counters;
-- minimum synchronization timestamps and ciphertext sizes;
-- one-time challenge/enrollment lifecycle state.
+The service may persist only opaque account/vault/device/object/event/enrollment identifiers; device public signing keys and authorization state; protocol/suite/key-epoch values; ciphertext/encrypted envelopes and non-secret salt/nonce values; envelope compatibility schema IDs; revisions; minimum sync timestamps/ciphertext sizes; and one-time challenge/enrollment lifecycle state.
 
 The service schema/API MUST NOT introduce readable health semantics such as period dates, flow, symptoms, sexual activity, fertility/pregnancy state, medication, mood, notes, predictions, or report content.
 
@@ -33,181 +21,92 @@ A logical encrypted event contains:
 ```text
 protocol_version
 suite_id
-account_id                 # authenticated account context; opaque
-vault_id                   # opaque
+account_id
+vault_id
 key_epoch
-object_id                  # random/opaque
- event_id                  # random/opaque and globally unique within vault
-source_device_id           # opaque
-schema_id                  # e.g. health-record-v1; no medical value
-base_revision              # revision source client believed current
+object_id
+event_id
+source_device_id
+schema_id
+base_revision
 operation                  # upsert | tombstone
 kdf_salt                   # 32 random bytes
 nonce                      # 12 random bytes
-ciphertext_and_tag         # AES-256-GCM output
-created_at                 # operational client/server timestamp; not health date
+ciphertext_and_tag
+created_at                 # operational timestamp, not health date
 ```
 
-`account_id`, `vault_id`, `event_id`, `object_id`, `source_device_id`, `key_epoch`, `schema_id`, `base_revision`, `operation` and suite are authenticated as AAD exactly as defined in `shared/crypto/e2ee-key-hierarchy-v1.md`.
-
-The service never decrypts `ciphertext_and_tag`.
+The account/vault/event/object/device/key-epoch/schema/revision/operation/suite fields are authenticated as AAD exactly as defined in `shared/crypto/e2ee-key-hierarchy-v1.md`. The service never decrypts `ciphertext_and_tag`.
 
 ## 4. Push authorization
 
-A client first receives a short-lived, action-scoped challenge. It signs the canonical device-authentication transcript described by the key-hierarchy document and submits:
+A client first receives a short-lived action-scoped challenge. It signs the canonical device-authentication transcript from the key-hierarchy document and submits an authenticated account session, device ID, challenge, canonical request body, and Ed25519 device signature.
 
-- authenticated account session;
-- device ID;
-- challenge ID/value;
-- canonical request body;
-- device ECDSA P-256/SHA-256 signature.
-
-The service verifies all of the following before accepting the mutation:
+Before accepting a mutation, the service verifies:
 
 1. session account matches request account context;
 2. device belongs to that account and is active;
-3. challenge belongs to that account/device/action, is unexpired and unused;
-4. request body hash matches the signed transcript;
-5. signature verifies under registered device public key;
+3. challenge is correctly scoped, unexpired, and unused;
+4. request-body SHA-256 matches the value inside the signed transcript;
+5. Ed25519 signature verifies under the registered device public key;
 6. vault belongs to account;
-7. suite/protocol/key epoch are supported for that vault;
-8. event ID has not been used with different content;
+7. protocol/suite/key epoch are supported;
+8. event ID has not been reused with different bytes;
 9. object revision transition satisfies conflict rules;
-10. size/rate limits pass.
+10. size and rate limits pass.
 
-Challenge is consumed atomically with the authorization decision. A used challenge cannot authorize a retry; the client obtains a new challenge and may resend the same idempotent event ID.
+Challenge consumption must be atomic with the authorization decision. A used challenge cannot authorize a retry; a client obtains a new challenge and may resend the same immutable idempotent event.
 
-## 5. Idempotency and duplicate events
+## 5. Idempotency
 
-`event_id` is the idempotency key.
+`event_id` is the idempotency key. A first valid submission commits. A byte-equivalent retry returns the existing acknowledgement without creating another logical event. Reusing the same event ID with different envelope bytes/metadata is rejected. Clients MUST NOT intentionally reuse an event ID for a fresh encryption.
 
-- First valid submission: store/commit.
-- Repeated byte-equivalent envelope for an already committed `event_id`: return the existing acknowledgement; do not create another logical event.
-- Same `event_id` with different envelope bytes/metadata: reject as integrity/protocol violation.
+## 6. Pull and safe application
 
-Clients MUST NOT intentionally reuse an event ID for a new encryption because that could also imply unsafe derived-key/nonce reuse.
+An authorized client requests events after an opaque sync cursor. The client validates outer fields, reconstructs AAD, derives the event key from its local epoch VRS, authenticates/decrypts AES-GCM, validates decrypted schema/domain content locally, applies conflict semantics transactionally, and advances the cursor only after safe application or preservation.
 
-## 6. Pull
-
-An authorized client requests events after an opaque sync cursor. The service returns authorized ciphertext envelopes and a new cursor. The client:
-
-1. validates outer protocol fields and authorization context;
-2. reconstructs expected AAD;
-3. derives the event key from the locally held epoch VRS;
-4. authenticates/decrypts AES-GCM;
-5. validates decrypted schema/domain content locally;
-6. applies conflict semantics transactionally to local authoritative state;
-7. advances local sync cursor only after safe application/preservation.
-
-Authentication or schema failure never silently deletes/replaces current local health state.
+Authentication or schema failure never silently deletes or replaces current local health state.
 
 ## 7. Revisions and conflicts
 
-Every object maintains a logical revision. A mutation carries `base_revision`.
+Every object has a logical revision and each mutation carries `base_revision`. A matching base commits the next revision. Concurrent or stale same-object changes are preserved as competing encrypted branches rather than resolved using health semantics on the server. Authorized clients decrypt competing candidates and surface a user/domain-safe choice where an automatic merge is not explicitly safe. Tombstones participate in the same revision graph and stale edits MUST NOT silently resurrect deleted data.
 
-- If `base_revision` equals the server-observed current revision, commit next revision.
-- If the object has advanced independently, do not choose a health winner on the server. Preserve the competing encrypted branch/event and mark an opaque conflict condition for authorized clients.
-- Clients decrypt competing candidates and present a health-language choice when automatic domain-safe merging is not explicitly specified.
-- Tombstones participate in the same revision graph and MUST NOT permit silent stale resurrection.
-
-The server may detect revision concurrency from opaque metadata, but it never interprets health meaning.
-
-The authoritative deterministic cases are in `shared/sync/conflict-vectors/v1.json`.
+`shared/sync/conflict-vectors/v1.json` is authoritative for deterministic protocol-state cases.
 
 ## 8. Offline queue
 
-Offline clients append encrypted local change records to a durable local queue. Each queued mutation has a stable event ID. Reconnect behavior is:
-
-```text
-local plaintext change
-→ local authoritative commit
-→ encrypt event locally
-→ queue ciphertext envelope
-→ retry authorization/push idempotently
-→ receive remote ciphertext since cursor
-→ decrypt/validate/apply or surface conflict locally
-```
-
-Sync outage therefore never blocks local health capture. Queue failure must be visible without claiming health data was synchronized.
+Offline clients first commit locally, then create encrypted change records with stable event IDs in a durable local queue. Reconnect retries ciphertext idempotently, pulls remote ciphertext, decrypts/validates, and applies or surfaces conflicts. Sync outage therefore never blocks local health capture.
 
 ## 9. Tombstones and deletion
 
-A deletion is an encrypted logical tombstone event whose outer operation is `tombstone`. The server can retain the opaque tombstone/version required to prevent stale resurrection according to retention policy, but it does not learn what health record was deleted.
+Deletion is an encrypted logical tombstone whose outer operation is `tombstone`. The server may retain opaque tombstone/version metadata required to prevent stale resurrection under retention policy, without learning which health record was deleted.
 
-Account deletion can delete server-held accounts, public device material, envelopes and ciphertext under policy. It MUST NOT claim to erase CycleVault exports, screenshots, backups, or plaintext/ciphertext already retained by former devices.
+Account deletion may delete server-held account/public-device/envelope/ciphertext state according to policy. It MUST NOT claim to erase CycleVault exports, screenshots, backups, or copies already retained by former devices.
 
 ## 10. Trusted-device enrollment
 
-Enrollment state machine:
-
-```text
-pending → approved → envelope_ready → consumed
-       ↘ rejected
-       ↘ expired
-```
-
-Rules:
-
-- target must first authenticate account and register its device public key;
-- source approver must be an active trusted device;
-- enrollment ID is random, account/vault/target scoped and short-lived;
-- transfer secret is delivered directly source→target and is never submitted to service;
-- only the encrypted VRS transfer envelope plus non-secret parameters are relayed;
-- consume is one-time and atomic;
-- expired/rejected/consumed enrollment cannot be reopened;
-- changing source/target/account/vault/key epoch invalidates AES-GCM authentication because those fields are bound in KDF context/AAD.
+Enrollment state is `pending → approved → envelope_ready → consumed`, with rejected/expired terminal paths. The target first authenticates the account and registers its Ed25519 public key. The approver must be active. Enrollment is random, scoped, short-lived, and one-time. TS travels directly source-to-target and is never submitted to the service. Only the encrypted VRS transfer envelope plus non-secret parameters are relayed. Changing source/target/account/vault/key epoch causes cryptographic authentication failure because those fields are bound into KDF context/AAD.
 
 ## 11. Recovery
 
-Recovery requires both:
-
-1. successful account identity authentication; and
-2. the user-held Sreva Recovery Secret capable of decrypting the stored recovery envelope.
-
-Email, SMS, support staff, database access, account session or passkey account login alone cannot unwrap the old VRS.
-
-After successful recovery the client creates/registers a fresh device identity. Security-sensitive recovery operations use the normal challenge/signature boundary once the new device has been authorized through the recovery flow.
+Recovery requires both successful account identity authentication and the user-held Recovery Secret capable of decrypting the recovery envelope. Email, SMS, support staff, database access, account session, or passkey login alone cannot unwrap the old VRS. After recovery, a fresh device identity is created/authorized and later sensitive operations return to the normal challenge/signature boundary.
 
 ## 12. Revocation
 
-A revoked device:
-
-- cannot obtain valid action challenges;
-- cannot push or pull future sync generations;
-- cannot approve new devices;
-- cannot modify recovery state;
-- cannot be represented as remotely wiped.
-
-Revocation may trigger a new key epoch created on a surviving authorized client. The service only coordinates opaque epoch metadata and ciphertext; it never generates or receives the new VRS.
+A revoked device cannot obtain valid action challenges, push/pull future sync generations, approve devices, or modify recovery state. Revocation is not represented as a remote wipe. A surviving client may create a new VRS/key epoch; the service coordinates only opaque epoch metadata and ciphertext.
 
 ## 13. Replay and substitution defenses
 
-Protocol v1 rejects or detects:
+Protocol v1 rejects or detects used/expired challenge or enrollment replay; altered duplicate events; stale revisions without conflict preservation; revoked-device requests; account/vault/device substitution; ciphertext/AAD/tag tampering; request-body substitution; and unsupported suite/key-epoch downgrade.
 
-- used/expired challenge replay;
-- used/expired enrollment replay;
-- duplicate event with altered bytes;
-- stale base revision without explicit conflict preservation;
-- revoked-device requests;
-- account/vault/device substitution through authorization checks and cryptographic AAD binding;
-- ciphertext/AAD/tag tampering through AES-GCM authentication;
-- request-body substitution through signed body hash;
-- unsupported suite/key-epoch downgrade.
+## 14. Transport/browser boundary
 
-## 14. Transport and browser boundary
-
-HTTPS is mandatory. Sensitive ciphertext endpoints use no health values in URL paths/query strings. Browser requests may carry opaque IDs only. Responses are not stored in ordinary service-worker/public caches. Authorization tokens and challenges are never embedded in static GitHub Pages output.
-
-The future sync service is deployed separately from GitHub Pages.
+HTTPS is mandatory. Sensitive endpoints put no health values in URLs/query strings. Browser requests may carry opaque IDs only. Responses are not stored in ordinary service-worker/public caches. Authorization tokens and challenges are never embedded in static GitHub Pages output. The future sync service is deployed separately from GitHub Pages.
 
 ## 15. Limits and abuse controls
 
-Production service must enforce conservative configurable limits for envelope size, queue depth, devices per account, enrollment attempts, challenge issuance, failed verification and mutation rate. Limits operate on opaque operational metadata and MUST NOT inspect health plaintext.
-
-Error responses avoid reflecting ciphertext, request bodies, recovery material, device private material or secrets into logs.
+Production service enforces conservative configurable envelope-size, queue, device, enrollment, challenge, verification-failure, and mutation-rate limits. Error responses do not reflect ciphertext bodies, recovery material, private keys, or secrets into logs.
 
 ## 16. Version negotiation
 
-Clients send explicit protocol version and suite ID. Unknown versions/suites fail closed. There is no implicit downgrade.
-
-Migration uses explicit read compatibility plus a write-current policy. New suites require shared golden vectors, cross-platform conformance, threat-model update and protocol review before production use.
+Clients send explicit protocol version and suite ID. Unknown versions/suites fail closed; there is no implicit downgrade. New suites require shared golden vectors, migration rules, threat-model update, and protocol review before production use.
