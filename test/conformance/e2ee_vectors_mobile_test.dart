@@ -53,8 +53,14 @@ void main() {
         transferContext,
       );
       expect(_hex(transferKey), transfer['derivedKeyHex']);
-      expect(_hex(trustedDeviceTransferKeyInfo(transferContext)), transfer['infoHex']);
-      expect(_hex(trustedDeviceTransferAad(transferContext)), transfer['aadHex']);
+      expect(
+        _hex(trustedDeviceTransferKeyInfo(transferContext)),
+        transfer['infoHex'],
+      );
+      expect(
+        _hex(trustedDeviceTransferAad(transferContext)),
+        transfer['aadHex'],
+      );
       final transferredRoot = await crypto.open(
         key: transferKey,
         nonce: _hexBytes(transfer['nonceHex'] as String),
@@ -92,86 +98,106 @@ void main() {
       expect(jsonEncode(clear), event['plaintextUtf8']);
     });
 
-    test('device-auth transcript remains byte-identical and verifies', () async {
-      final vector = await _loadObject(_cryptoVectorPath);
-      final entry = vector['deviceAuthentication'] as Map<String, dynamic>;
-      final transcript = deviceAuthenticationTranscript(
-        accountId: entry['accountId'] as String,
-        deviceId: entry['deviceId'] as String,
-        method: entry['method'] as String,
-        path: entry['path'] as String,
-        challenge: entry['challenge'] as String,
-        bodySha256Hex: entry['bodySha256Hex'] as String,
-      );
-      expect(_hex(transcript), entry['transcriptHex']);
-      final signature = Signature(
-        _hexBytes(entry['signatureHex'] as String),
-        publicKey: SimplePublicKey(
-          _hexBytes(entry['publicKeyHex'] as String),
-          type: KeyPairType.ed25519,
-        ),
-      );
-      expect(await Ed25519().verify(transcript, signature: signature), isTrue);
-    });
+    test(
+      'device-auth transcript remains byte-identical and verifies',
+      () async {
+        final vector = await _loadObject(_cryptoVectorPath);
+        final entry = vector['deviceAuthentication'] as Map<String, dynamic>;
+        final transcript = deviceAuthenticationTranscript(
+          accountId: entry['accountId'] as String,
+          deviceId: entry['deviceId'] as String,
+          method: entry['method'] as String,
+          path: entry['path'] as String,
+          challenge: entry['challenge'] as String,
+          bodySha256Hex: entry['bodySha256Hex'] as String,
+        );
+        expect(_hex(transcript), entry['transcriptHex']);
+        final signature = Signature(
+          _hexBytes(entry['signatureHex'] as String),
+          publicKey: SimplePublicKey(
+            _hexBytes(entry['publicKeyHex'] as String),
+            type: KeyPairType.ed25519,
+          ),
+        );
+        expect(
+          await Ed25519().verify(transcript, signature: signature),
+          isTrue,
+        );
+      },
+    );
   });
 
   group('mobile sync adapter uses shared conflict vectors', () {
-    test('duplicate event decisions preserve idempotency and integrity', () async {
-      final vector = await _loadObject(_syncVectorPath);
-      final cases = (vector['cases'] as List<dynamic>).cast<Map<String, dynamic>>();
-      final same = cases.single(
-        (entry) => entry['id'] == 'idempotent-byte-equivalent-retry',
-      );
-      final sameInput = same['input'] as Map<String, dynamic>;
-      expect(
-        SyncConflictPolicy.duplicateEvent(
-          existingEventId: sameInput['existingEventId'] as String,
-          existingEnvelopeDigest: sameInput['existingEnvelopeDigest'] as String,
-          retryEventId: sameInput['retryEventId'] as String,
-          retryEnvelopeDigest: sameInput['retryEnvelopeDigest'] as String,
-        ),
-        DuplicateEventDecision.returnExistingAcknowledgement,
-      );
+    test(
+      'duplicate event decisions preserve idempotency and integrity',
+      () async {
+        final vector = await _loadObject(_syncVectorPath);
+        final cases = (vector['cases'] as List<dynamic>)
+            .cast<Map<String, dynamic>>();
+        final same = cases.single(
+          (entry) => entry['id'] == 'idempotent-byte-equivalent-retry',
+        );
+        final sameInput = same['input'] as Map<String, dynamic>;
+        expect(
+          SyncConflictPolicy.duplicateEvent(
+            existingEventId: sameInput['existingEventId'] as String,
+            existingEnvelopeDigest:
+                sameInput['existingEnvelopeDigest'] as String,
+            retryEventId: sameInput['retryEventId'] as String,
+            retryEnvelopeDigest: sameInput['retryEnvelopeDigest'] as String,
+          ),
+          DuplicateEventDecision.returnExistingAcknowledgement,
+        );
 
-      final changed = cases.single(
-        (entry) => entry['id'] == 'duplicate-event-mutated-envelope',
-      );
-      final changedInput = changed['input'] as Map<String, dynamic>;
-      expect(
-        SyncConflictPolicy.duplicateEvent(
-          existingEventId: changedInput['existingEventId'] as String,
-          existingEnvelopeDigest: changedInput['existingEnvelopeDigest'] as String,
-          retryEventId: changedInput['retryEventId'] as String,
-          retryEnvelopeDigest: changedInput['retryEnvelopeDigest'] as String,
-        ),
-        DuplicateEventDecision.rejectIntegrityProtocolViolation,
-      );
-    });
+        final changed = cases.single(
+          (entry) => entry['id'] == 'duplicate-event-mutated-envelope',
+        );
+        final changedInput = changed['input'] as Map<String, dynamic>;
+        expect(
+          SyncConflictPolicy.duplicateEvent(
+            existingEventId: changedInput['existingEventId'] as String,
+            existingEnvelopeDigest:
+                changedInput['existingEnvelopeDigest'] as String,
+            retryEventId: changedInput['retryEventId'] as String,
+            retryEnvelopeDigest: changedInput['retryEnvelopeDigest'] as String,
+          ),
+          DuplicateEventDecision.rejectIntegrityProtocolViolation,
+        );
+      },
+    );
 
-    test('stale revisions require client resolution and suites fail closed', () async {
-      final vector = await _loadObject(_syncVectorPath);
-      final cases = (vector['cases'] as List<dynamic>).cast<Map<String, dynamic>>();
-      final stale = cases.single((entry) => entry['id'] == 'stale-base-revision');
-      final staleInput = stale['input'] as Map<String, dynamic>;
-      final staleEvent = staleInput['event'] as Map<String, dynamic>;
-      expect(
-        SyncConflictPolicy.needsClientResolution(
-          serverRevision: staleInput['serverRevision'] as int,
-          baseRevision: staleEvent['baseRevision'] as int,
-        ),
-        isTrue,
-      );
+    test(
+      'stale revisions require client resolution and suites fail closed',
+      () async {
+        final vector = await _loadObject(_syncVectorPath);
+        final cases = (vector['cases'] as List<dynamic>)
+            .cast<Map<String, dynamic>>();
+        final stale = cases.single(
+          (entry) => entry['id'] == 'stale-base-revision',
+        );
+        final staleInput = stale['input'] as Map<String, dynamic>;
+        final staleEvent = staleInput['event'] as Map<String, dynamic>;
+        expect(
+          SyncConflictPolicy.needsClientResolution(
+            serverRevision: staleInput['serverRevision'] as int,
+            baseRevision: staleEvent['baseRevision'] as int,
+          ),
+          isTrue,
+        );
 
-      final downgrade = cases.single(
-        (entry) => entry['id'] == 'unsupported-suite-downgrade',
-      );
-      final downgradeInput = downgrade['input'] as Map<String, dynamic>;
-      expect(
-        SyncConflictPolicy.acceptsSuite(downgradeInput['requestedSuite'] as String),
-        isFalse,
-      );
-      expect(SyncConflictPolicy.acceptsSuite(srevaE2eeSuiteV1), isTrue);
-    });
+        final downgrade = cases.single(
+          (entry) => entry['id'] == 'unsupported-suite-downgrade',
+        );
+        final downgradeInput = downgrade['input'] as Map<String, dynamic>;
+        expect(
+          SyncConflictPolicy.acceptsSuite(
+            downgradeInput['requestedSuite'] as String,
+          ),
+          isFalse,
+        );
+        expect(SyncConflictPolicy.acceptsSuite(srevaE2eeSuiteV1), isTrue);
+      },
+    );
   });
 }
 

@@ -29,8 +29,9 @@ class SecureSyncRandomSource implements SyncRandomSource {
   final Random _random;
   final Uuid _uuid;
 
-  Uint8List _bytes(int length) =>
-      Uint8List.fromList(List<int>.generate(length, (_) => _random.nextInt(256)));
+  Uint8List _bytes(int length) => Uint8List.fromList(
+    List<int>.generate(length, (_) => _random.nextInt(256)),
+  );
 
   @override
   String eventId() => _uuid.v4();

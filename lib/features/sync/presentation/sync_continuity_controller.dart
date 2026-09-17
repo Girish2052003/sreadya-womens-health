@@ -29,7 +29,9 @@ class SyncContinuityController extends ChangeNotifier {
   void setEnabled(bool enabled) {
     _set(
       SyncContinuitySnapshot(
-        status: enabled ? SyncContinuityStatus.idle : SyncContinuityStatus.disabled,
+        status: enabled
+            ? SyncContinuityStatus.idle
+            : SyncContinuityStatus.disabled,
         lastSuccessfulSync: _snapshot.lastSuccessfulSync,
       ),
     );

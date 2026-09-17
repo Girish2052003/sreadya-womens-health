@@ -38,7 +38,9 @@ class NativePasskeyAdapter {
     }
     final decoded = jsonDecode(response);
     if (decoded is! Map) {
-      throw const FormatException('Invalid native passkey credential response.');
+      throw const FormatException(
+        'Invalid native passkey credential response.',
+      );
     }
     return decoded.map(
       (key, value) => MapEntry(key.toString(), value as Object?),

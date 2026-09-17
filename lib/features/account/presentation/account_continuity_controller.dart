@@ -12,7 +12,9 @@ class AccountContinuityController extends ChangeNotifier {
   AccountContinuitySnapshot get snapshot => _snapshot;
 
   Future<void> registerPasskey(String accountId) async {
-    _set(const AccountContinuitySnapshot(status: AccountContinuityStatus.working));
+    _set(
+      const AccountContinuitySnapshot(status: AccountContinuityStatus.working),
+    );
     try {
       await _adapter.registerPasskey(accountId);
       _set(
@@ -33,7 +35,9 @@ class AccountContinuityController extends ChangeNotifier {
   }
 
   Future<String> loginWithPasskey() async {
-    _set(const AccountContinuitySnapshot(status: AccountContinuityStatus.working));
+    _set(
+      const AccountContinuitySnapshot(status: AccountContinuityStatus.working),
+    );
     try {
       final accountId = await _adapter.loginWithPasskey();
       _set(

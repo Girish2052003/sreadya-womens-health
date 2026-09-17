@@ -35,7 +35,9 @@ class MobileAccountContinuityAdapter {
       credential: credential,
     );
     if (accountId.isEmpty) {
-      throw const FormatException('Passkey login returned an empty account id.');
+      throw const FormatException(
+        'Passkey login returned an empty account id.',
+      );
     }
     return accountId;
   }
