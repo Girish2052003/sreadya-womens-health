@@ -22,6 +22,7 @@ concurrency:
   group: c2-task23-recovery-${{ github.ref }}
   cancel-in-progress: true
 
+# Registered through the contents API so branch pushes exercise this gate.
 jobs:
   go-account-recovery:
     runs-on: ubuntu-latest
