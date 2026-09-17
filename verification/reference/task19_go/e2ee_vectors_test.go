@@ -4,13 +4,11 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/ecdsa"
-	"crypto/elliptic"
+	"crypto/ed25519"
 	"crypto/hkdf"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"math/big"
 	"os"
 	"testing"
 )
@@ -27,10 +25,9 @@ type envelopeVector struct {
 }
 
 type deviceAuthVector struct {
-	PublicXHex         string `json:"publicXHex"`
-	PublicYHex         string `json:"publicYHex"`
-	TranscriptHex      string `json:"transcriptHex"`
-	SignatureP1363Hex string `json:"signatureP1363Hex"`
+	PublicKeyHex  string `json:"publicKeyHex"`
+	TranscriptHex string `json:"transcriptHex"`
+	SignatureHex  string `json:"signatureHex"`
 }
 
 type vectorFile struct {
@@ -106,17 +103,15 @@ func TestE2EEV1Envelopes(t *testing.T) {
 
 func TestE2EEV1DeviceAuthenticationSignature(t *testing.T) {
 	entry := loadVector(t).DeviceAuthentication
-	x := new(big.Int).SetBytes(mustHex(t, entry.PublicXHex))
-	y := new(big.Int).SetBytes(mustHex(t, entry.PublicYHex))
-	publicKey := &ecdsa.PublicKey{Curve: elliptic.P256(), X: x, Y: y}
-	signature := mustHex(t, entry.SignatureP1363Hex)
-	if len(signature) != 64 {
-		t.Fatalf("P-256 P1363 signature must be 64 bytes, got %d", len(signature))
+	publicKey := mustHex(t, entry.PublicKeyHex)
+	if len(publicKey) != ed25519.PublicKeySize {
+		t.Fatalf("Ed25519 public key must be %d bytes, got %d", ed25519.PublicKeySize, len(publicKey))
 	}
-	r := new(big.Int).SetBytes(signature[:32])
-	s := new(big.Int).SetBytes(signature[32:])
-	digest := sha256.Sum256(mustHex(t, entry.TranscriptHex))
-	if !ecdsa.Verify(publicKey, digest[:], r, s) {
+	signature := mustHex(t, entry.SignatureHex)
+	if len(signature) != ed25519.SignatureSize {
+		t.Fatalf("Ed25519 signature must be %d bytes, got %d", ed25519.SignatureSize, len(signature))
+	}
+	if !ed25519.Verify(ed25519.PublicKey(publicKey), mustHex(t, entry.TranscriptHex), signature) {
 		t.Fatalf("device authentication signature did not verify")
 	}
 }

@@ -18,17 +18,17 @@ type VectorFile = {
   trustedDeviceTransfer: EnvelopeVector;
   syncEvent: EnvelopeVector;
   deviceAuthentication: {
-    publicRawUncompressedHex: string;
+    publicKeyHex: string;
     transcriptHex: string;
-    signatureP1363Hex: string;
+    signatureHex: string;
   };
 };
 
 const vectorPath = resolve(process.cwd(), '../shared/crypto/interoperability-vectors/e2ee-v1.json');
 
-function bytes(hex: string): Uint8Array {
-  if (hex.length % 2 !== 0) throw new Error('Invalid hex length');
-  return Uint8Array.from(hex.match(/.{2}/g)?.map((value) => Number.parseInt(value, 16)) ?? []);
+function bytes(hexValue: string): Uint8Array {
+  if (hexValue.length % 2 !== 0) throw new Error('Invalid hex length');
+  return Uint8Array.from(hexValue.match(/.{2}/g)?.map((value) => Number.parseInt(value, 16)) ?? []);
 }
 
 function hex(value: ArrayBuffer | Uint8Array): string {
@@ -82,20 +82,20 @@ describe('E2EE v1 interoperability vectors', () => {
     });
   }
 
-  it('verifies the canonical P-256 device-authentication signature', async () => {
+  it('verifies the canonical Ed25519 device-authentication signature', async () => {
     const vector = await loadVector();
     const entry = vector.deviceAuthentication;
     const publicKey = await crypto.subtle.importKey(
       'raw',
-      bytes(entry.publicRawUncompressedHex),
-      { name: 'ECDSA', namedCurve: 'P-256' },
+      bytes(entry.publicKeyHex),
+      'Ed25519',
       false,
       ['verify'],
     );
     const ok = await crypto.subtle.verify(
-      { name: 'ECDSA', hash: 'SHA-256' },
+      'Ed25519',
       publicKey,
-      bytes(entry.signatureP1363Hex),
+      bytes(entry.signatureHex),
       bytes(entry.transcriptHex),
     );
     expect(ok).toBe(true);

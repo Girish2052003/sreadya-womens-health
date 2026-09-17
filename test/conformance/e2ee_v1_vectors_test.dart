@@ -39,20 +39,19 @@ void main() {
     }
   });
 
-  test('E2EE v1 P-256 verification vector verifies in Dart', () async {
+  test('E2EE v1 Ed25519 verification vector verifies in Dart', () async {
     final vector = await _loadVector();
     final entry = vector['deviceAuthentication'] as Map<String, dynamic>;
-    final publicKey = EcPublicKey(
-      x: _hexBytes(entry['publicXHex'] as String),
-      y: _hexBytes(entry['publicYHex'] as String),
-      type: KeyPairType.p256,
+    final publicKey = SimplePublicKey(
+      _hexBytes(entry['publicKeyHex'] as String),
+      type: KeyPairType.ed25519,
     );
     final signature = Signature(
-      _hexBytes(entry['signatureP1363Hex'] as String),
+      _hexBytes(entry['signatureHex'] as String),
       publicKey: publicKey,
     );
 
-    final ok = await Ecdsa.p256(Sha256()).verify(
+    final ok = await Ed25519().verify(
       _hexBytes(entry['transcriptHex'] as String),
       signature: signature,
     );
