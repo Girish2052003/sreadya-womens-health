@@ -19,6 +19,11 @@ export type WireSyncEvent = {
   conflict: boolean;
 };
 
+export type SyncEventCryptoContext = Omit<
+  WireSyncEvent,
+  'ciphertext_and_tag' | 'committed_revision' | 'conflict'
+>;
+
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
@@ -55,7 +60,7 @@ function decodeBase64(value: string): Uint8Array<ArrayBuffer> {
   return Uint8Array.from(binary, (part) => part.charCodeAt(0));
 }
 
-function assertEnvelope(envelope: WireSyncEvent): void {
+function assertCryptoContext(envelope: SyncEventCryptoContext): void {
   if (envelope.protocol_version !== 1 || envelope.suite_id !== SYNC_SUITE_V1) {
     throw new Error('Unsupported Sreva sync suite.');
   }
@@ -70,15 +75,20 @@ function assertEnvelope(envelope: WireSyncEvent): void {
     envelope.key_epoch < 0 ||
     !Number.isSafeInteger(envelope.base_revision) ||
     envelope.base_revision < 0 ||
-    !Number.isSafeInteger(envelope.committed_revision) ||
-    envelope.committed_revision < 1 ||
     (envelope.operation !== 'upsert' && envelope.operation !== 'tombstone')
   ) {
     throw new Error('Invalid Sreva sync envelope metadata.');
   }
 }
 
-function eventKeyInfo(envelope: WireSyncEvent): Uint8Array<ArrayBuffer> {
+function assertEnvelope(envelope: WireSyncEvent): void {
+  assertCryptoContext(envelope);
+  if (!Number.isSafeInteger(envelope.committed_revision) || envelope.committed_revision < 1) {
+    throw new Error('Invalid Sreva sync envelope metadata.');
+  }
+}
+
+function eventKeyInfo(envelope: SyncEventCryptoContext): Uint8Array<ArrayBuffer> {
   return lp16([
     utf8('sreva-event-key-v1'),
     utf8(envelope.event_id),
@@ -89,7 +99,8 @@ function eventKeyInfo(envelope: WireSyncEvent): Uint8Array<ArrayBuffer> {
   ]);
 }
 
-function eventAad(envelope: WireSyncEvent): Uint8Array<ArrayBuffer> {
+export function syncEventAad(envelope: SyncEventCryptoContext): Uint8Array<ArrayBuffer> {
+  assertCryptoContext(envelope);
   return lp16([
     utf8('sreva-sync-event-v1'),
     utf8(envelope.account_id),
@@ -107,9 +118,9 @@ function eventAad(envelope: WireSyncEvent): Uint8Array<ArrayBuffer> {
 
 export async function deriveSyncEventKey(
   vaultRootSecret: Uint8Array<ArrayBuffer>,
-  envelope: WireSyncEvent,
+  envelope: SyncEventCryptoContext,
 ): Promise<Uint8Array<ArrayBuffer>> {
-  assertEnvelope(envelope);
+  assertCryptoContext(envelope);
   if (vaultRootSecret.byteLength !== 32) throw new Error('Sreva vault root secret must be 32 bytes.');
 
   const salt = decodeBase64(envelope.kdf_salt);
@@ -145,7 +156,7 @@ export async function decryptSyncEvent<T = unknown>(
     {
       name: 'AES-GCM',
       iv: nonce,
-      additionalData: eventAad(envelope),
+      additionalData: syncEventAad(envelope),
       tagLength: 128,
     },
     key,
