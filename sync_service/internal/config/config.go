@@ -3,6 +3,8 @@ package config
 
 import (
 	"errors"
+	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -14,6 +16,7 @@ type Config struct {
 	ListenAddress    string
 	DatabaseURL      string
 	PostgreSQLTarget string
+	OTPEnabled       bool
 }
 
 // LoadFromLookup builds configuration from an environment-like lookup function.
@@ -30,9 +33,22 @@ func LoadFromLookup(lookup func(string) (string, bool)) (Config, error) {
 		listenAddress = strings.TrimSpace(value)
 	}
 
+	otpEnabled := false
+	if value, ok := lookup("SREVA_SYNC_OTP_ENABLED"); ok && strings.TrimSpace(value) != "" {
+		parsed, err := strconv.ParseBool(strings.TrimSpace(value))
+		if err != nil {
+			return Config{}, fmt.Errorf("SREVA_SYNC_OTP_ENABLED must be a boolean: %w", err)
+		}
+		otpEnabled = parsed
+	}
+	if otpEnabled {
+		return Config{}, errors.New("OTP verification routes require an approved production verification sender; none is configured")
+	}
+
 	return Config{
 		ListenAddress:    listenAddress,
 		DatabaseURL:      strings.TrimSpace(databaseURL),
 		PostgreSQLTarget: PostgreSQLTarget,
+		OTPEnabled:       false,
 	}, nil
 }
