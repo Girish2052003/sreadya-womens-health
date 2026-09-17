@@ -8,13 +8,16 @@ import (
 )
 
 var (
-	ErrCrossAccount    = errors.New("sync envelope crosses account boundary")
+	ErrCrossAccount     = errors.New("sync envelope crosses account boundary")
 	ErrEnvelopeTooLarge = errors.New("ciphertext envelope exceeds size limit")
-	ErrEventIDReuse    = errors.New("event id reused with different envelope")
+	ErrEventIDReuse     = errors.New("event id reused with different envelope")
+	ErrInvalidPullLimit = errors.New("pull limit must be between 1 and 1000")
+	ErrPullUnsupported  = errors.New("repository does not support pull")
 )
 
 type Session struct {
 	AccountID string
+	DeviceID  string
 }
 
 type Envelope struct {
@@ -42,6 +45,12 @@ type Ack struct {
 	Existing          bool
 }
 
+type StoredEvent struct {
+	Envelope          Envelope
+	CommittedRevision int64
+	Conflict          bool
+}
+
 type DeviceAuthorizer interface {
 	Authorize(context.Context, string, string) error
 }
@@ -51,6 +60,10 @@ type Repository interface {
 	ExistingEvent(context.Context, string) ([]byte, Ack, bool, error)
 	CurrentRevision(context.Context, string, string) (int64, error)
 	Commit(context.Context, Envelope, Ack) error
+}
+
+type PullRepository interface {
+	EventsAfter(context.Context, string, int64, int) ([]StoredEvent, error)
 }
 
 type Service struct {
@@ -117,4 +130,28 @@ func (s *Service) Push(ctx context.Context, session Session, envelope Envelope) 
 		return Ack{}, err
 	}
 	return ack, nil
+}
+
+func (s *Service) Pull(ctx context.Context, session Session, vaultID string, afterRevision int64, limit int) ([]StoredEvent, error) {
+	if limit < 1 || limit > 1000 {
+		return nil, ErrInvalidPullLimit
+	}
+	if session.AccountID == "" {
+		return nil, ErrCrossAccount
+	}
+	if err := s.authorizer.Authorize(ctx, session.AccountID, session.DeviceID); err != nil {
+		return nil, err
+	}
+	vaultAccount, err := s.repository.VaultAccount(ctx, vaultID)
+	if err != nil {
+		return nil, err
+	}
+	if vaultAccount != session.AccountID {
+		return nil, ErrCrossAccount
+	}
+	pullRepository, ok := s.repository.(PullRepository)
+	if !ok {
+		return nil, ErrPullUnsupported
+	}
+	return pullRepository.EventsAfter(ctx, vaultID, afterRevision, limit)
 }
