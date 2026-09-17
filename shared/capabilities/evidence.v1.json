@@ -1,0 +1,51 @@
+{
+  "contract": "SREVA C2 Cross-Platform Evidence Ledger",
+  "version": 1,
+  "registry": "shared/capabilities/sreva-capabilities.v1.json",
+  "applicable_status": "implemented",
+  "profiles": {
+    "CYC": {"mobile":{"implementation":["lib/features/cycle/domain/cycle_models.dart"],"evidence":["test/domain/cycle_predictor_test.dart"]},"web":{"implementation":["web/src/features/cycle/CycleShell.tsx"],"evidence":["web/e2e/account-free-core.spec.ts"]}},
+    "PRED": {"mobile":{"implementation":["lib/features/predictions/domain/cycle_predictor.dart"],"evidence":["test/domain/cycle_predictor_test.dart"]},"web":{"implementation":["web/src/features/predictions/PredictionWorkspace.tsx"],"evidence":["web/e2e/prediction-local.spec.ts"]}},
+    "REM": {"mobile":{"implementation":["lib/features/reminders/domain/reminder_policy.dart"],"evidence":["test/reminders/reminder_policy_test.dart"]},"web":{"implementation":["web/src/features/reminders/ReminderWorkspace.tsx"],"evidence":["web/src/features/reminders/reminder-service.test.ts"]}},
+    "LOG": {"mobile":{"implementation":["lib/features/logging/presentation/log_screen.dart"],"evidence":["verification/reference/test_v1_closure_structure.py"]},"web":{"implementation":["web/src/features/logging/LogCorePanel.tsx"],"evidence":["web/src/vault/health-repository.test.ts"]}},
+    "REPRO": {"mobile":{"implementation":["lib/features/cycle/domain/cycle_models.dart"],"evidence":["verification/reference/test_v1_closure_structure.py"]},"web":{"implementation":["web/src/domain/cycle/types.ts"],"evidence":["web/src/vault/health-repository.test.ts"]}},
+    "LIFE": {"mobile":{"implementation":["lib/features/life_stage/domain/life_stage.dart"],"evidence":["test/life_stage/life_stage_test.dart"]},"web":{"implementation":["web/src/features/life-stage/life-stage.ts"],"evidence":["web/src/features/life-stage/life-stage.test.ts"]}},
+    "INS": {"mobile":{"implementation":["lib/features/insights/domain/insight_engine.dart"],"evidence":["test/domain/insight_engine_test.dart"]},"web":{"implementation":["web/src/features/insights/insight-engine.ts"],"evidence":["web/src/features/insights/insight-engine.test.ts"]}},
+    "RPT": {"mobile":{"implementation":["lib/features/reports/data/doctor_report_service.dart"],"evidence":["test/reports/report_selection_test.dart"]},"web":{"implementation":["web/src/features/reports/report-builder.ts"],"evidence":["web/src/features/reports/report-builder.test.ts"]}},
+    "INT": {"mobile":{"implementation":["lib/features/assistant/domain/local_intent_parser.dart"],"evidence":["test/domain/local_intent_parser_test.dart"]},"web":{"implementation":["web/src/features/assistant/local-intent-parser.ts"],"evidence":["web/src/features/assistant/local-intent-parser.test.ts"]}},
+    "PART": {"mobile":{"implementation":["lib/features/partner/domain/partner_share.dart"],"evidence":["verification/reference/test_v1_closure_structure.py"]},"web":{"implementation":["web/src/features/sharing/partner-sharing.ts"],"evidence":["web/src/features/sharing/partner-sharing.test.ts"]}},
+    "HEALTH": {"mobile":{"implementation":["lib/features/health_integration/data/health_import_service.dart"],"evidence":["verification/reference/test_v1_closure_structure.py"]},"web":{"implementation":["web/src/vault/health-repository.ts"],"evidence":["web/src/vault/health-repository.test.ts"]}},
+    "A11Y": {"mobile":{"implementation":["lib/core/settings/user_formatters.dart"],"evidence":["test/settings/user_formatters_test.dart"]},"web":{"implementation":["web/src/app/layout.tsx"],"evidence":["web/e2e/accessibility-i18n.spec.ts"]}},
+    "PRIV": {"mobile":{"implementation":["lib/features/privacy/presentation/privacy_center_screen.dart"],"evidence":["test/privacy/diagnostic_report_builder_test.dart"]},"web":{"implementation":["web/src/features/privacy/PrivacyWorkspace.tsx"],"evidence":["web/src/features/privacy/PrivacyWorkspace.test.tsx"]}},
+    "VAULT": {"mobile":{"implementation":["lib/features/backup/data/cycle_vault_service.dart"],"evidence":["test/backup/cycle_vault_restore_test.dart"]},"web":{"implementation":["web/src/vault/vault-service.ts"],"evidence":["web/src/vault/vault-service.test.ts"]}},
+    "DIAG": {"mobile":{"implementation":["lib/core/diagnostics/diagnostic_report_builder.dart"],"evidence":["test/privacy/diagnostic_report_builder_test.dart"]},"web":{"implementation":["web/src/features/privacy/privacy-status.ts"],"evidence":["web/src/features/privacy/privacy-status.test.ts"]}},
+    "ID": {"mobile":{"implementation":["lib/features/account/data/account_continuity_adapter.dart"],"evidence":[".github/workflows/c2-task24-verify.yml"]},"web":{"implementation":["web/src/account/passkeys.ts"],"evidence":["web/src/account/passkeys.test.ts"]}},
+    "SYNC": {"mobile":{"implementation":["lib/features/sync/data/encrypted_sync_adapter.dart"],"evidence":["test/conformance/e2ee_vectors_mobile_test.dart"]},"web":{"implementation":["web/src/sync/client.ts"],"evidence":["web/src/sync/client.test.ts"]}},
+    "WEB": {"web":{"implementation":["web/src/app/layout.tsx"],"evidence":["web/e2e/pwa.spec.ts"]}}
+  },
+  "overrides": {
+    "ID-007": {"android":{"implementation":["platform_templates/android/SrevaCredentialBridge.kt"],"evidence":[".github/workflows/c2-task24-verify.yml"]},"ios":{"implementation":["platform_templates/ios/SrevaCredentialBridge.swift"],"evidence":[".github/workflows/c2-task24-verify.yml"]}},
+    "ID-008": {"android":{"implementation":["platform_templates/android/SrevaCredentialBridge.kt"],"evidence":[".github/workflows/c2-task24-verify.yml"]},"ios":{"implementation":["platform_templates/ios/SrevaCredentialBridge.swift"],"evidence":[".github/workflows/c2-task24-verify.yml"]}},
+    "HEALTH-001": {"ios":{"implementation":["platform_templates/ios/SrevaPlatformBridge.swift"],"evidence":["verification/reference/test_v1_closure_structure.py"]}},
+    "HEALTH-002": {"android":{"implementation":["platform_templates/android/MainActivity.kt"],"evidence":["verification/reference/test_v1_closure_structure.py"]}},
+    "HEALTH-003": {"android":{"implementation":["platform_templates/android/MainActivity.kt"],"evidence":["verification/reference/test_v1_closure_structure.py"]},"ios":{"implementation":["platform_templates/ios/SrevaPlatformBridge.swift"],"evidence":["verification/reference/test_v1_closure_structure.py"]}},
+    "HEALTH-004": {"android":{"implementation":["platform_templates/android/MainActivity.kt"],"evidence":["verification/reference/test_v1_closure_structure.py"]},"ios":{"implementation":["platform_templates/ios/SrevaPlatformBridge.swift"],"evidence":["verification/reference/test_v1_closure_structure.py"]}},
+    "HEALTH-005": {"android":{"implementation":["platform_templates/android/MainActivity.kt"],"evidence":["verification/reference/test_v1_closure_structure.py"]},"ios":{"implementation":["platform_templates/ios/SrevaPlatformBridge.swift"],"evidence":["verification/reference/test_v1_closure_structure.py"]}},
+    "HEALTH-006": {"android":{"implementation":["platform_templates/android/MainActivity.kt"],"evidence":["verification/reference/test_v1_closure_structure.py"]},"ios":{"implementation":["platform_templates/ios/SrevaPlatformBridge.swift"],"evidence":["verification/reference/test_v1_closure_structure.py"]},"web":{"implementation":["web/src/domain/cycle/types.ts"],"evidence":["web/src/vault/health-repository.test.ts"]},"pwa":{"implementation":["web/src/domain/cycle/types.ts"],"evidence":["web/src/vault/health-repository.test.ts"]}},
+    "HEALTH-007": {"android":{"implementation":["platform_templates/android/MainActivity.kt"],"evidence":["verification/reference/test_v1_closure_structure.py"]},"ios":{"implementation":["platform_templates/ios/SrevaPlatformBridge.swift"],"evidence":["verification/reference/test_v1_closure_structure.py"]},"web":{"implementation":["web/src/vault/health-repository.ts"],"evidence":["web/e2e/cyclevault-browser.spec.ts"]},"pwa":{"implementation":["web/src/vault/health-repository.ts"],"evidence":["web/e2e/cyclevault-browser.spec.ts"]}},
+    "HEALTH-008": {"android":{"implementation":["platform_templates/android/MainActivity.kt"],"evidence":["verification/reference/test_v1_closure_structure.py"]},"ios":{"implementation":["platform_templates/ios/SrevaPlatformBridge.swift"],"evidence":["verification/reference/test_v1_closure_structure.py"]},"web":{"implementation":["web/src/domain/cycle/types.ts","web/src/sync/reconcile.ts"],"evidence":["web/src/sync/reconcile.test.ts"]},"pwa":{"implementation":["web/src/domain/cycle/types.ts","web/src/sync/reconcile.ts"],"evidence":["web/src/sync/reconcile.test.ts"]}},
+    "HEALTH-009": {"android":{"implementation":["platform_templates/android/MainActivity.kt"],"evidence":["verification/reference/test_v1_closure_structure.py"]},"ios":{"implementation":["platform_templates/ios/SrevaPlatformBridge.swift"],"evidence":["verification/reference/test_v1_closure_structure.py"]},"web":{"implementation":["web/src/vault/health-repository.ts"],"evidence":["web/src/vault/health-repository.test.ts"]},"pwa":{"implementation":["web/src/vault/health-repository.ts"],"evidence":["web/src/vault/health-repository.test.ts"]}}
+  },
+  "adapted_rationales": {
+    "REM": "Browser/PWA reminder delivery adapts native scheduling to Web notification and service-worker capabilities.",
+    "PRIV": "Browser/PWA privacy controls adapt native app-lock and security primitives to browser storage and session capabilities.",
+    "ID": "Mobile account continuity adapts the shared account protocol through platform-native passkey credential APIs.",
+    "HEALTH": "Browser/PWA uses manual user-controlled health interchange because native HealthKit/Health Connect APIs are unavailable."
+  },
+  "na_rationales": {
+    "WEB": "Web/PWA-specific capability; native product equivalents are traced through native capability families.",
+    "HEALTH-001": "Apple HealthKit is not available on this platform.",
+    "HEALTH-002": "Android Health Connect is not available on this platform.",
+    "HEALTH": "Native health-store integration is unavailable in browser/PWA for this capability."
+  }
+}
