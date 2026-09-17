@@ -3,8 +3,8 @@
 
 The Flutter host folders may be generated on a clean CI runner, but the generated
 stock shells are not sufficient for Sreva. This script installs the audited
-native bridges and the platform privacy/health configuration that the Dart
-application expects.
+native bridges and the platform privacy/health/account configuration that the
+Dart application expects.
 """
 
 from __future__ import annotations
@@ -20,6 +20,8 @@ ANDROID_DEPENDENCIES = r'''
 
 dependencies {
     implementation("androidx.health.connect:connect-client:1.1.0")
+    implementation("androidx.credentials:credentials:1.6.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
 }
 '''
@@ -137,6 +139,7 @@ class PermissionsRationaleActivity : android.app.Activity() {
 '''
 
 IOS_APP_DELEGATE = r'''import AVFoundation
+import AuthenticationServices
 import Flutter
 import HealthKit
 import Speech
@@ -154,9 +157,9 @@ import UserNotifications
 
     func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
         GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
-        SrevaPlatformBridge.register(
-            messenger: engineBridge.applicationRegistrar.messenger()
-        )
+        let messenger = engineBridge.applicationRegistrar.messenger()
+        SrevaPlatformBridge.register(messenger: messenger)
+        SrevaCredentialBridge.register(messenger: messenger)
     }
 }
 
@@ -188,13 +191,26 @@ def configure_android() -> None:
     manifest.write_text(ANDROID_MANIFEST, encoding="utf-8")
 
     source = ROOT / "platform_templates" / "android" / "MainActivity.kt"
+    credential_source = ROOT / "platform_templates" / "android" / "SrevaCredentialBridge.kt"
     require(source, "Android native bridge template")
-    target = app_dir / "src" / "main" / "kotlin" / "com" / "sreva" / "health" / "sreva" / "MainActivity.kt"
-    target.parent.mkdir(parents=True, exist_ok=True)
+    require(credential_source, "Android credential bridge template")
+    target_dir = app_dir / "src" / "main" / "kotlin" / "com" / "sreva" / "health" / "sreva"
+    target = target_dir / "MainActivity.kt"
+    credential_target = target_dir / "SrevaCredentialBridge.kt"
+    target_dir.mkdir(parents=True, exist_ok=True)
     kotlin = source.read_text(encoding="utf-8")
+    registration = '        MethodChannel(messenger, "sreva/voice").setMethodCallHandler(::handleVoice)'
+    if "SrevaCredentialBridge(this, messenger).register()" not in kotlin:
+        if registration not in kotlin:
+            raise SystemExit("Unable to locate Android Flutter channel registration point")
+        kotlin = kotlin.replace(
+            registration,
+            registration + '\n        SrevaCredentialBridge(this, messenger).register()',
+        )
     if "class PermissionsRationaleActivity" not in kotlin:
         kotlin += RATIONALE_ACTIVITY
     target.write_text(kotlin, encoding="utf-8")
+    credential_target.write_text(credential_source.read_text(encoding="utf-8"), encoding="utf-8")
 
     check_android()
 
@@ -202,13 +218,17 @@ def configure_android() -> None:
 def check_android() -> None:
     gradle = ROOT / "android" / "app" / "build.gradle.kts"
     manifest = ROOT / "android" / "app" / "src" / "main" / "AndroidManifest.xml"
-    source = ROOT / "android" / "app" / "src" / "main" / "kotlin" / "com" / "sreva" / "health" / "sreva" / "MainActivity.kt"
-    for path in (gradle, manifest, source):
+    source_dir = ROOT / "android" / "app" / "src" / "main" / "kotlin" / "com" / "sreva" / "health" / "sreva"
+    source = source_dir / "MainActivity.kt"
+    credential_source = source_dir / "SrevaCredentialBridge.kt"
+    for path in (gradle, manifest, source, credential_source):
         require(path, "configured Android file")
     checks = {
         gradle: [
             'minSdk = 26',
             'androidx.health.connect:connect-client:1.1.0',
+            'androidx.credentials:credentials:1.6.0',
+            'androidx.credentials:credentials-play-services-auth:1.6.0',
             'kotlinx-coroutines-android:1.11.0',
         ],
         manifest: [
@@ -225,7 +245,13 @@ def check_android() -> None:
             'MethodChannel(messenger, "sreva/reminders")',
             'MethodChannel(messenger, "sreva/health")',
             'MethodChannel(messenger, "sreva/voice")',
+            'SrevaCredentialBridge(this, messenger).register()',
             'class PermissionsRationaleActivity',
+        ],
+        credential_source: [
+            'MethodChannel(messenger, "sreva/account")',
+            'CreatePublicKeyCredentialRequest',
+            'GetPublicKeyCredentialOption',
         ],
     }
     for path, markers in checks.items():
@@ -236,8 +262,12 @@ def check_android() -> None:
     print("Android native host configuration: OK")
 
 
+def _strip_swift_imports(template: str) -> str:
+    return re.sub(r"^import [^\n]+\n", "", template, flags=re.MULTILINE).lstrip()
+
+
 def _transform_ios_bridge(template: str) -> str:
-    body = re.sub(r"^import [^\n]+\n", "", template, flags=re.MULTILINE).lstrip()
+    body = _strip_swift_imports(template)
     body = body.replace(
         "private init(controller: FlutterViewController) {",
         "private init(messenger: FlutterBinaryMessenger) {",
@@ -257,9 +287,15 @@ def configure_ios() -> None:
     require(runner, "generated iOS project; run flutter create first")
 
     bridge_path = ROOT / "platform_templates" / "ios" / "SrevaPlatformBridge.swift"
+    credential_path = ROOT / "platform_templates" / "ios" / "SrevaCredentialBridge.swift"
     require(bridge_path, "iOS native bridge template")
+    require(credential_path, "iOS credential bridge template")
     bridge = _transform_ios_bridge(bridge_path.read_text(encoding="utf-8"))
-    (runner / "AppDelegate.swift").write_text(IOS_APP_DELEGATE + bridge, encoding="utf-8")
+    credential_bridge = _strip_swift_imports(credential_path.read_text(encoding="utf-8"))
+    (runner / "AppDelegate.swift").write_text(
+        IOS_APP_DELEGATE + bridge + "\n\n" + credential_bridge,
+        encoding="utf-8",
+    )
 
     info_path = runner / "Info.plist"
     require(info_path, "iOS Info.plist")
@@ -308,11 +344,13 @@ def check_ios() -> None:
         "FlutterImplicitEngineDelegate",
         "didInitializeImplicitFlutterEngine",
         "SrevaPlatformBridge.register(",
+        "SrevaCredentialBridge.register(",
         "engineBridge.applicationRegistrar.messenger()",
         'FlutterMethodChannel(name: "sreva/privacy"',
         'FlutterMethodChannel(name: "sreva/reminders"',
         'FlutterMethodChannel(name: "sreva/health"',
         'FlutterMethodChannel(name: "sreva/voice"',
+        'FlutterMethodChannel(name: "sreva/account"',
     ):
         if marker not in source:
             raise SystemExit(f"iOS native bridge marker missing: {marker}")
