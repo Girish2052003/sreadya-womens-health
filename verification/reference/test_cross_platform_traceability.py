@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[2]
 REGISTRY = ROOT / "shared" / "capabilities" / "sreva-capabilities.v1.json"
 EVIDENCE = ROOT / "shared" / "capabilities" / "evidence.v1.json"
 VERIFIER = ROOT / "tool" / "verify_cross_platform_traceability.py"
+CI_WORKFLOW = ROOT / ".github" / "workflows" / "ci.yml"
 PLATFORMS = {"android", "ios", "web", "pwa"}
 EVIDENCE_PREFIXES = (
     "test/",
@@ -17,6 +18,7 @@ EVIDENCE_PREFIXES = (
     "web/",
     ".github/workflows/",
     "platform_templates/",
+    "sync_service/",
 )
 
 
@@ -121,3 +123,8 @@ def test_release_verifier_passes_and_legacy_mobile_gate_remains_compatible() -> 
             result.stdout,
             result.stderr,
         )
+
+
+def test_cross_platform_traceability_is_release_enforced_in_ci() -> None:
+    workflow = CI_WORKFLOW.read_text(encoding="utf-8")
+    assert "python tool/verify_cross_platform_traceability.py" in workflow
