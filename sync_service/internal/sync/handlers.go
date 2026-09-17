@@ -203,6 +203,10 @@ func (h *Handler) handlePush(w http.ResponseWriter, r *http.Request, session Ses
 		writeError(w, http.StatusForbidden, "forbidden")
 		return
 	}
+	// Idempotency is bound to the exact request bytes that were signed. Never
+	// trust a client-supplied digest when deciding whether an event ID is a
+	// byte-equivalent retry.
+	wire.EnvelopeDigest = append([]byte(nil), digest[:]...)
 
 	ack, err := h.api.Push(r.Context(), session, wire.envelope())
 	if err != nil {
