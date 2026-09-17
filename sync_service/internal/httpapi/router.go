@@ -10,9 +10,16 @@ import (
 	"sreva.dev/sync_service/internal/store"
 )
 
-// NewRouter constructs the provider-independent HTTP surface for the service
-// scaffold. Liveness is independent of persistence; readiness is not.
-func NewRouter(persistence store.Store) http.Handler {
+// NewRouter constructs the provider-independent HTTP surface. Existing Task-20
+// liveness/readiness behavior remains available when no options are supplied.
+func NewRouter(persistence store.Store, options ...RouterOption) http.Handler {
+	cfg := routerConfig{}
+	for _, option := range options {
+		if option != nil {
+			option(&cfg)
+		}
+	}
+
 	router := chi.NewRouter()
 
 	router.Get("/healthz", func(w http.ResponseWriter, _ *http.Request) {
@@ -26,6 +33,10 @@ func NewRouter(persistence store.Store) http.Handler {
 		}
 		writeStatus(w, http.StatusOK, "ok")
 	})
+
+	if cfg.identity != nil {
+		registerIdentityRoutes(router, cfg.identity)
+	}
 
 	return router
 }
