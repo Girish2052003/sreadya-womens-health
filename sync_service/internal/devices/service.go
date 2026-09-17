@@ -24,7 +24,7 @@ type Record struct {
 	DeviceID         string
 	AccountID        string
 	State            State
-	PublicSigningKey []byte
+	PublicSigningKey [32]byte
 	SignatureSuite   string
 }
 
