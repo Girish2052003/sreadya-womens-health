@@ -185,7 +185,7 @@ func writeAPIError(w http.ResponseWriter, err error) {
 		writeError(w, http.StatusRequestEntityTooLarge, "request too large")
 	case errors.Is(err, ErrEventIDReuse):
 		writeError(w, http.StatusConflict, "event conflict")
-	case errors.Is(err, ErrInvalidPullLimit):
+	case errors.Is(err, ErrInvalidCursor), errors.Is(err, ErrInvalidPullLimit):
 		writeError(w, http.StatusBadRequest, "invalid request")
 	default:
 		writeError(w, http.StatusInternalServerError, "request failed")
