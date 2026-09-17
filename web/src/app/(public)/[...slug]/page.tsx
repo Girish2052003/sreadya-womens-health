@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { PublicFooter } from '../../../components/navigation/PublicFooter';
 import { PublicHeader } from '../../../components/navigation/PublicHeader';
 import { InstallGuide, type InstallGuideTarget } from '../../../components/pwa/InstallGuide';
+import { privacyPolicyIntro, privacyPolicyLastUpdated, privacyPolicySections } from '../../../content/privacy-policy';
 import { publicPages } from '../../../content/routes';
 
 export function generateStaticParams() {
@@ -23,6 +24,7 @@ export default async function PublicPage({ params }: { params: Promise<{ slug: s
       : key === 'install/pwa'
         ? 'pwa'
         : null;
+  const isPrivacyPolicy = key === 'privacy-policy';
 
   return (
     <div className="public-site">
@@ -38,6 +40,18 @@ export default async function PublicPage({ params }: { params: Promise<{ slug: s
           </div>
         </section>
         {installTarget ? <InstallGuide target={installTarget} /> : null}
+        {isPrivacyPolicy ? (
+          <section className="policy-document" aria-label="Sreva Privacy Policy">
+            <p className="public-eyebrow">Last updated: {privacyPolicyLastUpdated}</p>
+            <p className="public-lede">{privacyPolicyIntro}</p>
+            {privacyPolicySections.map((section) => (
+              <article key={section.title}>
+                <h2>{section.title}</h2>
+                <p>{section.body}</p>
+              </article>
+            ))}
+          </section>
+        ) : null}
         <section className="principle-grid" aria-label="Sreva product principles">
           <article><span>01</span><h2>Local first</h2><p>Core health tools remain useful without creating an account.</p></article>
           <article><span>02</span><h2>Private by architecture</h2><p>Health telemetry is not the price of using Sreva.</p></article>
