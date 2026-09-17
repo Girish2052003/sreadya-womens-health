@@ -1,10 +1,10 @@
 # Sreva Web/PWA Local Acceptance — Task 18
 
-**Status:** IN PROGRESS — desktop/live-production acceptance is green; two physical iPhone observations remain
+**Status:** FORMALLY CLOSED FOR IMPLEMENTATION — desktop/live-production acceptance is green; two physical iPhone field observations are explicitly deferred and remain pending
 
 **Task-17 closure baseline:** `79359d0ea10730c4301f4147706184371f7ddc4c`
 
-**Current Task-18 branch head before this evidence-only update:** `98195fae5b0502dd45c4a8bdc713a34472d943ea`
+**Current Task-18 branch head before the closure decision:** `a4f6dd70e9e6987b0e8777f33047338893be62b3`
 
 **Live production URL:** `https://girish2052003.github.io/sreva-womens-health/`
 
@@ -47,14 +47,16 @@ The live test also verifies the PWA manifest (`name=Sreva`, `display=standalone`
 
 ## Required Task-18 acceptance
 
-Acceptance is required on an iPhone using Safari / Add to Home Screen plus a desktop browser.
+The original acceptance text requested an iPhone using Safari / Add to Home Screen plus a desktop browser. The desktop/live-production portion is complete. On 17 September 2026, the product owner explicitly authorized the implementation milestone to close and subsequent C2 work to proceed while the two physical-iPhone observations are deferred to field acceptance.
 
-### Physical iPhone observations — still required
+This is a governance decision, **not** evidence that the physical checks passed. The unchecked observations remain visible below and MUST NOT be described as completed until directly observed.
+
+### Physical iPhone observations — deferred field acceptance, still pending
 
 - [ ] Install/open the PWA on a real iPhone from the deployed HTTPS site using Safari → Add to Home Screen.
 - [ ] Reopen the installed PWA from the real iPhone Home Screen and confirm it opens in standalone installed-app form.
 
-These two checks are intentionally not replaced by desktop emulation or CI. They require direct observation on the target physical device.
+These two checks are intentionally not replaced by desktop emulation or CI. They require direct observation on the target physical device. They are carried forward as a field-acceptance obligation and must be recorded here when performed.
 
 ### Live production desktop/account-free flow — accepted
 
@@ -79,10 +81,10 @@ These two checks are intentionally not replaced by desktop emulation or CI. They
 - [x] Inspect all observed request URLs and request bodies for those sensitive sentinels and confirm they are absent.
 - [x] Confirm every observed request stays on the deployed Sreva origin during the acceptance flow.
 
-## Truthful boundary
+## Closure boundary
 
-Task 18 is **not formally closed yet** because the frozen acceptance text explicitly requires installation/open and reopen on a real iPhone using Safari/Add to Home Screen. The repository and production desktop/browser-verifiable portion is green. Only the two physical-device observations above remain.
+Task 18 is formally closed for implementation and automated/live-production acceptance by explicit product-owner decision dated 17 September 2026. No additional Task-18 coding is required to begin Task 20 or later C2 implementation.
 
-Account/sync work must not be used to hide, waive, or substitute for the physical-device acceptance. When those two observations are completed, record the device/browser date and result here, then Task 18 can be closed with the planned commit message:
+The two physical-iPhone observations above remain **PENDING** and are not waived as facts. They are deferred to field acceptance and must be completed before Sreva claims real-iPhone PWA installation/standalone acceptance. When they are observed, record device/browser, date, and result here without rewriting the historical closure decision.
 
-`docs: record local Sreva PWA acceptance evidence`
+Account/sync work must not be used as evidence for those physical-device checks.
