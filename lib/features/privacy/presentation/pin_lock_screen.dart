@@ -39,7 +39,9 @@ class _PinLockScreenState extends State<PinLockScreen> {
         setState(() => _configured = Future.value(true));
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Sreadya PIN verifier saved in secure device storage.'),
+            content: Text(
+              'Sreadya PIN verifier saved in secure device storage.',
+            ),
           ),
         );
       }
@@ -96,7 +98,9 @@ class _PinLockScreenState extends State<PinLockScreen> {
                 onPressed: _busy ? null : _save,
                 icon: const Icon(Icons.pin_outlined),
                 label: Text(
-                  configured ? 'Change Sreadya PIN' : 'Enable Sreadya PIN',
+                  configured
+                      ? 'Change Sreadya PIN'
+                      : 'Enable Sreadya PIN',
                 ),
               ),
               if (configured) ...[
