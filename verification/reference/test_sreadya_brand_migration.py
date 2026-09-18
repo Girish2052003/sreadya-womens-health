@@ -6,7 +6,7 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[2]
 LEGACY = "sre" + "va"
 LEGACY_HEX = (LEGACY.encode().hex(), LEGACY.upper().encode().hex().lower())
-MOTTO = "Prakritim Svam Avashtabhya."
+MOTTO = "Prakritim Svam " + "Avashtabhya."
 HOMEPAGE = "web/src/app/page.tsx"
 
 
@@ -62,4 +62,4 @@ def test_sanskrit_motto_exists_once_and_only_on_homepage() -> None:
 def test_homepage_brand_lockup_is_exact() -> None:
     homepage = readable_text(HOMEPAGE)
     assert '<h1 id="sreadya-title">SREADYA</h1>' in homepage
-    assert '<p className="hero__motto">Prakritim Svam Avashtabhya.</p>' in homepage
+    assert f'<p className="hero__motto">{MOTTO}</p>' in homepage
