@@ -2961,6 +2961,9 @@
   "@sreadya_sharing__dot__cyclePhase": {
     "description": "SREADYA canonical message ID: sharing.cyclePhase"
   },
+  "@sreadya_sharing__dot__cyclePhaseAria": {
+    "description": "SREADYA canonical message ID: sharing.cyclePhaseAria"
+  },
   "@sreadya_sharing__dot__empty": {
     "description": "SREADYA canonical message ID: sharing.empty"
   },
@@ -4581,6 +4584,7 @@
   "sreadya_sharing__dot__category__dot__selectedReminder": "One selected reminder",
   "sreadya_sharing__dot__category__dot__selectedWellness": "Selected wellness summary",
   "sreadya_sharing__dot__cyclePhase": "Cycle phase / day",
+  "sreadya_sharing__dot__cyclePhaseAria": "Cycle phase or day",
   "sreadya_sharing__dot__empty": "No partner content is available to share until you create and review a local preview.",
   "sreadya_sharing__dot__error__dot__category": "Select at least one sharing category.",
   "sreadya_sharing__dot__error__dot__cycle": "Enter the cycle phase/day you want to share.",
@@ -4717,7 +4721,7 @@
   "sreadya_vault__dot__selected": "Selected: {file}",
   "sreadya_vault__dot__status": "Account-free · encrypted locally · nothing is uploaded to Sreadya",
   "sreadya_vault__dot__status__dot__downloaded": "Encrypted CycleVault recovery file downloaded locally.",
-  "sreadya_vault__dot__status__dot__restored": "CycleVault restored locally: {periods} period records, {observations} observations.",
+  "sreadya_vault__dot__status__dot__restored": "CycleVault restored locally: {periods} period record(s), {observations} observation(s).",
   "sreadya_vault__dot__status__dot__selected": "CycleVault file selected. Nothing has been restored yet.",
   "sreadya_vault__dot__summary": "CycleVault creates a user-controlled encrypted CycleVault recovery file for period and observation history. The recovery passphrase is not sent to Sreadya and cannot be recovered by Sreadya.",
   "sreadya_workspace__dot__account__dot__note": "Account mode is optional and adds continuity only; local health features remain complete without it.",

@@ -11,50 +11,50 @@
       "providerModel": "gpt-5.6-sol",
       "reviewStatus": "machine-unreviewed",
       "risk": "standard-ui",
-      "sourceMessageCount": 1198,
-      "sourceVersion": "0191d1b3bb4f94495ec61f161c5ec692993219d7"
+      "sourceMessageCount": 1199,
+      "sourceVersion": "17ad07cc00cb99a51e20f53f0ab2500e44c4e543"
     },
     "ar-xb": {
       "coverage": "pseudo",
-      "gitBlobSha": "75b1871f7fc8aede4471c61f9ec68b38e2fded59",
+      "gitBlobSha": "9d7360126525b82884d0430cac7a5a4524dfea56",
       "locale": "ar-XB",
-      "messageCount": 1198,
+      "messageCount": 1199,
       "method": "pseudo",
-      "path": "i18n/ar-xb.75b1871f7fc8aede.json",
+      "path": "i18n/ar-xb.9d7360126525b828.json",
       "provider": "sreadya-ci",
       "providerModel": "rtl-v1",
       "reviewStatus": "test-only",
       "risk": "test-only",
-      "sourceMessageCount": 1198,
-      "sourceVersion": "0191d1b3bb4f94495ec61f161c5ec692993219d7"
+      "sourceMessageCount": 1199,
+      "sourceVersion": "17ad07cc00cb99a51e20f53f0ab2500e44c4e543"
     },
     "en": {
       "coverage": "source",
-      "gitBlobSha": "71ee805288cc42dbba79ef6699abc376bdce644f",
+      "gitBlobSha": "19c499d88ca5cff069e22b5e3030d5ccdb181f62",
       "locale": "en",
-      "messageCount": 1198,
+      "messageCount": 1199,
       "method": "source",
-      "path": "i18n/en.71ee805288cc42db.json",
+      "path": "i18n/en.19c499d88ca5cff0.json",
       "provider": "sreadya",
       "providerModel": "authoritative-source",
       "reviewStatus": "source-authoritative",
       "risk": "mixed",
-      "sourceMessageCount": 1198,
-      "sourceVersion": "0191d1b3bb4f94495ec61f161c5ec692993219d7"
+      "sourceMessageCount": 1199,
+      "sourceVersion": "17ad07cc00cb99a51e20f53f0ab2500e44c4e543"
     },
     "en-xa": {
       "coverage": "pseudo",
-      "gitBlobSha": "eb3445d659821a073ca4d15e9b92e18b0a88b264",
+      "gitBlobSha": "283e776a5fa85fe633c1beea5e31f051838f38cf",
       "locale": "en-XA",
-      "messageCount": 1198,
+      "messageCount": 1199,
       "method": "pseudo",
-      "path": "i18n/en-xa.eb3445d659821a07.json",
+      "path": "i18n/en-xa.283e776a5fa85fe6.json",
       "provider": "sreadya-ci",
       "providerModel": "expansion-v1",
       "reviewStatus": "test-only",
       "risk": "test-only",
-      "sourceMessageCount": 1198,
-      "sourceVersion": "0191d1b3bb4f94495ec61f161c5ec692993219d7"
+      "sourceMessageCount": 1199,
+      "sourceVersion": "17ad07cc00cb99a51e20f53f0ab2500e44c4e543"
     },
     "fi": {
       "coverage": "partial",
@@ -67,8 +67,8 @@
       "providerModel": "gpt-5.6-sol",
       "reviewStatus": "machine-unreviewed",
       "risk": "standard-ui",
-      "sourceMessageCount": 1198,
-      "sourceVersion": "0191d1b3bb4f94495ec61f161c5ec692993219d7"
+      "sourceMessageCount": 1199,
+      "sourceVersion": "17ad07cc00cb99a51e20f53f0ab2500e44c4e543"
     },
     "hi": {
       "coverage": "partial",
@@ -81,8 +81,8 @@
       "providerModel": "gpt-5.6-sol",
       "reviewStatus": "machine-unreviewed",
       "risk": "standard-ui",
-      "sourceMessageCount": 1198,
-      "sourceVersion": "0191d1b3bb4f94495ec61f161c5ec692993219d7"
+      "sourceMessageCount": 1199,
+      "sourceVersion": "17ad07cc00cb99a51e20f53f0ab2500e44c4e543"
     },
     "ta": {
       "coverage": "partial",
@@ -95,12 +95,12 @@
       "providerModel": "gpt-5.6-sol",
       "reviewStatus": "machine-unreviewed",
       "risk": "standard-ui",
-      "sourceMessageCount": 1198,
-      "sourceVersion": "0191d1b3bb4f94495ec61f161c5ec692993219d7"
+      "sourceMessageCount": 1199,
+      "sourceVersion": "17ad07cc00cb99a51e20f53f0ab2500e44c4e543"
     }
   },
-  "sourceGitBlobSha": "0191d1b3bb4f94495ec61f161c5ec692993219d7",
+  "sourceGitBlobSha": "17ad07cc00cb99a51e20f53f0ab2500e44c4e543",
   "sourceLocale": "en",
-  "sourceVersion": "0191d1b3bb4f94495ec61f161c5ec692993219d7",
+  "sourceVersion": "17ad07cc00cb99a51e20f53f0ab2500e44c4e543",
   "version": 1
 }
