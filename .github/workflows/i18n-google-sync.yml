@@ -52,18 +52,23 @@ jobs:
             echo "::error::Add SREADYA_GOOGLE_TRANSLATE_API_KEY as a protected GitHub Actions secret. Never paste it into client code or commit it."
             exit 1
           fi
-          if [ -z "${SREADYA_TRANSLATION_MAX_CHARACTERS:-}" ]; then
-            echo "::error::Add repository variable SREADYA_TRANSLATION_MAX_CHARACTERS as an explicitly approved per-run ceiling before paid translation."
-            exit 1
-          fi
 
       - name: Verify frozen 194-language Google baseline
         run: |
           python -m py_compile tool/i18n_pipeline.py tool/verify_globalization.py
           python tool/i18n_pipeline.py --check-google-baseline
 
-      - name: Discover Google targets and show the exact translation plan
+      - name: Discover Google targets and show the exact no-charge translation plan
         run: python tool/i18n_pipeline.py --estimate-google-sync
+
+      - name: Require an explicitly approved paid-run character ceiling
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${SREADYA_TRANSLATION_MAX_CHARACTERS:-}" ]; then
+            echo "::error::Review the translationPlan from the previous step, then add repository variable SREADYA_TRANSLATION_MAX_CHARACTERS as the approved per-run ceiling."
+            exit 1
+          fi
 
       - name: Synchronize every supported Google locale within the approved ceiling
         run: python tool/i18n_pipeline.py --sync-google-all
