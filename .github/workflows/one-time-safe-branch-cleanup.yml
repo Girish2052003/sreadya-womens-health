@@ -1,0 +1,82 @@
+name: One-time safe branch cleanup
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/one-time-safe-branch-cleanup.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.repository == 'Girish2052003/sreva-womens-health' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify, archive, and delete merged task branches
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          api="https://api.github.com/repos/${GITHUB_REPOSITORY}"
+          auth=(-H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28")
+
+          declare -A expected=(
+            [task25-formal-green]="a3445e51a44896d4f2f1bed35f9e584e2a5515b6"
+            [task26-sync-release-policy]="da3bd98fabf8b19eeba7ac4df42b11fc2f50b4f1"
+            [task27-release-hardening]="832a404ad26b1f1991922f1740917b8b79d946cd"
+            [task28-staged-acceptance]="df86697dcf2b63ff3ea75d95af64ebce3bdf1720"
+            [task29-pages-live-acceptance]="0719f75367ec5be11e344878dce7262151228b1b"
+          )
+
+          echo "Fail-closed branch-tip verification"
+          for branch in "${!expected[@]}"; do
+            actual="$(curl --fail --silent --show-error "${auth[@]}" "${api}/git/ref/heads/${branch}" | jq -r '.object.sha')"
+            test "${actual}" = "${expected[$branch]}" || {
+              echo "REFUSED: ${branch} moved: expected ${expected[$branch]}, got ${actual}" >&2
+              exit 1
+            }
+            echo "verified ${branch} -> ${actual}"
+          done
+
+          declare -A archive_tags=(
+            [archive/task25-pre-squash]="${expected[task25-formal-green]}"
+            [archive/task26-pre-squash]="${expected[task26-sync-release-policy]}"
+            [archive/task27-pre-squash]="${expected[task27-release-hardening]}"
+            [archive/task28-pre-squash]="${expected[task28-staged-acceptance]}"
+          )
+
+          echo "Creating/verifying archival tags"
+          for tag in "${!archive_tags[@]}"; do
+            sha="${archive_tags[$tag]}"
+            encoded="${tag//\//%2F}"
+            if response="$(curl --silent --show-error --fail "${auth[@]}" "${api}/git/ref/tags/${encoded}" 2>/dev/null)"; then
+              actual="$(jq -r '.object.sha' <<<"${response}")"
+              test "${actual}" = "${sha}" || {
+                echo "REFUSED: existing tag ${tag} points to ${actual}, expected ${sha}" >&2
+                exit 1
+              }
+              echo "existing tag verified ${tag} -> ${actual}"
+            else
+              payload="$(jq -n --arg ref "refs/tags/${tag}" --arg sha "${sha}" '{ref:$ref,sha:$sha}')"
+              curl --fail --silent --show-error -X POST "${auth[@]}"                 -H "Content-Type: application/json"                 "${api}/git/refs"                 -d "${payload}" >/dev/null
+              echo "created tag ${tag} -> ${sha}"
+            fi
+          done
+
+          echo "Deleting audited task branches"
+          for branch in task25-formal-green task26-sync-release-policy task27-release-hardening task28-staged-acceptance task29-pages-live-acceptance; do
+            curl --fail --silent --show-error -X DELETE "${auth[@]}" "${api}/git/refs/heads/${branch}"
+            echo "deleted ${branch}"
+          done
+
+          echo "Verifying only main remains"
+          mapfile -t branches < <(curl --fail --silent --show-error "${auth[@]}" "${api}/branches?per_page=100" | jq -r '.[].name' | sort)
+          printf 'remaining branch: %s\n' "${branches[@]}"
+          test "${#branches[@]}" -eq 1
+          test "${branches[0]}" = "main"
+
+          echo "SAFE BRANCH CLEANUP PASS"
