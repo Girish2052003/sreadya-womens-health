@@ -762,6 +762,12 @@
   "@sreadya_homeCore__dot__nothingLogged": {
     "description": "SREADYA canonical message ID: homeCore.nothingLogged"
   },
+  "@sreadya_homeCore__dot__observationCount__dot__one": {
+    "description": "SREADYA canonical message ID: homeCore.observationCount.one"
+  },
+  "@sreadya_homeCore__dot__observationCount__dot__other": {
+    "description": "SREADYA canonical message ID: homeCore.observationCount.other"
+  },
   "@sreadya_homeCore__dot__observationHint": {
     "description": "SREADYA canonical message ID: homeCore.observationHint"
   },
@@ -773,6 +779,12 @@
   },
   "@sreadya_homeCore__dot__openPredictions": {
     "description": "SREADYA canonical message ID: homeCore.openPredictions"
+  },
+  "@sreadya_homeCore__dot__periodCount__dot__one": {
+    "description": "SREADYA canonical message ID: homeCore.periodCount.one"
+  },
+  "@sreadya_homeCore__dot__periodCount__dot__other": {
+    "description": "SREADYA canonical message ID: homeCore.periodCount.other"
   },
   "@sreadya_homeCore__dot__periodStarted": {
     "description": "SREADYA canonical message ID: homeCore.periodStarted"
@@ -806,9 +818,6 @@
   },
   "@sreadya_home__dot__lede": {
     "description": "SREADYA canonical message ID: home.lede"
-  },
-  "@sreadya_home__dot__motto": {
-    "description": "SREADYA canonical message ID: home.motto"
   },
   "@sreadya_home__dot__previewAria": {
     "description": "SREADYA canonical message ID: home.previewAria"
@@ -1440,6 +1449,9 @@
   "@sreadya_prediction__dot__fertileWindow": {
     "description": "SREADYA canonical message ID: prediction.fertileWindow"
   },
+  "@sreadya_prediction__dot__fertileWindowUnavailable": {
+    "description": "SREADYA canonical message ID: prediction.fertileWindowUnavailable"
+  },
   "@sreadya_prediction__dot__fertilityBoundary": {
     "description": "SREADYA canonical message ID: prediction.fertilityBoundary"
   },
@@ -1493,6 +1505,9 @@
   },
   "@sreadya_prediction__dot__ovulation": {
     "description": "SREADYA canonical message ID: prediction.ovulation"
+  },
+  "@sreadya_prediction__dot__ovulationUnavailable": {
+    "description": "SREADYA canonical message ID: prediction.ovulationUnavailable"
   },
   "@sreadya_prediction__dot__periodDuration": {
     "description": "SREADYA canonical message ID: prediction.periodDuration"
@@ -3833,10 +3848,14 @@
   "sreadya_homeCore__dot__mostLikely": "Most likely · {date}",
   "sreadya_homeCore__dot__noPeriod": "No period history yet",
   "sreadya_homeCore__dot__nothingLogged": "Nothing logged yet",
+  "sreadya_homeCore__dot__observationCount__dot__one": "{count} local observation",
+  "sreadya_homeCore__dot__observationCount__dot__other": "{count} local observations",
   "sreadya_homeCore__dot__observationHint": "Your optional daily observations will appear here after you save them.",
   "sreadya_homeCore__dot__ongoing": "Currently marked as ongoing.",
   "sreadya_homeCore__dot__openCycle": "Open cycle history",
   "sreadya_homeCore__dot__openPredictions": "Open predictions",
+  "sreadya_homeCore__dot__periodCount__dot__one": "{count} recorded period",
+  "sreadya_homeCore__dot__periodCount__dot__other": "{count} recorded periods",
   "sreadya_homeCore__dot__periodStarted": "Period started today",
   "sreadya_homeCore__dot__predictionHint": "Sreadya will calculate an estimate locally after enough valid cycle history is available.",
   "sreadya_homeCore__dot__seeToday": "See today",
@@ -3848,7 +3867,6 @@
   "sreadya_home__dot__eyebrow": "Private by architecture. Gentle by design.",
   "sreadya_home__dot__headline": "Your cycle, your context, your private space.",
   "sreadya_home__dot__lede": "A local-first women's cycle and menstrual health companion designed to feel calm, personal and beautifully simple—without making an account the price of care.",
-  "sreadya_home__dot__motto": "Prakritim Svam Avashtabhya.",
   "sreadya_home__dot__previewAria": "A private Sreadya cycle summary preview",
   "sreadya_home__dot__preview__dot__aboutSixDays": "About 6 days",
   "sreadya_home__dot__preview__dot__copy": "An estimate from your local history, with confidence shown clearly.",
@@ -4059,6 +4077,7 @@
   "sreadya_prediction__dot__expectedRange": "Expected range",
   "sreadya_prediction__dot__eyebrow__dot__local": "Local estimate",
   "sreadya_prediction__dot__fertileWindow": "Estimated fertile window: {start} – {end}",
+  "sreadya_prediction__dot__fertileWindowUnavailable": "Estimated fertile window: available only when Trying to Conceive mode is enabled.",
   "sreadya_prediction__dot__fertilityBoundary": "These are optional calendar estimates for Trying to Conceive mode. They use the conventional next-period-minus-14-day heuristic and are not contraceptive guidance, clinical fertility confirmation, or a guarantee of ovulation.",
   "sreadya_prediction__dot__fertilityEyebrow": "Trying to conceive context",
   "sreadya_prediction__dot__fertilityHidden": "Sreadya does not silently show fertility timing in other life-stage modes.",
@@ -4077,6 +4096,7 @@
   "sreadya_prediction__dot__noInvent": "No date is invented. Record at least two period starts; Sreadya will use your own history and will not assume a 28-day cycle.",
   "sreadya_prediction__dot__noScore": "No accuracy score is shown until a later actual period start can be compared with a previously stored prediction.",
   "sreadya_prediction__dot__ovulation": "Ovulation estimate: {date}",
+  "sreadya_prediction__dot__ovulationUnavailable": "Ovulation estimate: available only when Trying to Conceive mode is enabled.",
   "sreadya_prediction__dot__periodDuration": "Estimated period duration: {days} days.",
   "sreadya_prediction__dot__periodDurationMissing": "Period-duration history is not sufficient for a duration estimate yet.",
   "sreadya_prediction__dot__pmsBoundary": "This is a transparent seven-day pre-period planning window derived from the current period estimate. It is not a diagnosis of PMS and does not claim symptoms will occur.",
