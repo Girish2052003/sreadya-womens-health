@@ -37,13 +37,9 @@ class _PinLockScreenState extends State<PinLockScreen> {
       _confirm.clear();
       if (mounted) {
         setState(() => _configured = Future.value(true));
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Sreadya PIN verifier saved in secure device storage.',
-            ),
-          ),
-        );
+        const message = 'Sreadya PIN verifier saved in secure device storage.';
+        final messenger = ScaffoldMessenger.of(context);
+        messenger.showSnackBar(const SnackBar(content: Text(message)));
       }
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -63,6 +59,9 @@ class _PinLockScreenState extends State<PinLockScreen> {
         future: _configured,
         builder: (context, snapshot) {
           final configured = snapshot.data == true;
+          final actionLabel = configured
+              ? 'Change Sreadya PIN'
+              : 'Enable Sreadya PIN';
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
@@ -97,11 +96,7 @@ class _PinLockScreenState extends State<PinLockScreen> {
               FilledButton.icon(
                 onPressed: _busy ? null : _save,
                 icon: const Icon(Icons.pin_outlined),
-                label: Text(
-                  configured
-                      ? 'Change Sreadya PIN'
-                      : 'Enable Sreadya PIN',
-                ),
+                label: Text(actionLabel),
               ),
               if (configured) ...[
                 const SizedBox(height: 8),
