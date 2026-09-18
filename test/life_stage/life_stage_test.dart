@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sreva/features/life_stage/domain/life_stage.dart';
+import 'package:sreadya/features/life_stage/domain/life_stage.dart';
 
 void main() {
   test('pregnancy mode suppresses cycle prediction without deleting cycle history capability', () {

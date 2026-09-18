@@ -19,8 +19,8 @@ def test_android_host_rebuilds_reminders_after_system_time_and_update_events():
     ):
         assert action in platform
 
-    assert "class SrevaBootReceiver" in native
-    assert "SrevaReminderRuntime.rescheduleAll(context)" in native
+    assert "class SreadyaBootReceiver" in native
+    assert "SreadyaReminderRuntime.rescheduleAll(context)" in native
 
 
 def test_android_reminders_are_os_scheduled_and_do_not_require_network_push():

@@ -10,8 +10,8 @@ import (
 
 	"github.com/jackc/pgx/v5"
 
-	"sreva.dev/sync_service/internal/devices"
-	srevasync "sreva.dev/sync_service/internal/sync"
+	"sreadya.dev/sync_service/internal/devices"
+	sreadyasync "sreadya.dev/sync_service/internal/sync"
 )
 
 type fakeRow func(...any) error
@@ -96,7 +96,7 @@ func TestTask22CursorCodecIsOpaqueAndVersioned(t *testing.T) {
 		t.Fatalf("initial empty cursor decoded to %d, %v; want 0, nil", sequence, err)
 	}
 	for _, malformed := range []string{"42", "v2.AAAAAAAAACo", "v1.not-base64", "v1.AQ"} {
-		if _, err := decodeCursor(malformed); !errors.Is(err, srevasync.ErrInvalidCursor) {
+		if _, err := decodeCursor(malformed); !errors.Is(err, sreadyasync.ErrInvalidCursor) {
 			t.Fatalf("decodeCursor(%q) error=%v, want ErrInvalidCursor", malformed, err)
 		}
 	}
@@ -178,7 +178,7 @@ func TestTask22EventsAfterUsesServerSequenceAndPreservesOpaqueEnvelope(t *testin
 					*(dest[4].(*string)) = "dev-a"
 					*(dest[5].(*int64)) = 1
 					*(dest[6].(*int64)) = 1
-					*(dest[7].(*string)) = "SREVA-E2EE-V1-ED25519"
+					*(dest[7].(*string)) = "SREADYA-E2EE-V1-ED25519"
 					*(dest[8].(*string)) = "opaque-schema-v1"
 					*(dest[9].(*int64)) = 0
 					*(dest[10].(*string)) = "upsert"
@@ -252,7 +252,7 @@ func TestTask22CommitEnvelopeLocksVaultAndAllocatesRevisionInOneTransaction(t *t
 	store := &Store{db: fakeDatabase{
 		begin: func(context.Context) (transaction, error) { return tx, nil },
 	}}
-	envelope := srevasync.Envelope{
+	envelope := sreadyasync.Envelope{
 		AccountID:        "acct-a",
 		VaultID:          "vault-a",
 		EventID:          "evt-13",
@@ -260,7 +260,7 @@ func TestTask22CommitEnvelopeLocksVaultAndAllocatesRevisionInOneTransaction(t *t
 		SourceDeviceID:   "dev-a",
 		KeyEpoch:         1,
 		ProtocolVersion:  1,
-		SuiteID:          "SREVA-E2EE-V1-ED25519",
+		SuiteID:          "SREADYA-E2EE-V1-ED25519",
 		SchemaID:         "opaque-schema-v1",
 		BaseRevision:     8,
 		Operation:        "upsert",
@@ -319,7 +319,7 @@ func TestTask22CommitEnvelopeReturnsEquivalentExistingEventIdempotently(t *testi
 		return nil
 	}
 	store := &Store{db: fakeDatabase{begin: func(context.Context) (transaction, error) { return tx, nil }}}
-	envelope := srevasync.Envelope{VaultID: "vault-a", EventID: "evt-7", EnvelopeDigest: digest}
+	envelope := sreadyasync.Envelope{VaultID: "vault-a", EventID: "evt-7", EnvelopeDigest: digest}
 
 	ack, err := store.CommitEnvelope(context.Background(), envelope)
 	if err != nil {
