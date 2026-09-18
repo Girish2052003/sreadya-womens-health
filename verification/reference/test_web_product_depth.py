@@ -16,8 +16,10 @@ def test_web_pin_gate_and_automatic_lock_are_real_private_workspace_controls() -
     assert "visibilitychange" in gate
     assert "automatic" in gate.lower()
     assert "WebAppLockGate" in layout
-    assert "PIN" in settings
-    assert "lock" in settings.lower()
+    assert "AppLockSettings" in settings
+    app_lock_settings = read("web/src/privacy/AppLockSettings.tsx")
+    assert "PIN" in app_lock_settings
+    assert "automatic lock" in app_lock_settings.lower()
 
 def test_cycle_workspace_supports_period_notes() -> None:
     cycle = read("web/src/features/cycle/CycleCorePanel.tsx")
