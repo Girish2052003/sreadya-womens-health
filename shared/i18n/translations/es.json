@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "locale": "es",
+    "sourceLocale": "en",
+    "sourceVersion": "8f439cd8c651fc3d9a3557a31f6af67904f22e62",
+    "method": "machine",
+    "provider": "openai-assistant",
+    "providerModel": "gpt-5.6-sol",
+    "reviewStatus": "machine-unreviewed",
+    "risk": "mixed"
+  },
+  "messages": {}
+}
