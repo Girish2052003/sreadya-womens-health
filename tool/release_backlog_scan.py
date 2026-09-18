@@ -7,20 +7,22 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SCAN_ROOTS = ("lib", "platform_templates", "tool", ".github/workflows")
+SCAN_ROOTS = ("lib", "platform_templates", "web/src", "tool", ".github/workflows")
 MARKERS = ("TODO", "FIXME", "HACK", "XXX", "coming soon", "placeholder")
-TEXT_SUFFIXES = {".dart", ".kt", ".swift", ".py", ".yml", ".yaml"}
+TEXT_SUFFIXES = {".dart", ".kt", ".swift", ".py", ".yml", ".yaml", ".ts", ".tsx"}
 EXCLUDED = {
-    "tool/release_backlog_scan.py",  # contains the marker vocabulary by design
+    "tool/release_backlog_scan.py",
 }
 MARKER_PATTERN = re.compile(
     r"\b(?:TODO|FIXME|HACK|XXX)\b|\bcoming\s+soon\b|\bplaceholder\b",
     flags=re.IGNORECASE,
 )
+JSX_PLACEHOLDER_ATTRIBUTE = re.compile(r"\bplaceholder\s*=", flags=re.IGNORECASE)
 
 
-def contains_backlog_marker(line: str) -> bool:
-    return MARKER_PATTERN.search(line) is not None
+def contains_backlog_marker(line: str, suffix: str = "") -> bool:
+    candidate = JSX_PLACEHOLDER_ATTRIBUTE.sub("input_hint=", line) if suffix in {".ts", ".tsx"} else line
+    return MARKER_PATTERN.search(candidate) is not None
 
 
 def annotation_escape(value: str) -> str:
@@ -46,7 +48,7 @@ def main() -> None:
                 continue
             text = path.read_text(encoding="utf-8", errors="ignore")
             for number, line in enumerate(text.splitlines(), start=1):
-                if contains_backlog_marker(line):
+                if contains_backlog_marker(line, path.suffix.lower()):
                     findings.append((relative, number, line.strip()))
 
     if findings:

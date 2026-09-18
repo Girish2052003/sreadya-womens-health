@@ -7,13 +7,13 @@ const primary = [
   ['today', 'Today', '/app/today'],
   ['log', 'Log', '/app/log'],
   ['calendar', 'Calendar', '/app/calendar'],
-  ['more', 'More', '/app/settings'],
+  ['more', 'More', '/app/more'],
 ] as const;
 
 export function WorkspaceNav({ active }: { active: PrimaryKey | string }) {
   return (
     <nav className="workspace-nav" aria-label="Sreva workspace">
-      <Link className="workspace-nav__brand" href="/app/home" aria-label="Sreva workspace home">
+      <Link className="workspace-nav__brand" href="/app/home" aria-label="Sreva workspace home" title="Sreva workspace home">
         <span aria-hidden="true">S</span>
       </Link>
       <div className="workspace-nav__items">

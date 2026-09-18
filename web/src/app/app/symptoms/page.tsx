@@ -1,8 +1,8 @@
 import { WorkspaceNav } from '../../../components/navigation/WorkspaceNav';
 import { StatusChip } from '../../../components/ui/StatusChip';
-import { SyncWorkspace } from '../../../features/sync/SyncWorkspace';
+import { SymptomsWorkspace } from '../../../features/logging/SymptomsWorkspace';
 
-export default function SyncPage() {
+export default function SymptomsPage() {
   return (
     <div className="workspace-shell">
       <WorkspaceNav active="more" />
@@ -10,12 +10,12 @@ export default function SyncPage() {
         <header className="workspace-heading">
           <div>
             <p className="workspace-kicker">Private workspace</p>
-            <h1>Sync</h1>
-            <p className="workspace-note">Inspect and control the local encrypted sync queue while keeping account-free Sreva fully operational.</p>
+            <h1>Symptoms</h1>
+            <p className="workspace-note">Track optional symptoms with structured severity and context while keeping medical boundaries explicit.</p>
           </div>
-          <StatusChip tone="info">Optional encrypted sync</StatusChip>
+          <StatusChip tone="success">Local-first</StatusChip>
         </header>
-        <SyncWorkspace />
+        <SymptomsWorkspace />
       </main>
     </div>
   );

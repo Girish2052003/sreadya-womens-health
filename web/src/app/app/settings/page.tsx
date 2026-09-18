@@ -1,8 +1,8 @@
 import { WorkspaceNav } from '../../../components/navigation/WorkspaceNav';
 import { StatusChip } from '../../../components/ui/StatusChip';
-import { SyncWorkspace } from '../../../features/sync/SyncWorkspace';
+import { SettingsWorkspace } from '../../../features/settings/SettingsWorkspace';
 
-export default function SyncPage() {
+export default function SettingsPage() {
   return (
     <div className="workspace-shell">
       <WorkspaceNav active="more" />
@@ -10,12 +10,12 @@ export default function SyncPage() {
         <header className="workspace-heading">
           <div>
             <p className="workspace-kicker">Private workspace</p>
-            <h1>Sync</h1>
-            <p className="workspace-note">Inspect and control the local encrypted sync queue while keeping account-free Sreva fully operational.</p>
+            <h1>Settings</h1>
+            <p className="workspace-note">Appearance, formatting, accessibility, reminders, privacy, backup, continuity and support live in one organized settings area.</p>
           </div>
-          <StatusChip tone="info">Optional encrypted sync</StatusChip>
+          <StatusChip tone="info">Local preferences</StatusChip>
         </header>
-        <SyncWorkspace />
+        <SettingsWorkspace />
       </main>
     </div>
   );

@@ -7,6 +7,7 @@ import './globals.css';
 import './accessibility.css';
 import './pwa.css';
 import './vault.css';
+import './product-completeness.css';
 
 export const metadata: Metadata = {
   title: 'Sreva — Private, local-first women\'s health',
