@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sreadya.example/schemas/i18n/translation-artifact-v1.schema.json",
+  "title": "SREADYA translation artifact v1",
+  "type": "object",
+  "required": [
+    "meta",
+    "messages"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "locale",
+        "sourceLocale",
+        "sourceVersion",
+        "method",
+        "provider",
+        "providerModel",
+        "reviewStatus",
+        "risk"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "locale": {
+          "type": "string",
+          "minLength": 2
+        },
+        "sourceLocale": {
+          "const": "en"
+        },
+        "sourceVersion": {
+          "type": "string",
+          "minLength": 7
+        },
+        "method": {
+          "enum": [
+            "machine",
+            "human",
+            "community",
+            "hybrid"
+          ]
+        },
+        "provider": {
+          "type": "string"
+        },
+        "providerModel": {
+          "type": "string"
+        },
+        "reviewStatus": {
+          "enum": [
+            "machine-unreviewed",
+            "human-reviewed",
+            "qualified-reviewed"
+          ]
+        },
+        "risk": {
+          "enum": [
+            "standard-ui",
+            "general-content",
+            "sensitive-health",
+            "safety-critical",
+            "legal-consent",
+            "mixed"
+          ]
+        }
+      }
+    },
+    "messages": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

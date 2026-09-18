@@ -1176,5 +1176,6 @@
   "vault.ack": "I understand that a successful restore replaces the local period and observation history in this browser.",
   "vault.restoring": "Restoring locally…",
   "vault.replace": "Replace local health data",
-  "vault.restoreBoundary": "Wrong passphrases, tampered files, unsupported formats, or invalid health records fail before the live encrypted dataset is replaced."
+  "vault.restoreBoundary": "Wrong passphrases, tampered files, unsupported formats, or invalid health records fail before the live encrypted dataset is replaced.",
+  "flutter.privacyPromise": "Your cycle belongs to you."
 }
