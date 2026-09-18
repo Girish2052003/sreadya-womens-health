@@ -550,11 +550,79 @@ def google_discovery(provider: GoogleCloudProvider) -> list[dict[str, str]]:
     return logical
 
 
-def sync_google_all() -> None:
+def google_sync_plan(
+    logical: list[dict[str, str]],
+    source: dict[str, str],
+) -> dict[str, int]:
+    translated_messages = 0
+    reused_messages = 0
+    provider_input_characters = 0
+
+    for row in logical:
+        canonical = str(row["code"])
+        if locale_key(canonical) == "en":
+            continue
+
+        existing = read_raw_translation(canonical)
+        meta = existing.get("meta", {}) if isinstance(existing.get("meta"), dict) else {}
+        existing_messages = existing.get("messages", {}) if isinstance(existing.get("messages"), dict) else {}
+        existing_hashes = existing.get("sourceHashes", {}) if isinstance(existing.get("sourceHashes"), dict) else {}
+        existing_is_google = str(meta.get("provider", "")) == GOOGLE_PROVIDER_ID
+
+        for key, value in source.items():
+            digest = source_value_hash(value)
+            reusable = (
+                existing_is_google
+                and isinstance(existing_messages.get(key), str)
+                and existing_hashes.get(key) == digest
+                and message_variables(existing_messages[key]) == message_variables(value)
+            )
+            if reusable:
+                reused_messages += 1
+                continue
+            translated_messages += 1
+            protected, _ = protect_text(value)
+            provider_input_characters += len(protected)
+
+    return {
+        "logicalLanguages": len(logical),
+        "sourceMessages": len(source),
+        "translatedMessages": translated_messages,
+        "reusedMessages": reused_messages,
+        "providerInputCharacters": provider_input_characters,
+    }
+
+
+def enforce_translation_character_budget(plan: dict[str, int]) -> None:
+    raw_limit = os.environ.get("SREADYA_TRANSLATION_MAX_CHARACTERS", "").strip()
+    if not raw_limit:
+        raise SystemExit(
+            "SREADYA_TRANSLATION_MAX_CHARACTERS is required before provider translation. "
+            "Set a reviewed per-run character ceiling in protected CI configuration."
+        )
+    try:
+        limit = int(raw_limit)
+    except ValueError as error:
+        raise SystemExit("SREADYA_TRANSLATION_MAX_CHARACTERS must be an integer") from error
+    if limit < 0:
+        raise SystemExit("SREADYA_TRANSLATION_MAX_CHARACTERS must be non-negative")
+    planned = plan["providerInputCharacters"]
+    if planned > limit:
+        raise SystemExit(
+            f"translation plan requires {planned} provider input characters, exceeding approved limit {limit}"
+        )
+
+
+def sync_google_all(*, estimate_only: bool = False) -> None:
     provider = GoogleCloudProvider()
     source, _, source_version = source_state()
     logical = google_discovery(provider)
     allowed = {locale_key(row["code"]) for row in logical if locale_key(row["code"]) != "en"}
+    plan = google_sync_plan(logical, source)
+    print(json.dumps({"translationPlan": plan}, sort_keys=True))
+    if estimate_only:
+        return
+    enforce_translation_character_budget(plan)
 
     translated_total = 0
     reused_total = 0
@@ -844,6 +912,7 @@ def main() -> None:
     mode.add_argument("--translate", action="store_true")
     mode.add_argument("--check-google-baseline", action="store_true")
     mode.add_argument("--discover-google", action="store_true")
+    mode.add_argument("--estimate-google-sync", action="store_true")
     mode.add_argument("--sync-google-all", action="store_true")
     parser.add_argument("--locales", default="")
     parser.add_argument("--locale")
@@ -870,6 +939,8 @@ def main() -> None:
     elif args.discover_google:
         logical = google_discovery(GoogleCloudProvider())
         print(json.dumps({"logicalLanguages": len(logical)}, sort_keys=True))
+    elif args.estimate_google_sync:
+        sync_google_all(estimate_only=True)
     elif args.sync_google_all:
         sync_google_all()
     elif args.dry_run:
