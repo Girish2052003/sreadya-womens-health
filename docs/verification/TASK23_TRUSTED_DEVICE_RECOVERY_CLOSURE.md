@@ -26,7 +26,7 @@ The documentation commit containing this note is not a replacement verification 
 
 ## Frozen Task-23 requirement coverage
 
-Task 23 is the trusted-device approval and recovery-key continuity boundary defined in `docs/superpowers/plans/2026-09-16-sreva-c2-cross-platform-implementation.md`.
+Task 23 is the trusted-device approval and recovery-key continuity boundary defined in `docs/superpowers/plans/2026-09-16-sreadya-c2-cross-platform-implementation.md`.
 
 Implemented and verified production surfaces include:
 

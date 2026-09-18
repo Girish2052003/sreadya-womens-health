@@ -48,7 +48,7 @@ class LifeStageScreen extends ConsumerWidget {
               child: Padding(
                 padding: EdgeInsets.all(16),
                 child: Text(
-                  'Sreva’s life-stage modes organize tracking and reminders. They do not diagnose pregnancy, fertility, menopause, or any health condition.',
+                  'Sreadya’s life-stage modes organize tracking and reminders. They do not diagnose pregnancy, fertility, menopause, or any health condition.',
                 ),
               ),
             ),

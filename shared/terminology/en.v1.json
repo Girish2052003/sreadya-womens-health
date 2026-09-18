@@ -16,7 +16,7 @@
     },
     "lifeStage": {
       "label": "Life stage",
-      "definition": "The user-selected Sreva mode that adapts relevant product behaviour while preserving historical cycle records."
+      "definition": "The user-selected Sreadya mode that adapts relevant product behaviour while preserving historical cycle records."
     },
     "predictionConfidence": {
       "label": "Prediction confidence",
@@ -28,7 +28,7 @@
     },
     "accountFreeMode": {
       "label": "Account-free mode",
-      "definition": "The first-class Sreva mode in which core health functionality works locally without creating or requiring an online account."
+      "definition": "The first-class Sreadya mode in which core health functionality works locally without creating or requiring an online account."
     },
     "accountMode": {
       "label": "Account mode",
@@ -40,7 +40,7 @@
     },
     "trustedDevice": {
       "label": "Trusted device",
-      "definition": "A device explicitly authorized under the future reviewed continuity protocol to participate in the user's encrypted Sreva vault."
+      "definition": "A device explicitly authorized under the future reviewed continuity protocol to participate in the user's encrypted Sreadya vault."
     },
     "recoveryKey": {
       "label": "Recovery key",
