@@ -21,7 +21,7 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install pytest
       - name: Enforce complete Web product surface
-        run: python -m pytest -q verification/reference/test_web_product_completeness.py
+        run: python -m pytest -q verification/reference/test_web_product_completeness.py verification/reference/test_web_product_depth.py
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '24.21.0'
