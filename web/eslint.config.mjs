@@ -44,6 +44,7 @@ const sreadyaI18nPlugin = {
           /\.test\.tsx?$/.test(filename)
           || filename.endsWith('/src/app/layout.tsx')
           || filename.endsWith('/src/components/vault/VaultLocalOnlyPanel.tsx')
+          || filename.endsWith('/src/features/vault/CycleVaultWorkspace.tsx') // NEXT_PUBLIC_SREADYA_CYCLEVAULT_TEST_HARNESS-only literals; verifier strips the bounded harness region.
         ) {
           return {};
         }
