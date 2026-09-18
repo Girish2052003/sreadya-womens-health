@@ -387,14 +387,14 @@
   "@sreadya_catalogue__dot__nativeOnly": {
     "description": "SREADYA canonical message ID: catalogue.nativeOnly"
   },
-  "@sreadya_catalogue__dot__placeholder": {
-    "description": "SREADYA canonical message ID: catalogue.placeholder"
-  },
   "@sreadya_catalogue__dot__requirements": {
     "description": "SREADYA canonical message ID: catalogue.requirements"
   },
   "@sreadya_catalogue__dot__search": {
     "description": "SREADYA canonical message ID: catalogue.search"
+  },
+  "@sreadya_catalogue__dot__searchHint": {
+    "description": "SREADYA canonical message ID: catalogue.searchHint"
   },
   "@sreadya_catalogue__dot__showing": {
     "description": "SREADYA canonical message ID: catalogue.showing"
@@ -3708,9 +3708,9 @@
   "sreadya_catalogue__dot__futureTitle": "Future / optional — not launch promises",
   "sreadya_catalogue__dot__lede": "Public marketing says 40+ thoughtful capabilities. Engineering tracks 258 atomic launch requirements so important details cannot disappear behind a broad feature label.",
   "sreadya_catalogue__dot__nativeOnly": "Native-only mechanism; underlying Sreadya promise is adapted on Web.",
-  "sreadya_catalogue__dot__placeholder": "Try reminders, privacy, recovery, flow, mood…",
   "sreadya_catalogue__dot__requirements": "launch requirements",
   "sreadya_catalogue__dot__search": "Find a Sreadya capability",
+  "sreadya_catalogue__dot__searchHint": "Try reminders, privacy, recovery, flow, mood…",
   "sreadya_catalogue__dot__showing": "Showing {count} of 258 launch requirements.",
   "sreadya_catalogue__dot__surface__dot__interaction": "Use feature",
   "sreadya_catalogue__dot__surface__dot__platform__dash__adapted": "Platform adapted",
