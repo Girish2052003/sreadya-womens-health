@@ -1,24 +1,24 @@
-# Sreva Worldwide v1.0 Implementation Plan
+# Sreadya Worldwide v1.0 Implementation Plan
 
 > **C2 preservation amendment — 16 September 2026:** This file is preserved as the complete historical Flutter/mobile implementation plan. The original task descriptions, interfaces, tests, and release steps below are intentionally retained rather than compressed or rewritten. They remain useful implementation provenance and mobile-baseline detail.
 >
-> The authoritative cross-platform architecture is `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`, and the authoritative forward implementation programme is `docs/superpowers/plans/2026-09-16-sreva-c2-cross-platform-implementation.md`. If this historical mobile plan conflicts with those C2 documents, C2 wins. Android, iOS, and Web/PWA are equal first-class Sreva clients; account mode adds optional E2EE continuity rather than superior health functionality.
+> The authoritative cross-platform architecture is `docs/superpowers/specs/2026-09-16-sreadya-web-product-architecture-design.md`, and the authoritative forward implementation programme is `docs/superpowers/plans/2026-09-16-sreadya-c2-cross-platform-implementation.md`. If this historical mobile plan conflicts with those C2 documents, C2 wins. Android, iOS, and Web/PWA are equal first-class Sreadya clients; account mode adds optional E2EE continuity rather than superior health functionality.
 >
 > **Historical-status note:** The unchecked boxes below reproduce the original 15 September plan and MUST NOT be interpreted as the current repository completion state. Current implementation/verification evidence is recorded by the repository tests, CI, traceability tooling, and closure ledgers. Preserving the boxes keeps the original engineering intent intact.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build Sreva as a local-first iOS/Android women's cycle companion implementing the complete v1.0 capability matrix while keeping reproductive-health processing on-device.
+**Goal:** Build Sreadya as a local-first iOS/Android women's cycle companion implementing the complete v1.0 capability matrix while keeping reproductive-health processing on-device.
 
 **Architecture:** Feature-oriented Flutter application with platform adapters for native health, notifications and device security. The domain layer is deterministic and independently testable; persistence, encrypted backup, notifications, HealthKit/Health Connect and UI are adapters around it.
 
 **Tech Stack:** Flutter 3.47.2, Dart 3.13.2, Riverpod, Drift/SQLite, secure storage, local authentication, local notifications, HealthKit/Health Connect adapters, local PDF/CSV, audited cryptography.
 
-**Spec:** `docs/superpowers/specs/2026-09-15-sreva-master-design.md`
+**Spec:** `docs/superpowers/specs/2026-09-15-sreadya-master-design.md`
 
 ## Global Constraints
 
-- Public product name is `Sreva`; created in honour of `Sreedevi Girish Nallan Chakravathy`.
+- Public product name is `Sreadya`; created in honour of `Sreedevi Girish Nallan Chakravathy`.
 - Minimum iOS target is 17.0; first physical target is iPhone 17.
 - Core app must work without account, operator backend or network.
 - No health values in ordinary logs, analytics, diagnostics or CI fixtures.
@@ -40,13 +40,13 @@
 
 **Files:** create Flutter project metadata, app shell, theme, routing, version registry and smoke tests.
 
-**Interfaces:** produces `SrevaApp`, `AppVersions`, and top-level navigation consumed by all feature tasks.
+**Interfaces:** produces `SreadyaApp`, `AppVersions`, and top-level navigation consumed by all feature tasks.
 
 - [ ] Write smoke tests for app title, primary navigation destinations and version registry.
 - [ ] Run tests and verify they fail because app shell is absent.
 - [ ] Implement app shell, theme tokens, navigation rail/bottom bar, and version registry.
 - [ ] Run smoke tests and static analysis.
-- [ ] Commit `feat: establish Sreva application shell`.
+- [ ] Commit `feat: establish Sreadya application shell`.
 
 ### Task 2: Cycle domain and Prediction Engine v1
 
@@ -70,7 +70,7 @@
 - [ ] Verify red.
 - [ ] Implement immutable domain models and repository contract.
 - [ ] Verify green.
-- [ ] Commit `feat: define Sreva health domain`.
+- [ ] Commit `feat: define Sreadya health domain`.
 
 ### Task 4: Encrypted local persistence and migrations
 
@@ -216,7 +216,7 @@
 - [ ] Add checks that intentionally fail on forbidden sample secrets and health-log patterns, then confirm expected failure.
 - [ ] Implement CI/security policy and remove the intentionally bad fixtures.
 - [ ] Validate workflow syntax and repository secret-free state.
-- [ ] Commit `build: add Sreva production quality gates`.
+- [ ] Commit `build: add Sreadya production quality gates`.
 
 ### Task 16: Full-system acceptance
 
@@ -229,7 +229,7 @@
 - [ ] Run privacy scans ensuring no health values in diagnostics/logging.
 - [ ] Build unsigned iOS release artifact on macOS CI when repository is hosted; sign/TestFlight only with owner-provided Apple credentials.
 - [ ] Build Android release artifact and run closed-track validation before Play production.
-- [ ] Commit `release: complete Sreva v1 readiness`.
+- [ ] Commit `release: complete Sreadya v1 readiness`.
 
 ---
 
@@ -237,4 +237,4 @@
 
 The historical tasks above are preserved in full. The C2 programme does **not** discard or restart them. It treats their implemented Flutter/mobile outputs as a mature first-class baseline, then adds language-neutral contracts, Web/PWA, and optional reviewed E2EE continuity without rewriting verified mobile behavior merely for symmetry.
 
-Forward implementation authority: `docs/superpowers/plans/2026-09-16-sreva-c2-cross-platform-implementation.md`.
+Forward implementation authority: `docs/superpowers/plans/2026-09-16-sreadya-c2-cross-platform-implementation.md`.

@@ -1,4 +1,4 @@
-# Sreva Task 22 Web Sync Client Implementation Plan
+# Sreadya Task 22 Web Sync Client Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -8,7 +8,7 @@
 
 **Tech Stack:** TypeScript 6.0.3, Dexie 4.4.6, WebCrypto, Vitest 5.0.0, Node 24.21.0.
 
-**Spec:** `docs/superpowers/specs/2026-09-17-sreva-task22-web-sync-client-design.md`
+**Spec:** `docs/superpowers/specs/2026-09-17-sreadya-task22-web-sync-client-design.md`
 
 ## Global Constraints
 
@@ -33,7 +33,7 @@
 
 - [ ] **Step 1: Write RED tests** for immutable enqueue, duplicate event-ID rejection when bytes differ, idempotent duplicate enqueue when bytes match, FIFO pending order, acknowledgement removal, pause retention, cursor persistence, and explicit sync-state clearing without touching the health vault.
 - [ ] **Step 2: Run** `cd web && npm test -- --run src/sync/queue.test.ts`; expect missing-module/symbol RED.
-- [ ] **Step 3: Implement minimal queue** with a pure persistence interface plus separate Dexie `sreva-sync-v1` stores for outbox and state. Copy byte arrays on ingress/egress so callers cannot mutate queued request bytes.
+- [ ] **Step 3: Implement minimal queue** with a pure persistence interface plus separate Dexie `sreadya-sync-v1` stores for outbox and state. Copy byte arrays on ingress/egress so callers cannot mutate queued request bytes.
 - [ ] **Step 4: Run** `npm test -- --run src/sync/queue.test.ts && npm run typecheck`; expect GREEN.
 - [ ] **Step 5: Commit** `web(task22): add durable opaque sync outbox`.
 
@@ -73,7 +73,7 @@
 **Files:**
 - Modify: `sync_service/internal/httpapi/router.go`
 - Add/modify router tests.
-- Modify: `sync_service/cmd/sreva-sync/main.go` only to the extent required for a fail-closed runnable composition boundary.
+- Modify: `sync_service/cmd/sreadya-sync/main.go` only to the extent required for a fail-closed runnable composition boundary.
 
 **Interfaces:**
 - Register the already-tested Task-22 sync handler through an explicit router option. Production assembly must refuse to expose sync endpoints without session resolution, signed-device authorization, and storage dependencies.

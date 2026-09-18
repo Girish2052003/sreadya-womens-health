@@ -1,6 +1,6 @@
-# Sreva Task 22 Web Sync Client Design
+# Sreadya Task 22 Web Sync Client Design
 
-**Status:** Approved Task-22 Web slice. This document is subordinate to `docs/superpowers/plans/2026-09-16-sreva-c2-cross-platform-implementation.md` and must not weaken the frozen Task-19 protocol.
+**Status:** Approved Task-22 Web slice. This document is subordinate to `docs/superpowers/plans/2026-09-16-sreadya-c2-cross-platform-implementation.md` and must not weaken the frozen Task-19 protocol.
 
 ## Goal
 
@@ -8,8 +8,8 @@ Add a browser sync boundary that keeps local health capture authoritative and av
 
 ## Architecture
 
-1. `web/src/sync/queue.ts` owns an isolated durable outbox and sync cursor state. Production persistence uses a separate Dexie database named `sreva-sync-v1`. The queue stores immutable exact UTF-8 request bodies containing encrypted envelopes plus opaque operational metadata only. It never stores health plaintext, VRS, Recovery Secret, private signing keys, OTPs, account passwords, or decrypted remote records.
-2. `web/src/sync/client.ts` owns HTTP transport and Task-19 signed authorization. A device signer is injected; Task 22 does not decide how the private Ed25519 key is provisioned or protected. Push hashes the exact queued bytes, obtains a `sync.push` challenge, signs the frozen `sreva-device-auth-v1` LP16 transcript, and sends the same immutable bytes. Pull obtains a challenge for a canonical opaque target and signs the same frozen transcript construction.
+1. `web/src/sync/queue.ts` owns an isolated durable outbox and sync cursor state. Production persistence uses a separate Dexie database named `sreadya-sync-v1`. The queue stores immutable exact UTF-8 request bodies containing encrypted envelopes plus opaque operational metadata only. It never stores health plaintext, VRS, Recovery Secret, private signing keys, OTPs, account passwords, or decrypted remote records.
+2. `web/src/sync/client.ts` owns HTTP transport and Task-19 signed authorization. A device signer is injected; Task 22 does not decide how the private Ed25519 key is provisioned or protected. Push hashes the exact queued bytes, obtains a `sync.push` challenge, signs the frozen `sreadya-device-auth-v1` LP16 transcript, and sends the same immutable bytes. Pull obtains a challenge for a canonical opaque target and signs the same frozen transcript construction.
 3. Reconnect orchestration is local-first: local health writes complete before sync work. Upload failure leaves the immutable event queued. Pull events are delivered to an injected safe-application boundary that decrypts/authenticates/validates locally. The client advances the cursor only after every returned event is reported as safely applied or explicitly preserved as a conflict.
 4. Pause disables network processing without deleting queued ciphertext or changing local health behavior. Disable clears account-sync state only when explicitly requested by the caller; it does not delete the local health vault.
 
