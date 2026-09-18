@@ -45,13 +45,17 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Require protected Google Cloud Translation credential
+      - name: Detect optional Google Cloud Translation credential
+        id: provider
         shell: bash
         run: |
           set -euo pipefail
-          if [ -z "${SREADYA_GOOGLE_TRANSLATE_API_KEY:-}" ]; then
-            echo "::error::Add SREADYA_GOOGLE_TRANSLATE_API_KEY as a protected GitHub Actions secret. Never paste it into client code or commit it."
-            exit 1
+          if [ -n "${SREADYA_GOOGLE_TRANSLATE_API_KEY:-}" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "Google translation provider is enabled for this run."
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "Google translation is deferred; validating the English-only release path without provider calls."
           fi
 
       - name: Verify frozen 194-language Google baseline
@@ -60,9 +64,11 @@ jobs:
           python tool/i18n_pipeline.py --check-google-baseline
 
       - name: Discover Google targets and show the exact no-charge translation plan
+        if: steps.provider.outputs.enabled == 'true'
         run: python tool/i18n_pipeline.py --estimate-google-sync
 
       - name: Require an explicitly approved paid-run character ceiling
+        if: steps.provider.outputs.enabled == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -72,14 +78,17 @@ jobs:
           fi
 
       - name: Synchronize every supported Google locale within the approved ceiling
+        if: steps.provider.outputs.enabled == 'true'
         run: python tool/i18n_pipeline.py --sync-google-all
 
       - name: Prove formal globalization closure before publishing artifacts
+        if: steps.provider.outputs.enabled == 'true'
         run: |
           python tool/i18n_pipeline.py --check
           python tool/verify_globalization.py --require-global-closure
 
       - name: Detect generated changes
+        if: steps.provider.outputs.enabled == 'true'
         id: changes
         shell: bash
         run: |
