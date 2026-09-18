@@ -103,10 +103,10 @@ function reminderKind(text: string): ReminderKind {
   return 'medication';
 }
 
-function reminderLabel(input: string): string {
+function reminderLabel(input: string): string | undefined {
   let text = input.trim().replace(/^remind me(?: to| about)?\s*/i, '');
   text = text.replace(/\s+at\s+\d{1,2}(?::\d{2})?\s*(?:am|pm)?\s*$/i, '');
-  return text.trim() || 'Health reminder';
+  return text.trim() || undefined;
 }
 
 function symptomKind(text: string): ObservationKind {
@@ -142,7 +142,6 @@ export function parseLocalIntent(input: string, now: Date): ParsedCommand {
         value: flow,
         flowLevel: flow,
         observationKind: 'menstrualFlow',
-        label: `${flow} flow`,
         requiresConfirmation: true,
         rawText: input,
         note: input,
@@ -158,7 +157,7 @@ export function parseLocalIntent(input: string, now: Date): ParsedCommand {
       value: input,
       reminderKind: reminderKind(text),
       ...(time ? { reminderHour: time[0], reminderMinute: time[1] } : {}),
-      label: reminderLabel(input),
+      ...(reminderLabel(input) ? { label: reminderLabel(input) } : {}),
       requiresConfirmation: true,
       rawText: input,
       note: input,
@@ -186,7 +185,6 @@ export function parseLocalIntent(input: string, now: Date): ParsedCommand {
       value: text,
       observationKind,
       severity: symptomSeverity(text),
-      label: observationKind,
       requiresConfirmation: true,
       rawText: input,
       note: input,

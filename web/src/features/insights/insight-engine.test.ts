@@ -34,20 +34,21 @@ describe('Task 13 local insight parity', () => {
     expect(insight.observationCounts.cramps).toBe(2);
   });
 
-  it('uses observational language and exposes the data provenance/date range behind the result', () => {
+  it('returns language-neutral pattern facts with provenance behind the result', () => {
     const insight = summarizeInsights({ periods, observations });
 
-    expect(insight.observationalMessages).toContain(
-      'Cramps were recorded most often around cycle day 2. This is an observation, not a medical cause or diagnosis.',
-    );
-    expect(insight.observationalMessages).toContain(
-      'Heavy flow was your most frequently recorded flow level (2 logs). This is a summary of your entries, not a medical interpretation.',
-    );
+    expect(insight.timingInsights).toContainEqual({
+      kind: 'cramps',
+      cycleDay: 2,
+    });
+    expect(insight.topFlowPattern).toEqual({
+      flow: 'heavy',
+      count: 2,
+    });
     expect(insight.provenance.sources).toEqual(['app', 'cycleVault', 'healthConnect']);
     expect(insight.provenance.dateRange).toEqual({
       from: '2026-06-01T00:00:00.000Z',
       to: '2026-07-31T00:00:00.000Z',
     });
-    expect(insight.observationalMessages.join(' ').toLowerCase()).not.toContain('diagnosed');
   });
 });

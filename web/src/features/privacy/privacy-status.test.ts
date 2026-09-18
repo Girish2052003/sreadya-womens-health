@@ -6,22 +6,20 @@ describe('Web Privacy Center truthfulness', () => {
   it('tracks PRIV-001 through PRIV-021 without claiming unavailable native mechanisms', () => {
     expect(PRIVACY_CAPABILITY_IDS).toHaveLength(21);
     const status = buildWebPrivacyStatus({ notificationPrivacy: 'maximum', appLockConfigured: true });
-    expect(status.healthDataLocation).toBe('This browser/device');
-    expect(status.developerHealthDatabase).toBe('None');
-    expect(status.behaviorAnalytics).toBe('Disabled');
-    expect(status.databaseProtection).toContain('AES-GCM');
-    expect(status.platformHealthAccess).toMatch(/unavailable in Web/);
-    expect(status.appLock).toMatch(/PIN app lock enabled/);
-    expect(status.appLock).toMatch(/native biometric protection not claimed/);
-    expect(status.appSwitcherProtection).toMatch(/no Web guarantee/);
-    expect(status.notificationPrivacy).toBe('Maximum Privacy');
-    expect(status.advertisingProfile).toBe('None from reproductive-health data');
+    expect(status.healthDataLocation).toBe('privacy.value.localDevice');
+    expect(status.developerHealthDatabase).toBe('privacy.value.none');
+    expect(status.behaviorAnalytics).toBe('privacy.value.disabled');
+    expect(status.databaseProtection).toBe('privacy.value.aesGcmLocalVault');
+    expect(status.platformHealthAccess).toBe('privacy.value.nativeHealthUnavailableWeb');
+    expect(status.appLock).toBe('privacy.value.pinEnabled');
+    expect(status.appSwitcherProtection).toBe('privacy.value.browserControlled');
+    expect(status.notificationPrivacy).toBe('reminder.privacy.maximum');
+    expect(status.advertisingProfile).toBe('privacy.value.noneReproductiveHealth');
   });
 
   it('reports an unconfigured Web PIN truthfully instead of pretending biometric protection exists', () => {
     const status = buildWebPrivacyStatus({ notificationPrivacy: 'detailed', appLockConfigured: false });
-    expect(status.appLock).toMatch(/not configured/);
-    expect(status.appLock).toMatch(/native biometric protection not claimed/);
-    expect(status.notificationPrivacy).toBe('Detailed');
+    expect(status.appLock).toBe('privacy.value.pinNotConfigured');
+    expect(status.notificationPrivacy).toBe('reminder.privacy.detailed');
   });
 });

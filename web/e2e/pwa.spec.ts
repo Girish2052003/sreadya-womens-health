@@ -65,7 +65,20 @@ test('reviewed install guidance is explicit for iPhone and Android', async ({ pa
 });
 
 
-test('selected language bundle is cached as a static globalization artifact', async ({ page }) => {
+test('selected language bundle is cached as a static globalization artifact', async ({ page, request }) => {
+  const manifestResponse = await request.get('/i18n/manifest.json');
+  expect(manifestResponse.ok()).toBeTruthy();
+  const globalizationManifest = await manifestResponse.json() as {
+    publicLocales?: Array<{ tag?: string }>;
+  };
+  const arabicPublished = globalizationManifest.publicLocales?.some(
+    (locale) => locale.tag?.toLowerCase() === 'ar',
+  ) ?? false;
+  test.skip(
+    !arabicPublished,
+    'Arabic is intentionally not selectable until the complete Google-generated bundle is published.',
+  );
+
   await page.goto('/');
   await page.evaluate(async () => {
     if (!('serviceWorker' in navigator)) throw new Error('Service worker unavailable');
@@ -77,7 +90,8 @@ test('selected language bundle is cached as a static globalization artifact', as
   await page.getByTestId('language-chooser-search').fill('Arabic');
   await page.locator('[data-language-tag="ar"]').click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
-  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
+  await expect(page.locator('html')).toHaveAttribute('data-sreadya-text-direction', 'rtl');
 
   const languageAssets = await page.evaluate(async () => {
     const names = await caches.keys();

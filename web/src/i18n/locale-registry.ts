@@ -1,64 +1,124 @@
-import { CLDR_LANGUAGE_CODES } from './cldr-language-codes';
 import { localeDirection, normalizeLocaleTag } from './locale';
+
+export type PublishedLocale = {
+  tag: string;
+  englishName: string;
+  coverage: 'source' | 'complete';
+  method: string;
+  reviewStatus: string;
+};
 
 export type LanguageChoice = {
   tag: string;
-  language: string;
   nativeName: string;
   englishName: string;
-  flag: string;
   direction: 'ltr' | 'rtl';
 };
 
-export const POPULAR_LANGUAGE_CODES = [
+export const POPULAR_LANGUAGE_PRIORITY = [
   'en', 'ta', 'hi', 'fi', 'es', 'fr', 'de', 'pt', 'ar', 'ur', 'bn', 'te',
-  'ml', 'kn', 'mr', 'gu', 'pa', 'zh', 'ja', 'ko', 'ru', 'tr', 'id', 'sw',
+  'ml', 'kn', 'mr', 'gu', 'pa', 'zh-CN', 'zh-TW', 'ja', 'ko', 'tr', 'id', 'sw', 'ru',
 ] as const;
 
-export const LANGUAGE_UNIVERSE_COUNT = CLDR_LANGUAGE_CODES.length;
+const PROVIDER_ALIASES: Record<string, string> = {
+  zh: 'zh-cn',
+  tl: 'fil',
+  iw: 'he',
+  jw: 'jv',
+};
 
-function displayName(language: string, displayLocale: string): string {
+function localeKey(locale: string): string {
   try {
-    return new Intl.DisplayNames([displayLocale], { type: 'language', languageDisplay: 'standard' }).of(language) ?? language;
+    return normalizeLocaleTag(locale).toLowerCase();
   } catch {
-    try {
-      return new Intl.DisplayNames(['en'], { type: 'language', languageDisplay: 'standard' }).of(language) ?? language;
-    } catch {
-      return language;
+    return locale.trim().toLowerCase();
+  }
+}
+
+function nativeDisplayName(tag: string, englishName: string): string {
+  try {
+    const normalized = normalizeLocaleTag(tag);
+    const ownLocale = new Intl.Locale(normalized).language;
+    const display = new Intl.DisplayNames([normalized], {
+      type: 'language',
+      languageDisplay: 'standard',
+    }).of(normalized);
+    if (display && display.toLowerCase() !== normalized.toLowerCase() && display.toLowerCase() !== ownLocale.toLowerCase()) {
+      return display;
     }
-  }
-}
-
-function flagForRegion(region?: string): string {
-  if (!region || !/^[A-Z]{2}$/.test(region)) return '🌐';
-  return String.fromCodePoint(...[...region].map((character) => 0x1F1E6 + character.charCodeAt(0) - 65));
-}
-
-export function languageChoice(languageCode: string): LanguageChoice {
-  const language = normalizeLocaleTag(languageCode).split('-')[0].toLowerCase();
-  let maximized: Intl.Locale;
-  try {
-    maximized = new Intl.Locale(language).maximize();
   } catch {
-    maximized = new Intl.Locale('en').maximize();
+    // Fall through to the provider's English name. Raw locale codes never become product labels.
   }
+  return englishName;
+}
+
+export function languageChoice(locale: PublishedLocale): LanguageChoice {
   return {
-    tag: language,
-    language,
-    nativeName: displayName(language, language),
-    englishName: displayName(language, 'en'),
-    flag: flagForRegion(maximized.region),
-    direction: localeDirection(language),
+    tag: normalizeLocaleTag(locale.tag),
+    nativeName: nativeDisplayName(locale.tag, locale.englishName),
+    englishName: locale.englishName,
+    direction: localeDirection(locale.tag),
   };
 }
 
-export function allLanguageChoices(): LanguageChoice[] {
-  return CLDR_LANGUAGE_CODES
-    .filter((code) => code !== 'und')
+export function allLanguageChoices(locales: readonly PublishedLocale[]): LanguageChoice[] {
+  return locales
+    .filter((locale) => locale.coverage === 'source' || locale.coverage === 'complete')
     .map(languageChoice)
     .sort((a, b) => a.englishName.localeCompare(b.englishName, 'en'));
 }
 
-export function currentLanguageChoice(locale: string): LanguageChoice {
-  return languageChoice(new Intl.Locale(normalizeLocaleTag(locale)).language);
+export function resolvePublishedLocale(
+  requestedLocale: string,
+  locales: readonly PublishedLocale[],
+): PublishedLocale | null {
+  const byKey = new Map(locales.map((locale) => [localeKey(locale.tag), locale]));
+  let normalized = 'en';
+  try {
+    normalized = normalizeLocaleTag(requestedLocale);
+  } catch {
+    normalized = 'en';
+  }
+
+  const exact = localeKey(normalized);
+  const alias = PROVIDER_ALIASES[exact];
+  if (byKey.has(exact)) return byKey.get(exact) ?? null;
+  if (alias && byKey.has(alias)) return byKey.get(alias) ?? null;
+
+  try {
+    const base = new Intl.Locale(normalized).language.toLowerCase();
+    const baseAlias = PROVIDER_ALIASES[base] ?? base;
+    if (byKey.has(baseAlias)) return byKey.get(baseAlias) ?? null;
+
+    const sameBase = locales.filter((locale) => {
+      try {
+        return new Intl.Locale(locale.tag).language.toLowerCase() === base;
+      } catch {
+        return false;
+      }
+    });
+    if (sameBase.length === 1) return sameBase[0];
+  } catch {
+    return byKey.get('en') ?? null;
+  }
+
+  return byKey.get('en') ?? null;
+}
+
+export function currentLanguageChoice(
+  locale: string,
+  locales: readonly PublishedLocale[],
+): LanguageChoice {
+  const resolved = resolvePublishedLocale(locale, locales)
+    ?? locales.find((entry) => localeKey(entry.tag) === 'en')
+    ?? { tag: 'en', englishName: 'English', coverage: 'source', method: 'source', reviewStatus: 'source-authoritative' };
+  return languageChoice(resolved);
+}
+
+export function popularLanguageChoices(locales: readonly PublishedLocale[]): LanguageChoice[] {
+  const byKey = new Map(locales.map((locale) => [localeKey(locale.tag), locale]));
+  return POPULAR_LANGUAGE_PRIORITY
+    .map((tag) => byKey.get(localeKey(tag)))
+    .filter((locale): locale is PublishedLocale => Boolean(locale))
+    .map(languageChoice);
 }

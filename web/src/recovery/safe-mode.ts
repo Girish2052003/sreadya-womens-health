@@ -15,8 +15,6 @@ export type SafeModeState = {
   preserveExistingData: true;
   automaticResetAllowed: false;
   writesAllowed: false;
-  title: string;
-  message: string;
   actions: readonly SafeModeAction[];
 };
 
@@ -35,9 +33,6 @@ export function createSafeModeState(reason: SafeModeReason): SafeModeState {
         preserveExistingData: true,
         automaticResetAllowed: false,
         writesAllowed: false,
-        title: 'Local vault integrity needs attention',
-        message:
-          'Sreadya stopped health-data changes because an encrypted local record could not be verified. Existing local data has not been reset or overwritten.',
         actions: COMMON_ACTIONS,
       };
     case 'migration_failed':
@@ -47,9 +42,6 @@ export function createSafeModeState(reason: SafeModeReason): SafeModeState {
         preserveExistingData: true,
         automaticResetAllowed: false,
         writesAllowed: false,
-        title: 'Local data upgrade did not complete',
-        message:
-          'Sreadya stopped health-data changes because the local schema upgrade did not complete safely. Existing local data has not been reset or overwritten.',
         actions: [...COMMON_ACTIONS, 'review_migration'],
       };
     case 'storage_pressure':
@@ -59,9 +51,6 @@ export function createSafeModeState(reason: SafeModeReason): SafeModeState {
         preserveExistingData: true,
         automaticResetAllowed: false,
         writesAllowed: false,
-        title: 'Device storage needs attention',
-        message:
-          'Sreadya stopped health-data changes because local persistence may not be reliable. Existing local data has not been reset or overwritten.',
         actions: [...COMMON_ACTIONS, 'free_device_storage'],
       };
   }
@@ -69,7 +58,7 @@ export function createSafeModeState(reason: SafeModeReason): SafeModeState {
 
 export function assertRecoveryWriteAllowed(state: SafeModeState | null): void {
   if (state) {
-    throw new Error('Sreadya safe mode is read-only; existing health data must not be changed.');
+    throw new Error('safe_mode_write_blocked');
   }
 }
 

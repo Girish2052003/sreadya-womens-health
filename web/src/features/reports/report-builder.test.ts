@@ -8,6 +8,7 @@ import {
   buildCsvReport,
   buildPdfReport,
   buildReportPreview,
+  type ReportCopy,
 } from './report-builder';
 
 const periods: PeriodEpisode[] = [
@@ -23,6 +24,18 @@ const observations: HealthObservation[] = [
 ];
 
 const range = { from: '2026-09-01', to: '2026-09-30' };
+const copy: ReportCopy = {
+  title: 'Sreadya cycle history report',
+  disclaimer: 'Generated locally on this device. This report is not a diagnosis.',
+  periodsHeading: 'Periods',
+  ongoing: 'ongoing',
+  observationsHeading: 'Selected observations',
+  pdfSubject: 'Locally generated Sreadya health report',
+  pdfProducer: 'Sreadya Web local report generator',
+  kindLabel: (kind) => ({ menstrualFlow: 'Menstrual flow', cramps: 'Cramps', basalBodyTemperature: 'Basal body temperature' })[kind] ?? kind,
+  severityLabel: (severity) => ({ moderate: 'Moderate' })[severity] ?? severity,
+  flowLabel: (flow) => ({ heavy: 'Heavy' })[flow] ?? flow,
+};
 
 describe('Task 13 local doctor reports', () => {
   it('covers RPT-001 through RPT-013 and excludes highly private categories by default', () => {
@@ -33,17 +46,18 @@ describe('Task 13 local doctor reports', () => {
     expect(SAFE_REPORT_CATEGORIES).not.toContain('sexualActivity');
   });
 
-  it('builds a local preview and CSV from exactly the selected date range/categories', () => {
+  it('builds a localized local preview while keeping CSV a stable technical export', () => {
     const selection = { categories: [...SAFE_REPORT_CATEGORIES], ...range };
-    const preview = buildReportPreview({ periods, observations, selection });
+    const preview = buildReportPreview({ periods, observations, selection }, copy);
     const csv = buildCsvReport({ periods, observations, selection });
 
     expect(preview).toContain('Sreadya cycle history report');
     expect(preview).toContain('Generated locally on this device. This report is not a diagnosis.');
     expect(preview).toContain('2026-09-01');
-    expect(preview).toContain('menstrualFlow');
-    expect(preview).toContain('cramps');
-    expect(preview).toContain('basalBodyTemperature');
+    expect(preview).toContain('Menstrual flow');
+    expect(preview).toContain('Cramps');
+    expect(preview).toContain('Basal body temperature');
+    expect(preview).toContain('Heavy');
     expect(preview).not.toContain('2026-08-01');
     expect(preview).not.toContain('sexualActivity');
     expect(preview).not.toContain('private pain note');
@@ -68,14 +82,22 @@ describe('Task 13 local doctor reports', () => {
     expect(csv).toContain('private sexual note');
   });
 
-  it('generates a valid PDF locally with pdf-lib', async () => {
+  it('generates a valid PDF locally when the selected copy is encodable', async () => {
     const bytes = await buildPdfReport({
       periods,
       observations,
       selection: { categories: [...SAFE_REPORT_CATEGORIES], ...range },
-    });
+    }, copy);
     const pdf = await PDFDocument.load(bytes);
     expect(pdf.getPageCount()).toBeGreaterThan(0);
     expect(pdf.getTitle()).toBe('Sreadya cycle history report');
+  });
+
+  it('fails closed before PDF rendering when the built-in font cannot encode the selected script', async () => {
+    await expect(buildPdfReport({
+      periods,
+      observations,
+      selection: { categories: [...SAFE_REPORT_CATEGORIES], ...range },
+    }, { ...copy, title: 'சுழற்சி அறிக்கை' })).rejects.toThrow('report_pdf_font_unsupported');
   });
 });

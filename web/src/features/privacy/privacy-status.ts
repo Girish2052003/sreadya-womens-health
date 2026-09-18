@@ -11,10 +11,6 @@ export type WebPrivacyStatus = {
   appLock: string; appSwitcherProtection: string; notificationPrivacy: string; advertisingProfile: string;
 };
 
-function privacyLabel(value: NotificationPrivacy): string {
-  return value === 'maximum' ? 'Maximum Privacy' : value === 'balanced' ? 'Balanced' : 'Detailed';
-}
-
 export function buildWebPrivacyStatus({
   notificationPrivacy,
   appLockConfigured = false,
@@ -23,18 +19,20 @@ export function buildWebPrivacyStatus({
   appLockConfigured?: boolean;
 }): WebPrivacyStatus {
   return Object.freeze({
-    healthDataLocation: 'This browser/device',
-    developerHealthDatabase: 'None',
-    behaviorAnalytics: 'Disabled',
-    databaseProtection: 'AES-GCM encrypted local vault',
-    platformHealthAccess: 'Native HealthKit / Health Connect unavailable in Web',
-    partnerLiveAccess: 'None — explicit local preview/share only',
-    sync: process.env.NEXT_PUBLIC_SREADYA_SYNC_BASE_URL ? 'Optional encrypted continuity endpoint configured' : 'Remote continuity endpoint not configured',
+    healthDataLocation: 'privacy.value.localDevice',
+    developerHealthDatabase: 'privacy.value.none',
+    behaviorAnalytics: 'privacy.value.disabled',
+    databaseProtection: 'privacy.value.aesGcmLocalVault',
+    platformHealthAccess: 'privacy.value.nativeHealthUnavailableWeb',
+    partnerLiveAccess: 'privacy.value.explicitLocalShareOnly',
+    sync: process.env.NEXT_PUBLIC_SREADYA_SYNC_BASE_URL
+      ? 'privacy.value.continuityConfigured'
+      : 'privacy.value.continuityUnconfigured',
     appLock: appLockConfigured
-      ? 'PIN app lock enabled · automatic lock active · native biometric protection not claimed'
-      : 'PIN app lock available but not configured · native biometric protection not claimed',
-    appSwitcherProtection: 'Browser controlled — no Web guarantee',
-    notificationPrivacy: privacyLabel(notificationPrivacy),
-    advertisingProfile: 'None from reproductive-health data',
+      ? 'privacy.value.pinEnabled'
+      : 'privacy.value.pinNotConfigured',
+    appSwitcherProtection: 'privacy.value.browserControlled',
+    notificationPrivacy: `reminder.privacy.${notificationPrivacy}`,
+    advertisingProfile: 'privacy.value.noneReproductiveHealth',
   });
 }

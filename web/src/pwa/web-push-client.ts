@@ -11,9 +11,7 @@ class DisabledWebPushClient implements WebPushClient {
   readonly configured = false;
 
   async subscribe(): Promise<WebPushSubscriptionSummary> {
-    throw new Error(
-      'A reviewed Web Push relay is not configured. Sreadya will not claim closed-app delivery until that security/deployment boundary is approved.',
-    );
+    throw new Error('web_push_relay_unconfigured');
   }
 }
 

@@ -66,14 +66,17 @@ def test_easy_language_and_rtl_are_real_user_preferences() -> None:
     preferences = read("web/src/accessibility/preferences.ts")
     panel = read("web/src/accessibility/AccessibilityPreferencesPanel.tsx")
     layout = read("web/src/app/app/layout.tsx")
-    settings = read("web/src/features/settings/SettingsWorkspace.tsx")
+    provider = read("web/src/i18n/I18nProvider.tsx")
+    globalization_css = read("web/src/app/globalization.css")
     guide = read("web/src/accessibility/EasyLanguageGuide.tsx")
     assert "easyLanguage" in preferences
     assert "data-sreadya-language-mode" in preferences
     assert "Easy language" in panel
     assert "EasyLanguageGuide" in layout
-    assert "localeDirection" in settings
-    assert "document.documentElement.dir" in settings
+    assert "localeDirection" in provider
+    assert "document.documentElement.dir = 'ltr'" in provider
+    assert "data-sreadya-text-direction" in provider
+    assert "data-sreadya-text-direction='rtl'" in globalization_css
     assert "easy" in guide.lower()
 
 def test_public_architecture_pages_have_topic_specific_content() -> None:

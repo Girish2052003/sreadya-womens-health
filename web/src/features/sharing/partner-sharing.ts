@@ -25,6 +25,13 @@ export type PartnerShareValues = {
   selectedWellness?: string;
 };
 
+export type PartnerShareCopy = {
+  title: string;
+  footer: string;
+  labels: Readonly<Record<PartnerShareCategory, string>>;
+  formatRow: (label: string, value: string) => string;
+};
+
 export type PartnerSharePackage = {
   summary: string;
   qrPayload: string;
@@ -33,14 +40,14 @@ export type PartnerSharePackage = {
 
 function assertIsoTimestamp(value: string): void {
   if (!Number.isFinite(Date.parse(value)) || !value.endsWith('Z')) {
-    throw new Error('Partner grant timestamp must be UTC.');
+    throw new Error('partner_timestamp_invalid');
   }
 }
 
 function assertCategories(categories: readonly PartnerShareCategory[]): void {
-  if (categories.length === 0) throw new Error('Select at least one partner-sharing category.');
+  if (categories.length === 0) throw new Error('partner_categories_empty');
   if (categories.some((category) => !(PARTNER_SHARE_CATEGORIES as readonly string[]).includes(category))) {
-    throw new Error('Unsupported partner-sharing category.');
+    throw new Error('partner_category_unsupported');
   }
 }
 
@@ -53,7 +60,7 @@ export function createPartnerGrant({
   categories: readonly PartnerShareCategory[];
   createdAt: string;
 }): PartnerGrant {
-  if (!id.trim()) throw new Error('Partner grant id is required.');
+  if (!id.trim()) throw new Error('partner_grant_id_required');
   assertCategories(categories);
   assertIsoTimestamp(createdAt);
   return Object.freeze({ id, categories: Object.freeze([...new Set(categories)]), createdAt });
@@ -62,35 +69,36 @@ export function createPartnerGrant({
 export function revokePartnerGrant(grant: PartnerGrant, revokedAt: string): PartnerGrant {
   assertIsoTimestamp(revokedAt);
   if (Date.parse(revokedAt) < Date.parse(grant.createdAt)) {
-    throw new Error('Partner grant cannot be revoked before it was created.');
+    throw new Error('partner_revoke_before_create');
   }
   return Object.freeze({ ...grant, categories: Object.freeze([...grant.categories]), revokedAt });
 }
 
 export function buildPartnerSharePackage({
   grant,
+  copy,
   predictionWindow,
   cyclePhase,
   selectedReminder,
   selectedWellness,
-}: { grant: PartnerGrant } & PartnerShareValues): PartnerSharePackage {
-  if (grant.revokedAt) throw new Error('Partner grant is revoked.');
+}: { grant: PartnerGrant; copy: PartnerShareCopy } & PartnerShareValues): PartnerSharePackage {
+  if (grant.revokedAt) throw new Error('partner_grant_revoked');
   assertCategories(grant.categories);
 
-  const lines = ['Sreadya shared summary'];
+  const lines = [copy.title];
   if (grant.categories.includes('prediction') && predictionWindow) {
-    lines.push(`Expected period window: ${predictionWindow}`);
+    lines.push(copy.formatRow(copy.labels.prediction, predictionWindow));
   }
   if (grant.categories.includes('cyclePhase') && cyclePhase) {
-    lines.push(`Cycle: ${cyclePhase}`);
+    lines.push(copy.formatRow(copy.labels.cyclePhase, cyclePhase));
   }
   if (grant.categories.includes('selectedReminder') && selectedReminder) {
-    lines.push(`Reminder: ${selectedReminder}`);
+    lines.push(copy.formatRow(copy.labels.selectedReminder, selectedReminder));
   }
   if (grant.categories.includes('selectedWellness') && selectedWellness) {
-    lines.push(`Wellness: ${selectedWellness}`);
+    lines.push(copy.formatRow(copy.labels.selectedWellness, selectedWellness));
   }
-  lines.push('Shared intentionally by the Sreadya user.');
+  lines.push(copy.footer);
   const summary = lines.join('\n');
 
   return Object.freeze({
