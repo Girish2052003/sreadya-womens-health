@@ -62,7 +62,9 @@ class SyncEventCryptoContext {
       _requireNonEmpty(entry.$1, entry.$2);
     }
     if (keyEpoch < 0 || baseRevision < 0) {
-      throw const FormatException('Sreadya sync revisions must be non-negative.');
+      throw const FormatException(
+        'Sreadya sync revisions must be non-negative.',
+      );
     }
     if (operation != 'upsert' && operation != 'tombstone') {
       throw const FormatException('Unsupported Sreadya sync operation.');
