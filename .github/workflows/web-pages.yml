@@ -60,7 +60,42 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy static Sreva Web/PWA
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+
+  live-web-acceptance:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: deploy-pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      SREVA_LIVE_BASE_URL: ${{ needs.deploy-pages.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24.21.0'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install locked Web dependencies
+        working-directory: web
+        run: npm ci --ignore-scripts
+      - name: Install Chromium for synthetic live acceptance
+        working-directory: web
+        run: npx playwright install --with-deps chromium
+      - name: Wait for deployed Pages surface
+        shell: bash
+        run: |
+          url="${SREVA_LIVE_BASE_URL%/}/manifest.webmanifest"
+          curl --fail --show-error --silent --retry 12 --retry-delay 5 --retry-all-errors "$url" >/dev/null
+          echo "Live Pages manifest reachable."
+      - name: Run synthetic live Web/PWA acceptance
+        working-directory: web
+        run: npx playwright test e2e/task18-live-acceptance.spec.ts --project=chromium
