@@ -5,6 +5,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 LEGACY = "sre" + "va"
+LEGACY_HEX = (LEGACY.encode().hex(), LEGACY.upper().encode().hex().lower())
 MOTTO = "Prakritim Svam Avashtabhya."
 HOMEPAGE = "web/src/app/page.tsx"
 
@@ -38,6 +39,15 @@ def test_legacy_brand_is_absent_from_all_tracked_text() -> None:
         if LEGACY in text.lower():
             offenders.append(path)
     assert offenders == [], f"legacy brand remains in tracked content: {sorted(offenders)}"
+
+
+def test_legacy_brand_is_absent_from_hex_encoded_protocol_material() -> None:
+    offenders: list[str] = []
+    for path in tracked_files():
+        text = readable_text(path).lower()
+        if any(encoded in text for encoded in LEGACY_HEX):
+            offenders.append(path)
+    assert offenders == [], f"legacy brand remains hex-encoded in tracked content: {sorted(offenders)}"
 
 
 def test_sanskrit_motto_exists_once_and_only_on_homepage() -> None:
