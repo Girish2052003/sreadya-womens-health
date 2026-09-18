@@ -1,4 +1,5 @@
 import { GENERATED_TRANSLATION_AVAILABILITY } from './translation-manifest.generated';
+import { normalizeLocaleTag } from './locale';
 
 export type TranslationAvailability = {
   available: boolean;
@@ -7,27 +8,60 @@ export type TranslationAvailability = {
   reviewStatus: string;
 };
 
+const ALIASES: Record<string, string> = {
+  zh: 'zh-cn',
+  tl: 'fil',
+  iw: 'he',
+  jw: 'jv',
+};
+
+function candidates(locale: string): string[] {
+  try {
+    const normalized = normalizeLocaleTag(locale).toLowerCase();
+    const language = new Intl.Locale(normalized).language.toLowerCase();
+    const values = [normalized, ALIASES[normalized], language, ALIASES[language]]
+      .filter((value): value is string => Boolean(value));
+    return [...new Set(values)];
+  } catch {
+    return ['en'];
+  }
+}
+
 export function translationAvailability(locale: string): TranslationAvailability {
-  let language = 'en';
-  try { language = new Intl.Locale(locale).language.toLowerCase(); } catch { language = 'en'; }
-  const value = GENERATED_TRANSLATION_AVAILABILITY[language as keyof typeof GENERATED_TRANSLATION_AVAILABILITY];
-  if (!value) return { available: false, coverage: 'fallback', method: 'fallback', reviewStatus: 'fallback' };
-  return { available: true, coverage: value.coverage, method: value.method, reviewStatus: value.reviewStatus };
+  for (const candidate of candidates(locale)) {
+    const value = GENERATED_TRANSLATION_AVAILABILITY[
+      candidate as keyof typeof GENERATED_TRANSLATION_AVAILABILITY
+    ];
+    if (value) {
+      return {
+        available: true,
+        coverage: value.coverage,
+        method: value.method,
+        reviewStatus: value.reviewStatus,
+      };
+    }
+  }
+  return {
+    available: false,
+    coverage: 'fallback',
+    method: 'fallback',
+    reviewStatus: 'fallback',
+  };
 }
 
 export function hasCompleteTranslation(locale: string): boolean {
   const availability = translationAvailability(locale);
-  return availability.available && (availability.coverage === 'source' || availability.coverage === 'complete');
+  return availability.available
+    && (availability.coverage === 'source' || availability.coverage === 'complete');
 }
 
 export function selectableTranslationLanguages(): string[] {
   return Object.entries(GENERATED_TRANSLATION_AVAILABILITY)
     .filter(([, value]) => value.coverage === 'source' || value.coverage === 'complete')
-    .map(([language]) => language)
-    .sort();
+    .map(([tag, value]) => ('locale' in value && typeof value.locale === 'string' ? value.locale : tag))
+    .sort((a, b) => a.localeCompare(b, 'en'));
 }
 
-// Backward-compatible name: "shipped" now means safe for full public selection.
 export function hasShippedTranslation(locale: string): boolean {
   return hasCompleteTranslation(locale);
 }
