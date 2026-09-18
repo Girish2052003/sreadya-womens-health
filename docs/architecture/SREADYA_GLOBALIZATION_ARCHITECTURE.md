@@ -1,42 +1,56 @@
 # SREADYA Globalization Architecture
 
-**Status:** ACCEPTED — authoritative architecture  
+**Status:** ACCEPTED — authoritative architecture v2  
 **Repository:** SREADYA product repository  
 **Adopted:** 2026-09-18  
-**Scope:** Existing Web/PWA + Flutter Android/iOS + all future SREADYA content surfaces  
-**Authoritative home:** This document. Implementation documents must link here instead of redefining the architecture.
+**Scope:** Existing Web/PWA + Flutter Android/iOS + all future SREADYA product/content surfaces  
+**Authoritative home:** This document. Implementation documents must cross-reference it rather than redefine the contract.
 
 ---
 
 ## 1. Executive decision
 
-SREADYA will evolve the **existing repository**. This is not a rewrite and not a new parallel project.
+SREADYA keeps the existing product and replaces manual locale authoring with a **machine-first, build-time globalization pipeline**.
 
-The existing Web/PWA, Flutter applications, privacy model, tests, deployment workflows, content, routes, and product behaviour remain the starting point. The current localization scaffolding is upgraded into a permanent, provider-neutral globalization platform.
+The user experience target is intentionally simple:
 
-The target is:
+```text
+SREADYA owns the UI and language selector
+        +
+Google Cloud Translation does the translation work
+        +
+validated locale bundles are published with the product
+        =
+one coherent translated SREADYA experience
+```
 
-- one authoritative source language and content model;
-- user-selectable global language support that can scale beyond 500 enabled locales;
-- one language contract for current and future pages;
-- no requirement to hand-maintain hundreds of translations;
-- no translation API keys in clients;
-- no translation of private user health data by default;
-- no requirement for a custom runtime translation server at the current scale;
-- no framework, cloud, translation-vendor, hosting-vendor, or database lock-in;
-- support for very large future content collections without generating one HTML page per locale per content item.
+The browser never calls Google Cloud Translation directly. Translation credentials never enter Web/PWA JavaScript, mobile binaries, static assets, or public repository history.
 
-The architectural promise is **not** that today's implementation technologies will last for centuries. No responsible architecture can guarantee that. The promise is that the **contracts, identifiers, data ownership, portability, and boundaries are designed so technologies can be replaced without rewriting product content or user-facing application logic**.
+English remains the single canonical authored source language. Developers write product copy once, through stable message IDs. New or changed English strings are translated automatically by CI/build infrastructure. Unchanged strings are reused from translation memory.
+
+The current Google Cloud Neural Machine Translation (NMT) baseline is frozen in-repository as **194 logical language rows** from Google's published NMT table dated 2026-09-16. That baseline is a **minimum floor**, not a permanent ceiling:
+
+```text
+hard baseline = 194
+provider discovery today >= 194
+provider adds language later
+        ↓
+SREADYA discovers it
+        ↓
+translate + validate
+        ↓
+publish automatically when complete
+```
+
+CI MUST fail if the provider-supported target set unexpectedly drops below the frozen 194-language baseline or if a frozen baseline language disappears. Future provider additions MAY raise the public language count without a code rewrite.
 
 ---
 
 ## 2. Non-negotiable product invariants
 
-These rules survive framework and infrastructure changes.
+### 2.1 English is the only normal authoring language
 
-### 2.1 Pages never own language
-
-User-visible text MUST be referenced through stable message/content identifiers.
+User-visible product copy MUST be referenced by stable message/content IDs.
 
 Bad:
 
@@ -44,976 +58,765 @@ Bad:
 <h1>Your cycle, your context, your private space.</h1>
 ```
 
-Required direction:
+Required:
 
 ```tsx
 <h1>{t('home.hero.title')}</h1>
 ```
 
-Page structure may change. The message identity remains stable.
+Normal feature development MUST NOT require manual editing of hundreds of locale files.
 
-### 2.2 Stable content identity is independent of routes
+### 2.2 Public support means complete support
 
-A URL is not the identity of content.
-
-A future article may have:
+A locale is publicly selectable only when all of the following are true:
 
 ```text
-contentId = womens-health.article.9384248
+provider supports target
+AND source catalogue is current
+AND translated bundle exists
+AND translated key count == source key count
+AND placeholders match exactly
+AND protected terminology is preserved
+AND bundle QA passes
+AND route-level smoke checks pass
 ```
 
-Its route may later change, but translations remain attached to the stable content ID.
+A partial bundle MUST NOT be advertised as supported.
 
-### 2.3 English is the authoritative source, not the only language
+There is no public "English fallback" badge, no raw CLDR/ISO-code dumping, and no mixed-language page for a locale represented as fully translated.
 
-English is the source-of-truth language for authored SREADYA product copy unless a future governance decision changes the source locale.
+### 2.3 Atomic language switching
 
-A locale may contain:
+The current language remains active until the complete target bundle has loaded and validated.
 
-- source content;
-- machine translation;
-- human-reviewed translation;
-- stale translation;
-- missing translation.
+```text
+English active
+    ↓
+user selects Tamil
+    ↓
+load complete Tamil bundle
+    ├── fail → keep English
+    └── pass → switch whole app atomically
+```
 
-The application MUST never misrepresent machine-translated copy as professionally reviewed.
+A target locale is never persisted before successful activation.
 
-### 2.4 Translation providers are adapters
+### 2.4 Layout direction and text direction are separate
 
-SREADYA MUST NOT depend on one translator.
+Selecting an RTL language MUST NOT mirror or reorder the SREADYA composition.
 
-Google, Microsoft, DeepL, an LLM, an open model, a local model, a human translator, or a future provider are implementations behind a SREADYA-owned interface.
+The product layout remains designer-controlled and stable. Text containers may use `dir="auto"` or locale-aware text direction so Arabic, Hebrew, Persian, Urdu, and other RTL scripts read correctly.
 
-Changing providers MUST NOT require page rewrites.
+SREADYA still sets the correct document language for accessibility:
 
-### 2.5 Private health data is outside the translation pipeline
+```html
+<html lang="ar">
+```
 
-The normal localization pipeline may translate SREADYA-owned static product content such as:
+But the root document direction MUST NOT be used as a global layout switch.
 
-- navigation;
-- labels;
-- help text;
-- educational content;
-- accessibility copy;
-- installation guidance;
-- settings;
-- product explanations.
+### 2.5 Private health data never enters the translation pipeline
 
-It MUST NOT silently send user-created or user-health content to translation providers, including:
+Automated translation may receive SREADYA-authored product copy such as navigation, labels, help text, public explanations, accessibility strings, and settings text.
+
+It MUST NOT receive user health/private data, including:
 
 - cycle history;
 - symptom history;
 - medication entries;
-- fertility observations;
+- fertility/reproductive observations;
+- sexual-activity observations;
 - private notes;
 - journals;
 - reports containing personal health information;
-- account or recovery secrets.
+- vault data;
+- recovery material;
+- account secrets.
 
-Any future feature that translates user content requires an explicit, separate privacy design and consent boundary.
+Any future user-content translation feature requires a separate explicit privacy design and consent boundary.
 
-### 2.6 Failure is graceful
+### 2.6 Translation providers are adapters
 
-Missing translations MUST NOT break pages.
+SREADYA owns the provider interface.
 
-Default fallback:
-
-```text
-requested locale
-    ↓
-language/script parent
-    ↓
-language parent
-    ↓
-English source
-```
-
-Example:
+Initial production provider:
 
 ```text
-pt-BR → pt → en
+GoogleCloudProvider → PRIMARY
 ```
 
-Fallback behaviour must be deterministic and testable.
+Future optional adapters:
+
+```text
+AzureProvider
+OtherProvider
+HumanReviewProvider
+```
+
+Changing provider MUST NOT require page rewrites or message-ID changes.
 
 ---
 
-## 3. Standards boundary
+## 3. Current Google NMT baseline: 194+
 
-SREADYA uses open standards at system boundaries.
+The repository contains a frozen provider baseline representing the **194 rows** in Google's Cloud Translation NMT support table as published on 2026-09-16.
 
-### 3.1 Locale identity
+Authoritative upstream references:
 
-Use canonical **BCP 47** language tags.
+- https://docs.cloud.google.com/translate/docs/languages
+- https://docs.cloud.google.com/translate/docs/list-supported-languages
 
-Examples:
+Google documents that the supported-language list is updated when languages are added and can be queried through Cloud Translation Basic or Advanced APIs.
+
+SREADYA therefore maintains two related sets:
 
 ```text
-en
-en-GB
-en-IN
-ta
-ta-IN
-fi-FI
-ar-SA
-zh-Hans
-zh-Hant
-pt-BR
+FROZEN_BASELINE
+= exactly 194 logical NMT language rows
+= regression floor
+
+DISCOVERED_PROVIDER_SET
+= live provider-supported targets
+= baseline + future additions
 ```
 
-Application code MUST NOT invent proprietary locale identifiers when a valid BCP 47 representation exists.
+Release rule:
 
-### 3.2 Locale metadata
+```text
+FROZEN_BASELINE ⊆ DISCOVERED_PROVIDER_SET
+AND |FROZEN_BASELINE| == 194
+```
 
-Use **Unicode CLDR / UTS #35** as the primary reference for locale conventions such as:
+Aliases accepted by Google for the same logical language are normalized by SREADYA and MUST NOT create fake duplicate language choices.
 
-- native language names;
-- writing direction;
-- dates;
-- numbers;
-- currencies;
-- units;
-- plural rules;
-- scripts;
-- collation;
-- likely subtags.
+Examples include provider aliases such as:
 
-The architecture does not hard-code a tiny RTL list as the long-term source of truth.
+- Simplified Chinese: `zh-CN` / `zh`;
+- Filipino/Tagalog: `fil` / `tl`;
+- Hebrew: `he` / legacy `iw`;
+- Javanese: `jv` / legacy `jw`.
 
-### 3.3 Encoding and portability
-
-Canonical globalization data is UTF-8 and stored in a documented, versioned, portable representation.
-
-The contract MUST be readable without Next.js, Flutter, GitHub, or any particular translation SDK.
-
-### 3.4 Message syntax
-
-SREADYA owns a **versioned message contract** rather than exposing a framework-specific message API directly to product code.
-
-Initial implementations may compile to current Flutter ARB/ICU-compatible messages and web message bundles.
-
-The contract contains a `messageSyntaxVersion` field so a future migration to MessageFormat 2 or another standard does not force stable message IDs to change.
-
-This intentionally avoids making an evolving message-format implementation the permanent product boundary.
+The chooser exposes one clean logical choice per configured SREADYA target, not raw provider aliases.
 
 ---
 
-## 4. Permanent SREADYA globalization model
-
-The architecture is separated into five layers.
+## 4. Permanent architecture
 
 ```text
-┌─────────────────────────────────────────────────────────────┐
-│                    PRODUCT SURFACES                         │
-│       Web/PWA          Android          iOS       Future     │
-└─────────────────────────────┬───────────────────────────────┘
-                              │
-                     SREADYA I18N API
-                    t(key, params, locale)
-                              │
-┌─────────────────────────────┴───────────────────────────────┐
-│                  GLOBALIZATION CONTRACT                     │
-│ stable IDs · fallback · locale registry · provenance        │
-└───────────────┬────────────────────────────┬────────────────┘
-                │                            │
-       UI MESSAGE CATALOGUE             CONTENT CATALOGUE
-      small/stable product UI       potentially millions of items
-                │                            │
-                └──────────────┬─────────────┘
+                    ┌──────────────────────┐
+                    │  ENGLISH SOURCE      │
+                    │ stable message IDs   │
+                    └──────────┬───────────┘
                                │
-                     TRANSLATION PIPELINE
+                       source/hash diff
                                │
-                 provider-neutral translation router
+                  ┌────────────▼────────────┐
+                  │ Translation Orchestrator│
+                  │ provider-neutral router │
+                  └────────────┬────────────┘
                                │
-             build artifacts / future content store
+                  ┌────────────▼────────────┐
+                  │ Google Cloud Translation│
+                  │      PRIMARY NMT        │
+                  └────────────┬────────────┘
+                               │
+                    machine translation
+                               │
+                  ┌────────────▼────────────┐
+                  │ Translation QA          │
+                  │ completeness            │
+                  │ placeholders            │
+                  │ terminology             │
+                  │ source hash             │
+                  │ schema / injection      │
+                  └────────────┬────────────┘
+                               │
+                     content-addressed
+                        locale bundles
+                               │
+          ┌────────────────────┼────────────────────┐
+          ▼                    ▼                    ▼
+       Web/PWA              Android                iOS
+          │
+          ▼
+   SREADYA language chooser
+          │
+          ▼
+ only complete validated targets
 ```
 
-The public application consumes the SREADYA I18N API. It does not know which provider created a translation or where translations are physically stored.
+No visitor-time translation dependency is required.
 
 ---
 
-## 5. Canonical message contract
+## 5. Canonical source contract
 
-Create one canonical source catalogue under shared product ownership.
-
-Proposed authoritative location:
+Authoritative source:
 
 ```text
-shared/i18n/
-├── schema/
-├── source/
-├── locales/
-├── glossary/
-└── generated/
+shared/i18n/source/en.json
 ```
 
-Generated platform-specific files are derivatives, not authoritative sources.
-
-A canonical message record conceptually contains:
+A normal source entry is:
 
 ```json
 {
-  "id": "home.hero.title",
-  "sourceLocale": "en",
-  "source": "Your cycle, your context, your private space.",
-  "description": "Homepage hero headline",
-  "domain": "marketing",
-  "risk": "general",
-  "messageSyntaxVersion": "sreadya-message-v1",
-  "placeholders": {},
-  "doNotTranslate": [],
-  "sourceVersion": "sha256:..."
-}
-```
-
-Important properties:
-
-- **ID is stable.** Editing English text does not rename the ID.
-- **sourceVersion is content-derived.** Changed source text automatically makes older translations stale.
-- **description is mandatory for ambiguous copy.**
-- **risk is explicit.**
-- **placeholders are typed and validated.**
-- brand names and protected terminology can be declared non-translatable.
-
----
-
-## 6. Two translation systems, one contract
-
-UI localization and massive editorial/content localization have different scaling needs and MUST NOT be conflated.
-
-### 6.1 UI message catalogue
-
-Used for:
-
-- buttons;
-- navigation;
-- settings;
-- dialogs;
-- error messages;
-- accessibility labels;
-- common product copy.
-
-Characteristics:
-
-- relatively small;
-- eagerly or lazily bundled by locale;
-- strongly CI-enforced;
-- shared identifiers across Web and Flutter.
-
-### 6.2 Content catalogue
-
-Used for:
-
-- articles;
-- help pages;
-- wellness explanations;
-- future knowledge content;
-- potentially millions of records.
-
-Each content item has a stable content ID and structured fields.
-
-Concept:
-
-```json
-{
-  "contentId": "womens-health.article.9384248",
-  "sourceLocale": "en",
-  "schemaVersion": 1,
-  "fields": {
-    "title": "...",
-    "summary": "...",
-    "body": "..."
-  }
-}
-```
-
-Translations are stored as locale variants of that content ID.
-
-This allows:
-
-```text
-1 item
-100 items
-100,000 items
-10,000,000 items
-```
-
-without changing page implementation.
-
----
-
-## 7. Locale registry
-
-SREADYA owns a canonical locale registry.
-
-Proposed location:
-
-```text
-shared/i18n/locales/registry.json
-```
-
-Each enabled locale record includes, where known:
-
-```json
-{
-  "tag": "ta-IN",
-  "language": "ta",
-  "script": "Taml",
-  "region": "IN",
-  "nativeName": "தமிழ்",
-  "englishName": "Tamil",
-  "direction": "ltr",
-  "parent": "ta",
-  "status": "enabled",
-  "coverage": "machine",
-  "frameworkSupport": {
-    "web": true,
-    "flutterFrameworkWidgets": true
-  }
+  "home.hero.title": "Your cycle, your context, your private space."
 }
 ```
 
 Rules:
 
-1. BCP 47 is the identifier.
-2. CLDR supplies conventions where available.
-3. Provider support is metadata, never locale identity.
-4. A locale can exist even if one provider cannot translate it.
-5. A language appears publicly only when SREADYA has a usable translation/fallback policy for it.
-6. Country flags MUST NOT be used as the primary representation of languages.
-7. The selector shows native names prominently and remains searchable by English name, native name, tag, and script.
+1. message IDs are stable;
+2. values are UTF-8 strings;
+3. placeholders use the SREADYA message contract;
+4. source changes produce a new content hash;
+5. translations are derivatives, never canonical product source;
+6. page code references IDs, not provider-specific resources.
 
-Architecture capacity is not artificially limited to 500 locales. Product rollout may enable 500+ when translation quality and artifacts exist.
-
----
-
-## 8. Translation provenance and risk
-
-Every translation artifact must carry provenance.
-
-Conceptual record:
-
-```json
-{
-  "id": "home.hero.title",
-  "locale": "ta-IN",
-  "sourceVersion": "sha256:...",
-  "translationVersion": "sha256:...",
-  "method": "machine",
-  "provider": "provider-id",
-  "providerModel": "model-or-api-version",
-  "createdAt": "2026-09-18T00:00:00Z",
-  "reviewStatus": "unreviewed"
-}
-```
-
-Allowed review states:
-
-```text
-source
-machine-unreviewed
-human-reviewed
-stale
-missing
-```
-
-Recommended content-risk levels:
-
-```text
-standard-ui
-general-content
-sensitive-health
-safety-critical
-legal-consent
-```
-
-Default publication policy:
-
-- **standard-ui:** machine translation may publish after automated validation.
-- **general-content:** machine translation may publish with provenance; review is desirable.
-- **sensitive-health:** machine translation may be available, but review state must remain visible to system policy and source English must remain accessible.
-- **safety-critical:** machine output must never be labelled reviewed; product design should provide authoritative-source access and may require qualified review before treating the localized wording as authoritative.
-- **legal-consent:** jurisdiction-specific review requirements override automation.
-
-This allows users to benefit from broad language access without overstating translation assurance.
+Generated platform files remain derivatives.
 
 ---
 
-## 9. Translation pipeline
+## 6. Translation memory and incremental work
 
-Translation is primarily a **build/CI content-production activity**, not a visitor-time dependency.
-
-```text
-English source change
-        │
-        ▼
-catalogue validation
-        │
-        ▼
-source hash comparison
-        │
-        ├── unchanged → reuse translation memory
-        │
-        └── changed
-              │
-              ▼
-      Translation Router
-      ↙       ↓        ↘
- Provider A Provider B Local/LLM/Human
-             │        /
-             │       /
-        ▼     ▼      ▼
-     automated QA
-        │
-        ▼
- provenance + status
-        │
-        ▼
- generated locale artifacts
-        │
-        ▼
- build / deploy
-```
-
-### 9.1 Incremental translation
-
-Do not retranslate unchanged strings.
-
-Translation memory is keyed by stable message/content identity and source hash.
-
-A normal release translates only new or changed material.
-
-### 9.2 Provider router
-
-Define a SREADYA-owned interface similar to:
+Translation is based on stable identity + source value/hash.
 
 ```text
-capabilities()
-translate(request)
-estimate(request)
-health()
+source message unchanged
+        ↓
+reuse translated value
+
+source message new/changed
+        ↓
+translate only changed value
+        ↓
+validate
+        ↓
+update locale artifact
 ```
 
-The router decides providers based on:
+The system MUST NOT retranslate the entire catalogue on every build.
 
-- locale support;
-- quality profile;
-- content risk;
-- cost;
-- rate limits;
-- privacy/retention terms;
-- provider availability.
-
-Provider credentials exist only in secure CI/build infrastructure or future protected backend infrastructure.
-
-They MUST NOT be embedded in public Web/PWA JavaScript or mobile distributables.
-
-### 9.3 Quality gates
-
-Before publication, generated translations are checked for at least:
-
-- missing placeholders;
-- changed placeholder names;
-- malformed message syntax;
-- missing/empty output;
-- accidental untranslated protected tokens;
-- unexpected HTML/script injection;
-- locale/tag mismatch;
-- source-version mismatch;
-- bundle schema mismatch.
-
-Future quality models may be added behind this boundary.
+This keeps cost and provider traffic proportional to content changes rather than total product size.
 
 ---
 
-## 10. Current hosting strategy: no custom translation server required
+## 7. Protected placeholders and terminology
 
-Today, the Web/PWA remains compatible with GitHub Pages and Next.js static export.
+Placeholders MUST survive machine translation exactly.
 
-Generated Web bundles may be published as static assets:
-
-```text
-/i18n/manifest.json
-/i18n/en/<hash>.json
-/i18n/ta/<hash>.json
-/i18n/fi/<hash>.json
-...
-```
-
-Runtime flow:
+Example:
 
 ```text
-user chooses locale
-      ↓
-browser loads static locale bundle
-      ↓
-browser/PWA cache stores it
-      ↓
-SREADYA renders using that bundle
+source:
+Week {week}
+
+protected provider input:
+Week __SREADYA_VAR_0__
+
+translated:
+الأسبوع __SREADYA_VAR_0__
+
+restored:
+الأسبوع {week}
 ```
 
-No runtime translation provider call is required.
+CI compares the source and target placeholder sets and rejects any mismatch.
 
-No custom translation server is required.
+SREADYA also owns a protected-term glossary/do-not-translate set for terms such as:
 
-The PWA/service worker may cache language bundles using versioned artifact names. Old caches may be safely evicted after new manifests become active.
+```text
+SREADYA
+CycleVault
+FORGE
+NC CORP
+WebCrypto
+IndexedDB
+PIN
+E2EE
+PWA
+```
+
+Provider-native glossary support may be used, but SREADYA's validation remains authoritative.
+
+---
+
+## 8. Translation provider security
+
+Translation credentials MUST exist only in protected CI/build infrastructure.
+
+Allowed patterns include:
+
+```text
+GitHub Actions secret
+        ↓
+translation job
+        ↓
+Google Cloud Translation
+```
+
+and preferably, when configured:
+
+```text
+GitHub OIDC
+        ↓
+Google Workload Identity Federation
+        ↓
+short-lived credentials
+        ↓
+Google Cloud Translation
+```
+
+Forbidden:
+
+- API key in client JavaScript;
+- API key in committed files;
+- API key in PWA assets;
+- API key in Flutter resources;
+- direct public-browser calls to paid translation APIs.
+
+---
+
+## 9. Build-time machine translation flow
+
+```text
+git push / source change
+        │
+        ▼
+validate canonical English catalogue
+        │
+        ▼
+fetch provider supported-language set
+        │
+        ▼
+assert frozen 194-language baseline still exists
+        │
+        ▼
+compare source hashes against translation memory
+        │
+        ├── unchanged → reuse
+        │
+        └── changed/new
+                │
+                ▼
+        protect placeholders/terms
+                │
+                ▼
+        Google Cloud Translation
+                │
+                ▼
+        restore placeholders
+                │
+                ▼
+        automated QA
+                │
+                ▼
+        complete locale artifacts
+                │
+                ▼
+        manifest generation
+                │
+                ▼
+        Web/Flutter build
+                │
+                ▼
+        release tests
+                │
+                ▼
+        deploy
+```
+
+Translation is infrastructure, not a manual release chore.
+
+---
+
+## 10. Locale publication and chooser UX
+
+The public chooser is generated from validated publication metadata, not from the entire CLDR language-code universe.
+
+Hard rule:
+
+```text
+SELECTABLE(locale)
+=
+providerSupported(locale)
+AND completeBundle(locale)
+AND validBundle(locale)
+```
+
+The chooser retains the current SREADYA visual language while using one coherent panel:
+
+```text
+┌────────────────────────────────────┐
+│ Choose your language             × │
+│                                    │
+│ Search languages                   │
+│ ┌────────────────────────────────┐ │
+│ │ Search by language name...     │ │
+│ └────────────────────────────────┘ │
+│                                    │
+│ Suggested                          │
+│ English  தமிழ்  हिन्दी  Suomi      │
+│ Español  العربية  Deutsch Français │
+│                                    │
+│ All languages                      │
+│ ────────────────────────────────   │
+│ العربية                 Arabic    │
+│ বাংলা                   Bengali   │
+│ 中文                     Chinese   │
+│ Deutsch                 German    │
+│ हिन्दी                  Hindi     │
+│ 日本語                  Japanese  │
+│ தமிழ்                   Tamil     │
+│ ...                                │
+└────────────────────────────────────┘
+```
+
+Requirements:
+
+- one panel;
+- one scrollable language list;
+- native name primary;
+- English name secondary;
+- searchable by native name, English name, and supported code;
+- suggested languages remain compact chips;
+- no raw-code-only rows;
+- no "English fallback" pills;
+- no duplicate provider aliases;
+- keyboard/screen-reader accessible;
+- selected locale clearly marked.
+
+Country flags may be decorative/representative but MUST NOT be the primary identity of a language.
 
 ---
 
 ## 11. Web runtime contract
 
-The Web/PWA must provide one `LanguageProvider`/resolver boundary.
-
-Conceptual API:
+Runtime API:
 
 ```ts
 t(messageId, params?)
 locale()
 setLocale(tag)
-direction()
 formatDate(...)
 formatNumber(...)
 formatUnit(...)
 ```
 
-Rules:
+Runtime rules:
 
-- first-run locale can use browser language preferences;
-- explicit user selection always wins;
+- explicit selection wins over browser preference;
 - selection persists locally;
-- `<html lang>` and `dir` update from the active locale;
-- language selection is available globally, not hidden only inside Settings;
-- untranslated keys fall back deterministically;
-- user-facing hard-coded English in components is prohibited after migration;
-- raw translated HTML is prohibited unless processed through a strictly defined safe rich-text format.
-
-### 11.1 Search/selector UX
-
-The selector must support hundreds of locales without a 500-item traditional select box.
-
-Required behaviour:
-
-- search;
-- native language name;
-- English name;
-- script/tag matching;
-- recently used languages;
-- browser-suggested languages;
-- alphabetic browsing;
-- accessibility by keyboard and screen reader;
-- no country-flag-as-language assumption.
-
-### 11.2 SEO and static export
-
-Runtime localization and localized SEO are separate concerns.
-
-At today's scale, SREADYA may keep a single route per page and localize client-visible content through bundles.
-
-It MUST NOT multiply every route by every locale merely to claim language support.
-
-If localized SEO becomes strategically important, the rendering adapter may later provide:
-
-- selected pre-rendered high-value locale pages;
-- locale-specific canonical URLs;
-- SSR/edge rendering;
-- localized metadata and `hreflang`.
-
-That infrastructure change must not alter message/content IDs.
+- target bundle loads before activation;
+- target bundle must be complete;
+- target bundle must match the current source version;
+- a failed load keeps the previous complete locale active;
+- `<html lang>` updates after successful activation;
+- layout geometry is not mirrored merely because text is RTL;
+- text direction is locale/content aware;
+- no runtime provider credential exists;
+- no user health record is sent for translation.
 
 ---
 
-## 12. Flutter Android/iOS contract
+## 12. Translation-safe visual design
 
-Flutter already has `l10n.yaml`, ARB scaffolding, and `AppLocalizations`.
+Machine translation changes string length and script characteristics.
 
-That investment is preserved.
+SREADYA UI components MUST tolerate:
 
-However, app code should progressively depend on a SREADYA localization facade rather than assuming ARB is the permanent canonical store.
+- long German strings;
+- Finnish compounds;
+- Arabic/Urdu/Persian/Hebrew RTL text;
+- Chinese/Japanese/Korean compact scripts;
+- Tamil/Indic scripts;
+- diacritics and combining marks.
 
-### Near term
+Design rules include:
 
-- generate Flutter ARB inputs from the canonical SREADYA source/translation data;
-- keep `gen_l10n` for framework integration;
-- preserve `AppLocalizations.supportedLocales` where practical;
-- add the same locale selection and fallback semantics as Web.
-
-### Long term
-
-Hundreds of full locale catalogues must not force unnecessary mobile binary growth.
-
-The localization facade permits migration to:
-
-- embedded baseline language packs;
-- lazy/downloadable signed language packs;
-- generated asset bundles;
-- platform-specific optimized storage.
-
-The product API remains unchanged.
-
-Framework widget localization may use Flutter-supported locale data when available and a documented fallback when not.
+- avoid fixed text heights;
+- avoid assumptions about line count;
+- permit safe wrapping;
+- use `min-width: 0` where flex/grid children need it;
+- avoid clipping translated labels;
+- use responsive controls;
+- preserve design geometry while allowing text reflow;
+- use locale-aware line breaking where supported.
 
 ---
 
-## 13. Large-scale future: 10,000,000 content items
+## 13. CI globalization law
 
-Today's `output: 'export'` remains appropriate for the current finite site.
+CI MUST reject regressions in the language contract.
 
-It is **not** the final serving model for ten million content items.
+Required checks:
 
-The future content architecture is:
+1. frozen Google NMT baseline has exactly 194 logical rows;
+2. provider discovery contains every frozen baseline target;
+3. future provider additions are accepted without code rewrites;
+4. all product UI source strings use stable message IDs;
+5. hard-coded user-facing English is rejected except documented allow-list cases;
+6. every referenced key exists in English;
+7. placeholders match exactly;
+8. protected terms are preserved;
+9. locale artifacts match the current source version;
+10. public locales have 100% key coverage;
+11. raw/unsupported locale codes do not enter the chooser;
+12. no translation API credential is present in client/public code;
+13. representative route smoke tests find no source-English leakage in a non-English locale;
+14. language switching is atomic;
+15. locale persistence works across route changes and reloads;
+16. RTL text does not reverse the SREADYA layout;
+17. PWA caching does not serve stale-language manifests.
+
+Representative fast-gate locales SHOULD include:
 
 ```text
-             PAGE/VIEW SHELL
-                   │
-          stable content ID
-                   │
-             ContentResolver
-             ↙            ↘
-        source store    translation store
-                         /
-                        /
-               locale resolver
-                    │
-                 render
+de   long words
+fi   long compounds
+ar   RTL
+zh-CN CJK
+ta   Tamil script
+hi   Devanagari
 ```
 
-At large scale:
+A release/nightly gate SHOULD verify all published locales.
 
-- content lives in a content store/object store/database;
-- translations live in sharded locale/content artifacts or a translation store;
-- CDN caching may be introduced;
-- rendering may be browser, edge, server, native, or another future platform;
-- builds do not enumerate all content × locale combinations;
-- routes resolve stable content IDs;
-- storage and hosting are replaceable adapters.
+---
 
-Thus:
+## 14. No public partial fallback
+
+English remains the canonical recovery source internally, but SREADYA MUST NOT advertise an incomplete locale as fully supported.
+
+Therefore:
 
 ```text
-10,000,000 content items × 500 locales
+complete locale
+        ↓
+publicly selectable
+
+partial/stale/corrupt locale
+        ↓
+not publicly selectable
 ```
 
-does **not** imply five billion pre-generated HTML files.
+If a previously published target becomes invalid, the release must fail rather than silently ship a mixed-language experience.
 
-The language/content contract remains the same whether storage is JSON today or a distributed content platform later.
-
----
-
-## 14. CI enforcement
-
-After migration, globalization rules become build laws.
-
-CI must eventually reject:
-
-### 14.1 Hard-coded user-visible copy
-
-Examples to catch:
-
-- JSX text;
-- button labels;
-- accessibility labels;
-- tooltips;
-- placeholders;
-- page metadata;
-- error messages;
-- Flutter `Text` literals and comparable UI properties.
-
-Allow-lists may exist only for documented cases such as test fixtures, protocol literals, data identifiers, and intentionally non-localized brand tokens.
-
-### 14.2 Invalid or missing catalogue references
-
-Every referenced message ID must exist in the authoritative source catalogue.
-
-### 14.3 Placeholder incompatibility
-
-Translated messages must preserve required variables and valid types.
-
-### 14.4 Stale translation state
-
-A translation whose `sourceVersion` no longer matches the source must become stale automatically.
-
-### 14.5 Locale registry invalidity
-
-Locale tags, parents, direction, and uniqueness are validated.
-
-### 14.6 RTL and expansion regressions
-
-CI includes pseudo-locale tests:
-
-- text expansion;
-- long-word handling;
-- bidirectional/RTL layouts;
-- mirrored navigation expectations where appropriate.
-
-### 14.7 Bundle budgets
-
-Language support must not silently destroy page/app performance.
-
-CI tracks:
-
-- per-locale bundle size;
-- initial bundle size;
-- lazy-loaded bundle size;
-- missing-key rate;
-- fallback rate in tests.
+This supersedes the old public "English fallback" chooser behavior.
 
 ---
 
-## 15. Testing strategy
+## 15. Current repository migration
 
-Minimum test layers:
+The existing `fix/sreadya-complete-locales` branch is the implementation branch for this closure.
 
-1. catalogue/schema tests;
-2. locale-resolution tests;
-3. fallback-chain tests;
-4. placeholder/plural tests;
-5. Web language-switch tests;
-6. persistence tests;
-7. RTL layout tests;
-8. Unicode/script rendering tests;
-9. accessibility tests;
-10. PWA/offline language-bundle tests;
-11. Flutter locale-switch tests;
-12. source-hash/staleness tests;
-13. provider-adapter contract tests;
-14. translation-pipeline dry-run tests;
-15. English baseline regression tests.
+Useful work retained:
 
-The English product must remain functionally unchanged when globalization is introduced.
+- atomic bundle-loading concept;
+- complete-bundle publication rule;
+- source catalogue;
+- manifest generation;
+- provider-neutral translation interface;
+- locale persistence;
+- hard-coded-copy verification foundation.
 
----
+Work superseded:
 
-## 16. Security, privacy, and integrity
+- manually completing locale JSON files in chat;
+- exposing the raw CLDR universe as the public chooser;
+- showing public English-fallback badges;
+- treating partial locale artifacts as usable product support;
+- using root document RTL direction to mirror layout.
 
-### 16.1 Client secrets
+Implementation sequence:
 
-No translation API secret enters frontend code, PWA assets, mobile resources, or public repository history.
-
-### 16.2 Translation input boundary
-
-Only approved SREADYA-owned source content enters automated translation providers.
-
-### 16.3 Safe rendering
-
-Translations are data, never trusted executable code.
-
-Rich text uses an allow-listed structured representation rather than arbitrary translated HTML.
-
-### 16.4 Artifact integrity
-
-Generated bundles use content-addressed/versioned names and a manifest containing hashes.
-
-This permits safe caching, rollback, and reproducible releases.
-
-### 16.5 Supply-chain governance
-
-Translation providers are reviewed for:
-
-- data retention;
-- model-training use;
-- geographical/legal requirements;
-- service terms;
-- availability;
-- cost;
-- incident response.
-
-Provider governance is separate from product localization semantics.
+```text
+1. freeze this architecture v2
+2. freeze Google NMT 194-language baseline
+3. implement GoogleCloudProvider
+4. implement live provider-language discovery
+5. implement baseline-superset gate
+6. implement placeholder/term protection
+7. implement incremental translation memory
+8. implement complete-bundle-only manifest
+9. redesign language chooser as one coherent panel
+10. remove raw CLDR/fallback public rows
+11. separate RTL text direction from layout direction
+12. strengthen hard-coded-copy gate
+13. add representative route tests
+14. add all-published-locale release gate
+15. generate/validate provider-backed bundles
+16. deploy only after all required gates pass
+17. verify live GitHub Pages state
+18. merge only after formal evidence is green
+```
 
 ---
 
-## 17. Migration from the current repository
+## 16. Large-scale future: up to 10,000,000 content items
 
-The current architecture is upgraded in place.
+UI messages and large editorial content use the same stable-ID philosophy but different storage strategies.
 
-Current assets preserved:
+Today:
 
-- `web/src/i18n/locale.ts`;
-- `web/src/i18n/messages/en.json`;
-- current locale preferences;
-- `l10n.yaml`;
-- `lib/l10n/app_en.arb`;
-- Flutter localization delegates;
-- current Web/PWA routes;
-- current tests and release workflows;
-- current GitHub Pages deployment;
-- privacy-first/local-first product boundaries.
+```text
+UI source
+→ machine translation
+→ static locale bundles
+→ GitHub Pages/PWA cache
+```
 
-Migration sequence:
+At very large content scale:
 
-1. create the canonical shared i18n schema and source catalogue;
-2. create canonical locale registry and fallback resolver;
-3. introduce Web localization facade;
-4. migrate current Web message catalogue into the canonical source;
-5. migrate homepage/header/footer;
-6. migrate public-route content;
-7. migrate workspace UI;
-8. migrate policy/help/health content with risk metadata;
-9. generate Web locale artifacts;
-10. generate Flutter ARB derivatives;
-11. add language selector and persistence;
-12. add provider-neutral translation adapters;
-13. add source hashing and translation memory;
-14. add provenance;
-15. add CI hard-coded-copy gate;
-16. add catalogue and placeholder gates;
-17. add RTL/pseudo-locale tests;
-18. add PWA offline language-bundle tests;
-19. add Flutter parity tests;
-20. deploy preview;
-21. prove English baseline unchanged;
-22. enable initial machine-translated locales;
-23. expand locale coverage incrementally;
-24. merge only after all required gates are green.
+```text
+page shell
+    │
+stable content ID
+    │
+ContentResolver
+    │
+source content + translated variant store
+    │
+CDN/object store/database
+```
 
-This sequence may be implemented through bounded PRs. The architecture itself remains one contract.
+SREADYA MUST NOT pre-generate:
+
+```text
+10,000,000 pages × 194+ locales
+```
+
+as billions of static HTML files.
+
+Instead translations are cached by stable content identity and source hash. Storage and rendering infrastructure may evolve without changing the page-level language contract.
 
 ---
 
-## 18. What is deliberately NOT done
+## 17. Flutter/mobile contract
 
-SREADYA will not:
+The same canonical source and translation provenance apply to Android/iOS.
 
-- create a second globalization project;
-- fork the product into one app/site per language;
-- build one source page per locale;
-- expose translator credentials in clients;
-- call a paid translator on every page view;
-- send private health data for translation by default;
-- hand-maintain 500 giant catalogues;
-- hard-code one translation provider into page code;
-- make GitHub Pages a permanent scale assumption;
-- make Next.js or Flutter resource formats canonical business data;
-- claim every machine translation is human-reviewed;
-- pre-render billions of locale/page combinations;
-- use country flags as a substitute for language identity.
+Near term:
+
+- continue generating Flutter-compatible localization derivatives;
+- keep account-free/local-first behavior unchanged;
+- keep language selection independent of private-health storage;
+- do not place provider credentials in the app.
+
+Long term, hundreds of locales may use lazy/downloadable signed language packs to avoid unnecessary binary growth.
+
+Web closure does not weaken or fork the mobile language contract.
+
+---
+
+## 18. Formal closure criteria
+
+This globalization pass is formally closed only when all applicable conditions are proven:
+
+```text
+ARCHITECTURE
+[ ] v2 authority committed
+
+PROVIDER
+[ ] frozen Google NMT baseline count == 194
+[ ] live Google supported-language discovery implemented
+[ ] live set contains frozen baseline
+[ ] future additions accepted automatically
+
+TRANSLATION
+[ ] source catalogue complete
+[ ] all published non-English bundles are provider-generated
+[ ] all published bundles are 100% complete
+[ ] placeholders preserved
+[ ] protected terms preserved
+[ ] source hashes current
+
+RUNTIME
+[ ] atomic locale switching
+[ ] no mixed-language supported locale
+[ ] no raw aa/aaa-style rows
+[ ] no English-fallback badges
+[ ] one coherent chooser panel
+[ ] locale persists
+[ ] RTL text works without layout mirroring
+
+PRIVACY/SECURITY
+[ ] no translation credential in client/public assets
+[ ] no private health data enters translation provider path
+
+FUTURE CONTRACT
+[ ] hard-coded user-facing English gate active
+[ ] new source IDs automatically enter translation workflow
+[ ] unchanged text is not retranslated
+[ ] provider additions can expand beyond 194 automatically
+
+RELEASE
+[ ] representative cross-script tests green
+[ ] all published locale artifact checks green
+[ ] production build green
+[ ] live GitHub Pages smoke checks green
+```
+
+No claim of formal closure is permitted while a required gate remains unproven.
 
 ---
 
 ## 19. Technology replacement rule
 
-The following are adapters and MAY be replaced:
+Replaceable adapters:
 
 ```text
+Google Cloud Translation
+Azure Translator
 Next.js
 React
 Flutter
 GitHub Pages
 GitHub Actions
-PWA cache implementation
-translation vendors
-database/content store
+PWA cache
+database/object store
 CDN
-message-format runtime
-mobile packaging
+message runtime
 ```
 
-The following are SREADYA-owned contracts and MUST remain stable or be explicitly version-migrated:
+SREADYA-owned contracts:
 
 ```text
 stable message IDs
 stable content IDs
-source-locale ownership
-locale identity
-fallback semantics
+English source ownership
+194-language provider baseline floor
+future provider-superset rule
+complete-bundle publication rule
 translation provenance
-risk classification
-privacy boundary
-translation-provider interface
-content-resolver interface
-CI globalization rules
-portable export/import format
+placeholder semantics
+protected terminology
+private-health translation boundary
+provider interface
+atomic runtime activation
+CI globalization law
 ```
-
-This separation is the core long-term durability decision.
 
 ---
 
-## 20. Operational simplicity rule
+## 20. Developer workflow after closure
 
-Future developers should not need globalization expertise to add normal pages.
-
-The normal workflow must become:
+Normal feature work becomes:
 
 ```text
-1. create page/content
-2. reference stable message/content IDs
+1. create/update page
+2. reference stable message IDs
 3. write English source once
 4. commit
-5. CI identifies new/changed source
-6. translation pipeline produces eligible locale variants
-7. tests validate
-8. deployment publishes
+5. CI detects new/changed source
+6. machine translation fills all eligible targets
+7. QA validates
+8. complete artifacts publish
+9. user selects language
+10. SREADYA switches coherently
 ```
 
-No developer should manually edit hundreds of locale files for a normal feature.
+No developer manually translates 194+ locale catalogues.
 
-If a developer writes new user-visible hard-coded copy, CI should explain exactly how to move it into the contract.
-
----
-
-## 21. Company and user success criteria
-
-This architecture succeeds when:
-
-### For users
-
-- language selection is easy and global;
-- selected language persists;
-- pages do not break when translations are incomplete;
-- machine-translated content is not misrepresented as reviewed;
-- private health content remains private;
-- RTL and non-Latin scripts are first-class;
-- language loading is fast and offline-friendly after caching.
-
-### For the company
-
-- translation work is incremental;
-- translation providers are replaceable;
-- cost is bounded and measurable;
-- unchanged text is not retransmitted/retranslated;
-- future frameworks can change without reauthoring content;
-- future hosting can move beyond GitHub Pages without changing page language semantics;
-- millions of content items do not require billions of static outputs;
-- one CI contract prevents globalization regressions.
-
----
-
-## 22. Architecture acceptance statement
-
-SREADYA adopts a **standards-based, stable-ID, provider-neutral, privacy-preserving, risk-aware, build-first globalization architecture**.
-
-Today:
-
-```text
-existing repo
-+ static Web/PWA
-+ Flutter
-+ GitHub Pages
-+ generated language bundles
-```
-
-Future:
-
-```text
-same stable language/content contract
-+ replaceable translation providers
-+ replaceable storage
-+ replaceable rendering
-+ CDN/content platform when scale requires it
-```
-
-The platform may evolve. The contract survives.
-
-That is the SREADYA globalization foundation.
-
----
-
-## 23. Normative references
-
-- IETF BCP 47 / RFC 5646 — Tags for Identifying Languages: https://www.rfc-editor.org/info/bcp47/
-- Unicode CLDR: https://cldr.unicode.org/
-- Unicode UTS #35 (LDML): https://unicode.org/reports/tr35/
-- Unicode MessageFormat 2 project: https://messageformat.unicode.org/
-- Flutter internationalization: https://docs.flutter.dev/ui/internationalization
-- Next.js static exports: https://nextjs.org/docs/app/guides/static-exports
-
+That is the permanent SREADYA globalization contract.
