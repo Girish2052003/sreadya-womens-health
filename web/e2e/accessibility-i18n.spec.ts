@@ -95,15 +95,18 @@ test('keyboard focus, 200 percent reflow, large text, RTL and long-copy fixtures
   await page.getByTestId('language-chooser-search').fill('Arabic');
   await page.locator('[data-language-tag="ar"]').click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
-  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
+  await expect(page.locator('html')).toHaveAttribute('data-sreadya-text-direction', 'rtl');
 
   await page.goto(SETTINGS_URL);
   await expect(page.getByTestId('language-chooser-trigger')).toHaveCount(0);
   await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
-  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
+  await expect(page.locator('html')).toHaveAttribute('data-sreadya-text-direction', 'rtl');
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
-  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
+  await expect(page.locator('html')).toHaveAttribute('data-sreadya-text-direction', 'rtl');
 
   await page.evaluate(() => {
     const title = document.querySelector('[data-testid="accessibility-preferences"] h2');
