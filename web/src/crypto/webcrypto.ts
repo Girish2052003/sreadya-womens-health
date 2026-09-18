@@ -53,10 +53,10 @@ export async function openJson<T>(
   expectedAad: string,
 ): Promise<T> {
   if (envelope.version !== 1 || envelope.algorithm !== 'AES-GCM') {
-    throw new Error('Unsupported Sreva vault envelope.');
+    throw new Error('Unsupported Sreadya vault envelope.');
   }
   if (envelope.aad !== expectedAad) {
-    throw new Error('Sreva vault AAD mismatch.');
+    throw new Error('Sreadya vault AAD mismatch.');
   }
 
   const clear = await crypto.subtle.decrypt(

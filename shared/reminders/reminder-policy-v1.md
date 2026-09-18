@@ -1,6 +1,6 @@
-# Sreva reminder-policy-v1 contract
+# Sreadya reminder-policy-v1 contract
 
-This contract freezes the pure reminder-planning semantics already implemented by Flutter. It does not promise that a browser or operating system will deliver a notification while Sreva is closed. Delivery permissions, background execution, Web Push, OS scheduling, DST resolution, and time-zone conversion belong to platform **adapter** layers.
+This contract freezes the pure reminder-planning semantics already implemented by Flutter. It does not promise that a browser or operating system will deliver a notification while Sreadya is closed. Delivery permissions, background execution, Web Push, OS scheduling, DST resolution, and time-zone conversion belong to platform **adapter** layers.
 
 ## Inputs
 

@@ -34,10 +34,10 @@ type StoredConflict = PreservedSyncConflict & {
   objectId: string;
 };
 
-class SrevaSyncConflictDatabase extends Dexie {
+class SreadyaSyncConflictDatabase extends Dexie {
   conflicts!: Table<StoredConflict, string>;
 
-  constructor(name = 'sreva-sync-conflicts-v1') {
+  constructor(name = 'sreadya-sync-conflicts-v1') {
     super(name);
     this.version(1).stores({
       conflicts: '&id,vaultId,objectId',
@@ -54,7 +54,7 @@ function cloneConflict(conflict: PreservedSyncConflict): PreservedSyncConflict {
 }
 
 export class DexieSyncConflictStore implements SyncConflictStore {
-  constructor(readonly db = new SrevaSyncConflictDatabase()) {}
+  constructor(readonly db = new SreadyaSyncConflictDatabase()) {}
 
   async preserve(conflict: PreservedSyncConflict): Promise<void> {
     const value = cloneConflict(conflict);
@@ -85,7 +85,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 function requiredString(value: Record<string, unknown>, key: string): string {
   const candidate = value[key];
   if (typeof candidate !== 'string' || candidate.length === 0) {
-    throw new Error('Invalid Sreva remote sync event.');
+    throw new Error('Invalid Sreadya remote sync event.');
   }
   return candidate;
 }
@@ -93,18 +93,18 @@ function requiredString(value: Record<string, unknown>, key: string): string {
 function requiredInteger(value: Record<string, unknown>, key: string, minimum: number): number {
   const candidate = value[key];
   if (!Number.isSafeInteger(candidate) || (candidate as number) < minimum) {
-    throw new Error('Invalid Sreva remote sync event.');
+    throw new Error('Invalid Sreadya remote sync event.');
   }
   return candidate as number;
 }
 
 function parseWireSyncEvent(value: unknown): WireSyncEvent {
-  if (!isRecord(value)) throw new Error('Invalid Sreva remote sync event.');
+  if (!isRecord(value)) throw new Error('Invalid Sreadya remote sync event.');
   const operation = requiredString(value, 'operation');
   if (operation !== 'upsert' && operation !== 'tombstone') {
-    throw new Error('Invalid Sreva remote sync event.');
+    throw new Error('Invalid Sreadya remote sync event.');
   }
-  if (typeof value.conflict !== 'boolean') throw new Error('Invalid Sreva remote sync event.');
+  if (typeof value.conflict !== 'boolean') throw new Error('Invalid Sreadya remote sync event.');
 
   const event: WireSyncEvent = {
     protocol_version: requiredInteger(value, 'protocol_version', 1),
@@ -125,7 +125,7 @@ function parseWireSyncEvent(value: unknown): WireSyncEvent {
     conflict: value.conflict,
   };
   if (event.committed_revision <= event.base_revision) {
-    throw new Error('Invalid Sreva remote revision transition.');
+    throw new Error('Invalid Sreadya remote revision transition.');
   }
   return event;
 }

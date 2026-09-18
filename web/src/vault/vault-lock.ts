@@ -11,7 +11,7 @@ export class VaultLock {
   }
 
   remember(id: string, value: unknown) {
-    if (!this.unlocked) throw new Error('Sreva vault is locked.');
+    if (!this.unlocked) throw new Error('Sreadya vault is locked.');
     this.decrypted.set(id, structuredClone(value));
   }
 

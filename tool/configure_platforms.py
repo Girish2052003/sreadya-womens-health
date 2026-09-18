@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Materialize Sreva's production Android/iOS host configuration.
+"""Materialize Sreadya's production Android/iOS host configuration.
 
 The Flutter host folders may be generated on a clean CI runner, but the generated
-stock shells are not sufficient for Sreva. This script installs the audited
+stock shells are not sufficient for Sreadya. This script installs the audited
 native bridges and the platform privacy/health/account configuration that the
 Dart application expects.
 """
@@ -54,7 +54,7 @@ ANDROID_MANIFEST = r'''<manifest xmlns:android="http://schemas.android.com/apk/r
     </queries>
 
     <application
-        android:label="Sreva"
+        android:label="Sreadya"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="false"
@@ -96,13 +96,13 @@ ANDROID_MANIFEST = r'''<manifest xmlns:android="http://schemas.android.com/apk/r
         </activity-alias>
 
         <receiver
-            android:name=".SrevaAlarmReceiver"
+            android:name=".SreadyaAlarmReceiver"
             android:exported="false" />
         <receiver
-            android:name=".SrevaActionReceiver"
+            android:name=".SreadyaActionReceiver"
             android:exported="false" />
         <receiver
-            android:name=".SrevaBootReceiver"
+            android:name=".SreadyaBootReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -123,14 +123,14 @@ RATIONALE_ACTIVITY = r'''
 class PermissionsRationaleActivity : android.app.Activity() {
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
-        title = "Sreva privacy"
+        title = "Sreadya privacy"
         val padding = (24 * resources.displayMetrics.density).toInt()
         val text = android.widget.TextView(this).apply {
             setPadding(padding, padding, padding, padding)
             textSize = 16f
-            text = "Sreva processes reproductive-health information on this device. " +
+            text = "Sreadya processes reproductive-health information on this device. " +
                 "Health Connect access is optional and is used only for the categories you explicitly authorize. " +
-                "Sreva does not maintain a developer-operated database containing your menstrual history. " +
+                "Sreadya does not maintain a developer-operated database containing your menstrual history. " +
                 "You can revoke Health Connect permissions at any time in Android settings."
         }
         setContentView(android.widget.ScrollView(this).apply { addView(text) })
@@ -158,8 +158,8 @@ import UserNotifications
     func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
         GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
         let messenger = engineBridge.applicationRegistrar.messenger()
-        SrevaPlatformBridge.register(messenger: messenger)
-        SrevaCredentialBridge.register(messenger: messenger)
+        SreadyaPlatformBridge.register(messenger: messenger)
+        SreadyaCredentialBridge.register(messenger: messenger)
     }
 }
 
@@ -191,21 +191,21 @@ def configure_android() -> None:
     manifest.write_text(ANDROID_MANIFEST, encoding="utf-8")
 
     source = ROOT / "platform_templates" / "android" / "MainActivity.kt"
-    credential_source = ROOT / "platform_templates" / "android" / "SrevaCredentialBridge.kt"
+    credential_source = ROOT / "platform_templates" / "android" / "SreadyaCredentialBridge.kt"
     require(source, "Android native bridge template")
     require(credential_source, "Android credential bridge template")
-    target_dir = app_dir / "src" / "main" / "kotlin" / "com" / "sreva" / "health" / "sreva"
+    target_dir = app_dir / "src" / "main" / "kotlin" / "com" / "sreadya" / "health" / "sreadya"
     target = target_dir / "MainActivity.kt"
-    credential_target = target_dir / "SrevaCredentialBridge.kt"
+    credential_target = target_dir / "SreadyaCredentialBridge.kt"
     target_dir.mkdir(parents=True, exist_ok=True)
     kotlin = source.read_text(encoding="utf-8")
-    registration = '        MethodChannel(messenger, "sreva/voice").setMethodCallHandler(::handleVoice)'
-    if "SrevaCredentialBridge(this, messenger).register()" not in kotlin:
+    registration = '        MethodChannel(messenger, "sreadya/voice").setMethodCallHandler(::handleVoice)'
+    if "SreadyaCredentialBridge(this, messenger).register()" not in kotlin:
         if registration not in kotlin:
             raise SystemExit("Unable to locate Android Flutter channel registration point")
         kotlin = kotlin.replace(
             registration,
-            registration + '\n        SrevaCredentialBridge(this, messenger).register()',
+            registration + '\n        SreadyaCredentialBridge(this, messenger).register()',
         )
     if "class PermissionsRationaleActivity" not in kotlin:
         kotlin += RATIONALE_ACTIVITY
@@ -218,9 +218,9 @@ def configure_android() -> None:
 def check_android() -> None:
     gradle = ROOT / "android" / "app" / "build.gradle.kts"
     manifest = ROOT / "android" / "app" / "src" / "main" / "AndroidManifest.xml"
-    source_dir = ROOT / "android" / "app" / "src" / "main" / "kotlin" / "com" / "sreva" / "health" / "sreva"
+    source_dir = ROOT / "android" / "app" / "src" / "main" / "kotlin" / "com" / "sreadya" / "health" / "sreadya"
     source = source_dir / "MainActivity.kt"
-    credential_source = source_dir / "SrevaCredentialBridge.kt"
+    credential_source = source_dir / "SreadyaCredentialBridge.kt"
     for path in (gradle, manifest, source, credential_source):
         require(path, "configured Android file")
     checks = {
@@ -237,19 +237,19 @@ def check_android() -> None:
             'android.permission.health.READ_SEXUAL_ACTIVITY',
             'android.permission.health.WRITE_SEXUAL_ACTIVITY',
             'android.permission.health.READ_HEALTH_DATA_HISTORY',
-            '.SrevaBootReceiver',
+            '.SreadyaBootReceiver',
             'android.intent.category.HEALTH_PERMISSIONS',
         ],
         source: [
-            'MethodChannel(messenger, "sreva/privacy")',
-            'MethodChannel(messenger, "sreva/reminders")',
-            'MethodChannel(messenger, "sreva/health")',
-            'MethodChannel(messenger, "sreva/voice")',
-            'SrevaCredentialBridge(this, messenger).register()',
+            'MethodChannel(messenger, "sreadya/privacy")',
+            'MethodChannel(messenger, "sreadya/reminders")',
+            'MethodChannel(messenger, "sreadya/health")',
+            'MethodChannel(messenger, "sreadya/voice")',
+            'SreadyaCredentialBridge(this, messenger).register()',
             'class PermissionsRationaleActivity',
         ],
         credential_source: [
-            'MethodChannel(messenger, "sreva/account")',
+            'MethodChannel(messenger, "sreadya/account")',
             'CreatePublicKeyCredentialRequest',
             'GetPublicKeyCredentialOption',
         ],
@@ -274,8 +274,8 @@ def _transform_ios_bridge(template: str) -> str:
     )
     body = body.replace("controller.binaryMessenger", "messenger")
     body = body.replace(
-        "static func register(with controller: FlutterViewController) {\n        let bridge = SrevaPlatformBridge(controller: controller)",
-        "static func register(messenger: FlutterBinaryMessenger) {\n        let bridge = SrevaPlatformBridge(messenger: messenger)",
+        "static func register(with controller: FlutterViewController) {\n        let bridge = SreadyaPlatformBridge(controller: controller)",
+        "static func register(messenger: FlutterBinaryMessenger) {\n        let bridge = SreadyaPlatformBridge(messenger: messenger)",
     )
     if "FlutterViewController" in body:
         raise SystemExit("iOS bridge still depends on FlutterViewController after UIScene migration")
@@ -286,8 +286,8 @@ def configure_ios() -> None:
     runner = ROOT / "ios" / "Runner"
     require(runner, "generated iOS project; run flutter create first")
 
-    bridge_path = ROOT / "platform_templates" / "ios" / "SrevaPlatformBridge.swift"
-    credential_path = ROOT / "platform_templates" / "ios" / "SrevaCredentialBridge.swift"
+    bridge_path = ROOT / "platform_templates" / "ios" / "SreadyaPlatformBridge.swift"
+    credential_path = ROOT / "platform_templates" / "ios" / "SreadyaCredentialBridge.swift"
     require(bridge_path, "iOS native bridge template")
     require(credential_path, "iOS credential bridge template")
     bridge = _transform_ios_bridge(bridge_path.read_text(encoding="utf-8"))
@@ -303,11 +303,11 @@ def configure_ios() -> None:
         info = plistlib.load(handle)
     info.update(
         {
-            "CFBundleDisplayName": "Sreva",
-            "NSHealthShareUsageDescription": "Sreva can import the reproductive-health categories you choose from Apple Health to keep your local cycle history consistent.",
-            "NSHealthUpdateUsageDescription": "Sreva can save the reproductive-health categories you explicitly choose to Apple Health.",
-            "NSSpeechRecognitionUsageDescription": "Sreva uses on-device speech recognition when available so you can log cycle information by voice.",
-            "NSMicrophoneUsageDescription": "Sreva needs microphone access only when you explicitly start a voice logging action.",
+            "CFBundleDisplayName": "Sreadya",
+            "NSHealthShareUsageDescription": "Sreadya can import the reproductive-health categories you choose from Apple Health to keep your local cycle history consistent.",
+            "NSHealthUpdateUsageDescription": "Sreadya can save the reproductive-health categories you explicitly choose to Apple Health.",
+            "NSSpeechRecognitionUsageDescription": "Sreadya uses on-device speech recognition when available so you can log cycle information by voice.",
+            "NSMicrophoneUsageDescription": "Sreadya needs microphone access only when you explicitly start a voice logging action.",
         }
     )
     with info_path.open("wb") as handle:
@@ -322,7 +322,7 @@ def configure_ios() -> None:
     pbx = project.read_text(encoding="utf-8")
     pbx = re.sub(r"IPHONEOS_DEPLOYMENT_TARGET = [0-9.]+;", "IPHONEOS_DEPLOYMENT_TARGET = 17.0;", pbx)
     if "CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;" not in pbx:
-        bundle_line = "PRODUCT_BUNDLE_IDENTIFIER = com.sreva.health.sreva;"
+        bundle_line = "PRODUCT_BUNDLE_IDENTIFIER = com.sreadya.health.sreadya;"
         pbx = pbx.replace(
             bundle_line,
             "CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;\n\t\t\t\t" + bundle_line,
@@ -343,14 +343,14 @@ def check_ios() -> None:
     for marker in (
         "FlutterImplicitEngineDelegate",
         "didInitializeImplicitFlutterEngine",
-        "SrevaPlatformBridge.register(",
-        "SrevaCredentialBridge.register(",
+        "SreadyaPlatformBridge.register(",
+        "SreadyaCredentialBridge.register(",
         "engineBridge.applicationRegistrar.messenger()",
-        'FlutterMethodChannel(name: "sreva/privacy"',
-        'FlutterMethodChannel(name: "sreva/reminders"',
-        'FlutterMethodChannel(name: "sreva/health"',
-        'FlutterMethodChannel(name: "sreva/voice"',
-        'FlutterMethodChannel(name: "sreva/account"',
+        'FlutterMethodChannel(name: "sreadya/privacy"',
+        'FlutterMethodChannel(name: "sreadya/reminders"',
+        'FlutterMethodChannel(name: "sreadya/health"',
+        'FlutterMethodChannel(name: "sreadya/voice"',
+        'FlutterMethodChannel(name: "sreadya/account"',
     ):
         if marker not in source:
             raise SystemExit(f"iOS native bridge marker missing: {marker}")
