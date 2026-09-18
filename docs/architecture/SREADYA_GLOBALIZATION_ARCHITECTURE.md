@@ -1,7 +1,7 @@
 # SREADYA Globalization Architecture
 
 **Status:** ACCEPTED — authoritative architecture  
-**Repository:** `Girish2052003/sreva-womens-health`  
+**Repository:** SREADYA product repository  
 **Adopted:** 2026-09-18  
 **Scope:** Existing Web/PWA + Flutter Android/iOS + all future SREADYA content surfaces  
 **Authoritative home:** This document. Implementation documents must link here instead of redefining the architecture.
