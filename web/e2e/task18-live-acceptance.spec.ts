@@ -52,6 +52,31 @@ test('Task 18 live production desktop/account-free acceptance preflight', async 
 
   await page.goto(live());
   await expect(page.getByRole('heading', { level: 1, name: 'Sreva' })).toBeVisible();
+  await expect(page.getByRole('group', { name: 'Appearance' })).toBeVisible();
+  await page.getByRole('button', { name: 'Dark theme' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-sreva-theme', 'dark');
+  await page.goto(live('features/'));
+  await expect(page.locator('html')).toHaveAttribute('data-sreva-theme', 'dark');
+  const liveCapabilityContrast = await page.locator('.capability-catalogue__item').first().evaluate((item) => {
+    const title = item.querySelector('strong');
+    if (!title) throw new Error('Capability title missing');
+    const parse = (rgb: string) => {
+      const values = rgb.match(/[\d.]+/g)?.slice(0, 3).map(Number);
+      if (!values || values.length !== 3) throw new Error(`Unable to parse color: ${rgb}`);
+      const channel = (value: number) => {
+        const normalized = value / 255;
+        return normalized <= 0.04045 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
+      };
+      return 0.2126 * channel(values[0]) + 0.7152 * channel(values[1]) + 0.0722 * channel(values[2]);
+    };
+    const foreground = parse(getComputedStyle(title).color);
+    const background = parse(getComputedStyle(item).backgroundColor);
+    return (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05);
+  });
+  expect(liveCapabilityContrast).toBeGreaterThanOrEqual(4.5);
+  await page.goto(live());
+  await page.getByRole('button', { name: 'Light theme' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-sreva-theme', 'light');
   const continuePrivately = page.getByRole('link', { name: 'Continue without an account' });
   await expect(continuePrivately).toBeVisible();
   await page.evaluate(async () => {

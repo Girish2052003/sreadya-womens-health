@@ -85,3 +85,18 @@ html[dir='rtl'] .easy-language-guide { text-align: right; }
 @media (max-width: 820px) {
   .easy-language-guide { margin-top: 60px; margin-bottom: -62px; width: min(100% - 28px, 720px); }
 }
+
+
+html[data-sreva-theme='dark'][data-sreva-contrast='high'] {
+  --sreva-muted: #f1e5ea;
+  --line: rgba(255, 245, 247, 0.48);
+  --focus: #ffffff;
+}
+
+@media (prefers-contrast: more) {
+  html[data-sreva-theme='dark'] {
+    --sreva-muted: #f1e5ea;
+    --line: rgba(255, 245, 247, 0.48);
+    --focus: #ffffff;
+  }
+}

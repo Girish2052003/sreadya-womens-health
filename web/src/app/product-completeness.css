@@ -190,3 +190,31 @@
 .public-topic__boundary p { margin-bottom: 0; color: var(--sreva-muted); }
 html[dir='rtl'] .public-topic, html[dir='rtl'] .workspace-main, html[dir='rtl'] .workspace-topbar { direction: rtl; }
 @media (max-width: 820px) { .public-topic__grid { grid-template-columns: 1fr; } }
+
+
+/* Light card/control contrast contract for dark mode. */
+[data-sreva-theme='dark'] .structured-observation__form input,
+[data-sreva-theme='dark'] .structured-observation__form select,
+[data-sreva-theme='dark'] .structured-observation__form textarea,
+[data-sreva-theme='dark'] .settings-grid input,
+[data-sreva-theme='dark'] .settings-grid select,
+[data-sreva-theme='dark'] .continuity-form input,
+[data-sreva-theme='dark'] .continuity-form textarea,
+[data-sreva-theme='dark'] .settings-links a,
+[data-sreva-theme='dark'] .continuity-state,
+[data-sreva-theme='dark'] .capability-catalogue__summary article,
+[data-sreva-theme='dark'] .capability-catalogue details,
+[data-sreva-theme='dark'] .capability-catalogue__item {
+  color: var(--ink-on-light);
+}
+[data-sreva-theme='dark'] .capability-catalogue__item small,
+[data-sreva-theme='dark'] .capability-catalogue__item .workspace-note,
+[data-sreva-theme='dark'] .continuity-state .workspace-note {
+  color: var(--muted-on-light);
+}
+[data-sreva-theme='dark'] .capability-catalogue__id {
+  color: var(--rose-on-light);
+}
+[data-sreva-theme='dark'] .capability-catalogue__item a {
+  color: var(--accent-on-light);
+}

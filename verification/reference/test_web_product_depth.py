@@ -115,3 +115,20 @@ def test_public_topic_links_resolve_to_real_routes() -> None:
     hrefs = set(re.findall(r'href:\s*"([^"]+)"', content))
     missing = sorted(hrefs - valid)
     assert not missing, f"public topic content has dead internal routes: {missing}"
+
+
+def test_theme_toggle_and_light_surface_contrast_are_release_contracts() -> None:
+    toggle = read("web/src/theme/ThemeToggle.tsx")
+    theme = read("web/src/theme/theme-preference.ts")
+    header = read("web/src/components/navigation/PublicHeader.tsx")
+    globals_css = read("web/src/app/globals.css")
+    product_css = read("web/src/app/product-completeness.css")
+    for label in ("System", "Light", "Dark"):
+        assert f"label: '{label}'" in toggle
+    assert "theme`" in toggle or "theme'" in toggle
+    assert "sreva:general-settings:v1" in theme
+    assert "ThemeToggle" in header
+    assert "--ink-on-light" in globals_css
+    assert "--muted-on-light" in globals_css
+    assert "capability-catalogue__item" in product_css
+    assert "var(--ink-on-light)" in product_css
