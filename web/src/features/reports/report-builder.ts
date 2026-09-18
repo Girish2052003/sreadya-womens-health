@@ -43,14 +43,27 @@ type ReportInput = {
   selection: ReportSelection;
 };
 
+export type ReportCopy = {
+  title: string;
+  disclaimer: string;
+  periodsHeading: string;
+  ongoing: string;
+  observationsHeading: string;
+  pdfSubject: string;
+  pdfProducer: string;
+  kindLabel: (kind: string) => string;
+  severityLabel: (severity: string) => string;
+  flowLabel: (flow: string) => string;
+};
+
 function assertSelection(selection: ReportSelection): void {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(selection.from) || !/^\d{4}-\d{2}-\d{2}$/.test(selection.to)) {
-    throw new Error('Report date range must use calendar dates.');
+    throw new Error('report_invalid_date_range');
   }
-  if (selection.from > selection.to) throw new Error('Report start date cannot be after end date.');
-  if (selection.categories.length === 0) throw new Error('Select at least one report category.');
+  if (selection.from > selection.to) throw new Error('report_start_after_end');
+  if (selection.categories.length === 0) throw new Error('report_no_categories');
   if (selection.categories.some((category) => !(REPORT_CATEGORIES as readonly string[]).includes(category))) {
-    throw new Error('Unsupported report category.');
+    throw new Error('report_unsupported_category');
   }
 }
 
@@ -82,13 +95,19 @@ function includesObservation(observation: HealthObservation, categories: Readonl
   }
 }
 
-function observationValue(observation: HealthObservation): string {
+function technicalObservationValue(observation: HealthObservation): string {
   if (observation.flowLevel) return observation.flowLevel;
   if (observation.severity) return observation.severity;
   if (observation.numericValue !== undefined) {
     return `${observation.numericValue}${observation.unit ? ` ${observation.unit}` : ''}`;
   }
   return '';
+}
+
+function localizedObservationValue(observation: HealthObservation, copy: ReportCopy): string {
+  if (observation.flowLevel) return copy.flowLabel(observation.flowLevel);
+  if (observation.severity) return copy.severityLabel(observation.severity);
+  return technicalObservationValue(observation);
 }
 
 function selectedRecords(input: ReportInput) {
@@ -104,34 +123,35 @@ function selectedRecords(input: ReportInput) {
   return { categories, periods, observations };
 }
 
-function previewLines(input: ReportInput): string[] {
+function previewLines(input: ReportInput, copy: ReportCopy): string[] {
   const { categories, periods, observations } = selectedRecords(input);
   const lines = [
-    'Sreadya cycle history report',
+    copy.title,
     `${input.selection.from} – ${input.selection.to}`,
-    'Generated locally on this device. This report is not a diagnosis.',
+    copy.disclaimer,
   ];
 
   if (categories.has('periods')) {
-    lines.push('', 'Periods');
+    lines.push('', copy.periodsHeading);
     for (const period of periods) {
-      lines.push(`${period.start}${period.end ? ` – ${period.end}` : ' – ongoing'}`);
+      lines.push(`${period.start}${period.end ? ` – ${period.end}` : ` – ${copy.ongoing}`}`);
     }
   }
 
-  lines.push('', 'Selected observations');
+  lines.push('', copy.observationsHeading);
   for (const observation of observations) {
     const note = categories.has('privateNotes') && observation.note ? ` · ${observation.note}` : '';
-    const value = observationValue(observation);
+    const value = localizedObservationValue(observation, copy);
+    const label = observation.label ?? copy.kindLabel(observation.kind);
     lines.push(
-      `${observation.occurredAt} · ${observation.label ?? observation.kind}${value ? ` · ${value}` : ''}${note}`,
+      `${observation.occurredAt} · ${label}${value ? ` · ${value}` : ''}${note}`,
     );
   }
   return lines;
 }
 
-export function buildReportPreview(input: ReportInput): string {
-  return previewLines(input).join('\n');
+export function buildReportPreview(input: ReportInput, copy: ReportCopy): string {
+  return previewLines(input, copy).join('\n');
 }
 
 function csvCell(value: string): string {
@@ -157,7 +177,7 @@ export function buildCsvReport(input: ReportInput): string {
       'observation',
       observation.occurredAt,
       observation.label ?? observation.kind,
-      observationValue(observation),
+      technicalObservationValue(observation),
       categories.has('privateNotes') ? observation.note ?? '' : '',
     ]);
   }
@@ -182,13 +202,30 @@ function wrapLine(line: string, width = 88): string[] {
   return result;
 }
 
-export async function buildPdfReport(input: ReportInput): Promise<Uint8Array> {
+export async function buildPdfReport(input: ReportInput, copy: ReportCopy): Promise<Uint8Array> {
   const document = await PDFDocument.create();
-  document.setTitle('Sreadya cycle history report');
-  document.setSubject('Locally generated Sreadya health report');
-  document.setProducer('Sreadya Web local report generator');
   const font = await document.embedFont(StandardFonts.Helvetica);
   const bold = await document.embedFont(StandardFonts.HelveticaBold);
+  const lines = previewLines(input, copy);
+
+  // pdf-lib's built-in StandardFonts are WinAnsi. Prove every rendered line
+  // is encodable before creating a partial document. Non-WinAnsi scripts fail
+  // closed and the UI surfaces a localized explanation instead of English fallback.
+  try {
+    for (const line of lines) {
+      if (!line) continue;
+      const heading = line === copy.title
+        || line === copy.periodsHeading
+        || line === copy.observationsHeading;
+      (heading ? bold : font).encodeText(line);
+    }
+  } catch {
+    throw new Error('report_pdf_font_unsupported');
+  }
+
+  document.setTitle(copy.title);
+  document.setSubject(copy.pdfSubject);
+  document.setProducer(copy.pdfProducer);
 
   let page = document.addPage([595, 842]);
   let y = 800;
@@ -206,13 +243,14 @@ export async function buildPdfReport(input: ReportInput): Promise<Uint8Array> {
     y -= heading ? 24 : 16;
   };
 
-  const lines = previewLines(input);
-  lines.forEach((line, index) => {
+  lines.forEach((line) => {
     if (line === '') {
       y -= 8;
       return;
     }
-    const heading = index === 0 || line === 'Periods' || line === 'Selected observations';
+    const heading = line === copy.title
+      || line === copy.periodsHeading
+      || line === copy.observationsHeading;
     for (const wrapped of wrapLine(line)) addLine(wrapped, heading);
   });
 
