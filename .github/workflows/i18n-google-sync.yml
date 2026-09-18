@@ -32,6 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SREADYA_GOOGLE_TRANSLATE_API_KEY: ${{ secrets.SREADYA_GOOGLE_TRANSLATE_API_KEY }}
+      SREADYA_TRANSLATION_MAX_CHARACTERS: ${{ vars.SREADYA_TRANSLATION_MAX_CHARACTERS }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -51,13 +52,20 @@ jobs:
             echo "::error::Add SREADYA_GOOGLE_TRANSLATE_API_KEY as a protected GitHub Actions secret. Never paste it into client code or commit it."
             exit 1
           fi
+          if [ -z "${SREADYA_TRANSLATION_MAX_CHARACTERS:-}" ]; then
+            echo "::error::Add repository variable SREADYA_TRANSLATION_MAX_CHARACTERS as an explicitly approved per-run ceiling before paid translation."
+            exit 1
+          fi
 
       - name: Verify frozen 194-language Google baseline
         run: |
           python -m py_compile tool/i18n_pipeline.py tool/verify_globalization.py
           python tool/i18n_pipeline.py --check-google-baseline
 
-      - name: Discover Google targets and synchronize every supported locale
+      - name: Discover Google targets and show the exact translation plan
+        run: python tool/i18n_pipeline.py --estimate-google-sync
+
+      - name: Synchronize every supported Google locale within the approved ceiling
         run: python tool/i18n_pipeline.py --sync-google-all
 
       - name: Prove formal globalization closure before publishing artifacts
