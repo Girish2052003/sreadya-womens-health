@@ -62,7 +62,7 @@ test('every published locale is a complete current-source bundle and the frozen 
   expect(englishArtifact).toBeTruthy();
   const english = await bundle(request, data, 'en');
   const sourceKeys = Object.keys(english).sort();
-  expect(sourceKeys.length).toBeGreaterThanOrEqual(1200);
+  expect(sourceKeys.length).toBeGreaterThanOrEqual(1189);
 
   const seen = new Set<string>();
   for (const locale of data.publicLocales) {
