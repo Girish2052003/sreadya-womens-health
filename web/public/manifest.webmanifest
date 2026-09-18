@@ -1,6 +1,6 @@
 {
-  "name": "Sreva",
-  "short_name": "Sreva",
+  "name": "Sreadya",
+  "short_name": "Sreadya",
   "description": "A privacy-first, local-first women’s cycle and menstrual health companion.",
   "id": "./",
   "start_url": "./app/home/",
@@ -12,7 +12,7 @@
   "categories": ["health", "lifestyle"],
   "icons": [
     {
-      "src": "./sreva-icon.svg",
+      "src": "./sreadya-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"

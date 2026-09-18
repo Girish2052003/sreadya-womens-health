@@ -1,13 +1,13 @@
 {
   "version": 1,
   "contractStatus": "contract",
-  "authority": "docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md",
+  "authority": "docs/superpowers/specs/2026-09-16-sreadya-web-product-architecture-design.md",
   "rules": [
     {
       "id": "PRIV-LAW-001",
       "key": "account_free_equality",
       "normative": true,
-      "statement": "Account-free Sreva remains a complete first-class health experience; account mode may add encrypted continuity and recovery convenience but not stronger core health features.",
+      "statement": "Account-free Sreadya remains a complete first-class health experience; account mode may add encrypted continuity and recovery convenience but not stronger core health features.",
       "capabilityRefs": ["PRIV-005", "ID-001", "ID-002", "ID-013"]
     },
     {
@@ -28,7 +28,7 @@
       "id": "PRIV-LAW-004",
       "key": "ciphertext_only_optional_sync",
       "normative": true,
-      "statement": "Optional synchronization encrypts sensitive health content on an authorized client before transmission; Sreva-operated infrastructure stores ciphertext plus only minimum operational metadata and cannot read the health content.",
+      "statement": "Optional synchronization encrypts sensitive health content on an authorized client before transmission; Sreadya-operated infrastructure stores ciphertext plus only minimum operational metadata and cannot read the health content.",
       "optional": true,
       "serverReadableHealthContent": false,
       "universalOperatorDecryptionSecretAllowed": false,
@@ -56,7 +56,7 @@
       "id": "PRIV-LAW-007",
       "key": "explicit_health_platform_permissions",
       "normative": true,
-      "statement": "HealthKit and Health Connect access is optional, granular, and explicit; Sreva's vault remains the authoritative application datastore.",
+      "statement": "HealthKit and Health Connect access is optional, granular, and explicit; Sreadya's vault remains the authoritative application datastore.",
       "permissionModel": "optional_granular_explicit",
       "capabilityRefs": ["HEALTH-001", "HEALTH-002", "HEALTH-005", "HEALTH-009", "PRIV-009"]
     }

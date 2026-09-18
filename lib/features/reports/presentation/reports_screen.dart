@@ -124,7 +124,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(path)],
-          text: 'Sreva health report — shared intentionally by the user.',
+          text: 'Sreadya health report — shared intentionally by the user.',
         ),
       );
     } catch (error) {
@@ -191,7 +191,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
           ),
           const SizedBox(height: 16),
           const Text(
-            'Sreva does not upload the report to a developer server. The operating-system share sheet controls the destination you choose.',
+            'Sreadya does not upload the report to a developer server. The operating-system share sheet controls the destination you choose.',
           ),
         ],
       ),

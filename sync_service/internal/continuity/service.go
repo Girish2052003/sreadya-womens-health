@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"sreva.dev/sync_service/internal/devices"
+	"sreadya.dev/sync_service/internal/devices"
 )
 
 var (

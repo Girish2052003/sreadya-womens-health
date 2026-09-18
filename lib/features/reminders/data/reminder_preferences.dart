@@ -86,7 +86,7 @@ class ReminderPreferencesStore {
   ReminderPreferencesStore({LocalSettingsStore? settings})
     : _settings = settings ?? LocalSettingsStore();
 
-  static const _key = 'sreva.reminder.preferences.v1';
+  static const _key = 'sreadya.reminder.preferences.v1';
   final LocalSettingsStore _settings;
 
   Future<ReminderPreferences> read() async {

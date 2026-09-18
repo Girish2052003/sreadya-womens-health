@@ -22,7 +22,7 @@ function observeRemoteRequests(page: Page): string[] {
 
 async function readVaultRecord(page: Page, id: string) {
   return page.evaluate(async (recordId) => new Promise<PersistedVaultRecord | undefined>((resolve, reject) => {
-    const request = indexedDB.open('sreva-vault-v1');
+    const request = indexedDB.open('sreadya-vault-v1');
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
       const db = request.result;
