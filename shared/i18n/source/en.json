@@ -796,6 +796,7 @@
   "sharing.error.prepare": "Sreadya could not prepare the reviewed sharing package.",
   "sharing.error.mechanism": "This browser has no reviewed share or clipboard mechanism available.",
   "sharing.error.handoff": "Sreadya could not hand off the reviewed summary.",
+  "sharing.error.revoke": "Sreadya could not revoke the local sharing grant.",
   "sharing.status.saved": "Sharing grant saved locally · encrypted",
   "sharing.status.sheet": "Reviewed summary handed to the system share sheet",
   "sharing.status.copied": "Reviewed summary copied locally",
