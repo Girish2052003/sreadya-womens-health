@@ -1,0 +1,161 @@
+{
+  "version": 1,
+  "task": 28,
+  "release_state": "blocked_external_acceptance",
+  "baseline_main_sha": "e04a7774b1de8f20913a03ccacf0fb5f9491b41d",
+  "user_visible_parity": [
+    {
+      "id": "terminology",
+      "repository_preflight": "covered",
+      "evidence": ["shared/terminology", "shared/capabilities/evidence.v1.json"]
+    },
+    {
+      "id": "data",
+      "repository_preflight": "covered",
+      "evidence": ["shared/schemas", "shared/capabilities/evidence.v1.json"]
+    },
+    {
+      "id": "predictions",
+      "repository_preflight": "covered",
+      "evidence": ["shared/prediction", "shared/capabilities/evidence.v1.json"]
+    },
+    {
+      "id": "privacy",
+      "repository_preflight": "covered",
+      "evidence": ["PRIVACY.md", "shared/privacy", "shared/capabilities/evidence.v1.json"]
+    },
+    {
+      "id": "reports",
+      "repository_preflight": "covered",
+      "evidence": ["shared/capabilities/evidence.v1.json", "web/e2e/task18-live-acceptance.spec.ts"]
+    },
+    {
+      "id": "reminders",
+      "repository_preflight": "covered",
+      "evidence": ["shared/reminders", "shared/capabilities/evidence.v1.json"]
+    },
+    {
+      "id": "life_stage_behavior",
+      "repository_preflight": "covered",
+      "evidence": ["shared/capabilities/evidence.v1.json"]
+    },
+    {
+      "id": "recovery_semantics",
+      "repository_preflight": "covered",
+      "evidence": ["docs/verification/TASK23_TRUSTED_DEVICE_RECOVERY_CLOSURE.md", "shared/capabilities/evidence.v1.json"]
+    },
+    {
+      "id": "sync_results",
+      "repository_preflight": "covered",
+      "evidence": ["docs/verification/C2_TASK22_CIPHERTEXT_SYNC_CLOSURE.md", "shared/sync", "shared/capabilities/evidence.v1.json"]
+    }
+  ],
+  "production_stop_gates": [
+    {
+      "id": "privacy",
+      "status": "repository_green",
+      "evidence": ["PRIVACY.md", "SECURITY.md", "tool/privacy_scan.py"]
+    },
+    {
+      "id": "migration",
+      "status": "repository_green",
+      "evidence": ["test/database/migration_coordinator_test.dart", "test/hardening/task27_recovery_hardening_test.dart"]
+    },
+    {
+      "id": "reminder",
+      "status": "repository_green",
+      "evidence": ["verification/reference/test_android_reminder_resilience.py", "shared/reminders"]
+    },
+    {
+      "id": "recovery",
+      "status": "repository_green",
+      "evidence": ["docs/verification/TASK23_TRUSTED_DEVICE_RECOVERY_CLOSURE.md", "test/hardening/task27_recovery_hardening_test.dart"]
+    },
+    {
+      "id": "ciphertext_authorization",
+      "status": "repository_green",
+      "evidence": ["docs/verification/C2_TASK22_CIPHERTEXT_SYNC_CLOSURE.md", "sync_service/internal/sync/task27_hardening_test.go"]
+    },
+    {
+      "id": "data_loss",
+      "status": "repository_green",
+      "evidence": ["web/src/sync/queue.test.ts", "test/backup/cycle_vault_restore_test.dart"]
+    }
+  ],
+  "stages": [
+    {
+      "id": "web_pwa_wife_alpha",
+      "kind": "external",
+      "status": "external_pending",
+      "repository_preflight": ["docs/verification/WEB_PWA_LOCAL_ACCEPTANCE.md", "web/e2e/task18-live-acceptance.spec.ts"],
+      "evidence_required": [
+        "sanitized wife-alpha acceptance receipt with date/build SHA and no health payload",
+        "device/browser class used for acceptance"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "android_wife_alpha_regression",
+      "kind": "external",
+      "status": "external_pending",
+      "repository_preflight": [".github/workflows/ci.yml", ".github/workflows/android-family-preview.yml"],
+      "evidence_required": [
+        "sanitized Android wife-alpha acceptance receipt with date/build SHA and no health payload",
+        "device/Android version used for acceptance"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "ios_native_distribution",
+      "kind": "external",
+      "status": "external_pending",
+      "repository_preflight": [".github/workflows/ci.yml", ".github/workflows/c2-task24-verify.yml"],
+      "evidence_required": [
+        "signed iOS distribution evidence when signing exists",
+        "sanitized iOS native acceptance receipt with date/build SHA and no health payload"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "multi_device_e2ee_acceptance",
+      "kind": "external",
+      "status": "external_pending",
+      "repository_preflight": [
+        "docs/security/E2EE_PROTOCOL_REVIEW.md",
+        "docs/verification/C2_TASK22_CIPHERTEXT_SYNC_CLOSURE.md",
+        "docs/verification/TASK23_TRUSTED_DEVICE_RECOVERY_CLOSURE.md"
+      ],
+      "evidence_required": [
+        "real-device multi-client E2EE acceptance receipt using synthetic or user-controlled data",
+        "build SHAs/device classes and recovery/revocation scenarios exercised"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "private_beta",
+      "kind": "external",
+      "status": "external_pending",
+      "repository_preflight": ["docs/verification/C2_CROSS_PLATFORM_RELEASE_CLOSURE.md"],
+      "evidence_required": [
+        "private-beta acceptance summary with tester count/build SHA and no health payload",
+        "open blocker count and disposition"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "staged_production",
+      "kind": "external",
+      "status": "blocked",
+      "repository_preflight": [
+        "docs/android/PLAY_PRODUCTION_RUNBOOK.md",
+        "docs/android/PLAY_COMPLIANCE_CHECKLIST.md"
+      ],
+      "evidence_required": [
+        "all prior Task-28 external stages accepted with sanitized evidence",
+        "exact-release store/compliance review",
+        "staged rollout authorization"
+      ],
+      "evidence": []
+    }
+  ]
+}
