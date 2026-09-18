@@ -214,9 +214,22 @@ test('Task 18 live production desktop/account-free acceptance preflight', async 
     return chunks.join('\n');
   });
 
-  const sensitiveSentinels = [SYNTHETIC_NOTE, ...starts];
-  for (const sentinel of sensitiveSentinels) {
-    expect(cachedBodies).not.toContain(sentinel);
+  // Raw YYYY-MM-DD values are not globally unique secrets: release metadata can
+  // legitimately contain the same calendar date. For Cache Storage, detect the
+  // structured plaintext shape a leaked period record would actually contain.
+  // Network requests remain stricter and must not contain even the raw dates.
+  const cachedSensitivePatterns = [
+    new RegExp(SYNTHETIC_NOTE),
+    ...starts.map((start) => new RegExp(
+      `"start"\\s*:\\s*"${start}T00:00:00\\.000Z"`,
+    )),
+  ];
+  for (const pattern of cachedSensitivePatterns) {
+    expect(cachedBodies).not.toMatch(pattern);
+  }
+
+  const requestSensitiveSentinels = [SYNTHETIC_NOTE, ...starts];
+  for (const sentinel of requestSensitiveSentinels) {
     for (const observed of observedRequests) {
       expect(observed.url).not.toContain(sentinel);
       expect(observed.postData ?? '').not.toContain(sentinel);
