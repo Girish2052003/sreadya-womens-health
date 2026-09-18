@@ -85,7 +85,7 @@ export function AccountFreeWorkspace({ section }: { section: Task10CoreSection }
   const mutate = useCallback(async (operation: (activeRepository: HealthVaultRepository) => Promise<void>) => {
     if (!repository) return; setError('');
     try { await operation(repository); setRevision((value) => value + 1); setVaultStatus(t('core.saved')); }
-    catch (cause) { setError(cause instanceof Error ? cause.message : t('core.error.update')); }
+    catch (cause) { setError(t('core.error.update')); }
   }, [repository, t]);
 
   const startPeriodToday = () => void mutate(async (r) => { await new PeriodActions(r).startPeriod(utcMidnight(today)); });
