@@ -150,10 +150,11 @@ test('keyboard focus, 200 percent reflow, large text, RTL and long-copy fixtures
   ) ?? false;
 
   await page.goto('/');
-  await page.getByTestId('language-chooser-trigger').click();
-  await page.getByTestId('language-chooser-search').fill('Arabic');
 
   if (arabicPublished) {
+    await expect(page.getByTestId('language-chooser-trigger')).toBeVisible();
+    await page.getByTestId('language-chooser-trigger').click();
+    await page.getByTestId('language-chooser-search').fill('Arabic');
     await page.locator('[data-language-tag="ar"]').click();
     await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
     await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
@@ -169,9 +170,10 @@ test('keyboard focus, 200 percent reflow, large text, RTL and long-copy fixtures
     await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
     await expect(page.locator('html')).toHaveAttribute('data-sreadya-text-direction', 'rtl');
   } else {
-    // Before provider closure, an RTL provider locale must not be selectable
-    // as a partial/fallback language. The remainder of this accessibility test
-    // still exercises reflow, focus and long-copy behavior.
+    // In English-only release mode, the one-item language chooser is hidden.
+    // The remainder of this accessibility test still exercises reflow, focus
+    // and long-copy behavior without weakening the future RTL proof.
+    await expect(page.getByTestId('language-chooser-trigger')).toHaveCount(0);
     await expect(page.locator('[data-language-tag="ar"]')).toHaveCount(0);
     await page.goto(SETTINGS_URL);
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
