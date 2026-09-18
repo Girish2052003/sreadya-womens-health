@@ -44,18 +44,29 @@ const sreadyaI18nPlugin = {
           /\.test\.tsx?$/.test(filename)
           || filename.endsWith('/src/app/layout.tsx')
           || filename.endsWith('/src/components/vault/VaultLocalOnlyPanel.tsx')
-          || filename.endsWith('/src/features/vault/CycleVaultWorkspace.tsx') // NEXT_PUBLIC_SREADYA_CYCLEVAULT_TEST_HARNESS-only literals; verifier strips the bounded harness region.
         ) {
           return {};
         }
 
+        const sourceText = context.sourceCode.getText();
+        const harnessStart = sourceText.indexOf('/* i18n-test-harness-start */');
+        const harnessEnd = sourceText.indexOf('/* i18n-test-harness-end */');
+        const insideTestHarness = (node) =>
+          harnessStart >= 0
+          && harnessEnd > harnessStart
+          && Array.isArray(node.range)
+          && node.range[0] >= harnessStart
+          && node.range[1] <= harnessEnd;
+
         return {
           JSXText(node) {
+            if (insideTestHarness(node)) return;
             if (isTranslatableLiteral(node.value)) {
               context.report({ node, messageId: 'hardcoded' });
             }
           },
           JSXAttribute(node) {
+            if (insideTestHarness(node)) return;
             if (!node.name || node.name.type !== 'JSXIdentifier') return;
             const checked = new Set(['aria-label', 'placeholder', 'title', 'alt', 'eyebrow']);
             if (!checked.has(node.name.name)) return;
@@ -64,6 +75,7 @@ const sreadyaI18nPlugin = {
             }
           },
           CallExpression(node) {
+            if (insideTestHarness(node)) return;
             if (node.callee?.type !== 'Identifier') return;
             if (!['setError', 'setStatus'].includes(node.callee.name)) return;
             const first = node.arguments?.[0];
