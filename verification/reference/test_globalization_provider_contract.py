@@ -99,3 +99,69 @@ def test_client_source_does_not_need_google_credentials() -> None:
     for text in (provider, chooser):
         assert "SREADYA_GOOGLE_TRANSLATE_API_KEY" not in text
         assert "translation.googleapis.com" not in text
+
+def test_google_locale_sync_deduplicates_and_reuses_unchanged_source(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.setattr(pipeline, "TRANSLATIONS", tmp_path)
+    source = {
+        "one": "Same source value",
+        "two": "Same source value",
+        "three": "Week {week}",
+    }
+    source_version = "deadbeef"
+
+    class FakeGoogleProvider:
+        provider_id = pipeline.GOOGLE_PROVIDER_ID
+        model_id = pipeline.GOOGLE_MODEL_ID
+
+        def __init__(self) -> None:
+            self.calls: list[dict[str, str]] = []
+
+        def translate(self, locale: str, messages: dict[str, str]) -> dict[str, str]:
+            assert locale == "fi"
+            self.calls.append(dict(messages))
+            return {
+                key: (
+                    "Sama lähdearvo"
+                    if value == "Same source value"
+                    else "Viikko {week}"
+                )
+                for key, value in messages.items()
+            }
+
+    provider = FakeGoogleProvider()
+    translated, reused = pipeline.sync_google_locale(
+        canonical_locale="fi",
+        provider_locale="fi",
+        provider=provider,
+        source=source,
+        source_version=source_version,
+    )
+
+    assert translated == 3
+    assert reused == 0
+    assert len(provider.calls) == 1
+    assert len(provider.calls[0]) == 2
+
+    artifact = pipeline.read_raw_translation("fi")
+    assert artifact["meta"]["provider"] == pipeline.GOOGLE_PROVIDER_ID
+    assert artifact["meta"]["risk"] == "mixed"
+    assert artifact["messages"]["one"] == artifact["messages"]["two"]
+    assert artifact["messages"]["three"] == "Viikko {week}"
+    assert set(artifact["sourceHashes"]) == set(source)
+
+    provider.calls.clear()
+    translated, reused = pipeline.sync_google_locale(
+        canonical_locale="fi",
+        provider_locale="fi",
+        provider=provider,
+        source=source,
+        source_version=source_version,
+    )
+
+    assert translated == 0
+    assert reused == 3
+    assert provider.calls == []
+
