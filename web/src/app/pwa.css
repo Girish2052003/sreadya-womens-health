@@ -67,3 +67,19 @@
     flex-direction: column;
   }
 }
+
+
+[data-sreva-theme='dark'] .install-guide {
+  background:
+    radial-gradient(circle at 88% 12%, rgba(217, 104, 143, 0.14), transparent 17rem),
+    linear-gradient(145deg, #ffffff, #fff4f7);
+  color: var(--ink-on-light);
+}
+[data-sreva-theme='dark'] .install-guide ol,
+[data-sreva-theme='dark'] .install-guide__privacy p {
+  color: var(--muted-on-light);
+}
+[data-sreva-theme='dark'] .install-guide__privacy,
+[data-sreva-theme='dark'] .install-guide__privacy strong {
+  color: var(--ink-on-light);
+}

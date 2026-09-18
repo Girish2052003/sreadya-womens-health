@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import { ThemeToggle } from '../../theme/ThemeToggle';
+
 const publicLinks = [
   ['Features', '/features'],
   ['How it works', '/how-it-works'],
@@ -21,6 +23,7 @@ export function PublicHeader() {
           <Link key={href} href={href}>{label}</Link>
         ))}
       </nav>
+      <ThemeToggle />
       <Link className="public-header__cta" href="/app/home">Open Sreva</Link>
     </header>
   );

@@ -16,6 +16,10 @@
   --line: rgba(117, 21, 58, 0.13);
   --shadow: 0 24px 70px rgba(80, 24, 44, 0.11);
   --focus: #26191e;
+  --ink-on-light: #26191e;
+  --muted-on-light: #66545b;
+  --accent-on-light: #75153a;
+  --rose-on-light: #a62e58;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: var(--sreva-pearl);
   color: var(--sreva-ink);
@@ -40,7 +44,7 @@ button, input, textarea, select { font: inherit; }
   margin: 0 auto;
   min-height: 78px;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr auto auto;
   align-items: center;
   gap: 28px;
   position: relative;
@@ -203,4 +207,63 @@ button, input, textarea, select { font: inherit; }
     transition-duration: .01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+
+/* Public appearance control */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+}
+.theme-toggle__option {
+  min-height: 36px;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sreva-muted);
+  cursor: pointer;
+  font-size: .78rem;
+  font-weight: 760;
+}
+.theme-toggle__option[aria-pressed='true'] {
+  background: var(--sreva-blush);
+  color: var(--sreva-crimson);
+}
+.theme-toggle__option span:first-child { margin-inline-end: 4px; }
+
+/* Deliberately light surfaces retain dark readable foregrounds in dark mode. */
+[data-sreva-theme='dark'] .link-button--quiet,
+[data-sreva-theme='dark'] .preview-card,
+[data-sreva-theme='dark'] .story-card:not(.story-card--wide),
+[data-sreva-theme='dark'] .closing-cta,
+[data-sreva-theme='dark'] .principle-grid article,
+[data-sreva-theme='dark'] .sreva-status,
+[data-sreva-theme='dark'] .workspace-nav {
+  color: var(--ink-on-light);
+}
+[data-sreva-theme='dark'] .preview-card__top,
+[data-sreva-theme='dark'] .preview-copy,
+[data-sreva-theme='dark'] .principle-grid p,
+[data-sreva-theme='dark'] .workspace-nav__item {
+  color: var(--muted-on-light);
+}
+[data-sreva-theme='dark'] .workspace-nav__item[aria-current='page'] {
+  color: var(--accent-on-light);
+}
+
+@media (max-width: 820px) {
+  .public-header { grid-template-columns: auto 1fr auto auto; gap: 8px; }
+  .theme-toggle__text { display: none; }
+  .theme-toggle__option { width: 34px; padding-inline: 6px; }
+}
+@media (max-width: 430px) {
+  .public-header__cta { padding-inline: 10px; font-size: .82rem; }
+  .theme-toggle { gap: 1px; padding: 3px; }
+  .theme-toggle__option { width: 30px; min-height: 32px; }
 }

@@ -80,3 +80,17 @@
     flex-direction: column;
   }
 }
+
+
+[data-sreva-theme='dark'] .vault-local-panel {
+  color: var(--ink-on-light);
+}
+[data-sreva-theme='dark'] .vault-local-panel__warning,
+[data-sreva-theme='dark'] .vault-test-harness label,
+[data-sreva-theme='dark'] .vault-test-harness output {
+  color: var(--muted-on-light);
+}
+[data-sreva-theme='dark'] .vault-local-panel__warning strong,
+[data-sreva-theme='dark'] .vault-test-harness textarea {
+  color: var(--ink-on-light);
+}

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { AccessibilityPreferencesWorkspace } from '../../accessibility/AccessibilityPreferencesWorkspace';
 import { localeDirection } from '../../i18n/locale';
+import { applyThemePreference, GENERAL_SETTINGS_KEY } from '../../theme/theme-preference';
 import { AppLockSettings } from '../../privacy/AppLockSettings';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
@@ -16,7 +17,7 @@ type Preferences = {
   locale: string;
 };
 
-const KEY = 'sreva:general-settings:v1';
+const KEY = GENERAL_SETTINGS_KEY;
 const defaults: Preferences = { theme: 'system', units: 'metric', time: 'system', locale: 'en-FI' };
 
 function applyLocale(locale: string) {
@@ -28,10 +29,11 @@ function applyLocale(locale: string) {
 }
 
 function applyTheme(theme: Preferences['theme']) {
-  const resolved = theme === 'system'
-    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-    : theme;
-  document.documentElement.setAttribute('data-sreva-theme', resolved);
+  applyThemePreference(
+    document.documentElement,
+    theme,
+    window.matchMedia('(prefers-color-scheme: dark)').matches,
+  );
 }
 
 function applyGeneralPreferences(preferences: Preferences) {
