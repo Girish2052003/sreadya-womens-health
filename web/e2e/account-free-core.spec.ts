@@ -17,7 +17,7 @@ type PersistedVaultRecord = {
 
 async function readPeriodRecords(page: import('@playwright/test').Page) {
   return page.evaluate(async () => new Promise<PersistedVaultRecord[]>((resolve, reject) => {
-    const request = indexedDB.open('sreva-vault-v1');
+    const request = indexedDB.open('sreadya-vault-v1');
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
       const db = request.result;

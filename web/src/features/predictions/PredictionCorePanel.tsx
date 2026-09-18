@@ -36,9 +36,9 @@ export function PredictionCorePanel({
     return (
       <div className="core-panel-grid" data-testid="prediction-core-panel">
         <Card eyebrow="Local estimate" title="Prediction">
-          <p>More cycle history is needed before Sreva can calculate a meaningful estimate.</p>
+          <p>More cycle history is needed before Sreadya can calculate a meaningful estimate.</p>
           <p className="workspace-note">
-            No date is invented. Record at least two period starts; Sreva will use your own history and will not assume a 28-day cycle.
+            No date is invented. Record at least two period starts; Sreadya will use your own history and will not assume a 28-day cycle.
           </p>
         </Card>
         <Card eyebrow="Prediction history" title="Accuracy starts with real outcomes">
@@ -79,7 +79,7 @@ export function PredictionCorePanel({
         </p>
       </Card>
 
-      <Card eyebrow="How Sreva calculated this" title="Your history stays in context">
+      <Card eyebrow="How Sreadya calculated this" title="Your history stays in context">
         <p>Estimated cycle length: {prediction.estimatedCycleLengthDays} days.</p>
         <p>
           {prediction.estimatedPeriodDurationDays == null
@@ -115,7 +115,7 @@ export function PredictionCorePanel({
           <>
             <p>Ovulation estimate: available only when Trying to Conceive mode is enabled.</p>
             <p>Estimated fertile window: available only when Trying to Conceive mode is enabled.</p>
-            <p className="workspace-note">Sreva does not silently show fertility timing in other life-stage modes.</p>
+            <p className="workspace-note">Sreadya does not silently show fertility timing in other life-stage modes.</p>
           </>
         )}
       </Card>

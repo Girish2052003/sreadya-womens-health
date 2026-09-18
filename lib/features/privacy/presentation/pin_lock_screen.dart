@@ -39,7 +39,7 @@ class _PinLockScreenState extends State<PinLockScreen> {
         setState(() => _configured = Future.value(true));
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Sreva PIN verifier saved in secure device storage.'),
+            content: Text('Sreadya PIN verifier saved in secure device storage.'),
           ),
         );
       }
@@ -56,7 +56,7 @@ class _PinLockScreenState extends State<PinLockScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sreva PIN fallback')),
+      appBar: AppBar(title: const Text('Sreadya PIN fallback')),
       body: FutureBuilder<bool>(
         future: _configured,
         builder: (context, snapshot) {
@@ -68,7 +68,7 @@ class _PinLockScreenState extends State<PinLockScreen> {
                 child: Padding(
                   padding: EdgeInsets.all(16),
                   child: Text(
-                    'A Sreva PIN is optional. It is stored only as a memory-hard Argon2id verifier in OS secure storage. It never encrypts the health database and is never sent to a server.',
+                    'A Sreadya PIN is optional. It is stored only as a memory-hard Argon2id verifier in OS secure storage. It never encrypts the health database and is never sent to a server.',
                   ),
                 ),
               ),
@@ -96,7 +96,7 @@ class _PinLockScreenState extends State<PinLockScreen> {
                 onPressed: _busy ? null : _save,
                 icon: const Icon(Icons.pin_outlined),
                 label: Text(
-                  configured ? 'Change Sreva PIN' : 'Enable Sreva PIN',
+                  configured ? 'Change Sreadya PIN' : 'Enable Sreadya PIN',
                 ),
               ),
               if (configured) ...[
@@ -104,7 +104,7 @@ class _PinLockScreenState extends State<PinLockScreen> {
                 OutlinedButton.icon(
                   onPressed: _busy ? null : _remove,
                   icon: const Icon(Icons.delete_outline),
-                  label: const Text('Remove Sreva PIN'),
+                  label: const Text('Remove Sreadya PIN'),
                 ),
               ],
             ],

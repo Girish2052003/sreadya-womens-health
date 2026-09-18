@@ -69,7 +69,7 @@ export function SharingWorkspace() {
     })().catch(() => {
       if (cancelled) return;
       setStatus('Local vault unavailable');
-      setError('Sreva could not open encrypted local sharing grants in this browser.');
+      setError('Sreadya could not open encrypted local sharing grants in this browser.');
       setReady(true);
     });
     return () => {
@@ -127,7 +127,7 @@ export function SharingWorkspace() {
     } catch (cause) {
       setGrant(null);
       setSharePackage(null);
-      setError(cause instanceof Error ? cause.message : 'Sreva could not prepare the reviewed sharing package.');
+      setError(cause instanceof Error ? cause.message : 'Sreadya could not prepare the reviewed sharing package.');
     }
   };
 
@@ -136,7 +136,7 @@ export function SharingWorkspace() {
     setError('');
     try {
       if (typeof navigator.share === 'function') {
-        await navigator.share({ title: 'Sreva shared summary', text: sharePackage.shareText });
+        await navigator.share({ title: 'Sreadya shared summary', text: sharePackage.shareText });
         setStatus('Reviewed summary handed to the system share sheet');
       } else if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(sharePackage.shareText);
@@ -146,7 +146,7 @@ export function SharingWorkspace() {
       }
     } catch (cause) {
       if (cause instanceof DOMException && cause.name === 'AbortError') return;
-      setError(cause instanceof Error ? cause.message : 'Sreva could not hand off the reviewed summary.');
+      setError(cause instanceof Error ? cause.message : 'Sreadya could not hand off the reviewed summary.');
     }
   };
 

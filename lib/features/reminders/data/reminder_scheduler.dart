@@ -12,7 +12,7 @@ class ReminderPermissionStatus {
 }
 
 class ReminderScheduler {
-  static const MethodChannel _channel = MethodChannel('sreva/reminders');
+  static const MethodChannel _channel = MethodChannel('sreadya/reminders');
 
   Future<ReminderPermissionStatus> permissionStatus() async {
     try {
@@ -45,7 +45,7 @@ class ReminderScheduler {
         'id': plan.id,
         'kind': plan.kind.name,
         'timestampMillis': plan.targetLocal.millisecondsSinceEpoch,
-        'title': 'Sreva',
+        'title': 'Sreadya',
         'body': body,
         'repeatDaily': plan.repeatDaily,
         'label': plan.label,

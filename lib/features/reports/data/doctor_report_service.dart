@@ -27,7 +27,7 @@ class DoctorReportService {
       pw.MultiPage(
         build: (_) => [
           pw.Text(
-            'Sreva cycle history report',
+            'Sreadya cycle history report',
             style: pw.TextStyle(fontSize: 22, fontWeight: pw.FontWeight.bold),
           ),
           pw.SizedBox(height: 8),
@@ -67,7 +67,7 @@ class DoctorReportService {
     );
 
     final directory = await getTemporaryDirectory();
-    final file = File(p.join(directory.path, 'sreva-health-report.pdf'));
+    final file = File(p.join(directory.path, 'sreadya-health-report.pdf'));
     await file.writeAsBytes(await doc.save(), flush: true);
     return file.path;
   }
@@ -120,7 +120,7 @@ class DoctorReportService {
     if (!writeFile) return csv;
 
     final directory = await getTemporaryDirectory();
-    final file = File(p.join(directory.path, 'sreva-health-report.csv'));
+    final file = File(p.join(directory.path, 'sreadya-health-report.csv'));
     await file.writeAsString(csv, encoding: utf8, flush: true);
     return file.path;
   }
