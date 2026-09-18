@@ -61,8 +61,8 @@ test('Task 18 live production desktop/account-free acceptance preflight', async 
     const title = item.querySelector('strong');
     if (!title) throw new Error('Capability title missing');
     const parse = (rgb: string) => {
-      const values = rgb.match(/[\\d.]+/g)?.slice(0, 3).map(Number);
-      if (!values || values.length !== 3) throw new Error(\`Unable to parse color: \${rgb}\`);
+      const values = rgb.match(/[\d.]+/g)?.slice(0, 3).map(Number);
+      if (!values || values.length !== 3) throw new Error(`Unable to parse color: ${rgb}`);
       const channel = (value: number) => {
         const normalized = value / 255;
         return normalized <= 0.04045 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
