@@ -28,7 +28,7 @@ describe('buildDiagnosticReport', () => {
     } as never);
 
     expect(report).toEqual({
-      format: 'SREVA-DIAGNOSTIC', version: 1, appVersion: '0.1.0', ...versions,
+      format: 'SREADYA-DIAGNOSTIC', version: 1, appVersion: '0.1.0', ...versions,
       browser: { name: 'Chromium', version: '153' },
       schema: { vaultVersion: 1, supported: true },
       engine: { crypto: 'webcrypto', persistence: 'indexeddb' },
@@ -50,6 +50,6 @@ describe('buildDiagnosticReport', () => {
       engine: { crypto: 'made-up-crypto', persistence: 'indexeddb' },
       permissions: { notifications: 'default', persistentStorage: 'unknown' },
       integrity: { state: 'ok' },
-    } as never)).toThrow('Unsupported Sreva diagnostic technical state.');
+    } as never)).toThrow('Unsupported Sreadya diagnostic technical state.');
   });
 });

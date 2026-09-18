@@ -52,7 +52,7 @@ func TestPasskeyServiceBeginsRegistrationAndStoresOneTimeSession(t *testing.T) {
 	)
 	service, err := NewPasskeyService(PasskeyConfig{
 		RPID:          "example.com",
-		RPDisplayName: "Sreva",
+		RPDisplayName: "Sreadya",
 		RPOrigins:     []string{"https://example.com"},
 	}, sessions)
 	if err != nil {
@@ -62,7 +62,7 @@ func TestPasskeyServiceBeginsRegistrationAndStoresOneTimeSession(t *testing.T) {
 	user := PasskeyUser{
 		ID:          []byte("0123456789abcdef"),
 		Name:        "wife@example.com",
-		DisplayName: "Sreva User",
+		DisplayName: "Sreadya User",
 	}
 	creation, sessionID, err := service.BeginRegistration(user)
 	if err != nil {
@@ -92,7 +92,7 @@ func TestPasskeyServiceBeginsDiscoverableLogin(t *testing.T) {
 	)
 	service, err := NewPasskeyService(PasskeyConfig{
 		RPID:          "example.com",
-		RPDisplayName: "Sreva",
+		RPDisplayName: "Sreadya",
 		RPOrigins:     []string{"https://example.com"},
 	}, sessions)
 	if err != nil {
@@ -127,7 +127,7 @@ func TestPasskeyServiceFinishRegistrationConsumesCeremonyBeforeValidation(t *tes
 	)
 	service, err := NewPasskeyService(PasskeyConfig{
 		RPID:          "example.com",
-		RPDisplayName: "Sreva",
+		RPDisplayName: "Sreadya",
 		RPOrigins:     []string{"https://example.com"},
 	}, sessions)
 	if err != nil {
@@ -137,7 +137,7 @@ func TestPasskeyServiceFinishRegistrationConsumesCeremonyBeforeValidation(t *tes
 	user := PasskeyUser{
 		ID:          []byte("0123456789abcdef"),
 		Name:        "wife@example.com",
-		DisplayName: "Sreva User",
+		DisplayName: "Sreadya User",
 	}
 	_, sessionID, err := service.BeginRegistration(user)
 	if err != nil {
@@ -168,7 +168,7 @@ func TestPasskeyServiceFinishDiscoverableLoginConsumesCeremonyBeforeValidation(t
 	)
 	service, err := NewPasskeyService(PasskeyConfig{
 		RPID:          "example.com",
-		RPDisplayName: "Sreva",
+		RPDisplayName: "Sreadya",
 		RPOrigins:     []string{"https://example.com"},
 	}, sessions)
 	if err != nil {
