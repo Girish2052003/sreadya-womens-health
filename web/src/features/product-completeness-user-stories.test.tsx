@@ -1,9 +1,9 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import type { ReminderPolicySettings } from '../../domain/reminders/reminder-policy';
-import { PredictionCorePanel } from '../predictions/PredictionCorePanel';
-import { ReminderSettingsPanel } from '../reminders/ReminderSettingsPanel';
+import type { ReminderPolicySettings } from '../domain/reminders/reminder-policy';
+import { PredictionCorePanel } from './predictions/PredictionCorePanel';
+import { ReminderSettingsPanel } from './reminders/ReminderSettingsPanel';
 
 describe('final product-completeness user stories', () => {
   it('surfaces the complete prediction context rather than only the next-period date', () => {
