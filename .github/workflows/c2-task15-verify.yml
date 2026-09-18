@@ -25,7 +25,8 @@ jobs:
       - name: Verify Sreadya globalization contract
         run: |
           python -m py_compile tool/i18n_pipeline.py tool/verify_globalization.py
-          python tool/verify_globalization.py
+          python tool/i18n_pipeline.py --check-google-baseline
+          python tool/verify_globalization.py --require-global-closure
           python tool/i18n_pipeline.py --check
           python tool/i18n_pipeline.py --dry-run --locales fi,ta,hi,ar,ja,sw
       - name: Install locked Web dependencies
