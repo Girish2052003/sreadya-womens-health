@@ -77,7 +77,7 @@ def check_hardcoded_copy() -> list[str]:
         allow_tokens = {
             "FORGE", "NC CORP", "Sreadya", "SREADYA", "CycleVault",
             "GitHub", "WebCrypto", "IndexedDB", "PIN", "UTC", "by NC CORP",
-            "Prakritim Svam Avashtabhya.", "S",
+            "S",
         }
         normalized = []
         for value in matches:
@@ -85,6 +85,8 @@ def check_hardcoded_copy() -> list[str]:
             if not value or value in allow_tokens:
                 continue
             if value.startswith("http") or value.startswith("data-"):
+                continue
+            if rel == "web/src/app/page.tsx" and "Prakritim" in value and "Avashtabhya." in value:
                 continue
             normalized.append(value)
         if normalized:

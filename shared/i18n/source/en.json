@@ -1157,7 +1157,7 @@
   "vault.error.export": "Sreadya could not create the encrypted CycleVault recovery file.",
   "vault.status.selected": "CycleVault file selected. Nothing has been restored yet.",
   "vault.error.read": "Sreadya could not read that CycleVault file. Your local health data was not changed.",
-  "vault.status.restored": "CycleVault restored locally: {periods} period records, {observations} observations.",
+  "vault.status.restored": "CycleVault restored locally: {periods} period record(s), {observations} observation(s).",
   "vault.error.restore": "CycleVault restore failed. Your existing local health data was preserved. Check the file and recovery passphrase.",
   "vault.backupEyebrow": "Encrypted backup",
   "vault.backupTitle": "Create a CycleVault recovery file",
@@ -1196,5 +1196,6 @@
   "homeCore.observationCount.one": "{count} local observation",
   "homeCore.observationCount.other": "{count} local observations",
   "prediction.ovulationUnavailable": "Ovulation estimate: available only when Trying to Conceive mode is enabled.",
-  "prediction.fertileWindowUnavailable": "Estimated fertile window: available only when Trying to Conceive mode is enabled."
+  "prediction.fertileWindowUnavailable": "Estimated fertile window: available only when Trying to Conceive mode is enabled.",
+  "sharing.cyclePhaseAria": "Cycle phase or day"
 }

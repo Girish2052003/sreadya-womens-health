@@ -4,9 +4,9 @@
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import type { HealthObservation, PeriodEpisode } from '../../domain/cycle/types';
-import { formatLocaleDate } from '../../i18n/locale';
+import { formatLocaleDate, isEnglishLocale } from '../../i18n/locale';
 import { useI18n } from '../../i18n/I18nProvider';
-import { formatDateInput, periodDurationDays } from '../core/presentation';
+import { formatDateInput, formatUtcDate, periodDurationDays } from '../core/presentation';
 import type { PeriodEdit } from './period-actions';
 
 function dateInputToUtc(value: string): string { return `${value}T00:00:00.000Z`; }
@@ -18,7 +18,7 @@ export function CycleCorePanel({ periods, cycleNotes, onStartPeriodToday, onEndP
 }) {
   const { t, locale } = useI18n();
   const recent = [...periods].reverse();
-  const date = (value: string) => formatLocaleDate(value, locale, 'UTC');
+  const date = (value: string) => isEnglishLocale(locale) ? formatUtcDate(value) : formatLocaleDate(value, locale, 'UTC');
 
   return (
     <div className="core-panel-grid">
