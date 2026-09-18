@@ -1187,5 +1187,10 @@
   "prediction.ovulationUnavailable": "Ovulation estimate: available only when Trying to Conceive mode is enabled.",
   "prediction.fertileWindowUnavailable": "Estimated fertile window: available only when Trying to Conceive mode is enabled.",
   "sharing.cyclePhaseAria": "Cycle phase or day",
-  "reminder.lateAria": "Late reminder days"
+  "reminder.lateAria": "Late reminder days",
+  "insights.timingPattern": "{symptom} entries were recorded most often around cycle day {day}. This is an observation, not a medical cause or diagnosis.",
+  "insights.pmsPattern.one": "{symptom}: {count} entry in the seven days before a recorded period. This is an observed timing pattern, not a PMS diagnosis.",
+  "insights.pmsPattern.other": "{symptom}: {count} entries in the seven days before a recorded period. This is an observed timing pattern, not a PMS diagnosis.",
+  "insights.flowPattern.one": "{flow} flow was your most frequently recorded flow level ({count} log). This is a summary of your entries, not a medical interpretation.",
+  "insights.flowPattern.other": "{flow} flow was your most frequently recorded flow level ({count} logs). This is a summary of your entries, not a medical interpretation."
 }
