@@ -8,6 +8,7 @@ import {
   setAutoLockMinutes,
   setPin,
   verifyPin,
+  type AppLockStorage,
 } from './app-lock';
 
 class MemoryStorage {
@@ -21,11 +22,11 @@ describe('Web PIN privacy gate', () => {
   it('stores only a salted verifier and verifies the PIN without using it as the vault key', async () => {
     const storage = new MemoryStorage();
     const salt = new Uint8Array(16).fill(7);
-    await setPin(storage as Storage, '2052', 5, salt);
+    await setPin(storage as AppLockStorage, '2052', 5, salt);
 
-    expect(isPinConfigured(storage as Storage)).toBe(true);
-    expect(await verifyPin(storage as Storage, '2052')).toBe(true);
-    expect(await verifyPin(storage as Storage, '0000')).toBe(false);
+    expect(isPinConfigured(storage as AppLockStorage)).toBe(true);
+    expect(await verifyPin(storage as AppLockStorage, '2052')).toBe(true);
+    expect(await verifyPin(storage as AppLockStorage, '0000')).toBe(false);
 
     const raw = storage.getItem(APP_LOCK_STORAGE_KEY) ?? '';
     expect(raw).not.toContain('2052');
@@ -34,10 +35,10 @@ describe('Web PIN privacy gate', () => {
 
   it('supports reviewed automatic-lock intervals and explicit removal', async () => {
     const storage = new MemoryStorage();
-    await setPin(storage as Storage, '1234', 5, new Uint8Array(16).fill(4));
-    setAutoLockMinutes(storage as Storage, 15);
-    expect(getAutoLockMinutes(storage as Storage)).toBe(15);
-    removePin(storage as Storage);
-    expect(isPinConfigured(storage as Storage)).toBe(false);
+    await setPin(storage as AppLockStorage, '1234', 5, new Uint8Array(16).fill(4));
+    setAutoLockMinutes(storage as AppLockStorage, 15);
+    expect(getAutoLockMinutes(storage as AppLockStorage)).toBe(15);
+    removePin(storage as AppLockStorage);
+    expect(isPinConfigured(storage as AppLockStorage)).toBe(false);
   });
 });
