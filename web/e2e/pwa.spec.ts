@@ -77,7 +77,8 @@ test('selected language bundle is cached as a static globalization artifact', as
   await page.getByTestId('language-chooser-search').fill('Arabic');
   await page.locator('[data-language-tag="ar"]').click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
-  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
+  await expect(page.locator('html')).toHaveAttribute('data-sreadya-text-direction', 'rtl');
 
   const languageAssets = await page.evaluate(async () => {
     const names = await caches.keys();
