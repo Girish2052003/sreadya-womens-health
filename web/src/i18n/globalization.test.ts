@@ -1,41 +1,50 @@
 import { describe, expect, it } from 'vitest';
 
 import { sourceMessage, interpolateMessage } from './catalog';
-import { LANGUAGE_UNIVERSE_COUNT, currentLanguageChoice, languageChoice } from './locale-registry';
+import {
+  LANGUAGE_ARCHITECTURE_CAPACITY_COUNT,
+  allLanguageChoices,
+  currentLanguageChoice,
+  languageChoice,
+} from './locale-registry';
 import { localeDirection, normalizeLocaleTag } from './locale';
-import { translationAvailability } from './translation-manifest';
+import {
+  hasCompleteTranslation,
+  selectableTranslationLanguages,
+  translationAvailability,
+} from './translation-manifest';
 
 describe('SREADYA globalization contract', () => {
-  it('keeps the locale universe well above the 500+ product requirement', () => {
-    expect(LANGUAGE_UNIVERSE_COUNT).toBeGreaterThanOrEqual(500);
+  it('keeps broad standards capacity separate from public language claims', () => {
+    expect(LANGUAGE_ARCHITECTURE_CAPACITY_COUNT).toBeGreaterThanOrEqual(500);
+    expect(allLanguageChoices().map((choice) => choice.language)).toEqual(selectableTranslationLanguages());
+  });
+
+  it('publishes only complete/source locales and never raw-code display names', () => {
+    for (const choice of allLanguageChoices()) {
+      expect(hasCompleteTranslation(choice.tag)).toBe(true);
+      expect(['source', 'complete']).toContain(translationAvailability(choice.tag).coverage);
+      expect(choice.nativeName.toLowerCase()).not.toBe(choice.language.toLowerCase());
+      expect(choice.englishName.toLowerCase()).not.toBe(choice.language.toLowerCase());
+    }
   });
 
   it('uses standards-based locale identity and script direction', () => {
     expect(normalizeLocaleTag('fi-fi')).toBe('fi-FI');
     expect(localeDirection('ar')).toBe('rtl');
     expect(localeDirection('ta')).toBe('ltr');
-    expect(currentLanguageChoice('ar-SA').language).toBe('ar');
   });
 
-  it('derives native names and representative flags without treating a flag as locale identity', () => {
-    const finnish = languageChoice('fi');
-    expect(finnish.language).toBe('fi');
-    expect(finnish.nativeName.length).toBeGreaterThan(1);
-    expect(finnish.flag.length).toBeGreaterThan(0);
+  it('never presents an unsupported persisted locale as a selectable language', () => {
+    expect(currentLanguageChoice('aaa').language).toBe('en');
+    expect(languageChoice('aaa').language).toBe('en');
   });
 
-  it('reports source, machine-partial, and deterministic fallback states truthfully', () => {
-    expect(translationAvailability('en').coverage).toBe('source');
-    expect(translationAvailability('fi-FI')).toMatchObject({
-      available: true,
-      coverage: 'partial',
-      method: 'machine',
-      reviewStatus: 'machine-unreviewed',
-    });
-    expect(translationAvailability('zu')).toMatchObject({
-      available: false,
-      coverage: 'fallback',
-    });
+  it('derives native names and representative flags for a complete locale', () => {
+    const english = languageChoice('en');
+    expect(english.language).toBe('en');
+    expect(english.nativeName.length).toBeGreaterThan(1);
+    expect(english.flag.length).toBeGreaterThan(0);
   });
 
   it('preserves message variables through the public interpolation facade', () => {

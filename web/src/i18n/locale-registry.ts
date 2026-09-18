@@ -1,5 +1,6 @@
 import { CLDR_LANGUAGE_CODES } from './cldr-language-codes';
 import { localeDirection, normalizeLocaleTag } from './locale';
+import { hasCompleteTranslation, selectableTranslationLanguages } from './translation-manifest';
 
 export type LanguageChoice = {
   tag: string;
@@ -10,12 +11,13 @@ export type LanguageChoice = {
   direction: 'ltr' | 'rtl';
 };
 
-export const POPULAR_LANGUAGE_CODES = [
-  'en', 'ta', 'hi', 'fi', 'es', 'fr', 'de', 'pt', 'ar', 'ur', 'bn', 'te',
-  'ml', 'kn', 'mr', 'gu', 'pa', 'zh', 'ja', 'ko', 'ru', 'tr', 'id', 'sw',
+const POPULAR_LANGUAGE_PRIORITY = [
+  'en', 'ta', 'hi', 'fi', 'es', 'ru', 'fr', 'de', 'pt', 'ar', 'ur', 'bn', 'te',
+  'ml', 'kn', 'mr', 'gu', 'pa', 'zh', 'ja', 'ko', 'tr', 'id', 'sw',
 ] as const;
 
-export const LANGUAGE_UNIVERSE_COUNT = CLDR_LANGUAGE_CODES.length;
+// Internal standards capacity. This is deliberately NOT the number advertised to users.
+export const LANGUAGE_ARCHITECTURE_CAPACITY_COUNT = CLDR_LANGUAGE_CODES.length;
 
 function displayName(language: string, displayLocale: string): string {
   try {
@@ -35,7 +37,8 @@ function flagForRegion(region?: string): string {
 }
 
 export function languageChoice(languageCode: string): LanguageChoice {
-  const language = normalizeLocaleTag(languageCode).split('-')[0].toLowerCase();
+  const requested = normalizeLocaleTag(languageCode).split('-')[0].toLowerCase();
+  const language = hasCompleteTranslation(requested) ? requested : 'en';
   let maximized: Intl.Locale;
   try {
     maximized = new Intl.Locale(language).maximize();
@@ -53,12 +56,19 @@ export function languageChoice(languageCode: string): LanguageChoice {
 }
 
 export function allLanguageChoices(): LanguageChoice[] {
-  return CLDR_LANGUAGE_CODES
-    .filter((code) => code !== 'und')
+  return selectableTranslationLanguages()
     .map(languageChoice)
+    .filter((choice) => choice.englishName.toLowerCase() !== choice.language.toLowerCase())
     .sort((a, b) => a.englishName.localeCompare(b.englishName, 'en'));
 }
 
+export const PUBLIC_LANGUAGE_COUNT = allLanguageChoices().length;
+
+export const POPULAR_LANGUAGE_CODES = POPULAR_LANGUAGE_PRIORITY
+  .filter((code) => hasCompleteTranslation(code));
+
 export function currentLanguageChoice(locale: string): LanguageChoice {
-  return languageChoice(new Intl.Locale(normalizeLocaleTag(locale)).language);
+  let language = 'en';
+  try { language = new Intl.Locale(normalizeLocaleTag(locale)).language.toLowerCase(); } catch { language = 'en'; }
+  return languageChoice(language);
 }
