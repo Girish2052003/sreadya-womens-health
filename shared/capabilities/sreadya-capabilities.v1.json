@@ -1,7 +1,7 @@
 {
-  "contract": "SREVA C2 Capability Registry",
+  "contract": "SREADYA C2 Capability Registry",
   "version": 1,
-  "source": "docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md#section-1--master-capability-contract",
+  "source": "docs/superpowers/specs/2026-09-16-sreadya-web-product-architecture-design.md#section-1--master-capability-contract",
   "launch_requirement_count": 258,
   "launch_family_count": 18,
   "families": [
@@ -3333,7 +3333,7 @@
     },
     {
       "id": "HEALTH-009",
-      "name": "Sreva vault remains authoritative application datastore",
+      "name": "Sreadya vault remains authoritative application datastore",
       "family": "HEALTH",
       "launch_status": "contract",
       "platforms": {
@@ -4635,7 +4635,7 @@
     },
     {
       "id": "ID-001",
-      "name": "Full account-free Sreva experience",
+      "name": "Full account-free Sreadya experience",
       "family": "ID",
       "launch_status": "contract",
       "platforms": {
@@ -4656,7 +4656,7 @@
     },
     {
       "id": "ID-002",
-      "name": "Full account-based Sreva experience",
+      "name": "Full account-based Sreadya experience",
       "family": "ID",
       "launch_status": "contract",
       "platforms": {
@@ -5223,7 +5223,7 @@
     },
     {
       "id": "WEB-001",
-      "name": "Full browser-based Sreva client",
+      "name": "Full browser-based Sreadya client",
       "family": "WEB",
       "launch_status": "contract",
       "platforms": {

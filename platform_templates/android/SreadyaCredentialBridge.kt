@@ -1,4 +1,4 @@
-package com.sreva.health.sreva
+package com.sreadya.health.sreadya
 
 import android.os.Build
 import androidx.credentials.CreatePublicKeyCredentialRequest
@@ -16,11 +16,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
-class SrevaCredentialBridge(
+class SreadyaCredentialBridge(
     private val activity: FlutterFragmentActivity,
     messenger: BinaryMessenger,
 ) {
-    private val channel = MethodChannel(messenger, "sreva/account")
+    private val channel = MethodChannel(messenger, "sreadya/account")
     private val credentialManager = CredentialManager.create(activity)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 

@@ -1,20 +1,20 @@
-# Sreva
+# Sreadya
 
 **One private, local-first women's cycle and wellness companion across Android, iOS, and Web/PWA.**
 
-> In honour of **Sreedevi Girish Nallan Chakravathy**. Public product name: **Sreva**.
+> In honour of **Sreedevi Girish Nallan Chakravathy**. Public product name: **Sreadya**.
 
-Sreva is designed as **one product with three equal first-class clients**:
+Sreadya is designed as **one product with three equal first-class clients**:
 
 - **Android** — Flutter/Dart + Android-native adapters;
 - **iOS** — Flutter/Dart + iOS-native adapters;
 - **Web/PWA** — Next.js + React + TypeScript, usable in a browser or as an installable PWA where supported.
 
-The clients may use different operating-system mechanisms, but they are governed by one capability contract, one privacy model, one set of health semantics, and shared conformance vectors. Platform limitations may change the mechanism; they must not quietly create a weaker Sreva edition.
+The clients may use different operating-system mechanisms, but they are governed by one capability contract, one privacy model, one set of health semantics, and shared conformance vectors. Platform limitations may change the mechanism; they must not quietly create a weaker Sreadya edition.
 
 ## Current repository status
 
-The **implemented production baseline today** is the Flutter Android/iOS client. Android is the current native production-distribution priority and uses package `com.sreva.health.sreva` with release line `1.0.0+1`. iOS remains a first-class client and is continuously compiled/adapter-verified without production Apple signing until publisher signing/App Store capability is available.
+The **implemented production baseline today** is the Flutter Android/iOS client. Android is the current native production-distribution priority and uses package `com.sreadya.health.sreadya` with release line `1.0.0+1`. iOS remains a first-class client and is continuously compiled/adapter-verified without production Apple signing until publisher signing/App Store capability is available.
 
 The **approved next architecture** adds a browser-native Next.js/React/TypeScript Web/PWA client, shared language-neutral contracts, and optional end-to-end encrypted account continuity. Those C2 additions are documented and planned, but they must not be described as already implemented or shipping until the corresponding code, tests, privacy disclosures, and release gates are complete.
 
@@ -22,12 +22,12 @@ This distinction is deliberate: the approved architecture is ahead of the curren
 
 ## Product principles
 
-- **One Sreva:** Android, iOS, and Web/PWA are equal first-class clients.
+- **One Sreadya:** Android, iOS, and Web/PWA are equal first-class clients.
 - **Account-free is first-class:** core health functionality works without an account.
 - **Offline-first:** core tracking, history, predictions, insights, reports, and local logging remain usable without Internet where the platform permits.
 - **Local intelligence:** predictions and personal insights run on the authorized client.
-- **Local plaintext ownership:** reproductive-health information is not maintained in a Sreva-operated plaintext or developer-decryptable health database.
-- **Optional E2EE continuity:** approved account mode may synchronize ciphertext plus minimum operational metadata across Android, iOS, and Web. Sreva infrastructure must not possess the health-vault decryption key.
+- **Local plaintext ownership:** reproductive-health information is not maintained in a Sreadya-operated plaintext or developer-decryptable health database.
+- **Optional E2EE continuity:** approved account mode may synchronize ciphertext plus minimum operational metadata across Android, iOS, and Web. Sreadya infrastructure must not possess the health-vault decryption key.
 - **Account equality:** an account adds encrypted continuity and recovery conveniences, not superior health features.
 - **Adaptive reminders:** one reminder policy, with native Android/iOS scheduling and honest Web/PWA/browser-adapted delivery.
 - **Explicit health integrations:** HealthKit and Health Connect are native, granular, opt-in integrations—not fake Web APIs.
@@ -38,7 +38,7 @@ This distinction is deliberate: the approved architecture is ahead of the curren
 ## C2 cross-platform architecture
 
 ```text
-                         SREVA MONOREPO
+                         SREADYA MONOREPO
                               │
              ┌────────────────┴────────────────┐
              │                                 │
@@ -63,10 +63,10 @@ The approved internal capability contract contains **18 launch families and 258 
 
 ### Account-free mode
 
-- full core Sreva;
+- full core Sreadya;
 - encrypted local vault;
 - offline operation;
-- no Sreva account or sync service required.
+- no Sreadya account or sync service required.
 
 ### Optional account mode
 
@@ -110,11 +110,11 @@ The Web/PWA runtime and its pinned Node/Next/React/TypeScript toolchain are defi
 
 The authority chain is:
 
-1. **Cross-platform constitution:** `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`
-2. **C2 consistency audit:** `docs/superpowers/specs/2026-09-16-sreva-c2-consistency-audit.md`
-3. **Cross-platform implementation plan:** `docs/superpowers/plans/2026-09-16-sreva-c2-cross-platform-implementation.md`
-4. **Mobile baseline companion:** `docs/superpowers/specs/2026-09-15-sreva-master-design.md`
-5. **Mobile baseline implementation record:** `docs/superpowers/plans/2026-09-15-sreva-v1-implementation.md`
+1. **Cross-platform constitution:** `docs/superpowers/specs/2026-09-16-sreadya-web-product-architecture-design.md`
+2. **C2 consistency audit:** `docs/superpowers/specs/2026-09-16-sreadya-c2-consistency-audit.md`
+3. **Cross-platform implementation plan:** `docs/superpowers/plans/2026-09-16-sreadya-c2-cross-platform-implementation.md`
+4. **Mobile baseline companion:** `docs/superpowers/specs/2026-09-15-sreadya-master-design.md`
+5. **Mobile baseline implementation record:** `docs/superpowers/plans/2026-09-15-sreadya-v1-implementation.md`
 
 Platform-specific release/compliance documents remain authoritative for their release channel but must obey the cross-platform constitution.
 
