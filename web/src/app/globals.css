@@ -1,5 +1,6 @@
 /* Pages cache-bust after repository rename; no visual styles changed. */
 :root {
+  --sreadya-pages-rename-cache-bust: 20260918;
   --sreadya-pages-asset-version: 2;
   color-scheme: light;
   --sreadya-crimson: #75153a;
