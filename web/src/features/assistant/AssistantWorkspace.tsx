@@ -51,7 +51,7 @@ export function AssistantWorkspace() {
     })().catch(() => {
       if (cancelled) return;
       setStatus('Local vault unavailable');
-      setError('Sreva could not open the encrypted local workspace for the private assistant.');
+      setError('Sreadya could not open the encrypted local workspace for the private assistant.');
       setReady(true);
     });
     return () => {
@@ -160,7 +160,7 @@ export function AssistantWorkspace() {
 
       {ready ? (
         <div className="workspace-grid">
-          <Card eyebrow="Private assistant" title="Tell Sreva">
+          <Card eyebrow="Private assistant" title="Tell Sreadya">
             <p>Try “My period started yesterday”, “Yesterday was heavy”, “I have severe cramps today”, “When is my next period?”, “Show my last six periods”, “Find cramps”, or “Remind me about medicine at 8”.</p>
             <label>
               <span>Private command</span>
@@ -175,7 +175,7 @@ export function AssistantWorkspace() {
             <p className="workspace-note">Voice input is not enabled in this Web build because no reviewed private offline-recognition adapter is available. Text reminder creation is available locally.</p>
           </Card>
 
-          <Card eyebrow="Local interpretation" title="Sreva understood">
+          <Card eyebrow="Local interpretation" title="Sreadya understood">
             {!command ? <p>No command has been interpreted yet.</p> : (
               <>
                 <p>Intent: <strong>{command.intent}</strong></p>

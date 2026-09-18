@@ -5,7 +5,7 @@ class AppPreferencesStore {
   AppPreferencesStore({LocalSettingsStore? settings})
     : _settings = settings ?? LocalSettingsStore();
 
-  static const _key = 'sreva.app-preferences.v1';
+  static const _key = 'sreadya.app-preferences.v1';
   final LocalSettingsStore _settings;
 
   Future<AppPreferences> read() async {

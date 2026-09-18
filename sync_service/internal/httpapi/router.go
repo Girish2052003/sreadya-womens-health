@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"sreva.dev/sync_service/internal/store"
+	"sreadya.dev/sync_service/internal/store"
 )
 
 // NewRouter constructs the provider-independent HTTP surface. Existing Task-20
