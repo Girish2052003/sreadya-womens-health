@@ -123,7 +123,6 @@ test('keyboard focus, 200 percent reflow, large text, RTL and long-copy fixtures
     // as a partial/fallback language. The remainder of this accessibility test
     // still exercises reflow, focus and long-copy behavior.
     await expect(page.locator('[data-language-tag="ar"]')).toHaveCount(0);
-    await page.getByTestId('language-chooser-trigger').click();
     await page.goto(SETTINGS_URL);
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
