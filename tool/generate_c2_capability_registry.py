@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the SREVA C2 capability registry from the approved architecture spec.
+"""Generate the SREADYA C2 capability registry from the approved architecture spec.
 
 The architecture specification is the human-auditable source for capability
 IDs and names. This generator adds explicit machine lifecycle/applicability
@@ -14,8 +14,8 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SPEC = ROOT / "docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md"
-OUT = ROOT / "shared/capabilities/sreva-capabilities.v1.json"
+SPEC = ROOT / "docs/superpowers/specs/2026-09-16-sreadya-web-product-architecture-design.md"
+OUT = ROOT / "shared/capabilities/sreadya-capabilities.v1.json"
 
 EXPECTED = {
     "CYC": 15,
@@ -186,9 +186,9 @@ def main() -> None:
         )
 
     payload = {
-        "contract": "SREVA C2 Capability Registry",
+        "contract": "SREADYA C2 Capability Registry",
         "version": 1,
-        "source": "docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md#section-1--master-capability-contract",
+        "source": "docs/superpowers/specs/2026-09-16-sreadya-web-product-architecture-design.md#section-1--master-capability-contract",
         "launch_requirement_count": 258,
         "launch_family_count": 18,
         "families": [
