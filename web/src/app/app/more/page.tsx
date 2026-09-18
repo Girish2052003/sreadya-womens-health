@@ -1,84 +1,82 @@
+'use client';
+
 import Link from 'next/link';
 
-import { WorkspaceNav } from '../../../components/navigation/WorkspaceNav';
-import { StatusChip } from '../../../components/ui/StatusChip';
+import { WorkspacePageShell } from '../../../components/navigation/WorkspacePageShell';
+import { useI18n } from '../../../i18n/I18nProvider';
 
 const groups = [
   {
-    title: 'Track & understand',
+    titleKey: 'workspace.more.group.track',
     links: [
-      ['Cycle & periods', '/app/cycle'],
-      ['Predictions', '/app/predictions'],
-      ['Reminders', '/app/reminders'],
-      ['Symptoms', '/app/symptoms'],
-      ['Wellness', '/app/wellness'],
-      ['Medication', '/app/medication'],
-      ['Reproductive health', '/app/reproductive-health'],
-      ['Life stage', '/app/life-stage'],
-      ['Insights', '/app/insights'],
+      ['workspace.more.cycle', '/app/cycle'],
+      ['workspace.title.predictions', '/app/predictions'],
+      ['workspace.title.reminders', '/app/reminders'],
+      ['workspace.title.symptoms', '/app/symptoms'],
+      ['workspace.title.wellness', '/app/wellness'],
+      ['workspace.title.medication', '/app/medication'],
+      ['workspace.title.reproductive-health', '/app/reproductive-health'],
+      ['workspace.title.life-stage', '/app/life-stage'],
+      ['workspace.title.insights', '/app/insights'],
     ],
   },
   {
-    title: 'Share & export',
+    titleKey: 'workspace.more.group.share',
     links: [
-      ['Doctor reports', '/app/reports'],
-      ['Private assistant', '/app/assistant'],
-      ['Partner sharing', '/app/sharing'],
-      ['Encrypted backup & restore', '/app/vault'],
+      ['workspace.more.doctorReports', '/app/reports'],
+      ['workspace.more.privateAssistant', '/app/assistant'],
+      ['workspace.more.partnerSharing', '/app/sharing'],
+      ['workspace.more.backup', '/app/vault'],
     ],
   },
   {
-    title: 'Continuity & recovery',
+    titleKey: 'workspace.more.group.continuity',
     links: [
-      ['Encrypted sync', '/app/sync'],
-      ['Trusted devices', '/app/devices'],
-      ['Account', '/app/account'],
-      ['Recovery', '/app/recovery'],
+      ['workspace.more.encryptedSync', '/app/sync'],
+      ['workspace.more.trustedDevices', '/app/devices'],
+      ['workspace.title.account', '/app/account'],
+      ['workspace.title.recovery', '/app/recovery'],
     ],
   },
   {
-    title: 'Privacy & preferences',
+    titleKey: 'workspace.more.group.privacy',
     links: [
-      ['Privacy Center', '/app/privacy'],
-      ['Diagnostics', '/app/diagnostics'],
-      ['Accessibility & settings', '/app/settings'],
+      ['workspace.more.privacyCenter', '/app/privacy'],
+      ['workspace.title.diagnostics', '/app/diagnostics'],
+      ['workspace.more.accessibilitySettings', '/app/settings'],
     ],
   },
 ] as const;
 
 export default function MorePage() {
+  const { t } = useI18n();
+
   return (
-    <div className="workspace-shell">
-      <WorkspaceNav active="more" />
-      <main className="workspace-main">
-        <header className="workspace-heading">
-          <div>
-            <p className="workspace-kicker">Complete Sreadya</p>
-            <h1>More</h1>
-            <p className="workspace-note">Every production workspace has a home here. Nothing important is hidden behind an unlabelled control.</p>
-          </div>
-          <StatusChip tone="success">Feature hub</StatusChip>
-        </header>
-        <p className="feature-hub__intro">
-          The five-item primary navigation stays calm for daily use. This hub is the complete map for cycle tracking,
-          predictions, reminders, reproductive observations, reports, privacy, backup and optional encrypted continuity.
-          <br /><Link className="workspace-text-link" href="/features">Browse the complete 258-ID capability catalogue</Link>
-        </p>
-        <div className="feature-hub__groups">
-          {groups.map((group) => (
-            <section className="feature-hub__group" key={group.title}>
-              <h2>{group.title}</h2>
-              <div className="feature-hub__links">
-                {group.links.map(([label, href]) => (
-                  <Link className="feature-hub__link" href={href} key={href}>
-                    <span>{label}</span><span aria-hidden="true">→</span>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-      </main>
-    </div>
+    <WorkspacePageShell
+      kickerKey="workspace.more.kicker"
+      titleKey="workspace.title.more"
+      noteKey="workspace.more.note"
+      statusKey="workspace.more.status"
+      statusTone="success"
+    >
+      <p className="feature-hub__intro">
+        {t('workspace.more.intro')}
+        <br /><Link className="workspace-text-link" href="/features">{t('workspace.more.catalogue')}</Link>
+      </p>
+      <div className="feature-hub__groups">
+        {groups.map((group) => (
+          <section className="feature-hub__group" key={group.titleKey}>
+            <h2>{t(group.titleKey)}</h2>
+            <div className="feature-hub__links">
+              {group.links.map(([labelKey, href]) => (
+                <Link className="feature-hub__link" href={href} key={href}>
+                  <span>{t(labelKey)}</span><span aria-hidden="true">→</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+    </WorkspacePageShell>
   );
 }

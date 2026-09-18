@@ -1,30 +1,34 @@
+'use client';
+
 import Link from 'next/link';
 
-import { WorkspaceNav } from '../../components/navigation/WorkspaceNav';
-import { StatusChip } from '../../components/ui/StatusChip';
+import { WorkspacePageShell } from '../../components/navigation/WorkspacePageShell';
+import { useI18n } from '../../i18n/I18nProvider';
+
+const links = [
+  ['common.home', '/app/home'],
+  ['common.today', '/app/today'],
+  ['common.log', '/app/log'],
+  ['common.calendar', '/app/calendar'],
+  ['nav.workspace.allFeatures', '/app/more'],
+] as const;
 
 export default function AppLandingPage() {
+  const { t } = useI18n();
+
   return (
-    <div className="workspace-shell">
-      <WorkspaceNav active="home" />
-      <main className="workspace-main">
-        <header className="workspace-heading">
-          <div>
-            <p className="workspace-kicker">Private Sreadya</p>
-            <h1>Open your space</h1>
-            <p className="workspace-note">Choose a starting point. Account-free health features remain first class.</p>
-          </div>
-          <StatusChip tone="success">Local-first</StatusChip>
-        </header>
-        <div className="feature-hub__links">
-          {[
-            ['Home', '/app/home'], ['Today', '/app/today'], ['Log', '/app/log'],
-            ['Calendar', '/app/calendar'], ['All features', '/app/more'],
-          ].map(([label, href]) => (
-            <Link className="feature-hub__link" href={href} key={href}><span>{label}</span><span>→</span></Link>
-          ))}
-        </div>
-      </main>
-    </div>
+    <WorkspacePageShell
+      active="home"
+      kickerKey="workspace.landing.kicker"
+      titleKey="workspace.landing.title"
+      noteKey="workspace.landing.note"
+      statusKey="workspace.status.localFirst"
+    >
+      <div className="feature-hub__links">
+        {links.map(([labelKey, href]) => (
+          <Link className="feature-hub__link" href={href} key={href}><span>{t(labelKey)}</span><span>→</span></Link>
+        ))}
+      </div>
+    </WorkspacePageShell>
   );
 }

@@ -1,8 +1,7 @@
 import { notFound } from 'next/navigation';
 
-import { WorkspaceNav } from '../../../components/navigation/WorkspaceNav';
-import { StatusChip } from '../../../components/ui/StatusChip';
-import { workspaceSections, workspaceTitles } from '../../../content/routes';
+import { WorkspacePageShell } from '../../../components/navigation/WorkspacePageShell';
+import { workspaceSections, workspaceTitleKey } from '../../../content/routes';
 import { AccountFreeWorkspace } from '../../../features/core/AccountFreeWorkspace';
 
 const CORE_SECTIONS = ['home', 'today', 'log', 'calendar', 'cycle'] as const;
@@ -35,21 +34,13 @@ export default async function WorkspaceSection({ params }: { params: Promise<{ s
   if (DEDICATED_WORKSPACE_SECTIONS.has(section)) notFound();
   if (!isCoreSection(section)) notFound();
 
-  const title = workspaceTitles[section];
-
   return (
-    <div className="workspace-shell">
-      <WorkspaceNav active={activeKey(section)} />
-      <main className="workspace-main">
-        <header className="workspace-heading">
-          <div>
-            <p className="workspace-kicker">Private workspace</p>
-            <h1>{title}</h1>
-          </div>
-          <StatusChip tone="success">Local-first</StatusChip>
-        </header>
-        <AccountFreeWorkspace section={section} />
-      </main>
-    </div>
+    <WorkspacePageShell
+      active={activeKey(section)}
+      titleKey={workspaceTitleKey(section)}
+      statusKey="workspace.status.localFirst"
+    >
+      <AccountFreeWorkspace section={section} />
+    </WorkspacePageShell>
   );
 }

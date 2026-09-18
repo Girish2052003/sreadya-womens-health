@@ -1,22 +1,15 @@
-import { WorkspaceNav } from '../../../components/navigation/WorkspaceNav';
-import { StatusChip } from '../../../components/ui/StatusChip';
+import { WorkspacePageShell } from '../../../components/navigation/WorkspacePageShell';
 import { SyncWorkspace } from '../../../features/sync/SyncWorkspace';
 
-export default function SyncPage() {
+export default function Page() {
   return (
-    <div className="workspace-shell">
-      <WorkspaceNav active="more" />
-      <main className="workspace-main">
-        <header className="workspace-heading">
-          <div>
-            <p className="workspace-kicker">Private workspace</p>
-            <h1>Sync</h1>
-            <p className="workspace-note">Inspect and control the local encrypted sync queue while keeping account-free Sreadya fully operational.</p>
-          </div>
-          <StatusChip tone="info">Optional encrypted sync</StatusChip>
-        </header>
-        <SyncWorkspace />
-      </main>
-    </div>
+    <WorkspacePageShell
+      titleKey="workspace.title.sync"
+      noteKey="workspace.sync.note"
+      statusKey="workspace.status.optionalEncryptedSync"
+      statusTone="info"
+    >
+      <SyncWorkspace />
+    </WorkspacePageShell>
   );
 }
