@@ -53,7 +53,7 @@ export function StructuredObservationWorkspace({ config }: { config: Config }) {
     const draft: Omit<HealthObservation, 'id' | 'source'> = { kind: selectedKind, occurredAt: occurredAtDate.toISOString(), ...(SEVERITIES.includes(severityRaw as Severity) ? { severity: severityRaw as Severity } : {}), ...(numericRaw.length > 0 && Number.isFinite(Number(numericRaw)) ? { numericValue: Number(numericRaw) } : {}), ...(unit ? { unit } : {}), ...(observationLabel ? { label: observationLabel } : {}), ...(note ? { note } : {}), ...(selectedKind === 'menstrualFlow' && FLOW_LEVELS.includes(flowRaw as FlowLevel) ? { flowLevel: flowRaw as FlowLevel } : {}) };
     setError('');
     try { await new ObservationActions(repository).logObservation(draft); await refresh(repository); form.reset(); setSelectedKind(config.kinds[0]); setStatus(t('core.saved')); }
-    catch (cause) { setError(t('structured.saveError')); }
+    catch { setError(t('structured.saveError')); }
   };
 
   const remove = async (id: string) => {
