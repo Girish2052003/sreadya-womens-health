@@ -13,6 +13,7 @@ function surfaceLabel(value: LaunchCapability['surface_type']): string {
   if (value === 'interaction') return 'Use feature';
   if (value === 'protection') return 'Active protection';
   if (value === 'platform-adapted') return 'Platform adapted';
+  if (value === 'provider-dependent') return 'Requires continuity service';
   return 'View status';
 }
 

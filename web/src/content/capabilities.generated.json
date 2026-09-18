@@ -123,7 +123,7 @@
       "id": "CYC-004",
       "name": "Flow logging: spotting/light/medium/heavy",
       "family": "CYC",
-      "route": "/app/cycle",
+      "route": "/app/reproductive-health",
       "surface_type": "interaction",
       "web_applicability": "full"
     },
@@ -147,7 +147,7 @@
       "id": "CYC-007",
       "name": "Previous-period history",
       "family": "CYC",
-      "route": "/app/cycle",
+      "route": "/app/calendar",
       "surface_type": "interaction",
       "web_applicability": "full"
     },
@@ -163,7 +163,7 @@
       "id": "CYC-009",
       "name": "Monthly calendar",
       "family": "CYC",
-      "route": "/app/cycle",
+      "route": "/app/calendar",
       "surface_type": "interaction",
       "web_applicability": "full"
     },
@@ -171,7 +171,7 @@
       "id": "CYC-010",
       "name": "Timeline view",
       "family": "CYC",
-      "route": "/app/cycle",
+      "route": "/app/calendar",
       "surface_type": "interaction",
       "web_applicability": "full"
     },
@@ -179,7 +179,7 @@
       "id": "CYC-011",
       "name": "Year view",
       "family": "CYC",
-      "route": "/app/cycle",
+      "route": "/app/calendar",
       "surface_type": "interaction",
       "web_applicability": "full"
     },
@@ -187,7 +187,7 @@
       "id": "CYC-012",
       "name": "Historical editing",
       "family": "CYC",
-      "route": "/app/cycle",
+      "route": "/app/calendar",
       "surface_type": "interaction",
       "web_applicability": "full"
     },
@@ -203,7 +203,7 @@
       "id": "CYC-014",
       "name": "Automatic cycle statistics",
       "family": "CYC",
-      "route": "/app/cycle",
+      "route": "/app/insights",
       "surface_type": "interaction",
       "web_applicability": "full"
     },
@@ -371,7 +371,7 @@
       "id": "REM-006",
       "name": "Medication reminders",
       "family": "REM",
-      "route": "/app/medication",
+      "route": "/app/reminders",
       "surface_type": "interaction",
       "web_applicability": "adapted"
     },
@@ -379,7 +379,7 @@
       "id": "REM-007",
       "name": "Contraceptive reminders",
       "family": "REM",
-      "route": "/app/medication",
+      "route": "/app/reminders",
       "surface_type": "interaction",
       "web_applicability": "adapted"
     },
@@ -387,7 +387,7 @@
       "id": "REM-008",
       "name": "Supplement reminders",
       "family": "REM",
-      "route": "/app/medication",
+      "route": "/app/reminders",
       "surface_type": "interaction",
       "web_applicability": "adapted"
     },
@@ -395,7 +395,7 @@
       "id": "REM-009",
       "name": "Ovulation-test reminders",
       "family": "REM",
-      "route": "/app/medication",
+      "route": "/app/reminders",
       "surface_type": "interaction",
       "web_applicability": "adapted"
     },
@@ -403,7 +403,7 @@
       "id": "REM-010",
       "name": "Pregnancy-test reminders",
       "family": "REM",
-      "route": "/app/medication",
+      "route": "/app/reminders",
       "surface_type": "interaction",
       "web_applicability": "adapted"
     },
@@ -659,7 +659,7 @@
       "id": "LOG-018",
       "name": "Vaginal discharge",
       "family": "LOG",
-      "route": "/app/wellness",
+      "route": "/app/reproductive-health",
       "surface_type": "interaction",
       "web_applicability": "full"
     },
@@ -667,7 +667,7 @@
       "id": "LOG-019",
       "name": "Cervical mucus",
       "family": "LOG",
-      "route": "/app/wellness",
+      "route": "/app/reproductive-health",
       "surface_type": "interaction",
       "web_applicability": "full"
     },
@@ -675,7 +675,7 @@
       "id": "LOG-020",
       "name": "Basal body temperature",
       "family": "LOG",
-      "route": "/app/wellness",
+      "route": "/app/reproductive-health",
       "surface_type": "interaction",
       "web_applicability": "full"
     },
@@ -707,7 +707,7 @@
       "id": "LOG-024",
       "name": "Custom symptoms",
       "family": "LOG",
-      "route": "/app/wellness",
+      "route": "/app/symptoms",
       "surface_type": "interaction",
       "web_applicability": "full"
     },
@@ -715,7 +715,7 @@
       "id": "LOG-025",
       "name": "Severity scales",
       "family": "LOG",
-      "route": "/app/log",
+      "route": "/app/symptoms",
       "surface_type": "interaction",
       "web_applicability": "full"
     },
@@ -1132,7 +1132,7 @@
       "name": "Voice interaction where supported",
       "family": "INT",
       "route": "/app/assistant",
-      "surface_type": "interaction",
+      "surface_type": "platform-adapted",
       "web_applicability": "full"
     },
     {
@@ -1260,7 +1260,7 @@
       "name": "E2EE live-sharing transport interface",
       "family": "PART",
       "route": "/app/sharing",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1508,7 +1508,7 @@
       "name": "Delete account",
       "family": "PRIV",
       "route": "/app/account",
-      "surface_type": "protection",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1556,7 +1556,7 @@
       "name": "Session/device management",
       "family": "PRIV",
       "route": "/app/devices",
-      "surface_type": "protection",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1836,7 +1836,7 @@
       "name": "Full account-based Sreva experience",
       "family": "ID",
       "route": "/app/account",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1844,7 +1844,7 @@
       "name": "Email-only account permitted",
       "family": "ID",
       "route": "/app/account",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1852,7 +1852,7 @@
       "name": "Mobile-number-only account permitted",
       "family": "ID",
       "route": "/app/account",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1860,7 +1860,7 @@
       "name": "Email + mobile-number account permitted",
       "family": "ID",
       "route": "/app/account",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1868,7 +1868,7 @@
       "name": "Mobile number remains optional",
       "family": "ID",
       "route": "/app/account",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1876,7 +1876,7 @@
       "name": "Passkey setup/sign-in",
       "family": "ID",
       "route": "/app/account",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1884,7 +1884,7 @@
       "name": "Trusted-device approval",
       "family": "ID",
       "route": "/app/devices",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1892,7 +1892,7 @@
       "name": "Emergency recovery key",
       "family": "ID",
       "route": "/app/recovery",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1900,7 +1900,7 @@
       "name": "Email may recover account identity",
       "family": "ID",
       "route": "/app/recovery",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1908,7 +1908,7 @@
       "name": "SMS may recover account identity",
       "family": "ID",
       "route": "/app/recovery",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1916,7 +1916,7 @@
       "name": "Email/SMS alone cannot decrypt old vault",
       "family": "ID",
       "route": "/app/recovery",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1932,7 +1932,7 @@
       "name": "End-to-end encrypted multi-device sync",
       "family": "SYNC",
       "route": "/app/sync",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1940,7 +1940,7 @@
       "name": "Android ↔ iOS ↔ Web continuity",
       "family": "SYNC",
       "route": "/app/sync",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1948,7 +1948,7 @@
       "name": "Server stores health content only as ciphertext",
       "family": "SYNC",
       "route": "/app/sync",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1956,7 +1956,7 @@
       "name": "Encrypt locally before synchronization",
       "family": "SYNC",
       "route": "/app/sync",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1964,7 +1964,7 @@
       "name": "Decrypt locally after synchronization",
       "family": "SYNC",
       "route": "/app/sync",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1972,7 +1972,7 @@
       "name": "Trusted-device list",
       "family": "SYNC",
       "route": "/app/devices",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1980,7 +1980,7 @@
       "name": "Rename trusted device",
       "family": "SYNC",
       "route": "/app/devices",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1988,7 +1988,7 @@
       "name": "Remove/revoke device",
       "family": "SYNC",
       "route": "/app/devices",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -1996,7 +1996,7 @@
       "name": "Pause synchronization",
       "family": "SYNC",
       "route": "/app/sync",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -2004,7 +2004,7 @@
       "name": "Disable synchronization",
       "family": "SYNC",
       "route": "/app/sync",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -2012,7 +2012,7 @@
       "name": "Last successful sync state",
       "family": "SYNC",
       "route": "/app/sync",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -2020,7 +2020,7 @@
       "name": "Pending-change state",
       "family": "SYNC",
       "route": "/app/sync",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -2028,15 +2028,15 @@
       "name": "Deterministic/conflict-safe reconciliation",
       "family": "SYNC",
       "route": "/app/sync",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
       "id": "SYNC-014",
       "name": "New-device approval/key transfer",
       "family": "SYNC",
-      "route": "/app/sync",
-      "surface_type": "interaction",
+      "route": "/app/devices",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -2044,7 +2044,7 @@
       "name": "Infrastructure cannot decrypt health vault",
       "family": "SYNC",
       "route": "/app/sync",
-      "surface_type": "interaction",
+      "surface_type": "provider-dependent",
       "web_applicability": "full"
     },
     {
@@ -2059,7 +2059,7 @@
       "id": "WEB-002",
       "name": "Installable PWA",
       "family": "WEB",
-      "route": "/app/more",
+      "route": "/install/pwa",
       "surface_type": "status",
       "web_applicability": "full"
     },
@@ -2067,7 +2067,7 @@
       "id": "WEB-003",
       "name": "Standalone Home Screen/Desktop experience",
       "family": "WEB",
-      "route": "/app/more",
+      "route": "/install/pwa",
       "surface_type": "status",
       "web_applicability": "full"
     },
@@ -2075,7 +2075,7 @@
       "id": "WEB-004",
       "name": "Offline PWA application shell",
       "family": "WEB",
-      "route": "/app/more",
+      "route": "/install/pwa",
       "surface_type": "status",
       "web_applicability": "full"
     },
@@ -2083,7 +2083,7 @@
       "id": "WEB-005",
       "name": "Encrypted browser-local health vault",
       "family": "WEB",
-      "route": "/app/more",
+      "route": "/app/vault",
       "surface_type": "status",
       "web_applicability": "full"
     },
@@ -2091,15 +2091,15 @@
       "id": "WEB-006",
       "name": "Web Push where supported",
       "family": "WEB",
-      "route": "/app/more",
-      "surface_type": "status",
+      "route": "/app/reminders",
+      "surface_type": "platform-adapted",
       "web_applicability": "full"
     },
     {
       "id": "WEB-007",
       "name": "Browser/in-app reminder fallback",
       "family": "WEB",
-      "route": "/app/more",
+      "route": "/app/reminders",
       "surface_type": "status",
       "web_applicability": "full"
     },
@@ -2107,7 +2107,7 @@
       "id": "WEB-008",
       "name": "Easy iPhone PWA-install guidance",
       "family": "WEB",
-      "route": "/app/more",
+      "route": "/install/iphone",
       "surface_type": "status",
       "web_applicability": "full"
     },
@@ -2115,7 +2115,7 @@
       "id": "WEB-009",
       "name": "Easy Android/PWA-install guidance",
       "family": "WEB",
-      "route": "/app/more",
+      "route": "/install/android",
       "surface_type": "status",
       "web_applicability": "full"
     },
@@ -2123,7 +2123,7 @@
       "id": "WEB-010",
       "name": "Responsive desktop/tablet/mobile layouts",
       "family": "WEB",
-      "route": "/app/more",
+      "route": "/",
       "surface_type": "status",
       "web_applicability": "full"
     },
@@ -2131,7 +2131,7 @@
       "id": "WEB-011",
       "name": "Shareable/deep-linkable public pages",
       "family": "WEB",
-      "route": "/app/more",
+      "route": "/features",
       "surface_type": "status",
       "web_applicability": "full"
     },
@@ -2139,7 +2139,7 @@
       "id": "WEB-012",
       "name": "Seamless public-site → private-workspace transition",
       "family": "WEB",
-      "route": "/app/more",
+      "route": "/",
       "surface_type": "status",
       "web_applicability": "full"
     },
@@ -2147,7 +2147,7 @@
       "id": "WEB-013",
       "name": "Android download/store entry",
       "family": "WEB",
-      "route": "/app/more",
+      "route": "/download",
       "surface_type": "status",
       "web_applicability": "full"
     },
@@ -2155,7 +2155,7 @@
       "id": "WEB-014",
       "name": "Native iOS store entry when available",
       "family": "WEB",
-      "route": "/app/more",
+      "route": "/download",
       "surface_type": "status",
       "web_applicability": "full"
     }
