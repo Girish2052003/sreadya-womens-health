@@ -67,7 +67,7 @@ describe('accessibility preferences', () => {
 
   it('maps preferences to a constrained document attribute contract', () => {
     expect(
-      accessibilityDataAttributes({ textScale: 'large', motion: 'reduced', contrast: 'high' }),
+      accessibilityDataAttributes({ textScale: 'large', motion: 'reduced', contrast: 'high', easyLanguage: true }),
     ).toEqual({
       'data-sreva-text-scale': 'large',
       'data-sreva-motion': 'reduced',
