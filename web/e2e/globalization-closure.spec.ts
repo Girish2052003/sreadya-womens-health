@@ -106,10 +106,19 @@ test('published locales are complete and pre-sync publication fails closed until
   }
 });
 
-test('language chooser exactly reflects complete published locales with no raw fallback rows', async ({ page, request }) => {
+test('language chooser stays hidden for English-only launch and activates only after full provider closure', async ({ page, request }) => {
   const data = await manifest(request);
 
   await page.goto('/');
+
+  if (!providerClosurePublished(data)) {
+    await expect(page.getByTestId('language-chooser-trigger')).toHaveCount(0);
+    expect(data.publicLocales).toHaveLength(1);
+    expect(data.publicLocales[0]).toMatchObject({ tag: 'en', coverage: 'source' });
+    return;
+  }
+
+  await expect(page.getByTestId('language-chooser-trigger')).toBeVisible();
   await page.getByTestId('language-chooser-trigger').click();
 
   const list = page.locator('.language-chooser__list');
@@ -120,15 +129,7 @@ test('language chooser exactly reflects complete published locales with no raw f
   const optionCount = await page.locator('.language-chooser__option').count();
   expect(optionCount).toBe(data.publicLocales.length);
 
-  if (providerClosurePublished(data)) {
-    expect(optionCount).toBeGreaterThanOrEqual(194);
-  } else {
-    expect(optionCount).toBe(1);
-    await expect(page.locator('.language-chooser__option[data-language-tag="en"]')).toHaveCount(1);
-    await expect(page.locator('[data-language-tag="ar"]')).toHaveCount(0);
-    await expect(page.locator('[data-language-tag="en-XA"]')).toHaveCount(0);
-    await expect(page.locator('[data-language-tag="ar-XB"]')).toHaveCount(0);
-  }
+  expect(optionCount).toBeGreaterThanOrEqual(194);
 
   await expect(page.getByText('English fallback', { exact: true })).toHaveCount(0);
   await expect(page.locator('[data-language-tag="aa"]')).toHaveCount(0);
