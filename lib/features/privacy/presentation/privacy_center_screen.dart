@@ -38,7 +38,7 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text(
-                'Configure and successfully unlock with Face ID, Touch ID, or the device passcode before enabling Sreva App Lock.',
+                'Configure and successfully unlock with Face ID, Touch ID, or the device passcode before enabling Sreadya App Lock.',
               ),
             ),
           );
@@ -64,7 +64,7 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
     final first = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete all Sreva health data?'),
+        title: const Text('Delete all Sreadya health data?'),
         content: const Text(
           'This permanently removes all periods and health observations from this device. Create a CycleVault backup first if you may need the history later.',
         ),
@@ -106,7 +106,7 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
     ref.read(healthActionsProvider).refreshAll();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Local Sreva health data deleted.')),
+        const SnackBar(content: Text('Local Sreadya health data deleted.')),
       );
     }
   }
@@ -164,7 +164,7 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
                 value: settings.appLockEnabled,
                 title: const Text('App lock'),
                 subtitle: const Text(
-                  'Require Face ID, Touch ID, or the device passcode when Sreva locks.',
+                  'Require Face ID, Touch ID, or the device passcode when Sreadya locks.',
                 ),
                 onChanged: (value) => _setAppLock(settings, value),
               ),
@@ -299,11 +299,11 @@ class _PrivacyCenterScreenState extends ConsumerState<PrivacyCenterScreen> {
               OutlinedButton.icon(
                 onPressed: _wipeAll,
                 icon: const Icon(Icons.delete_forever_outlined),
-                label: const Text('Delete all local Sreva health data'),
+                label: const Text('Delete all local Sreadya health data'),
               ),
               const SizedBox(height: 16),
               const Text(
-                'Face ID and device authentication are controlled by the operating system. Sreva receives only the success/failure result, never biometric templates or the device passcode.',
+                'Face ID and device authentication are controlled by the operating system. Sreadya receives only the success/failure result, never biometric templates or the device passcode.',
               ),
             ],
           );

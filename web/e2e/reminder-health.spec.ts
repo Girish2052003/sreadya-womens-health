@@ -46,7 +46,7 @@ async function addHistoricalPeriod(page: Page, start: string, end: string) {
 
 async function readReminderPreferenceRecord(page: Page) {
   return page.evaluate(async () => new Promise<PersistedVaultRecord | undefined>((resolve, reject) => {
-    const request = indexedDB.open('sreva-vault-v1');
+    const request = indexedDB.open('sreadya-vault-v1');
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
       const db = request.result;

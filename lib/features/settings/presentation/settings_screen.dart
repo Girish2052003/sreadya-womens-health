@@ -110,7 +110,7 @@ class SettingsScreen extends ConsumerWidget {
                 leading: Icon(Icons.accessibility_new),
                 title: Text('Accessibility'),
                 subtitle: Text(
-                  'Sreva follows Dynamic Type/text scaling, VoiceOver/TalkBack semantics, one-handed layouts and directional UI.',
+                  'Sreadya follows Dynamic Type/text scaling, VoiceOver/TalkBack semantics, one-handed layouts and directional UI.',
                 ),
               ),
             ),
@@ -125,7 +125,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             const Text(
-              'Sreva never requires an account for core tracking. Core cycle features remain available without internet.',
+              'Sreadya never requires an account for core tracking. Core cycle features remain available without internet.',
             ),
           ],
         ),

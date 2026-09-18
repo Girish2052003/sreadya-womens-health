@@ -24,7 +24,7 @@ class HealthVault {
     await (privacyPlatform ?? PrivacyPlatform()).excludePathFromBackup(
       root.path,
     );
-    final dbPath = p.join(root.path, 'sreva_vault.sqlite3');
+    final dbPath = p.join(root.path, 'sreadya_vault.sqlite3');
 
     final provider = keyProvider ?? DatabaseKeyProvider();
     final rawKey = await provider.readOrCreate();
