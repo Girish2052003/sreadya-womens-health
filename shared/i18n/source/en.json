@@ -1177,5 +1177,11 @@
   "vault.restoring": "Restoring locally…",
   "vault.replace": "Replace local health data",
   "vault.restoreBoundary": "Wrong passphrases, tampered files, unsupported formats, or invalid health records fail before the live encrypted dataset is replaced.",
-  "flutter.privacyPromise": "Your cycle belongs to you."
+  "flutter.privacyPromise": "Your cycle belongs to you.",
+  "language.close": "Close",
+  "language.machinePartial": "Machine translated · partial",
+  "language.machineComplete": "Machine translated",
+  "language.reviewed": "Human reviewed",
+  "language.source": "Source language",
+  "language.pseudo": "Test locale"
 }
