@@ -98,7 +98,7 @@ describe('encrypted health repository', () => {
       source: 'app',
     } as unknown as HealthObservation;
     await expect(repository.saveObservation(invalidKind))
-      .rejects.toThrow('Health observation does not conform to Sreva HealthObservation v1 schema.');
+      .rejects.toThrow('Health observation does not conform to Sreadya HealthObservation v1 schema.');
 
     const invalidTimestamp = {
       id: 'observation-invalid-time',
@@ -107,7 +107,7 @@ describe('encrypted health repository', () => {
       source: 'app',
     } as unknown as HealthObservation;
     await expect(repository.saveObservation(invalidTimestamp))
-      .rejects.toThrow('Health observation does not conform to Sreva HealthObservation v1 schema.');
+      .rejects.toThrow('Health observation does not conform to Sreadya HealthObservation v1 schema.');
 
     const invalidSource = {
       id: 'observation-invalid-source',
@@ -116,7 +116,7 @@ describe('encrypted health repository', () => {
       source: 'remoteApi',
     } as unknown as HealthObservation;
     await expect(repository.saveObservation(invalidSource))
-      .rejects.toThrow('Health observation does not conform to Sreva HealthObservation v1 schema.');
+      .rejects.toThrow('Health observation does not conform to Sreadya HealthObservation v1 schema.');
 
     expect(persistence.records.size).toBe(0);
   });
@@ -126,7 +126,7 @@ describe('encrypted health repository', () => {
     const vault = new VaultService(persistence);
     await vault.createOrOpen();
     const repository = new HealthVaultRepository(vault);
-    const sentinel = 'SREVA-PRIVATE-HEALTH-SENTINEL-9A7C';
+    const sentinel = 'SREADYA-PRIVATE-HEALTH-SENTINEL-9A7C';
 
     await repository.savePeriod({
       id: 'period-ciphertext-proof',

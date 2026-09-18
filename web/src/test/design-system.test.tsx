@@ -8,17 +8,17 @@ import { PublicHeader } from '../components/navigation/PublicHeader';
 import { WorkspaceNav } from '../components/navigation/WorkspaceNav';
 import { colorRoles, motion, radius, spacing } from '../styles/tokens';
 
-describe('Sreva Web design system', () => {
+describe('Sreadya Web design system', () => {
   it('exposes every frozen semantic colour role without making colour the only state signal', () => {
     expect(Object.keys(colorRoles)).toEqual(
       expect.arrayContaining([
-        'sreva-crimson',
-        'sreva-rose',
-        'sreva-pink',
-        'sreva-blush',
-        'sreva-pearl',
-        'sreva-ink',
-        'sreva-muted',
+        'sreadya-crimson',
+        'sreadya-rose',
+        'sreadya-pink',
+        'sreadya-blush',
+        'sreadya-pearl',
+        'sreadya-ink',
+        'sreadya-muted',
         'success',
         'warning',
         'danger',
@@ -49,9 +49,9 @@ describe('Sreva Web design system', () => {
     expect(publicNav).toContain('aria-label="Public navigation"');
     expect(publicNav).toContain('Features');
     expect(publicNav).toContain('Privacy');
-    expect(publicNav).toContain('Open Sreva');
+    expect(publicNav).toContain('Open Sreadya');
 
-    expect(workspaceNav).toContain('aria-label="Sreva workspace"');
+    expect(workspaceNav).toContain('aria-label="Sreadya workspace"');
     for (const label of ['Home', 'Today', 'Log', 'Calendar', 'More']) {
       expect(workspaceNav).toContain(label);
     }

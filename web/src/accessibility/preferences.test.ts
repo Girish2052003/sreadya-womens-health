@@ -69,17 +69,17 @@ describe('accessibility preferences', () => {
     expect(
       accessibilityDataAttributes({ textScale: 'large', motion: 'reduced', contrast: 'high', easyLanguage: true }),
     ).toEqual({
-      'data-sreva-text-scale': 'large',
-      'data-sreva-motion': 'reduced',
-      'data-sreva-contrast': 'high',
-      'data-sreva-language-mode': 'easy',
+      'data-sreadya-text-scale': 'large',
+      'data-sreadya-motion': 'reduced',
+      'data-sreadya-contrast': 'high',
+      'data-sreadya-language-mode': 'easy',
     });
 
     expect(accessibilityDataAttributes(DEFAULT_ACCESSIBILITY_PREFERENCES)).toEqual({
-      'data-sreva-text-scale': 'normal',
-      'data-sreva-motion': 'system',
-      'data-sreva-contrast': 'system',
-      'data-sreva-language-mode': 'standard',
+      'data-sreadya-text-scale': 'normal',
+      'data-sreadya-motion': 'system',
+      'data-sreadya-contrast': 'system',
+      'data-sreadya-language-mode': 'standard',
     });
   });
 
@@ -99,10 +99,10 @@ describe('accessibility preferences', () => {
     });
 
     expect(Object.fromEntries(applied)).toEqual({
-      'data-sreva-text-scale': 'large',
-      'data-sreva-motion': 'reduced',
-      'data-sreva-contrast': 'high',
-      'data-sreva-language-mode': 'easy',
+      'data-sreadya-text-scale': 'large',
+      'data-sreadya-motion': 'reduced',
+      'data-sreadya-contrast': 'high',
+      'data-sreadya-language-mode': 'easy',
     });
   });
 });

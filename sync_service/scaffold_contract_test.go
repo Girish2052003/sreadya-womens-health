@@ -9,7 +9,7 @@ import (
 func TestTask20RequiredScaffoldExists(t *testing.T) {
 	required := []string{
 		"go.sum",
-		"cmd/sreva-sync/main.go",
+		"cmd/sreadya-sync/main.go",
 		"internal/httpapi/router.go",
 		"internal/config/config.go",
 		"internal/store/store.go",

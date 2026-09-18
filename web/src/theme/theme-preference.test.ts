@@ -37,7 +37,7 @@ describe('theme preference', () => {
     const attrs = new Map<string, string>();
     const target = { setAttribute: (name: string, value: string) => attrs.set(name, value) };
     expect(applyThemePreference(target, 'system', true)).toBe('dark');
-    expect(attrs.get('data-sreva-theme')).toBe('dark');
-    expect(attrs.get('data-sreva-theme-preference')).toBe('system');
+    expect(attrs.get('data-sreadya-theme')).toBe('dark');
+    expect(attrs.get('data-sreadya-theme-preference')).toBe('system');
   });
 });
