@@ -42,6 +42,8 @@ No credential may be committed or emitted into client/public assets.
 
 Expected CI inputs are documented by the translation tool/workflow. Local developers may use environment variables but must never commit their values.
 
+A paid translation run is additionally bounded by the non-secret repository variable `SREADYA_TRANSLATION_MAX_CHARACTERS`. The orchestrator calculates the exact provider-input character plan before sending any text and refuses to translate when the plan exceeds that reviewed ceiling. An absent ceiling fails closed.
+
 ## Incremental translation
 
 The translation tool compares the current English source with existing target artifacts.
