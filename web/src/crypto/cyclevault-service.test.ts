@@ -53,7 +53,7 @@ async function setup() {
 
 function manifest() {
   return {
-    format: 'SREVA-CYCLEVAULT' as const,
+    format: 'SREADYA-CYCLEVAULT' as const,
     formatVersion: 1 as const,
     createdAtUtc: CREATED_AT.toISOString(),
     appVersion: '1.0.0',

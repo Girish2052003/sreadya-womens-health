@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"sreva.dev/sync_service/internal/devices"
+	"sreadya.dev/sync_service/internal/devices"
 )
 
 type fakeChallenges struct {

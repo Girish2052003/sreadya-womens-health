@@ -9,7 +9,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 
-	"sreva.dev/sync_service/internal/continuity"
+	"sreadya.dev/sync_service/internal/continuity"
 )
 
 func TestTask23StoreImplementsContinuityBoundary(t *testing.T) {
@@ -75,7 +75,7 @@ func TestTask23RecoveryWrapperUpsertContainsOnlyOpaqueContinuityFields(t *testin
 		VaultID:          "vault-a",
 		KeyEpoch:         3,
 		ProtocolVersion:  1,
-		SuiteID:          "SREVA-AES256GCM-HKDFSHA256-ED25519-V1",
+		SuiteID:          "SREADYA-AES256GCM-HKDFSHA256-ED25519-V1",
 		KDFSalt:          []byte{1, 2, 3},
 		Nonce:            []byte{4, 5, 6},
 		CiphertextAndTag: []byte{7, 8, 9},
