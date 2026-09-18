@@ -1197,5 +1197,6 @@
   "homeCore.observationCount.other": "{count} local observations",
   "prediction.ovulationUnavailable": "Ovulation estimate: available only when Trying to Conceive mode is enabled.",
   "prediction.fertileWindowUnavailable": "Estimated fertile window: available only when Trying to Conceive mode is enabled.",
-  "sharing.cyclePhaseAria": "Cycle phase or day"
+  "sharing.cyclePhaseAria": "Cycle phase or day",
+  "reminder.lateAria": "Late reminder days"
 }

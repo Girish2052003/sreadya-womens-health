@@ -2577,6 +2577,9 @@
   "@sreadya_reminder__dot__late": {
     "description": "SREADYA canonical message ID: reminder.late"
   },
+  "@sreadya_reminder__dot__lateAria": {
+    "description": "SREADYA canonical message ID: reminder.lateAria"
+  },
   "@sreadya_reminder__dot__lateHelp": {
     "description": "SREADYA canonical message ID: reminder.lateHelp"
   },
@@ -4456,6 +4459,7 @@
   "sreadya_reminder__dot__kind__dot__pregnancyTest": "Pregnancy-test reminder",
   "sreadya_reminder__dot__kind__dot__supplement": "Supplement reminder",
   "sreadya_reminder__dot__late": "Late reminder",
+  "sreadya_reminder__dot__lateAria": "Late reminder days",
   "sreadya_reminder__dot__lateHelp": "Days after the expected date; 0 disables it.",
   "sreadya_reminder__dot__localDelivery": "Reminder delivery stays local to Sreadya. Background push is not required.",
   "sreadya_reminder__dot__mechanism": "Mechanism",

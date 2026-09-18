@@ -2,7 +2,7 @@
   "meta": {
     "locale": "fi",
     "sourceLocale": "en",
-    "sourceVersion": "17ad07cc00cb99a51e20f53f0ab2500e44c4e543",
+    "sourceVersion": "8f439cd8c651fc3d9a3557a31f6af67904f22e62",
     "method": "machine",
     "provider": "openai-assistant",
     "providerModel": "gpt-5.6-sol",

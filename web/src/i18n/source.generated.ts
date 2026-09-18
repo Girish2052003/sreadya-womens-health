@@ -859,6 +859,7 @@ export const GENERATED_SOURCE_MESSAGES = {
   "reminder.kind.pregnancyTest": "Pregnancy-test reminder",
   "reminder.kind.supplement": "Supplement reminder",
   "reminder.late": "Late reminder",
+  "reminder.lateAria": "Late reminder days",
   "reminder.lateHelp": "Days after the expected date; 0 disables it.",
   "reminder.localDelivery": "Reminder delivery stays local to Sreadya. Background push is not required.",
   "reminder.mechanism": "Mechanism",
