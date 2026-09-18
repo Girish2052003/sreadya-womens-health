@@ -94,7 +94,14 @@ def load_artifacts(source:dict[str,str],source_version:str)->list[Artifact]:
     return artifacts
 
 def flutter_key(message_id:str)->str:
-    key="sreadya_"+re.sub(r"[^A-Za-z0-9_]","_",message_id)
+    # Preserve punctuation identity so e.g. "security-report" and
+    # "security.report" can never collapse to the same generated ARB key.
+    escaped=(message_id
+        .replace("_","__us__")
+        .replace(".","__dot__")
+        .replace("-","__dash__")
+        .replace("/","__slash__"))
+    key="sreadya_"+re.sub(r"[^A-Za-z0-9_]","_",escaped)
     return key if key[0].isalpha() else "m_"+key
 
 def generated_outputs()->dict[Path,bytes]:
