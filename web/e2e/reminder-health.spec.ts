@@ -117,7 +117,7 @@ test('3-day reminder configuration persists encrypted and derives its next inten
   }).format(threeDaysBefore);
 
   await expect(page.getByRole('heading', { name: expectedNextDate })).toBeVisible();
-  await expect(page.getByText(/Period Three Days · 08:00/)).toBeVisible();
+  await expect(page.getByText(/Three-day cycle reminder · 08:00/)).toBeVisible();
   await expect(page.getByText(/Closed-app delivery is not guaranteed/)).toBeVisible();
 
   const stored = await readReminderPreferenceRecord(page);
