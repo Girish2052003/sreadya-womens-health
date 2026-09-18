@@ -1,4 +1,5 @@
 name: One-shot Pages asset diagnostic
+# Final live verification after rotated stylesheet deployment.
 # Recheck after cache-busted Pages redeploy.
 # Final fingerprint verification.
 
