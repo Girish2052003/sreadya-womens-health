@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install and validate Sreva's Android native reminder regression tests."""
+"""Install and validate Sreadya's Android native reminder regression tests."""
 
 from __future__ import annotations
 
@@ -24,12 +24,12 @@ def configure() -> None:
     if dependency not in text:
         marker = 'implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")'
         if marker not in text:
-            raise SystemExit("Sreva Android dependencies were not configured first")
+            raise SystemExit("Sreadya Android dependencies were not configured first")
         text = text.replace(marker, marker + "\n    " + dependency)
         gradle.write_text(text, encoding="utf-8")
 
     # AGP 9 enables unit tests only for the tested build type by default,
-    # which removes testReleaseUnitTest. Sreva intentionally verifies the
+    # which removes testReleaseUnitTest. Sreadya intentionally verifies the
     # production release variant, so restore unit-test components for all
     # build types using AGP's documented compatibility property.
     unit_test_property = "android.onlyEnableUnitTestForTheTestedBuildType=false"
@@ -50,9 +50,9 @@ def configure() -> None:
         / "test"
         / "kotlin"
         / "com"
-        / "sreva"
+        / "sreadya"
         / "health"
-        / "sreva"
+        / "sreadya"
         / "ReminderWallClockTest.kt"
     )
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -71,9 +71,9 @@ def check() -> None:
         / "test"
         / "kotlin"
         / "com"
-        / "sreva"
+        / "sreadya"
         / "health"
-        / "sreva"
+        / "sreadya"
         / "ReminderWallClockTest.kt"
     )
     require(gradle, "configured Android Gradle file")

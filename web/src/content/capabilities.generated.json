@@ -1,5 +1,5 @@
 {
-  "generated_from": "shared/capabilities/sreva-capabilities.v1.json",
+  "generated_from": "shared/capabilities/sreadya-capabilities.v1.json",
   "launch_requirement_count": 258,
   "future_requirement_count": 11,
   "families": [
@@ -1329,7 +1329,7 @@
     },
     {
       "id": "HEALTH-009",
-      "name": "Sreva vault remains authoritative application datastore",
+      "name": "Sreadya vault remains authoritative application datastore",
       "family": "HEALTH",
       "route": "/app/settings",
       "surface_type": "status",
@@ -1825,7 +1825,7 @@
     },
     {
       "id": "ID-001",
-      "name": "Full account-free Sreva experience",
+      "name": "Full account-free Sreadya experience",
       "family": "ID",
       "route": "/app/account",
       "surface_type": "interaction",
@@ -1833,7 +1833,7 @@
     },
     {
       "id": "ID-002",
-      "name": "Full account-based Sreva experience",
+      "name": "Full account-based Sreadya experience",
       "family": "ID",
       "route": "/app/account",
       "surface_type": "provider-dependent",
@@ -2049,7 +2049,7 @@
     },
     {
       "id": "WEB-001",
-      "name": "Full browser-based Sreva client",
+      "name": "Full browser-based Sreadya client",
       "family": "WEB",
       "route": "/app/more",
       "surface_type": "status",
