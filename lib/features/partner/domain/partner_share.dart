@@ -15,7 +15,7 @@ class PartnerShareGrant {
     String? selectedReminder,
     String? selectedWellness,
   }) {
-    final buffer = StringBuffer('Sreva shared summary');
+    final buffer = StringBuffer('Sreadya shared summary');
     if (categories.contains(PartnerShareCategory.prediction) &&
         predictionWindow != null) {
       buffer.write('\nExpected period window: $predictionWindow');
@@ -32,7 +32,7 @@ class PartnerShareGrant {
         selectedWellness != null) {
       buffer.write('\nWellness: $selectedWellness');
     }
-    buffer.write('\nShared intentionally by the Sreva user.');
+    buffer.write('\nShared intentionally by the Sreadya user.');
     return buffer.toString();
   }
 }

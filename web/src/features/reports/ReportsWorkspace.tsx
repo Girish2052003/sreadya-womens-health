@@ -88,7 +88,7 @@ export function ReportsWorkspace() {
     })().catch(() => {
       if (cancelled) return;
       setStatus('Local vault unavailable');
-      setError('Sreva could not prepare a local report from the encrypted history in this browser.');
+      setError('Sreadya could not prepare a local report from the encrypted history in this browser.');
       setReady(true);
     });
     return () => {
@@ -113,25 +113,25 @@ export function ReportsWorkspace() {
       setPreview(buildReportPreview({ periods, observations, selection }));
     } catch (cause) {
       setPreview(null);
-      setError(cause instanceof Error ? cause.message : 'Sreva could not prepare the report preview.');
+      setError(cause instanceof Error ? cause.message : 'Sreadya could not prepare the report preview.');
     }
   };
 
   const downloadCsv = () => {
     const csv = buildCsvReport({ periods, observations, selection });
-    downloadBlob(new Blob([csv], { type: 'text/csv;charset=utf-8' }), 'sreva-health-report.csv');
+    downloadBlob(new Blob([csv], { type: 'text/csv;charset=utf-8' }), 'sreadya-health-report.csv');
   };
 
   const downloadPdf = async () => {
     const bytes = await buildPdfReport({ periods, observations, selection });
-    downloadBlob(pdfBlob(bytes), 'sreva-health-report.pdf');
+    downloadBlob(pdfBlob(bytes), 'sreadya-health-report.pdf');
   };
 
   return (
     <section className="account-free-core" data-testid="reports-workspace" aria-busy={!ready}>
       <div className="account-free-core__status">
         <StatusChip tone={error ? 'danger' : ready ? 'success' : 'info'}>{status}</StatusChip>
-        <span className="workspace-note">Account-free · generated locally · nothing sent to Sreva</span>
+        <span className="workspace-note">Account-free · generated locally · nothing sent to Sreadya</span>
       </div>
       {error ? <p className="core-error" role="alert">{error}</p> : null}
 

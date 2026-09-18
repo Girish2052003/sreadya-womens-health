@@ -31,7 +31,7 @@ export function TodayCorePanel({ observations, today }: { observations: HealthOb
       </Card>
 
       <Card eyebrow="Health boundary" title="Observation is not diagnosis">
-        <p>Sreva keeps your own records readable without turning a symptom log into a medical conclusion.</p>
+        <p>Sreadya keeps your own records readable without turning a symptom log into a medical conclusion.</p>
       </Card>
     </div>
   );

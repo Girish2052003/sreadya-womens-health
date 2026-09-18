@@ -14,7 +14,7 @@ The closure-note commit is documentation only. The tested code SHA above remains
 
 ## Frozen-plan coverage
 
-Task 22 from `docs/superpowers/plans/2026-09-16-sreva-c2-cross-platform-implementation.md` requires:
+Task 22 from `docs/superpowers/plans/2026-09-16-sreadya-c2-cross-platform-implementation.md` requires:
 
 - provider-independent opaque ciphertext sync service and handlers;
 - device authorization;
@@ -42,7 +42,7 @@ The Go service and HTTP boundary provide:
 - explicit ciphertext size limits;
 - cross-account and revoked-device rejection;
 - one-use durable signed-device challenges;
-- exact Task-19 `sreva-device-auth-v1` LP16 Ed25519 verification;
+- exact Task-19 `sreadya-device-auth-v1` LP16 Ed25519 verification;
 - exact request-body binding for push and canonical request-target binding for pull;
 - safe `Cache-Control: no-store` HTTP behavior;
 - no parsing of decrypted health payloads on the server.

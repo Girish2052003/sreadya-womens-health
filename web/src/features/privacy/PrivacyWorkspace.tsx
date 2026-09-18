@@ -48,7 +48,7 @@ export function PrivacyWorkspace() {
     })().catch(() => {
       if (cancelled) return;
       setVaultStatus('Local vault unavailable');
-      setError('Sreva could not read the local privacy status from this browser.');
+      setError('Sreadya could not read the local privacy status from this browser.');
       setReady(true);
     });
 
@@ -65,7 +65,7 @@ export function PrivacyWorkspace() {
 
       {ready && privacy ? (
         <div className="workspace-grid">
-          <Card eyebrow="Privacy center" title="What Sreva actually protects here">
+          <Card eyebrow="Privacy center" title="What Sreadya actually protects here">
             <dl className="privacy-status-list">
               {(Object.keys(STATUS_LABELS) as Array<keyof WebPrivacyStatus>).map((key) => (
                 <div key={key} className="privacy-status-row"><dt>{STATUS_LABELS[key]}</dt><dd>{privacy[key]}</dd></div>
@@ -86,15 +86,15 @@ export function PrivacyWorkspace() {
           </Card>
 
           <Card eyebrow="Why is this stored?" title="Storage transparency">
-            <p><strong>Health records:</strong> encrypted locally so Sreva can show the history, calculations, reports and reminders you asked for.</p>
+            <p><strong>Health records:</strong> encrypted locally so Sreadya can show the history, calculations, reports and reminders you asked for.</p>
             <p><strong>Preferences:</strong> stored locally so reminder privacy, life stage, accessibility and PIN-lock choices persist on this browser.</p>
             <p><strong>Optional sync state:</strong> only opaque identifiers, queue metadata and ciphertext are used when continuity is configured.</p>
             <p><strong>Technical diagnostics:</strong> generated only on request from allowlisted non-health technical fields.</p>
           </Card>
 
           <Card eyebrow="Truthful boundary" title="Platform protections are not exaggerated">
-            <p>Web PIN locking is available, but Sreva does not call it native biometric security. The browser controls screenshots and app-switcher previews, and native HealthKit / Health Connect require the native clients.</p>
-            <p className="workspace-note">Account-free use remains first class. The encrypted local vault is authoritative, and Sreva does not require reproductive-health telemetry to operate.</p>
+            <p>Web PIN locking is available, but Sreadya does not call it native biometric security. The browser controls screenshots and app-switcher previews, and native HealthKit / Health Connect require the native clients.</p>
+            <p className="workspace-note">Account-free use remains first class. The encrypted local vault is authoritative, and Sreadya does not require reproductive-health telemetry to operate.</p>
           </Card>
         </div>
       ) : null}
