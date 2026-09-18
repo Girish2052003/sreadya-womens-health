@@ -16,7 +16,7 @@ const publicLinks = [
 ] as const;
 
 export function PublicHeader({ showLanguageChooser = false }: { showLanguageChooser?: boolean }) {
-  const { t } = useI18n();
+  const { t, availableLocales } = useI18n();
 
   return (
     <header className="public-header">
@@ -29,7 +29,7 @@ export function PublicHeader({ showLanguageChooser = false }: { showLanguageChoo
           <Link key={href} href={href}>{t(labelKey)}</Link>
         ))}
       </nav>
-      {showLanguageChooser ? <LanguageChooser /> : null}
+      {showLanguageChooser && availableLocales.length > 1 ? <LanguageChooser /> : null}
       <ThemeToggle />
       <Link className="public-header__cta" href="/app/home">{t('common.openSreadya')}</Link>
     </header>
