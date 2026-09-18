@@ -41,7 +41,7 @@ class PersonalReminder {
 class PersonalReminderStore {
   PersonalReminderStore({LocalSettingsStore? settings})
     : _settings = settings ?? LocalSettingsStore();
-  static const _key = 'sreva.personal-reminders.v1';
+  static const _key = 'sreadya.personal-reminders.v1';
   final LocalSettingsStore _settings;
 
   Future<List<PersonalReminder>> readAll() async {

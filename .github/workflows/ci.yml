@@ -1,4 +1,4 @@
-name: Sreva CI
+name: Sreadya CI
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: sreva-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: sreadya-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -66,12 +66,12 @@ jobs:
         run: |
           mkdir -p build/security
           dart pub deps --json > build/security/pub-deps.json
-          python tool/generate_sbom.py build/security/pub-deps.json build/security/sreva-cyclonedx.json
+          python tool/generate_sbom.py build/security/pub-deps.json build/security/sreadya-cyclonedx.json
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: sreva-security-evidence
+          name: sreadya-security-evidence
           path: |
-            build/security/sreva-cyclonedx.json
+            build/security/sreadya-cyclonedx.json
             pubspec.lock
           retention-days: 30
 
@@ -89,8 +89,8 @@ jobs:
           cache: true
       - run: flutter pub get
       - name: Generate Android host
-        run: flutter create --platforms=android --org com.sreva.health .
-      - name: Install Sreva Android native bridge and privacy configuration
+        run: flutter create --platforms=android --org com.sreadya.health .
+      - name: Install Sreadya Android native bridge and privacy configuration
         run: |
           python3 tool/configure_platforms.py android
           python3 tool/configure_platforms.py android --check
@@ -109,42 +109,42 @@ jobs:
         run: |
           keytool -genkeypair \
             -storetype JKS \
-            -keystore "$RUNNER_TEMP/sreva-ci-upload.jks" \
-            -storepass sreva-ci-store-pass \
-            -keypass sreva-ci-key-pass \
-            -alias sreva-ci-upload \
+            -keystore "$RUNNER_TEMP/sreadya-ci-upload.jks" \
+            -storepass sreadya-ci-store-pass \
+            -keypass sreadya-ci-key-pass \
+            -alias sreadya-ci-upload \
             -keyalg RSA \
             -keysize 3072 \
             -validity 3650 \
-            -dname "CN=Sreva CI, OU=Verification, O=Sreva, C=FI"
+            -dname "CN=Sreadya CI, OU=Verification, O=Sreadya, C=FI"
       - name: Verify production-signing path with ephemeral key
         env:
-          SREVA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreva-ci-upload.jks
-          SREVA_ANDROID_KEYSTORE_PASSWORD: sreva-ci-store-pass
-          SREVA_ANDROID_KEY_ALIAS: sreva-ci-upload
-          SREVA_ANDROID_KEY_PASSWORD: sreva-ci-key-pass
+          SREADYA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreadya-ci-upload.jks
+          SREADYA_ANDROID_KEYSTORE_PASSWORD: sreadya-ci-store-pass
+          SREADYA_ANDROID_KEY_ALIAS: sreadya-ci-upload
+          SREADYA_ANDROID_KEY_PASSWORD: sreadya-ci-key-pass
         run: python3 tool/configure_android_release.py --require-signing
       - name: Build signed Android release AAB and APK for verification only
         env:
-          SREVA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreva-ci-upload.jks
-          SREVA_ANDROID_KEYSTORE_PASSWORD: sreva-ci-store-pass
-          SREVA_ANDROID_KEY_ALIAS: sreva-ci-upload
-          SREVA_ANDROID_KEY_PASSWORD: sreva-ci-key-pass
+          SREADYA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreadya-ci-upload.jks
+          SREADYA_ANDROID_KEYSTORE_PASSWORD: sreadya-ci-store-pass
+          SREADYA_ANDROID_KEY_ALIAS: sreadya-ci-upload
+          SREADYA_ANDROID_KEY_PASSWORD: sreadya-ci-key-pass
         run: |
           flutter build appbundle --release
           flutter build apk --release
       - name: Verify Android signatures and package artifacts
         env:
-          SREVA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreva-ci-upload.jks
-          SREVA_ANDROID_KEYSTORE_PASSWORD: sreva-ci-store-pass
-          SREVA_ANDROID_KEY_ALIAS: sreva-ci-upload
+          SREADYA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreadya-ci-upload.jks
+          SREADYA_ANDROID_KEYSTORE_PASSWORD: sreadya-ci-store-pass
+          SREADYA_ANDROID_KEY_ALIAS: sreadya-ci-upload
         run: |
           python3 tool/verify_android_signatures.py \
             --aab build/app/outputs/bundle/release/app-release.aab \
             --apk build/app/outputs/flutter-apk/app-release.apk
       - name: Remove ephemeral Android CI signing material
         if: always()
-        run: rm -f "$RUNNER_TEMP/sreva-ci-upload.jks"
+        run: rm -f "$RUNNER_TEMP/sreadya-ci-upload.jks"
 
   android-family-preview-verification:
     runs-on: ubuntu-latest
@@ -159,9 +159,9 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
-      - name: Generate Android host from the same Sreva source
-        run: flutter create --platforms=android --org com.sreva.health .
-      - name: Install the complete Sreva Android native capability set
+      - name: Generate Android host from the same Sreadya source
+        run: flutter create --platforms=android --org com.sreadya.health .
+      - name: Install the complete Sreadya Android native capability set
         run: |
           python3 tool/configure_platforms.py android
           python3 tool/configure_platforms.py android --check
@@ -171,8 +171,8 @@ jobs:
         run: |
           python3 tool/configure_android_preview.py
           python3 tool/configure_android_preview.py --check
-          grep -F 'applicationId = "com.sreva.health.sreva.preview"' android/app/build.gradle.kts
-          grep -F 'namespace = "com.sreva.health.sreva"' android/app/build.gradle.kts
+          grep -F 'applicationId = "com.sreadya.health.sreadya.preview"' android/app/build.gradle.kts
+          grep -F 'namespace = "com.sreadya.health.sreadya"' android/app/build.gradle.kts
           grep -F 'android.permission.health.READ_MENSTRUATION' android/app/src/main/AndroidManifest.xml
       - name: Enforce the same API and signing policy as production
         run: |
@@ -185,42 +185,42 @@ jobs:
         run: |
           keytool -genkeypair \
             -storetype JKS \
-            -keystore "$RUNNER_TEMP/sreva-preview-ci-upload.jks" \
-            -storepass sreva-preview-ci-store-pass \
-            -keypass sreva-preview-ci-key-pass \
-            -alias sreva-preview-ci-upload \
+            -keystore "$RUNNER_TEMP/sreadya-preview-ci-upload.jks" \
+            -storepass sreadya-preview-ci-store-pass \
+            -keypass sreadya-preview-ci-key-pass \
+            -alias sreadya-preview-ci-upload \
             -keyalg RSA \
             -keysize 3072 \
             -validity 3650 \
-            -dname "CN=Sreva Family Preview CI, OU=Verification, O=Sreva, C=FI"
+            -dname "CN=Sreadya Family Preview CI, OU=Verification, O=Sreadya, C=FI"
       - name: Verify family-preview signing path
         env:
-          SREVA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreva-preview-ci-upload.jks
-          SREVA_ANDROID_KEYSTORE_PASSWORD: sreva-preview-ci-store-pass
-          SREVA_ANDROID_KEY_ALIAS: sreva-preview-ci-upload
-          SREVA_ANDROID_KEY_PASSWORD: sreva-preview-ci-key-pass
+          SREADYA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreadya-preview-ci-upload.jks
+          SREADYA_ANDROID_KEYSTORE_PASSWORD: sreadya-preview-ci-store-pass
+          SREADYA_ANDROID_KEY_ALIAS: sreadya-preview-ci-upload
+          SREADYA_ANDROID_KEY_PASSWORD: sreadya-preview-ci-key-pass
         run: python3 tool/configure_android_release.py --require-signing
       - name: Build signed family-preview AAB and APK for verification only
         env:
-          SREVA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreva-preview-ci-upload.jks
-          SREVA_ANDROID_KEYSTORE_PASSWORD: sreva-preview-ci-store-pass
-          SREVA_ANDROID_KEY_ALIAS: sreva-preview-ci-upload
-          SREVA_ANDROID_KEY_PASSWORD: sreva-preview-ci-key-pass
+          SREADYA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreadya-preview-ci-upload.jks
+          SREADYA_ANDROID_KEYSTORE_PASSWORD: sreadya-preview-ci-store-pass
+          SREADYA_ANDROID_KEY_ALIAS: sreadya-preview-ci-upload
+          SREADYA_ANDROID_KEY_PASSWORD: sreadya-preview-ci-key-pass
         run: |
           flutter build appbundle --release
           flutter build apk --release
       - name: Verify family-preview signatures
         env:
-          SREVA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreva-preview-ci-upload.jks
-          SREVA_ANDROID_KEYSTORE_PASSWORD: sreva-preview-ci-store-pass
-          SREVA_ANDROID_KEY_ALIAS: sreva-preview-ci-upload
+          SREADYA_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/sreadya-preview-ci-upload.jks
+          SREADYA_ANDROID_KEYSTORE_PASSWORD: sreadya-preview-ci-store-pass
+          SREADYA_ANDROID_KEY_ALIAS: sreadya-preview-ci-upload
         run: |
           python3 tool/verify_android_signatures.py \
             --aab build/app/outputs/bundle/release/app-release.aab \
             --apk build/app/outputs/flutter-apk/app-release.apk
       - name: Remove ephemeral family-preview CI signing material
         if: always()
-        run: rm -f "$RUNNER_TEMP/sreva-preview-ci-upload.jks"
+        run: rm -f "$RUNNER_TEMP/sreadya-preview-ci-upload.jks"
 
   ios-no-codesign:
     runs-on: macos-26
@@ -236,8 +236,8 @@ jobs:
           cache: true
       - run: flutter pub get
       - name: Generate iOS host
-        run: flutter create --platforms=ios --org com.sreva.health .
-      - name: Install Sreva iOS native bridge and privacy configuration
+        run: flutter create --platforms=ios --org com.sreadya.health .
+      - name: Install Sreadya iOS native bridge and privacy configuration
         run: |
           python3 tool/configure_platforms.py ios
           python3 tool/configure_platforms.py ios --check
@@ -360,11 +360,11 @@ jobs:
         working-directory: web
         run: |
           mkdir -p ../build/security
-          npm sbom --sbom-format cyclonedx > ../build/security/sreva-web-cyclonedx.json
+          npm sbom --sbom-format cyclonedx > ../build/security/sreadya-web-cyclonedx.json
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: sreva-web-security-evidence
+          name: sreadya-web-security-evidence
           path: |
-            build/security/sreva-web-cyclonedx.json
+            build/security/sreadya-web-cyclonedx.json
             web/package-lock.json
           retention-days: 30

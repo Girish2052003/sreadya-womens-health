@@ -26,7 +26,7 @@ export function HomeCorePanel({
 
   return (
     <div className="core-panel-grid">
-      <Card eyebrow="Private local summary" title="Your Sreva today">
+      <Card eyebrow="Private local summary" title="Your Sreadya today">
         <p>
           {periods.length} recorded period{periods.length === 1 ? '' : 's'} · {observations.length} local observation{observations.length === 1 ? '' : 's'}
         </p>
@@ -37,7 +37,7 @@ export function HomeCorePanel({
       </Card>
 
       <Card eyebrow="Cycle history" title={latestPeriod ? `Latest period · ${formatUtcDate(latestPeriod.start)}` : 'No period history yet'}>
-        <p>{latestPeriod?.end ? `Ended ${formatUtcDate(latestPeriod.end)}.` : latestPeriod ? 'Currently marked as ongoing.' : 'Start when it is useful to you. Sreva never assumes a 28-day cycle.'}</p>
+        <p>{latestPeriod?.end ? `Ended ${formatUtcDate(latestPeriod.end)}.` : latestPeriod ? 'Currently marked as ongoing.' : 'Start when it is useful to you. Sreadya never assumes a 28-day cycle.'}</p>
         <Link className="workspace-text-link" href="/app/cycle">Open cycle history</Link>
       </Card>
 
@@ -53,7 +53,7 @@ export function HomeCorePanel({
             <p>{titleCase(prediction.confidence)} confidence · based on {prediction.validIntervals.length} recent valid cycle intervals.</p>
           </>
         ) : (
-          <p>Sreva will calculate an estimate locally after enough valid cycle history is available.</p>
+          <p>Sreadya will calculate an estimate locally after enough valid cycle history is available.</p>
         )}
         <Link className="workspace-text-link" href="/app/predictions">Open predictions</Link>
       </Card>

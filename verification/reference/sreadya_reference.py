@@ -84,10 +84,10 @@ def plan_period_reminder(predicted_date, *, days_before, at, privacy='maximum'):
 
 
 def build_partner_summary(categories, *, prediction_window='', wellness=''):
-    lines = ['Sreva shared summary']
+    lines = ['Sreadya shared summary']
     if 'prediction' in categories and prediction_window:
         lines.append(f'Expected period window: {prediction_window}')
     if 'selected_wellness' in categories and wellness:
         lines.append(f'Selected wellness: {wellness}')
-    lines.append('Shared intentionally by the Sreva user.')
+    lines.append('Shared intentionally by the Sreadya user.')
     return '\n'.join(lines)

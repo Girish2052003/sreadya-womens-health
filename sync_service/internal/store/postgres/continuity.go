@@ -6,8 +6,8 @@ import (
 
 	"github.com/jackc/pgx/v5"
 
-	"sreva.dev/sync_service/internal/continuity"
-	"sreva.dev/sync_service/internal/devices"
+	"sreadya.dev/sync_service/internal/continuity"
+	"sreadya.dev/sync_service/internal/devices"
 )
 
 var _ continuity.Store = (*Store)(nil)

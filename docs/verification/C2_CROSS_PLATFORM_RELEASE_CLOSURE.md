@@ -1,6 +1,6 @@
 # C2 Cross-Platform Release Closure — Task 27
 
-**Status:** CANDIDATE EVIDENCE RECORDED — final branch closure requires this updated ledger SHA itself to reproduce the dedicated Task-27 and full Sreva CI success before merge.  
+**Status:** CANDIDATE EVIDENCE RECORDED — final branch closure requires this updated ledger SHA itself to reproduce the dedicated Task-27 and full Sreadya CI success before merge.  
 **Task-26 baseline:** `b239fd251bbba92aa62aab33a2c64ca47fa7ba70`  
 **Verified pre-ledger Task-27 candidate:** `492edf9029b929b7f65d68999df9288022af2680`  
 **Date:** 18 September 2026
@@ -59,13 +59,13 @@ All Task-27 fixtures use synthetic identifiers, dates and opaque ciphertext. **N
 For `492edf9029b929b7f65d68999df9288022af2680`:
 
 - dedicated Task-27 workflow run **35284999157**: **completed / success**, all 5 jobs green;
-- full Sreva CI run **35284999364**: **completed / success**, all 8 jobs green;
+- full Sreadya CI run **35284999364**: **completed / success**, all 8 jobs green;
 - C2 Task 25 Cross-Platform Traceability: success;
 - C2 Task 26 Sync Release Policy: success;
-- Sreva Web Pages: success;
+- Sreadya Web Pages: success;
 - every workflow run returned for this exact candidate SHA — **23 total** — completed with conclusion **success**.
 
-The full Sreva CI candidate matrix includes shared contracts, Flutter/reference/security work, Web core/security/E2E, iOS no-codesign release compilation, signed Android production verification and signed Android family-preview verification.
+The full Sreadya CI candidate matrix includes shared contracts, Flutter/reference/security work, Web core/security/E2E, iOS no-codesign release compilation, signed Android production verification and signed Android family-preview verification.
 
 ## External boundaries
 
@@ -73,4 +73,4 @@ External store-console declarations, production-provider accounts, physical-devi
 
 ## Formal merge rule
 
-This document update creates a new branch SHA. Task 27 is not formally closed merely because the pre-ledger candidate above passed. Before PR #16 is eligible to merge, the exact updated branch head must again pass the frozen Task-27 contract, dedicated Task-27 workflow and complete Sreva CI/regression matrix. After squash merge, the resulting `main` SHA must receive fresh push-triggered Task-27 and full Sreva CI success before Task 27 is stamped **FORMALLY CLOSED**.
+This document update creates a new branch SHA. Task 27 is not formally closed merely because the pre-ledger candidate above passed. Before PR #16 is eligible to merge, the exact updated branch head must again pass the frozen Task-27 contract, dedicated Task-27 workflow and complete Sreadya CI/regression matrix. After squash merge, the resulting `main` SHA must receive fresh push-triggered Task-27 and full Sreadya CI success before Task 27 is stamped **FORMALLY CLOSED**.

@@ -37,8 +37,8 @@ jobs:
       - name: Install Chromium for production acceptance preflight
         working-directory: web
         run: npx playwright install --with-deps chromium
-      - name: Verify deployed Sreva PWA account-free flow
+      - name: Verify deployed Sreadya PWA account-free flow
         working-directory: web
         env:
-          SREVA_LIVE_BASE_URL: https://girish2052003.github.io/sreva-womens-health/
+          SREADYA_LIVE_BASE_URL: https://girish2052003.github.io/sreadya-womens-health/
         run: npx playwright test e2e/task18-live-acceptance.spec.ts --config=playwright.live.config.ts --project=chromium

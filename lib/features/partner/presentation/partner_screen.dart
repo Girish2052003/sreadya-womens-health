@@ -127,7 +127,7 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
               const SizedBox(height: 20),
               Center(
                 child: Semantics(
-                  label: 'QR code containing only the reviewed Sreva partner summary',
+                  label: 'QR code containing only the reviewed Sreadya partner summary',
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -149,7 +149,7 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
                 onPressed: () async {
                   Navigator.pop(context);
                   await SharePlus.instance.share(
-                    ShareParams(text: text, title: 'Sreva shared summary'),
+                    ShareParams(text: text, title: 'Sreadya shared summary'),
                   );
                 },
                 icon: const Icon(Icons.ios_share),
@@ -173,7 +173,7 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
             child: Padding(
               padding: EdgeInsets.all(16),
               child: Text(
-                'Nothing is shared automatically. The Sreva user selects categories, reviews the exact summary/QR, then explicitly opens the system share sheet.',
+                'Nothing is shared automatically. The Sreadya user selects categories, reviews the exact summary/QR, then explicitly opens the system share sheet.',
               ),
             ),
           ),

@@ -54,7 +54,7 @@ export function PredictionWorkspace() {
     })().catch(() => {
       if (cancelled) return;
       setVaultStatus('Local vault unavailable');
-      setError('Sreva could not calculate a prediction from the encrypted local history in this browser.');
+      setError('Sreadya could not calculate a prediction from the encrypted local history in this browser.');
       setReady(true);
     });
 

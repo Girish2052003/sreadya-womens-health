@@ -89,8 +89,8 @@ def test_shipping_policy_surfaces_do_not_keep_obsolete_future_only_wording() -> 
     forbidden = (
         "approved future architecture is not current data flow",
         "future optional end-to-end encrypted continuity architecture",
-        "sreva v1 does not send your reproductive-health records to a developer health server",
-        "sreva shares nothing through its own developer server",
+        "sreadya v1 does not send your reproductive-health records to a developer health server",
+        "sreadya shares nothing through its own developer server",
     )
 
     for path in (PRIVACY_ARCHITECTURE, *USER_FACING_POLICIES):

@@ -5,8 +5,8 @@ import Speech
 import UIKit
 import UserNotifications
 
-final class SrevaPlatformBridge: NSObject, UNUserNotificationCenterDelegate {
-    static var shared: SrevaPlatformBridge?
+final class SreadyaPlatformBridge: NSObject, UNUserNotificationCenterDelegate {
+    static var shared: SreadyaPlatformBridge?
 
     private let privacyChannel: FlutterMethodChannel
     private let reminderChannel: FlutterMethodChannel
@@ -22,10 +22,10 @@ final class SrevaPlatformBridge: NSObject, UNUserNotificationCenterDelegate {
     private var voiceResult: FlutterResult?
 
     private init(controller: FlutterViewController) {
-        privacyChannel = FlutterMethodChannel(name: "sreva/privacy", binaryMessenger: controller.binaryMessenger)
-        reminderChannel = FlutterMethodChannel(name: "sreva/reminders", binaryMessenger: controller.binaryMessenger)
-        healthChannel = FlutterMethodChannel(name: "sreva/health", binaryMessenger: controller.binaryMessenger)
-        voiceChannel = FlutterMethodChannel(name: "sreva/voice", binaryMessenger: controller.binaryMessenger)
+        privacyChannel = FlutterMethodChannel(name: "sreadya/privacy", binaryMessenger: controller.binaryMessenger)
+        reminderChannel = FlutterMethodChannel(name: "sreadya/reminders", binaryMessenger: controller.binaryMessenger)
+        healthChannel = FlutterMethodChannel(name: "sreadya/health", binaryMessenger: controller.binaryMessenger)
+        voiceChannel = FlutterMethodChannel(name: "sreadya/voice", binaryMessenger: controller.binaryMessenger)
         super.init()
         installChannels()
         installPrivacyObservers()
@@ -33,7 +33,7 @@ final class SrevaPlatformBridge: NSObject, UNUserNotificationCenterDelegate {
     }
 
     static func register(with controller: FlutterViewController) {
-        let bridge = SrevaPlatformBridge(controller: controller)
+        let bridge = SreadyaPlatformBridge(controller: controller)
         shared = bridge
         UNUserNotificationCenter.current().delegate = bridge
     }
@@ -109,9 +109,9 @@ final class SrevaPlatformBridge: NSObject, UNUserNotificationCenterDelegate {
     // MARK: - Reminders
 
     private func installNotificationActions() {
-        let started = UNNotificationAction(identifier: "SREVA_PERIOD_STARTED", title: "Period started", options: [.foreground])
-        let snooze = UNNotificationAction(identifier: "SREVA_SNOOZE", title: "Snooze 2 hours", options: [])
-        let category = UNNotificationCategory(identifier: "SREVA_PERIOD", actions: [started, snooze], intentIdentifiers: [], options: [])
+        let started = UNNotificationAction(identifier: "SREADYA_PERIOD_STARTED", title: "Period started", options: [.foreground])
+        let snooze = UNNotificationAction(identifier: "SREADYA_SNOOZE", title: "Snooze 2 hours", options: [])
+        let category = UNNotificationCategory(identifier: "SREADYA_PERIOD", actions: [started, snooze], intentIdentifiers: [], options: [])
         UNUserNotificationCenter.current().setNotificationCategories([category])
     }
 
@@ -147,7 +147,7 @@ final class SrevaPlatformBridge: NSObject, UNUserNotificationCenterDelegate {
             content.title = title
             content.body = body
             content.sound = .default
-            content.categoryIdentifier = "SREVA_PERIOD"
+            content.categoryIdentifier = "SREADYA_PERIOD"
             let components: DateComponents
             if repeatDaily {
                 components = Calendar.current.dateComponents([.hour, .minute], from: date)
@@ -181,8 +181,8 @@ final class SrevaPlatformBridge: NSObject, UNUserNotificationCenterDelegate {
             }
         case "consumePendingAction":
             let defaults = UserDefaults.standard
-            let value = defaults.string(forKey: "sreva.pending.notification.action")
-            defaults.removeObject(forKey: "sreva.pending.notification.action")
+            let value = defaults.string(forKey: "sreadya.pending.notification.action")
+            defaults.removeObject(forKey: "sreadya.pending.notification.action")
             result(value)
         default:
             result(FlutterMethodNotImplemented)
@@ -195,16 +195,16 @@ final class SrevaPlatformBridge: NSObject, UNUserNotificationCenterDelegate {
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         switch response.actionIdentifier {
-        case "SREVA_PERIOD_STARTED":
-            UserDefaults.standard.set("periodStarted", forKey: "sreva.pending.notification.action")
-        case "SREVA_SNOOZE":
+        case "SREADYA_PERIOD_STARTED":
+            UserDefaults.standard.set("periodStarted", forKey: "sreadya.pending.notification.action")
+        case "SREADYA_SNOOZE":
             let content = UNMutableNotificationContent()
-            content.title = "Sreva"
+            content.title = "Sreadya"
             content.body = "You have a reminder."
             content.sound = .default
-            content.categoryIdentifier = "SREVA_PERIOD"
+            content.categoryIdentifier = "SREADYA_PERIOD"
             let request = UNNotificationRequest(
-                identifier: "sreva-snooze-\(UUID().uuidString)",
+                identifier: "sreadya-snooze-\(UUID().uuidString)",
                 content: content,
                 trigger: UNTimeIntervalNotificationTrigger(timeInterval: 2 * 60 * 60, repeats: false)
             )
@@ -230,7 +230,7 @@ final class SrevaPlatformBridge: NSObject, UNUserNotificationCenterDelegate {
     }
 
     private func healthShareType(for key: String) -> HKSampleType? {
-        // Sexual activity is deliberately read-only in Sreva V1. The user may
+        // Sexual activity is deliberately read-only in Sreadya V1. The user may
         // log it locally without granting any platform write permission.
         switch key {
         case "menstrualFlow": return HKObjectType.categoryType(forIdentifier: .menstrualFlow)
@@ -261,8 +261,8 @@ final class SrevaPlatformBridge: NSObject, UNUserNotificationCenterDelegate {
                 "available": HKHealthStore.isHealthDataAvailable(),
                 // HealthKit intentionally does not reveal whether read access
                 // was denied for an individual type. We therefore expose only
-                // whether Sreva has presented a permission choice before.
-                "authorizationRequested": UserDefaults.standard.bool(forKey: "sreva.health.authorization.requested"),
+                // whether Sreadya has presented a permission choice before.
+                "authorizationRequested": UserDefaults.standard.bool(forKey: "sreadya.health.authorization.requested"),
                 "platformName": "Apple Health",
                 "supportedCategories": ["menstrualFlow", "intermenstrualBleeding", "basalBodyTemperature", "cervicalMucus", "ovulationTest", "pregnancyTest", "sexualActivity"]
             ])
@@ -273,7 +273,7 @@ final class SrevaPlatformBridge: NSObject, UNUserNotificationCenterDelegate {
             let types = selectedHealthTypes(args)
             guard !types.read.isEmpty else { result(false); return }
             healthStore.requestAuthorization(toShare: types.share, read: types.read) { success, _ in
-                if success { UserDefaults.standard.set(true, forKey: "sreva.health.authorization.requested") }
+                if success { UserDefaults.standard.set(true, forKey: "sreadya.health.authorization.requested") }
                 DispatchQueue.main.async { result(success) }
             }
         case "readHealthRecords":

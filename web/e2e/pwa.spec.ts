@@ -1,12 +1,12 @@
 import { expect, test } from '@playwright/test';
 
-test('manifest identifies Sreva as a standalone account-free Web app', async ({ request }) => {
+test('manifest identifies Sreadya as a standalone account-free Web app', async ({ request }) => {
   const response = await request.get('/manifest.webmanifest');
   expect(response.ok()).toBeTruthy();
   const manifest = await response.json();
 
-  expect(manifest.name).toBe('Sreva');
-  expect(manifest.short_name).toBe('Sreva');
+  expect(manifest.name).toBe('Sreadya');
+  expect(manifest.short_name).toBe('Sreadya');
   expect(manifest.display).toBe('standalone');
   expect(manifest.start_url).toContain('app/home');
   expect(manifest.scope).toBe('./');
@@ -49,17 +49,17 @@ test('service worker supplies the reviewed offline shell in Chromium', async ({ 
 
   await context.setOffline(true);
   await page.goto('/app/home/');
-  await expect(page.getByRole('heading', { name: 'Sreva works offline' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Sreadya works offline' })).toBeVisible();
   await expect(page.getByText('Your private health records are not stored in this offline page.')).toBeVisible();
   await context.setOffline(false);
 });
 
 test('reviewed install guidance is explicit for iPhone and Android', async ({ page }) => {
   await page.goto('/install/iphone/');
-  await expect(page.getByRole('heading', { level: 2, name: 'Install Sreva on iPhone' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Install Sreadya on iPhone' })).toBeVisible();
   await expect(page.getByText('Add to Home Screen')).toBeVisible();
 
   await page.goto('/install/android/');
-  await expect(page.getByRole('heading', { level: 2, name: 'Install Sreva on Android' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Install Sreadya on Android' })).toBeVisible();
   await expect(page.getByText('Install app')).toBeVisible();
 });

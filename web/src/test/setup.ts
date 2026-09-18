@@ -1,1 +1,1 @@
-// Shared Vitest setup for Sreva Web. Keep tests deterministic and local-only.
+// Shared Vitest setup for Sreadya Web. Keep tests deterministic and local-only.

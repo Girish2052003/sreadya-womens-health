@@ -104,7 +104,7 @@ func TestPasskeyBeginRoutesExposeOpaqueSessionIDs(t *testing.T) {
 func TestPasskeyFinishRoutesKeepSessionOutOfURLAndPreserveAuthenticatorBody(t *testing.T) {
 	api := &fakeIdentityAPI{}
 	router := NewRouter(nil, WithIdentityAPI(api))
-	const sessionHeader = "X-Sreva-Passkey-Session"
+	const sessionHeader = "X-Sreadya-Passkey-Session"
 
 	registrationBody := `{"id":"registration-credential","response":{"clientDataJSON":"opaque-registration"}}`
 	registration := httptest.NewRequest(http.MethodPost, "/v1/auth/passkeys/register/finish", strings.NewReader(registrationBody))

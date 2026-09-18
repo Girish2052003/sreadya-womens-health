@@ -1,4 +1,4 @@
-package com.sreva.health.sreva
+package com.sreadya.health.sreadya
 
 import android.Manifest
 import android.app.AlarmManager
@@ -58,11 +58,11 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
-private const val REMINDER_CHANNEL = "sreva_local_reminders"
-private const val REMINDER_CHANNEL_NAME = "Sreva reminders"
-private const val ACTION_FIRE = "com.sreva.health.sreva.FIRE_REMINDER"
-private const val ACTION_PERIOD_STARTED = "com.sreva.health.sreva.PERIOD_STARTED"
-private const val ACTION_SNOOZE = "com.sreva.health.sreva.SNOOZE"
+private const val REMINDER_CHANNEL = "sreadya_local_reminders"
+private const val REMINDER_CHANNEL_NAME = "Sreadya reminders"
+private const val ACTION_FIRE = "com.sreadya.health.sreadya.FIRE_REMINDER"
+private const val ACTION_PERIOD_STARTED = "com.sreadya.health.sreadya.PERIOD_STARTED"
+private const val ACTION_SNOOZE = "com.sreadya.health.sreadya.SNOOZE"
 
 class MainActivity : FlutterFragmentActivity() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -93,16 +93,16 @@ class MainActivity : FlutterFragmentActivity() {
             SecurePrefs(this).putString("health.authorization.requested", "true")
         }
         super.onCreate(savedInstanceState)
-        SrevaReminderRuntime.ensureNotificationChannel(this)
+        SreadyaReminderRuntime.ensureNotificationChannel(this)
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         val messenger = flutterEngine.dartExecutor.binaryMessenger
-        MethodChannel(messenger, "sreva/privacy").setMethodCallHandler(::handlePrivacy)
-        MethodChannel(messenger, "sreva/reminders").setMethodCallHandler(::handleReminder)
-        MethodChannel(messenger, "sreva/health").setMethodCallHandler(::handleHealth)
-        MethodChannel(messenger, "sreva/voice").setMethodCallHandler(::handleVoice)
+        MethodChannel(messenger, "sreadya/privacy").setMethodCallHandler(::handlePrivacy)
+        MethodChannel(messenger, "sreadya/reminders").setMethodCallHandler(::handleReminder)
+        MethodChannel(messenger, "sreadya/health").setMethodCallHandler(::handleHealth)
+        MethodChannel(messenger, "sreadya/voice").setMethodCallHandler(::handleVoice)
     }
 
     private fun handlePrivacy(call: MethodCall, result: MethodChannel.Result) {
@@ -119,7 +119,7 @@ class MainActivity : FlutterFragmentActivity() {
     }
 
     private fun handleReminder(call: MethodCall, result: MethodChannel.Result) {
-        val store = SrevaReminderStore(this)
+        val store = SreadyaReminderStore(this)
         when (call.method) {
             "permissionStatus" -> {
                 val allowed = Build.VERSION.SDK_INT < 33 ||
@@ -138,7 +138,7 @@ class MainActivity : FlutterFragmentActivity() {
                     result.error("bad_args", "Invalid reminder", null); return
                 }
                 store.upsert(entry)
-                SrevaReminderRuntime.schedule(this, entry)
+                SreadyaReminderRuntime.schedule(this, entry)
                 result.success(null)
             }
             "cancel" -> {
@@ -146,7 +146,7 @@ class MainActivity : FlutterFragmentActivity() {
                     result.error("bad_args", "Missing id", null); return
                 }
                 store.remove(id)
-                SrevaReminderRuntime.cancel(this, id)
+                SreadyaReminderRuntime.cancel(this, id)
                 result.success(null)
             }
             "pending" -> result.success(store.all().map { entry -> mapOf("id" to entry.id, "timestampMillis" to (entry.scheduledEpochMillis() ?: entry.timestampMillis)) })
@@ -592,7 +592,7 @@ data class ReminderEntry(
                 id = id,
                 kind = kind,
                 timestampMillis = timestamp,
-                title = call.argument<String>("title") ?: "Sreva",
+                title = call.argument<String>("title") ?: "Sreadya",
                 body = call.argument<String>("body") ?: "You have a reminder.",
                 repeatDaily = call.argument<Boolean>("repeatDaily") ?: false,
                 label = call.argument<String>("label"),
@@ -611,7 +611,7 @@ data class ReminderEntry(
                 targetLocalDay = json.optInt("targetLocalDay", fallback.dayOfMonth),
                 targetLocalHour = json.optInt("targetLocalHour", fallback.hour),
                 targetLocalMinute = json.optInt("targetLocalMinute", fallback.minute),
-                title = json.optString("title", "Sreva"),
+                title = json.optString("title", "Sreadya"),
                 body = json.optString("body", "You have a reminder."),
                 repeatDaily = json.optBoolean("repeatDaily", false),
                 label = if (json.isNull("label")) null else json.optString("label"),
@@ -621,8 +621,8 @@ data class ReminderEntry(
 }
 
 class SecurePrefs(context: Context) {
-    private val prefs = context.getSharedPreferences("sreva.secure.native", Context.MODE_PRIVATE)
-    private val alias = "sreva.native.local.v1"
+    private val prefs = context.getSharedPreferences("sreadya.secure.native", Context.MODE_PRIVATE)
+    private val alias = "sreadya.native.local.v1"
 
     private fun key(): SecretKey {
         val store = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
@@ -664,7 +664,7 @@ class SecurePrefs(context: Context) {
     }
 }
 
-class SrevaReminderStore(private val context: Context) {
+class SreadyaReminderStore(private val context: Context) {
     private val secure = SecurePrefs(context)
 
     fun all(): MutableList<ReminderEntry> {
@@ -695,7 +695,7 @@ class SrevaReminderStore(private val context: Context) {
     fun consumePendingAction(): String? = secure.getString("pendingAction").also { secure.putString("pendingAction", null) }
 }
 
-object SrevaReminderRuntime {
+object SreadyaReminderRuntime {
     fun ensureNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= 26) {
             val manager = context.getSystemService(NotificationManager::class.java)
@@ -709,7 +709,7 @@ object SrevaReminderRuntime {
         ensureNotificationChannel(context)
         val target = entry.scheduledEpochMillis() ?: return
         val manager = context.getSystemService(AlarmManager::class.java)
-        val intent = Intent(context, SrevaAlarmReceiver::class.java)
+        val intent = Intent(context, SreadyaAlarmReceiver::class.java)
             .setAction(ACTION_FIRE)
             .putExtra("id", entry.id)
         val pending = PendingIntent.getBroadcast(
@@ -726,7 +726,7 @@ object SrevaReminderRuntime {
         val pending = PendingIntent.getBroadcast(
             context,
             id.hashCode(),
-            Intent(context, SrevaAlarmReceiver::class.java).setAction(ACTION_FIRE).putExtra("id", id),
+            Intent(context, SreadyaAlarmReceiver::class.java).setAction(ACTION_FIRE).putExtra("id", id),
             PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE,
         )
         if (pending != null) {
@@ -736,7 +736,7 @@ object SrevaReminderRuntime {
     }
 
     fun rescheduleAll(context: Context) {
-        val store = SrevaReminderStore(context)
+        val store = SreadyaReminderStore(context)
         val kept = mutableListOf<ReminderEntry>()
         for (entry in store.all()) {
             if (entry.repeatDaily || entry.scheduledEpochMillis() != null) {
@@ -748,12 +748,12 @@ object SrevaReminderRuntime {
     }
 }
 
-class SrevaAlarmReceiver : BroadcastReceiver() {
+class SreadyaAlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val id = intent.getStringExtra("id") ?: return
-        val store = SrevaReminderStore(context)
+        val store = SreadyaReminderStore(context)
         val entry = store.all().firstOrNull { it.id == id } ?: return
-        SrevaReminderRuntime.ensureNotificationChannel(context)
+        SreadyaReminderRuntime.ensureNotificationChannel(context)
         val manager = context.getSystemService(NotificationManager::class.java)
         val contentIntent = PendingIntent.getActivity(
             context,
@@ -772,29 +772,29 @@ class SrevaAlarmReceiver : BroadcastReceiver() {
             val started = PendingIntent.getBroadcast(
                 context,
                 (id + "started").hashCode(),
-                Intent(context, SrevaActionReceiver::class.java).setAction(ACTION_PERIOD_STARTED),
+                Intent(context, SreadyaActionReceiver::class.java).setAction(ACTION_PERIOD_STARTED),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
             val snooze = PendingIntent.getBroadcast(
                 context,
                 (id + "snooze").hashCode(),
-                Intent(context, SrevaActionReceiver::class.java).setAction(ACTION_SNOOZE),
+                Intent(context, SreadyaActionReceiver::class.java).setAction(ACTION_SNOOZE),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
             builder.addAction(0, "Period started", started).addAction(0, "Snooze 2 hours", snooze)
         }
         manager.notify(id.hashCode(), builder.build())
         if (entry.repeatDaily) {
-            SrevaReminderRuntime.schedule(context, entry)
+            SreadyaReminderRuntime.schedule(context, entry)
         } else {
             store.remove(entry.id)
         }
     }
 }
 
-class SrevaActionReceiver : BroadcastReceiver() {
+class SreadyaActionReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        val store = SrevaReminderStore(context)
+        val store = SreadyaReminderStore(context)
         when (intent.action) {
             ACTION_PERIOD_STARTED -> {
                 store.putPendingAction("periodStarted")
@@ -809,20 +809,20 @@ class SrevaActionReceiver : BroadcastReceiver() {
                     id = id,
                     kind = "snooze",
                     timestampMillis = System.currentTimeMillis() + 2 * 60 * 60 * 1000L,
-                    title = "Sreva",
+                    title = "Sreadya",
                     body = "You have a reminder.",
                     repeatDaily = false,
                     label = null,
                 )
                 store.upsert(entry)
-                SrevaReminderRuntime.schedule(context, entry)
+                SreadyaReminderRuntime.schedule(context, entry)
             }
         }
     }
 }
 
-class SrevaBootReceiver : BroadcastReceiver() {
+class SreadyaBootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        SrevaReminderRuntime.rescheduleAll(context)
+        SreadyaReminderRuntime.rescheduleAll(context)
     }
 }

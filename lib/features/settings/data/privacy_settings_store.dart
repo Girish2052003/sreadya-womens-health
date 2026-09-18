@@ -5,7 +5,7 @@ import '../domain/privacy_settings.dart';
 class PrivacySettingsStore {
   PrivacySettingsStore({LocalSettingsStore? settings})
     : _settings = settings ?? LocalSettingsStore();
-  static const _key = 'sreva.privacy-settings.v1';
+  static const _key = 'sreadya.privacy-settings.v1';
   final LocalSettingsStore _settings;
 
   Future<PrivacySettings> read() async {

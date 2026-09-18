@@ -3,8 +3,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 REPOSITORY_DEDICATION_TOKEN = "Sreedevi"
-PRODUCTION_APPLICATION_ID = "com.sreva.health.sreva"
-PREVIEW_APPLICATION_ID = "com.sreva.health.sreva.preview"
+PRODUCTION_APPLICATION_ID = "com.sreadya.health.sreadya"
+PREVIEW_APPLICATION_ID = "com.sreadya.health.sreadya.preview"
 
 
 def test_repository_dedication_is_provenance_only_not_runtime_copy() -> None:
@@ -17,7 +17,7 @@ def test_repository_dedication_is_provenance_only_not_runtime_copy() -> None:
     # Preserve the repository-level dedication/provenance rather than deleting it.
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     master_spec = (
-        ROOT / "docs/superpowers/specs/2026-09-15-sreva-master-design.md"
+        ROOT / "docs/superpowers/specs/2026-09-15-sreadya-master-design.md"
     ).read_text(encoding="utf-8")
     assert REPOSITORY_DEDICATION_TOKEN in readme
     assert REPOSITORY_DEDICATION_TOKEN in master_spec
@@ -43,7 +43,7 @@ def test_family_preview_has_distinct_package_without_changing_production_identit
     assert "configure_android_tests.py" in workflow_text
 
     # Production remains the frozen package used by the existing Play-ready path.
-    assert "flutter create --platforms=android --org com.sreva.health ." in production_text
+    assert "flutter create --platforms=android --org com.sreadya.health ." in production_text
     assert "configure_android_preview.py" not in production_text
 
 
@@ -57,9 +57,9 @@ def test_preview_config_changes_only_application_id(tmp_path, monkeypatch) -> No
     gradle = tmp_path / "build.gradle.kts"
     gradle.write_text(
         "android {\n"
-        '    namespace = "com.sreva.health.sreva"\n'
+        '    namespace = "com.sreadya.health.sreadya"\n'
         "    defaultConfig {\n"
-        '        applicationId = "com.sreva.health.sreva"\n'
+        '        applicationId = "com.sreadya.health.sreadya"\n'
         "    }\n"
         "}\n",
         encoding="utf-8",
@@ -69,6 +69,6 @@ def test_preview_config_changes_only_application_id(tmp_path, monkeypatch) -> No
     module.configure()
     text = gradle.read_text(encoding="utf-8")
 
-    assert 'namespace = "com.sreva.health.sreva"' in text
+    assert 'namespace = "com.sreadya.health.sreadya"' in text
     assert f'applicationId = "{PREVIEW_APPLICATION_ID}"' in text
     assert f'applicationId = "{PRODUCTION_APPLICATION_ID}"' not in text

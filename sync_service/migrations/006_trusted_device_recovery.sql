@@ -1,4 +1,4 @@
--- Sreva C2 trusted-device continuity and opaque recovery wrappers.
+-- Sreadya C2 trusted-device continuity and opaque recovery wrappers.
 -- PostgreSQL target: 18.6. Recovery material remains ciphertext-only.
 
 ALTER TABLE devices

@@ -9,7 +9,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-const passkeySessionHeader = "X-Sreva-Passkey-Session"
+const passkeySessionHeader = "X-Sreadya-Passkey-Session"
 
 type IdentityRequest struct {
 	AccountID string `json:"account_id"`

@@ -1,7 +1,7 @@
 export type ThemePreference = 'system' | 'light' | 'dark';
 export type ResolvedTheme = 'light' | 'dark';
 
-export const GENERAL_SETTINGS_KEY = 'sreva:general-settings:v1';
+export const GENERAL_SETTINGS_KEY = 'sreadya:general-settings:v1';
 
 type ThemeStorage = Pick<Storage, 'getItem' | 'setItem'>;
 type ThemeTarget = Pick<HTMLElement, 'setAttribute'>;
@@ -37,8 +37,8 @@ export function applyThemePreference(
   prefersDark: boolean,
 ): ResolvedTheme {
   const resolved = resolveTheme(preference, prefersDark);
-  target.setAttribute('data-sreva-theme', resolved);
-  target.setAttribute('data-sreva-theme-preference', preference);
+  target.setAttribute('data-sreadya-theme', resolved);
+  target.setAttribute('data-sreadya-theme-preference', preference);
   return resolved;
 }
 

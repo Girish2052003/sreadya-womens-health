@@ -29,7 +29,7 @@ export function buildWebPrivacyStatus({
     databaseProtection: 'AES-GCM encrypted local vault',
     platformHealthAccess: 'Native HealthKit / Health Connect unavailable in Web',
     partnerLiveAccess: 'None — explicit local preview/share only',
-    sync: process.env.NEXT_PUBLIC_SREVA_SYNC_BASE_URL ? 'Optional encrypted continuity endpoint configured' : 'Remote continuity endpoint not configured',
+    sync: process.env.NEXT_PUBLIC_SREADYA_SYNC_BASE_URL ? 'Optional encrypted continuity endpoint configured' : 'Remote continuity endpoint not configured',
     appLock: appLockConfigured
       ? 'PIN app lock enabled · automatic lock active · native biometric protection not claimed'
       : 'PIN app lock available but not configured · native biometric protection not claimed',

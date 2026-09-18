@@ -8,7 +8,7 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-REGISTRY = ROOT / "shared" / "capabilities" / "sreva-capabilities.v1.json"
+REGISTRY = ROOT / "shared" / "capabilities" / "sreadya-capabilities.v1.json"
 LEDGER = ROOT / "shared" / "capabilities" / "evidence.v1.json"
 PLATFORMS = ("android", "ios", "web", "pwa")
 ALLOWED_APPLICABILITY = {"full", "adapted", "na"}
@@ -59,11 +59,11 @@ def main() -> None:
     registry = load_object(REGISTRY)
     ledger = load_object(LEDGER)
 
-    if ledger.get("contract") != "SREVA C2 Cross-Platform Evidence Ledger":
+    if ledger.get("contract") != "SREADYA C2 Cross-Platform Evidence Ledger":
         fail("ledger contract identifier changed")
     if ledger.get("version") != 1:
         fail("ledger version must be 1")
-    if ledger.get("registry") != "shared/capabilities/sreva-capabilities.v1.json":
+    if ledger.get("registry") != "shared/capabilities/sreadya-capabilities.v1.json":
         fail("ledger registry pointer changed")
 
     records = registry.get("capabilities")

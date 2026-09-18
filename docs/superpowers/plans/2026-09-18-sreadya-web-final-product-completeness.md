@@ -1,20 +1,20 @@
-# Sreva Web Final Product-Completeness Implementation Plan
+# Sreadya Web Final Product-Completeness Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Convert the deployed Web/PWA from deployment-complete to product-complete against the frozen 258-ID Sreva launch contract.
+**Goal:** Convert the deployed Web/PWA from deployment-complete to product-complete against the frozen 258-ID Sreadya launch contract.
 
 **Architecture:** Preserve the existing Next.js/React local-first client and encrypted vault. Add a complete feature-discovery layer, finish shell workspaces with real encrypted local interactions, connect platform/account/sync state truthfully, and replace family-only traceability with a 258-ID Web surface ledger.
 
 **Tech Stack:** Next.js, React, TypeScript, IndexedDB/Dexie, WebCrypto, Playwright, Vitest, Python reference verifiers.
 
-**Spec:** `docs/superpowers/specs/2026-09-18-sreva-web-final-product-completeness-design.md`
+**Spec:** `docs/superpowers/specs/2026-09-18-sreadya-web-final-product-completeness-design.md`
 
 ## Global Constraints
 
 - The existing 258 launch IDs remain authoritative.
 - The 11 `FUT-*` capabilities remain future/optional unless explicitly promoted by a new architecture amendment.
-- Account-free Sreva remains a complete first-class health experience.
+- Account-free Sreadya remains a complete first-class health experience.
 - Health plaintext must not be added to URLs, analytics, service-worker caches or ordinary logs.
 - Browser/PWA behavior must be truthful about native-only and provider-dependent capabilities.
 - No placeholder, TODO, coming-soon or shell copy may remain in production Web source.
@@ -99,5 +99,5 @@
 - [ ] Run full CI on the branch.
 - [ ] Code-review the complete branch.
 - [ ] Merge only after green review.
-- [ ] Verify exact merged SHA across Tasks 25–28 and Sreva CI.
+- [ ] Verify exact merged SHA across Tasks 25–28 and Sreadya CI.
 - [ ] Verify Pages deploy + post-deploy live acceptance.

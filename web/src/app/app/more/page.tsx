@@ -53,7 +53,7 @@ export default function MorePage() {
       <main className="workspace-main">
         <header className="workspace-heading">
           <div>
-            <p className="workspace-kicker">Complete Sreva</p>
+            <p className="workspace-kicker">Complete Sreadya</p>
             <h1>More</h1>
             <p className="workspace-note">Every production workspace has a home here. Nothing important is hidden behind an unlabelled control.</p>
           </div>

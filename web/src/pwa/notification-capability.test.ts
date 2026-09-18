@@ -19,7 +19,7 @@ describe('adaptive Web reminder capability', () => {
       timeZone: 'Europe/Helsinki',
       installed: true,
       closedAppDelivery: 'not-guaranteed',
-      reason: 'Maximum Privacy keeps reminder delivery local to Sreva.',
+      reason: 'Maximum Privacy keeps reminder delivery local to Sreadya.',
     });
   });
 

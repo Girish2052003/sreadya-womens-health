@@ -100,7 +100,7 @@ func validEnvelope() Envelope {
 		SourceDeviceID:   "dev-a",
 		KeyEpoch:         1,
 		ProtocolVersion:  1,
-		SuiteID:          "SREVA-E2EE-V1-ED25519",
+		SuiteID:          "SREADYA-E2EE-V1-ED25519",
 		SchemaID:         "opaque-schema-v1",
 		BaseRevision:     0,
 		Operation:        "upsert",

@@ -11,7 +11,7 @@ import {
   setAutoLockMinutes,
   setPin,
 } from './app-lock';
-import { SREVA_APP_LOCK_CHANGE_EVENT } from './WebAppLockGate';
+import { SREADYA_APP_LOCK_CHANGE_EVENT } from './WebAppLockGate';
 
 export function AppLockSettings() {
   const [configured, setConfigured] = useState(false);
@@ -38,10 +38,10 @@ export function AppLockSettings() {
       setConfigured(true);
       setPinValue('');
       setConfirm('');
-      setStatus('PIN app lock saved. Sreva will lock this private workspace now.');
-      window.dispatchEvent(new Event(SREVA_APP_LOCK_CHANGE_EVENT));
+      setStatus('PIN app lock saved. Sreadya will lock this private workspace now.');
+      window.dispatchEvent(new Event(SREADYA_APP_LOCK_CHANGE_EVENT));
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Sreva could not save the PIN app lock.');
+      setError(cause instanceof Error ? cause.message : 'Sreadya could not save the PIN app lock.');
     }
   };
 
@@ -57,7 +57,7 @@ export function AppLockSettings() {
     removePin(window.localStorage);
     setConfigured(false);
     setStatus('PIN app lock removed.');
-    window.dispatchEvent(new Event(SREVA_APP_LOCK_CHANGE_EVENT));
+    window.dispatchEvent(new Event(SREADYA_APP_LOCK_CHANGE_EVENT));
   };
 
   return (

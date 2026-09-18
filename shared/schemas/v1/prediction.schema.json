@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.sreva.local/v1/prediction.schema.json",
-  "title": "Sreva Prediction v1",
+  "$id": "https://schemas.sreadya.local/v1/prediction.schema.json",
+  "title": "Sreadya Prediction v1",
   "type": "object",
   "additionalProperties": false,
   "required": [

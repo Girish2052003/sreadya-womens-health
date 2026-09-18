@@ -175,8 +175,8 @@ describe('SignedSyncClient push', () => {
         expect(url).toBe('https://sync.example.test/v1/sync/push');
         expect(requestBodyBytes(init?.body)).toEqual(body);
         const headers = new Headers(init?.headers);
-        expect(headers.get('X-Sreva-Device-Challenge')).toBe('challenge-push');
-        expect(headers.get('X-Sreva-Device-Signature')).toBe(btoa(String.fromCharCode(...new Uint8Array(64).fill(0x5a))));
+        expect(headers.get('X-Sreadya-Device-Challenge')).toBe('challenge-push');
+        expect(headers.get('X-Sreadya-Device-Signature')).toBe(btoa(String.fromCharCode(...new Uint8Array(64).fill(0x5a))));
         return jsonResponse({ event_id: 'evt-1', committed_revision: 1, conflict: false, existing: false });
       }
       throw new Error('unexpected fetch call');

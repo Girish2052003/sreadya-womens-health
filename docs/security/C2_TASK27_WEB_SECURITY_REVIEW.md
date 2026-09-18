@@ -1,7 +1,7 @@
 # C2 Task 27 Web Security Review
 
 **Review date:** 18 September 2026  
-**Scope:** Sreva Web/PWA release-hardening review for XSS, CSP, service worker, Cache Storage, clickjacking, CSRF, browser-extension boundaries and sensitive-response caching.
+**Scope:** Sreadya Web/PWA release-hardening review for XSS, CSP, service worker, Cache Storage, clickjacking, CSRF, browser-extension boundaries and sensitive-response caching.
 
 ## XSS review
 
@@ -11,7 +11,7 @@ Task 27 treats introduction of an unsafe rendering sink as a release-review even
 
 ## CSP and hosting limitation
 
-The current static Web/PWA distribution is GitHub Pages. GitHub Pages does not give this repository a normal application-server response-header control plane for a strong per-response Content Security Policy (CSP), frame-ancestor policy, and related security headers. Sreva therefore does **not** claim that a repository-controlled response-header CSP is currently enforced on that host.
+The current static Web/PWA distribution is GitHub Pages. GitHub Pages does not give this repository a normal application-server response-header control plane for a strong per-response Content Security Policy (CSP), frame-ancestor policy, and related security headers. Sreadya therefore does **not** claim that a repository-controlled response-header CSP is currently enforced on that host.
 
 This is an explicit hosting limitation, not a waived security requirement. The current release boundary relies on framework escaping, no reviewed dynamic-code sink, same-origin network rules, no readable health payload in static output, and the service-worker/cache restrictions below. A future host that supports controlled response headers must add and verify an appropriately restrictive CSP and clickjacking protections before those controls are claimed as deployed.
 
@@ -29,7 +29,7 @@ GitHub Pages cannot currently supply repository-controlled `frame-ancestors` res
 
 ## Malicious browser extension boundary
 
-A malicious browser extension with page/storage privileges is outside the protection that ordinary Web application code can guarantee. Sreva minimizes exposure by keeping health state local, avoiding health telemetry, keeping sync ciphertext-only, and preventing application-shell Cache Storage from becoming a health-record cache. This limitation must remain visible in the threat model and release documentation.
+A malicious browser extension with page/storage privileges is outside the protection that ordinary Web application code can guarantee. Sreadya minimizes exposure by keeping health state local, avoiding health telemetry, keeping sync ciphertext-only, and preventing application-shell Cache Storage from becoming a health-record cache. This limitation must remain visible in the threat model and release documentation.
 
 ## Review conclusion
 

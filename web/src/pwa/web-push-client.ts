@@ -12,7 +12,7 @@ class DisabledWebPushClient implements WebPushClient {
 
   async subscribe(): Promise<WebPushSubscriptionSummary> {
     throw new Error(
-      'A reviewed Web Push relay is not configured. Sreva will not claim closed-app delivery until that security/deployment boundary is approved.',
+      'A reviewed Web Push relay is not configured. Sreadya will not claim closed-app delivery until that security/deployment boundary is approved.',
     );
   }
 }

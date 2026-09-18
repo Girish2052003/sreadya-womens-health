@@ -1,7 +1,7 @@
 {
-  "contract": "SREVA Web Product Surface Ledger",
+  "contract": "SREADYA Web Product Surface Ledger",
   "version": 2,
-  "registry": "shared/capabilities/sreva-capabilities.v1.json",
+  "registry": "shared/capabilities/sreadya-capabilities.v1.json",
   "launch_requirement_count": 258,
   "claim_boundary": "A surface row proves discoverability/ownership and user-facing routing. Provider-dependent and platform-adapted rows remain visible without pretending that an optional backend or native-only mechanism is active on a static Web deployment.",
   "capabilities": [
@@ -2317,7 +2317,7 @@
     },
     {
       "id": "HEALTH-009",
-      "name": "Sreva vault remains authoritative application datastore",
+      "name": "Sreadya vault remains authoritative application datastore",
       "family": "HEALTH",
       "route": "/app/settings",
       "surface_type": "status",
@@ -2328,7 +2328,7 @@
       "evidence": [
         "web/e2e/accessibility-i18n.spec.ts"
       ],
-      "user_promise": "Sreva vault remains authoritative application datastore"
+      "user_promise": "Sreadya vault remains authoritative application datastore"
     },
     {
       "id": "A11Y-001",
@@ -3247,7 +3247,7 @@
     },
     {
       "id": "ID-001",
-      "name": "Full account-free Sreva experience",
+      "name": "Full account-free Sreadya experience",
       "family": "ID",
       "route": "/app/account",
       "surface_type": "interaction",
@@ -3258,11 +3258,11 @@
       "evidence": [
         "web/e2e/product-completeness.spec.ts"
       ],
-      "user_promise": "Full account-free Sreva experience"
+      "user_promise": "Full account-free Sreadya experience"
     },
     {
       "id": "ID-002",
-      "name": "Full account-based Sreva experience",
+      "name": "Full account-based Sreadya experience",
       "family": "ID",
       "route": "/app/account",
       "surface_type": "provider-dependent",
@@ -3273,7 +3273,7 @@
       "evidence": [
         "web/e2e/product-completeness.spec.ts"
       ],
-      "user_promise": "Full account-based Sreva experience"
+      "user_promise": "Full account-based Sreadya experience"
     },
     {
       "id": "ID-003",
@@ -3667,7 +3667,7 @@
     },
     {
       "id": "WEB-001",
-      "name": "Full browser-based Sreva client",
+      "name": "Full browser-based Sreadya client",
       "family": "WEB",
       "route": "/app/more",
       "surface_type": "status",
@@ -3678,7 +3678,7 @@
       "evidence": [
         "web/e2e/navigation.spec.ts"
       ],
-      "user_promise": "Full browser-based Sreva client"
+      "user_promise": "Full browser-based Sreadya client"
     },
     {
       "id": "WEB-002",

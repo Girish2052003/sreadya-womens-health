@@ -1,5 +1,5 @@
-/* Sreva PWA shell cache. Health payloads are deliberately excluded. */
-const SHELL_CACHE = 'sreva-shell-v1';
+/* Sreadya PWA shell cache. Health payloads are deliberately excluded. */
+const SHELL_CACHE = 'sreadya-shell-v1';
 const SHELL_FILES = ['./', './offline.html', './manifest.webmanifest'];
 const OFFLINE_CORE_SHELLS = new Set([
   'app/home',
@@ -52,7 +52,7 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
       .then((names) => Promise.all(names
-        .filter((name) => name.startsWith('sreva-shell-') && name !== SHELL_CACHE)
+        .filter((name) => name.startsWith('sreadya-shell-') && name !== SHELL_CACHE)
         .map((name) => caches.delete(name))))
       .then(() => self.clients.claim()),
   );

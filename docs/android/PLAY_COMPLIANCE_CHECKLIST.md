@@ -1,6 +1,6 @@
-# Sreva Google Play Compliance Checklist
+# Sreadya Google Play Compliance Checklist
 
-> **C2 release-policy note — 17 September 2026:** This checklist preserves the complete Android/Google Play requirements while covering both local-only candidates and candidates that enable optional E2EE continuity. Android remains one of three equal first-class Sreva clients. Account-free core health functionality remains first-class in either mode. A sync-enabled Android release must satisfy the additional C2 gate at the end of this file before any Play-track submission. Repository verification does not fabricate external Play Console evidence.
+> **C2 release-policy note — 17 September 2026:** This checklist preserves the complete Android/Google Play requirements while covering both local-only candidates and candidates that enable optional E2EE continuity. Android remains one of three equal first-class Sreadya clients. Account-free core health functionality remains first-class in either mode. A sync-enabled Android release must satisfy the additional C2 gate at the end of this file before any Play-track submission. Repository verification does not fabricate external Play Console evidence.
 
 This file tracks store-facing requirements that sit outside normal unit tests. The repository must keep the implementation and this checklist consistent.
 
@@ -8,12 +8,12 @@ This file tracks store-facing requirements that sit outside normal unit tests. T
 
 - Product category: menstrual health / period tracking / wellness.
 - Google Play Health apps declaration: **Period Tracking**.
-- Sreva is not marketed as a contraceptive method or diagnostic medical device.
+- Sreadya is not marketed as a contraceptive method or diagnostic medical device.
 - Prediction text must remain probabilistic and uncertainty-aware.
 
 ## Package and platform requirements
 
-- Android application ID: `com.sreva.health.sreva`.
+- Android application ID: `com.sreadya.health.sreadya`.
 - Minimum Android API: 26.
 - Compile SDK: API 36.
 - Target SDK: API 36.
@@ -21,7 +21,7 @@ This file tracks store-facing requirements that sit outside normal unit tests. T
 - Play App Signing must be enabled before first public release.
 - Developer-held upload key must be different from Android debug signing.
 
-## Health Connect permissions in Sreva
+## Health Connect permissions in Sreadya
 
 The Android host declares only the supported reproductive categories required by implemented features:
 
@@ -36,7 +36,7 @@ Permissions are requested at runtime only after explicit user action. Revocation
 
 ## Privacy-policy requirements
 
-- Full privacy policy is available inside Sreva Privacy Center and the in-app Privacy Policy screen.
+- Full privacy policy is available inside Sreadya Privacy Center and the in-app Privacy Policy screen.
 - The public policy source is maintained in `docs/android/privacy-policy.html`.
 - Before Play submission, publish that page at a publicly accessible, non-geofenced, non-PDF URL.
 - Enter that exact URL in Play Console App content > Privacy policy.
@@ -52,7 +52,7 @@ The policy must explain, as applicable to the exact build:
 - trusted-device and recovery-key boundaries;
 - Health Connect use;
 - explicit sharing/export behavior;
-- retention and deletion, including the limit that Sreva cannot remotely erase former-device/export copies;
+- retention and deletion, including the limit that Sreadya cannot remotely erase former-device/export copies;
 - backup behavior;
 - security practices;
 - diagnostics;
@@ -62,7 +62,7 @@ The policy must explain, as applicable to the exact build:
 
 Before each store submission, compare the Play Data Safety questionnaire against the exact release binary and dependency lockfile.
 
-Common Sreva architecture properties:
+Common Sreadya architecture properties:
 
 - no advertising SDK;
 - no behavioral analytics SDK;
@@ -72,25 +72,25 @@ Common Sreva architecture properties:
 - exports/shares occur only after user action;
 - Health Connect is optional and permission-scoped.
 
-For a local-only build, reproductive-health history is processed locally and is not transmitted to Sreva sync infrastructure. For a sync-enabled build, authorized clients encrypt health content before transmission and the service receives ciphertext plus minimum operational metadata; Sreva infrastructure lacks the health-vault decryption key.
+For a local-only build, reproductive-health history is processed locally and is not transmitted to Sreadya sync infrastructure. For a sync-enabled build, authorized clients encrypt health content before transmission and the service receives ciphertext plus minimum operational metadata; Sreadya infrastructure lacks the health-vault decryption key.
 
 Do not mechanically answer "no data collected" without checking Google's current definitions for on-device processing, account/device metadata, Health Connect, user-initiated sharing, crash diagnostics, store telemetry, and any newly added dependency.
 
 ## Prominent disclosure
 
-Before the first Health Connect permission request, Sreva must explain:
+Before the first Health Connect permission request, Sreadya must explain:
 
 - that access is optional;
 - which categories are being requested;
 - why the requested categories are useful;
-- that core Sreva data remains under the application's local privacy boundary;
+- that core Sreadya data remains under the application's local privacy boundary;
 - that access can be revoked in Android settings.
 
 The native Health Connect rationale activity and onboarding/Health Integration screens implement this disclosure boundary.
 
 ## Health-data use restrictions
 
-Sreva health data must never be used for:
+Sreadya health data must never be used for:
 
 - advertising targeting;
 - employment eligibility;
@@ -114,7 +114,7 @@ Required concepts:
 - optional Health Connect;
 - user-controlled exports/backups;
 - no operator-readable reproductive-health database for core operation or optional E2EE continuity;
-- if sync is enabled, optional encrypted continuity with the health-vault decryption key unavailable to Sreva infrastructure.
+- if sync is enabled, optional encrypted continuity with the health-vault decryption key unavailable to Sreadya infrastructure.
 
 Avoid claims such as "medically accurate contraception", "guaranteed ovulation", "diagnoses PCOS", or equivalent wording.
 
@@ -155,7 +155,7 @@ Before production rollout, verify on at least one supported physical Android pho
 - timezone change;
 - reboot reminder reconstruction;
 - notification permission revoke/restore;
-- app lock and Sreva PIN fallback;
+- app lock and Sreadya PIN fallback;
 - private notification modes;
 - Health Connect permission request/read/write where available;
 - CycleVault export and restore;
@@ -182,24 +182,24 @@ The following **external** actions cannot be proven by repository code alone and
 - content rating/target-audience declarations;
 - final Play review and rollout.
 
-Repository formal closure means Sreva is engineered and release-pipeline-ready for these account actions; it does not fabricate evidence that an external Play Console action has happened when it has not.
+Repository formal closure means Sreadya is engineered and release-pipeline-ready for these account actions; it does not fabricate evidence that an external Play Console action has happened when it has not.
 
 ---
 
 ## Additional mandatory gate for a sync-enabled Android release
 
-The implemented C2 continuity stack does **not** authorize Sreva to turn sync on silently. Before any Android binary that sends encrypted health ciphertext to Sreva-operated infrastructure enters any Play track:
+The implemented C2 continuity stack does **not** authorize Sreadya to turn sync on silently. Before any Android binary that sends encrypted health ciphertext to Sreadya-operated infrastructure enters any Play track:
 
 - the reviewed versioned E2EE key hierarchy and sync protocol must be frozen;
 - Android/Web/iOS interoperability vectors applicable to that release must pass;
 - server authorization, replay, revoked-device, cross-account and ciphertext-limit tests must pass;
 - account authentication must remain separate from health-vault decryption;
 - trusted-device and recovery-key loss/recovery cases must pass;
-- account-free core health functionality must remain available and disabling sync must leave local Sreva usable;
-- the public and in-app privacy policy must accurately disclose opaque account/device identifiers, server-visible minimum operational metadata, ciphertext sync, trusted devices, recovery-key limits, retention/deletion, the former-device/export deletion limitation, and the fact that Sreva infrastructure lacks the vault-decryption key;
+- account-free core health functionality must remain available and disabling sync must leave local Sreadya usable;
+- the public and in-app privacy policy must accurately disclose opaque account/device identifiers, server-visible minimum operational metadata, ciphertext sync, trusted devices, recovery-key limits, retention/deletion, the former-device/export deletion limitation, and the fact that Sreadya infrastructure lacks the vault-decryption key;
 - Play Data Safety and Health app declarations must be re-evaluated against the **exact sync-enabled binary and dependency set**;
 - SMS/email verification metadata must be reviewed if those channels are actually enabled;
 - Privacy Center must show sync/device/server boundaries truthfully;
 - applicable 258-ID C2 traceability and the Task-26 policy contract must pass.
 
-Until all repository-controlled conditions are met, the Android release remains local-only with Sreva sync disabled. If a required external Play Console action is incomplete, do not submit or roll out the affected release.
+Until all repository-controlled conditions are met, the Android release remains local-only with Sreadya sync disabled. If a required external Play Console action is incomplete, do not submit or roll out the affected release.

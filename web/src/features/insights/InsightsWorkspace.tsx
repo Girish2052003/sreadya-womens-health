@@ -13,7 +13,7 @@ import { PredictionHistoryRepository } from '../predictions/prediction-history-r
 import { summarizeInsights, type InsightSnapshot } from './insight-engine';
 
 const SOURCE_LABELS: Record<RecordSource, string> = {
-  app: 'Sreva app', healthKit: 'Apple Health', healthConnect: 'Health Connect', cycleVault: 'CycleVault',
+  app: 'Sreadya app', healthKit: 'Apple Health', healthConnect: 'Health Connect', cycleVault: 'CycleVault',
 };
 
 function number(value: number): string {
@@ -54,7 +54,7 @@ export function InsightsWorkspace() {
     })().catch(() => {
       if (cancelled) return;
       setStatus('Local vault unavailable');
-      setError('Sreva could not prepare local insights from the encrypted history in this browser.');
+      setError('Sreadya could not prepare local insights from the encrypted history in this browser.');
       setReady(true);
     });
 
@@ -98,7 +98,7 @@ export function InsightsWorkspace() {
           </Card>
 
           <Card eyebrow="PMS patterns" title="PMS patterns">
-            {snapshot.pmsPatternMessages.length ? <ul>{snapshot.pmsPatternMessages.map((message) => <li key={message}>{message}</li>)}</ul> : <p>No repeated pre-period symptom timing is available yet. Sreva does not invent a PMS pattern.</p>}
+            {snapshot.pmsPatternMessages.length ? <ul>{snapshot.pmsPatternMessages.map((message) => <li key={message}>{message}</li>)}</ul> : <p>No repeated pre-period symptom timing is available yet. Sreadya does not invent a PMS pattern.</p>}
           </Card>
 
           <Card eyebrow="Pain trends" title="Pain trends">
@@ -116,7 +116,7 @@ export function InsightsWorkspace() {
               <p>Evaluated outcomes: <strong>{snapshot.predictionEvaluation.sampleCount}</strong></p>
               <p>Mean absolute error: <strong>{number(snapshot.predictionEvaluation.meanAbsoluteErrorDays)} days</strong></p>
               <p>Window coverage: <strong>{Math.round(snapshot.predictionEvaluation.windowCoverage * 100)}%</strong></p>
-            </> : <p>No completed prediction/outcome pairs are available yet. Sreva does not fabricate an accuracy score.</p>}
+            </> : <p>No completed prediction/outcome pairs are available yet. Sreadya does not fabricate an accuracy score.</p>}
           </Card>
 
           <Card eyebrow="Patterns" title="Observational insights">
@@ -130,7 +130,7 @@ export function InsightsWorkspace() {
             <p className="workspace-note">Calculated in this browser from the encrypted local vault.</p>
           </Card>
 
-          {!hasData ? <Card eyebrow="Start with truth" title="No insight invented"><p>Log or import enough history first. Sreva will not create a pattern merely to fill this page.</p></Card> : null}
+          {!hasData ? <Card eyebrow="Start with truth" title="No insight invented"><p>Log or import enough history first. Sreadya will not create a pattern merely to fill this page.</p></Card> : null}
         </div>
       ) : null}
     </section>

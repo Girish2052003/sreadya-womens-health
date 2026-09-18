@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Harden the generated Android host for Google Play release builds.
 
-The generated Flutter template is convenient for development, but Sreva must
+The generated Flutter template is convenient for development, but Sreadya must
 never rely on the template's debug signing configuration for a production
 release. This script pins the Play target API and replaces debug release signing
 with an environment-driven upload-key configuration. Without signing secrets it
@@ -19,29 +19,29 @@ ROOT = Path(__file__).resolve().parents[1]
 GRADLE = ROOT / "android" / "app" / "build.gradle.kts"
 TARGET_API = 36
 SIGNING_ENV = (
-    "SREVA_ANDROID_KEYSTORE_PATH",
-    "SREVA_ANDROID_KEYSTORE_PASSWORD",
-    "SREVA_ANDROID_KEY_ALIAS",
-    "SREVA_ANDROID_KEY_PASSWORD",
+    "SREADYA_ANDROID_KEYSTORE_PATH",
+    "SREADYA_ANDROID_KEYSTORE_PASSWORD",
+    "SREADYA_ANDROID_KEY_ALIAS",
+    "SREADYA_ANDROID_KEY_PASSWORD",
 )
 
 SIGNING_PREAMBLE = r'''
-val srevaKeystorePath = System.getenv("SREVA_ANDROID_KEYSTORE_PATH")
-val srevaKeystorePassword = System.getenv("SREVA_ANDROID_KEYSTORE_PASSWORD")
-val srevaKeyAlias = System.getenv("SREVA_ANDROID_KEY_ALIAS")
-val srevaKeyPassword = System.getenv("SREVA_ANDROID_KEY_PASSWORD")
-val srevaSigningValues = listOf(
-    srevaKeystorePath,
-    srevaKeystorePassword,
-    srevaKeyAlias,
-    srevaKeyPassword,
+val sreadyaKeystorePath = System.getenv("SREADYA_ANDROID_KEYSTORE_PATH")
+val sreadyaKeystorePassword = System.getenv("SREADYA_ANDROID_KEYSTORE_PASSWORD")
+val sreadyaKeyAlias = System.getenv("SREADYA_ANDROID_KEY_ALIAS")
+val sreadyaKeyPassword = System.getenv("SREADYA_ANDROID_KEY_PASSWORD")
+val sreadyaSigningValues = listOf(
+    sreadyaKeystorePath,
+    sreadyaKeystorePassword,
+    sreadyaKeyAlias,
+    sreadyaKeyPassword,
 )
-val srevaSigningConfigured = srevaSigningValues.all { !it.isNullOrBlank() }
-val srevaSigningPartiallyConfigured =
-    srevaSigningValues.any { !it.isNullOrBlank() } && !srevaSigningConfigured
-if (srevaSigningPartiallyConfigured) {
+val sreadyaSigningConfigured = sreadyaSigningValues.all { !it.isNullOrBlank() }
+val sreadyaSigningPartiallyConfigured =
+    sreadyaSigningValues.any { !it.isNullOrBlank() } && !sreadyaSigningConfigured
+if (sreadyaSigningPartiallyConfigured) {
     throw org.gradle.api.GradleException(
-        "Sreva production signing is partially configured. Provide all SREVA_ANDROID_* signing variables."
+        "Sreadya production signing is partially configured. Provide all SREADYA_ANDROID_* signing variables."
     )
 }
 
@@ -49,12 +49,12 @@ if (srevaSigningPartiallyConfigured) {
 
 SIGNING_CONFIG = r'''
     signingConfigs {
-        if (srevaSigningConfigured) {
-            create("srevaRelease") {
-                storeFile = file(srevaKeystorePath!!)
-                storePassword = srevaKeystorePassword
-                keyAlias = srevaKeyAlias
-                keyPassword = srevaKeyPassword
+        if (sreadyaSigningConfigured) {
+            create("sreadyaRelease") {
+                storeFile = file(sreadyaKeystorePath!!)
+                storePassword = sreadyaKeystorePassword
+                keyAlias = sreadyaKeyAlias
+                keyPassword = sreadyaKeyPassword
             }
         }
     }
@@ -62,8 +62,8 @@ SIGNING_CONFIG = r'''
 '''
 
 RELEASE_SIGNING = (
-    'signingConfig = if (srevaSigningConfigured) '
-    'signingConfigs.getByName("srevaRelease") else null'
+    'signingConfig = if (sreadyaSigningConfigured) '
+    'signingConfigs.getByName("sreadyaRelease") else null'
 )
 
 
@@ -76,7 +76,7 @@ def configure(require_signing: bool) -> None:
     require_file(GRADLE)
     text = GRADLE.read_text(encoding="utf-8")
 
-    if "val srevaKeystorePath =" not in text:
+    if "val sreadyaKeystorePath =" not in text:
         marker = "android {"
         if marker not in text:
             raise SystemExit("Unable to locate Android block in generated Gradle file")
@@ -98,7 +98,7 @@ def configure(require_signing: bool) -> None:
     elif f"compileSdk = {TARGET_API}" not in text:
         raise SystemExit("Unable to pin Android compileSdk to API 36")
 
-    if "create(\"srevaRelease\")" not in text:
+    if "create(\"sreadyaRelease\")" not in text:
         marker = "    buildTypes {"
         if marker not in text:
             raise SystemExit("Unable to locate Android buildTypes block")
@@ -120,8 +120,8 @@ def check(require_signing: bool) -> None:
     required_markers = (
         f"targetSdk = {TARGET_API}",
         f"compileSdk = {TARGET_API}",
-        "srevaSigningConfigured",
-        'create("srevaRelease")',
+        "sreadyaSigningConfigured",
+        'create("sreadyaRelease")',
         RELEASE_SIGNING,
     )
     missing = [marker for marker in required_markers if marker not in text]
@@ -143,7 +143,7 @@ def check(require_signing: bool) -> None:
             raise SystemExit(
                 "Production signing required; missing: " + ", ".join(missing_env)
             )
-        keystore = Path(values["SREVA_ANDROID_KEYSTORE_PATH"])
+        keystore = Path(values["SREADYA_ANDROID_KEYSTORE_PATH"])
         if not keystore.is_file():
             raise SystemExit(f"Production keystore does not exist: {keystore}")
         print("Android production signing: configured")

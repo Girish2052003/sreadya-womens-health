@@ -32,7 +32,7 @@ describe('Task 23 browser passkey client', () => {
           session_id: 'registration-session',
           public_key: {
             challenge: 'AQID',
-            rp: { name: 'Sreva', id: 'example.test' },
+            rp: { name: 'Sreadya', id: 'example.test' },
             user: { id: 'BAUG', name: 'wife@example.test', displayName: 'Wife' },
             pubKeyCredParams: [{ type: 'public-key', alg: -8 }],
             excludeCredentials: [{ type: 'public-key', id: 'BwgJ' }],
@@ -64,7 +64,7 @@ describe('Task 23 browser passkey client', () => {
     expect(bytes(creation!.publicKey!.user.id)).toEqual([4, 5, 6]);
     expect(bytes(creation!.publicKey!.excludeCredentials![0].id)).toEqual([7, 8, 9]);
     const finishHeaders = new Headers(calls[1].init?.headers);
-    expect(finishHeaders.get('X-Sreva-Passkey-Session')).toBe('registration-session');
+    expect(finishHeaders.get('X-Sreadya-Passkey-Session')).toBe('registration-session');
     expect(calls[1].url).not.toContain('registration-session');
     expect(String(calls[1].init?.body)).toContain('registration-credential');
   });
@@ -107,7 +107,7 @@ describe('Task 23 browser passkey client', () => {
     expect(bytes(requestOptions!.publicKey!.challenge)).toEqual([10, 11, 12]);
     expect(bytes(requestOptions!.publicKey!.allowCredentials![0].id)).toEqual([13, 14, 15]);
     const finishHeaders = new Headers(calls[1].init?.headers);
-    expect(finishHeaders.get('X-Sreva-Passkey-Session')).toBe('login-session');
+    expect(finishHeaders.get('X-Sreadya-Passkey-Session')).toBe('login-session');
     expect(calls[1].url).not.toContain('login-session');
   });
 
@@ -116,7 +116,7 @@ describe('Task 23 browser passkey client', () => {
       session_id: 'registration-session',
       public_key: {
         challenge: 'AQID',
-        rp: { name: 'Sreva' },
+        rp: { name: 'Sreadya' },
         user: { id: 'BAUG', name: 'wife@example.test', displayName: 'Wife' },
         pubKeyCredParams: [{ type: 'public-key', alg: -8 }],
       },

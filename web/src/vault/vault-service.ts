@@ -6,7 +6,7 @@ export const LOCAL_ONLY_DATA_LOSS_WARNING =
   'Browser site data can be erased by browser cleanup, device reset, private-browsing policy, or storage eviction. Keep an encrypted recovery backup when backup is available.';
 
 function recordAad(id: string) {
-  return `sreva:vault:v1:${id}`;
+  return `sreadya:vault:v1:${id}`;
 }
 
 export class VaultService {
@@ -32,7 +32,7 @@ export class VaultService {
 
   async openFromStoredKey() {
     const stored = await this.persistence.getStoredKey();
-    if (!stored) throw new Error('No authorized local Sreva vault key is available.');
+    if (!stored) throw new Error('No authorized local Sreadya vault key is available.');
     this.key = stored;
     this.lockState.unlock();
   }
@@ -51,7 +51,7 @@ export class VaultService {
     const key = this.requireKey();
     const replace = this.persistence.replaceRecordsAtomically;
     if (!replace) {
-      throw new Error('This Sreva vault persistence does not support atomic replacement.');
+      throw new Error('This Sreadya vault persistence does not support atomic replacement.');
     }
 
     const sealedReplacements: PersistedVaultRecord[] = await Promise.all(
@@ -73,7 +73,7 @@ export class VaultService {
     if (remembered !== undefined) return remembered;
 
     const persisted = await this.persistence.getRecord(id);
-    if (!persisted) throw new Error('Sreva vault record not found.');
+    if (!persisted) throw new Error('Sreadya vault record not found.');
 
     const clear = await openJson<T>(key, persisted.sealed, recordAad(id));
     this.lockState.remember(id, clear);
@@ -97,7 +97,7 @@ export class VaultService {
   }
 
   private requireKey(): CryptoKey {
-    if (!this.key || !this.lockState.isUnlocked) throw new Error('Sreva vault is locked.');
+    if (!this.key || !this.lockState.isUnlocked) throw new Error('Sreadya vault is locked.');
     return this.key;
   }
 }

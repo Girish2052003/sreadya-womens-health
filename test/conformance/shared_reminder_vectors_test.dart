@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sreva/features/reminders/domain/reminder_models.dart';
-import 'package:sreva/features/reminders/domain/reminder_policy.dart';
+import 'package:sreadya/features/reminders/domain/reminder_models.dart';
+import 'package:sreadya/features/reminders/domain/reminder_policy.dart';
 
 void main() {
   test('reminder policy matches every shared golden vector', () {

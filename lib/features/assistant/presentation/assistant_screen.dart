@@ -181,7 +181,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
             minLines: 2,
             maxLines: 5,
             decoration: InputDecoration(
-              labelText: 'Tell Sreva',
+              labelText: 'Tell Sreadya',
               suffixIcon: IconButton(
                 tooltip: 'Use offline voice input',
                 onPressed: _listening ? null : _voice,
@@ -205,7 +205,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'Sreva understood',
+                      'Sreadya understood',
                       style: Theme.of(context).textTheme.titleMedium
                           ?.copyWith(fontWeight: FontWeight.w700),
                     ),

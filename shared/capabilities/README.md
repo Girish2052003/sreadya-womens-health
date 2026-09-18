@@ -1,6 +1,6 @@
-# SREVA capability registry
+# SREADYA capability registry
 
-`shared/capabilities/sreva-capabilities.v1.json` is the machine-readable launch contract for C2.
+`shared/capabilities/sreadya-capabilities.v1.json` is the machine-readable launch contract for C2.
 
 The approved architecture specification remains the human-auditable source of capability IDs and names. `tool/generate_c2_capability_registry.py` deterministically extracts that frozen Section 1 contract and adds explicit lifecycle and applicability metadata.
 

@@ -42,15 +42,15 @@ export default async function PublicPage({ params }: { params: Promise<{ slug: s
           <h1>{page.title}</h1>
           <p className="public-lede">{page.summary}</p>
           <div className="public-page__actions">
-            <Link className="link-button link-button--primary" href="/app/home">Open Sreva</Link>
-            <Link className="link-button link-button--quiet" href="/how-it-works">How Sreva works</Link>
+            <Link className="link-button link-button--primary" href="/app/home">Open Sreadya</Link>
+            <Link className="link-button link-button--quiet" href="/how-it-works">How Sreadya works</Link>
           </div>
         </section>
         {key === 'features' ? <CapabilityCatalogue /> : null}
         <PublicTopicContent topicKey={key} />
         {installTarget ? <InstallGuide target={installTarget} /> : null}
         {isPrivacyPolicy ? (
-          <section className="policy-document" aria-label="Sreva Privacy Policy">
+          <section className="policy-document" aria-label="Sreadya Privacy Policy">
             <p className="public-eyebrow">{privacyPolicyLastUpdatedLabel}: {privacyPolicyLastUpdated}</p>
             <p className="public-lede">{privacyPolicyIntro}</p>
             {privacyPolicySections.map((section) => (
@@ -61,10 +61,10 @@ export default async function PublicPage({ params }: { params: Promise<{ slug: s
             ))}
           </section>
         ) : null}
-        <section className="principle-grid" aria-label="Sreva product principles">
+        <section className="principle-grid" aria-label="Sreadya product principles">
           <article><span>01</span><h2>Local first</h2><p>Core health tools remain useful without creating an account.</p></article>
-          <article><span>02</span><h2>Private by architecture</h2><p>Health telemetry is not the price of using Sreva.</p></article>
-          <article><span>03</span><h2>Clear boundaries</h2><p>Sreva communicates estimates and wellness context without pretending to diagnose.</p></article>
+          <article><span>02</span><h2>Private by architecture</h2><p>Health telemetry is not the price of using Sreadya.</p></article>
+          <article><span>03</span><h2>Clear boundaries</h2><p>Sreadya communicates estimates and wellness context without pretending to diagnose.</p></article>
         </section>
       </main>
       <PublicFooter />

@@ -19,7 +19,7 @@ describe('safe recovery mode', () => {
     expect(state.actions).toContain('download_sanitized_diagnostics');
     expect(state.actions).not.toContain('reset_vault');
     expect(() => assertRecoveryWriteAllowed(state)).toThrow(
-      'Sreva safe mode is read-only; existing health data must not be changed.',
+      'Sreadya safe mode is read-only; existing health data must not be changed.',
     );
   });
 

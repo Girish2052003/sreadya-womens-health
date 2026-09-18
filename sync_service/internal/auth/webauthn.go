@@ -36,7 +36,7 @@ type PasskeyConfig struct {
 	RPOrigins     []string
 }
 
-// PasskeyUser is the minimum Sreva adapter for go-webauthn's User contract.
+// PasskeyUser is the minimum Sreadya adapter for go-webauthn's User contract.
 type PasskeyUser struct {
 	ID          []byte
 	Name        string
@@ -113,7 +113,7 @@ func (s *PasskeyService) ConsumeLoginSession(id string) (webauthn.SessionData, e
 }
 
 // FinishPasskeyLogin completes a discoverable/passkey assertion through the
-// upstream verifier after consuming Sreva's purpose-bound one-time session.
+// upstream verifier after consuming Sreadya's purpose-bound one-time session.
 func (s *PasskeyService) FinishPasskeyLogin(id string, handler webauthn.DiscoverableUserHandler, request *http.Request) (webauthn.User, *webauthn.Credential, error) {
 	session, err := s.ConsumeLoginSession(id)
 	if err != nil {

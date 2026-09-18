@@ -7,11 +7,11 @@ type StoredVaultKey = {
   key: CryptoKey;
 };
 
-export class SrevaVaultDatabase extends Dexie {
+export class SreadyaVaultDatabase extends Dexie {
   records!: Table<PersistedVaultRecord, string>;
   keys!: Table<StoredVaultKey, string>;
 
-  constructor(name = 'sreva-vault-v1') {
+  constructor(name = 'sreadya-vault-v1') {
     super(name);
     this.version(1).stores({
       records: '&id',
@@ -21,7 +21,7 @@ export class SrevaVaultDatabase extends Dexie {
 }
 
 export class DexieVaultPersistence implements VaultPersistence {
-  constructor(readonly db = new SrevaVaultDatabase()) {}
+  constructor(readonly db = new SreadyaVaultDatabase()) {}
 
   async getRecord(id: string) {
     return this.db.records.get(id);

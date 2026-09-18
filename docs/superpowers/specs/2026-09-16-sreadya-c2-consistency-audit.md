@@ -1,15 +1,15 @@
-# Sreva C2 Cross-Platform Consistency Audit
+# Sreadya C2 Cross-Platform Consistency Audit
 
 **Date:** 16 September 2026  
 **Branch:** `docs/c2-cross-platform-alignment`  
-**Authoritative design:** `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`  
-**Audit basis:** approved `SREVA MENSTRUAL WEBSITE PLANNING SPECS.md` maintenance log + repository state at `main` commit `9c228f873fa74944896118a53205a117e50ed7c7`.
+**Authoritative design:** `docs/superpowers/specs/2026-09-16-sreadya-web-product-architecture-design.md`  
+**Audit basis:** approved `SREADYA MENSTRUAL WEBSITE PLANNING SPECS.md` maintenance log + repository state at `main` commit `9c228f873fa74944896118a53205a117e50ed7c7`.
 
 ## 1. Audit objective
 
 Reconcile the existing Flutter/mobile plans and public documentation with the approved C2 architecture without weakening the C2 decision. The repository must tell one coherent story:
 
-> **One Sreva, three first-class clients — Android, iOS, Web/PWA — with the same health semantics, privacy philosophy, capability contract, and conformance rules.**
+> **One Sreadya, three first-class clients — Android, iOS, Web/PWA — with the same health semantics, privacy philosophy, capability contract, and conformance rules.**
 
 Existing Flutter code is treated as the mature mobile baseline, not a competing architecture. New Web/PWA and optional E2EE continuity extend that baseline through shared contracts.
 
@@ -19,7 +19,7 @@ A second preservation objective is equally important: **C2 must amend the earlie
 
 - `main` is currently a Flutter/Dart mobile codebase with Android/iOS native adapters generated from `platform_templates/`.
 - Current mobile release line is `1.0.0+1`.
-- Android package identity is `com.sreva.health.sreva`; family preview uses `com.sreva.health.sreva.preview`.
+- Android package identity is `com.sreadya.health.sreadya`; family preview uses `com.sreadya.health.sreadya.preview`.
 - Existing `lib/` already contains feature-oriented mobile modules for cycle, predictions, reminders, logging, life stages, insights, reports, backup, privacy, diagnostics, partner sharing, assistant, and health integration.
 - Existing CI verifies Flutter core, Android production/family-preview paths, and iOS no-codesign compilation.
 - `tool/verify_v1_traceability.py` currently closes 22 broad mobile capability families against implementation/evidence.
@@ -51,8 +51,8 @@ A second preservation objective is equally important: **C2 must amend the earlie
 
 The following existing production facts remain valid unless a later reviewed implementation change explicitly updates them:
 
-- Android production package `com.sreva.health.sreva`.
-- Family preview package `com.sreva.health.sreva.preview`.
+- Android production package `com.sreadya.health.sreadya`.
+- Family preview package `com.sreadya.health.sreadya.preview`.
 - Flutter mobile code under `lib/`.
 - Swift/Kotlin native bridge templates under `platform_templates/`.
 - Existing Android and iOS verification workflows.
@@ -64,11 +64,11 @@ The following existing production facts remain valid unless a later reviewed imp
 
 ## 5. Documentation authority chain after reconciliation
 
-1. **Cross-platform constitution:** `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`
-2. **Cross-platform implementation programme:** `docs/superpowers/plans/2026-09-16-sreva-c2-cross-platform-implementation.md`
-3. **This consistency/preservation audit:** `docs/superpowers/specs/2026-09-16-sreva-c2-consistency-audit.md`
-4. **Preserved mobile baseline specification:** `docs/superpowers/specs/2026-09-15-sreva-master-design.md`
-5. **Preserved historical mobile implementation plan:** `docs/superpowers/plans/2026-09-15-sreva-v1-implementation.md`
+1. **Cross-platform constitution:** `docs/superpowers/specs/2026-09-16-sreadya-web-product-architecture-design.md`
+2. **Cross-platform implementation programme:** `docs/superpowers/plans/2026-09-16-sreadya-c2-cross-platform-implementation.md`
+3. **This consistency/preservation audit:** `docs/superpowers/specs/2026-09-16-sreadya-c2-consistency-audit.md`
+4. **Preserved mobile baseline specification:** `docs/superpowers/specs/2026-09-15-sreadya-master-design.md`
+5. **Preserved historical mobile implementation plan:** `docs/superpowers/plans/2026-09-15-sreadya-v1-implementation.md`
 6. Platform release runbooks remain authoritative only for their platform/release channel and must obey the cross-platform constitution.
 
 If documents conflict, higher items in the authority chain win. Lower-level documents retain non-conflicting detail; they are not discarded merely because a higher-level document exists.
@@ -126,7 +126,7 @@ The approved planning log contains Sections 0–25. This table records where eac
 
 The broad section crosswalk was not considered sufficient by itself. The audit also checked details that are easy to lose during summarization. They remain requirements of the corresponding C2 sections/tasks:
 
-- **Design/UX:** public Sreva may be expressive but the health workspace is calm; semantic colors are contrast-tested; colour is never the sole state signal; destructive actions are separated and require confirmation; motion explains state and obeys reduced-motion settings; charts have textual summaries/labels/units rather than colour-only meaning.
+- **Design/UX:** public Sreadya may be expressive but the health workspace is calm; semantic colors are contrast-tested; colour is never the sole state signal; destructive actions are separated and require confirmation; motion explains state and obeys reduced-motion settings; charts have textual summaries/labels/units rather than colour-only meaning.
 - **Navigation/responsiveness:** the primary mobile/PWA navigation stays intentionally small (Home/Today/Log/Calendar/More); browser back/forward/refresh/deep links are respected; ultra-wide layouts remain readable rather than stretching health content merely because space exists.
 - **Browser vault:** no plaintext health values in `localStorage`, URL state, indexes, or service-worker caches; application-layer encryption precedes persistence; persistent/durable storage is requested where appropriate; users are warned that browser-site-data clearing can destroy a local-only vault; CycleVault remains available.
 - **Recovery:** email/phone/both are account identifiers, phone is optional, passkeys are preferred, trusted-device approval is primary for new devices, a user-held recovery key restores vault access when devices are lost, and email/SMS alone cannot decrypt old history. Recovery-key UX must support safe user-controlled storage/export methods without creating a server-held decryption copy.
@@ -140,15 +140,15 @@ These details are implementation constraints, not a competing architecture. If a
 
 A diff review found that the first reconciliation draft compressed the original 15 September mobile specification and task plan. That was corrected before merge:
 
-- `2026-09-15-sreva-master-design.md` now retains the original detailed 22 capability families, screen map, domain invariants, exact Prediction v1 algorithm, reminder state machine, key lifecycle, logging policy, and signing boundary, with C2 interpretation/precedence notices added around them.
-- `2026-09-15-sreva-v1-implementation.md` now retains the original 16-task files/interfaces/test/commit checklist in full, with C2 preservation/status notes and a forward handoff added around it.
+- `2026-09-15-sreadya-master-design.md` now retains the original detailed 22 capability families, screen map, domain invariants, exact Prediction v1 algorithm, reminder state machine, key lifecycle, logging policy, and signing boundary, with C2 interpretation/precedence notices added around them.
+- `2026-09-15-sreadya-v1-implementation.md` now retains the original 16-task files/interfaces/test/commit checklist in full, with C2 preservation/status notes and a forward handoff added around it.
 - The C2 constitution does **not** delete the mobile algorithms or test requirements; it promotes their behavior into shared cross-platform schemas/vectors where applicable.
 
 Therefore the cross-platform plan extends the existing verified product rather than replacing valuable prior engineering history with a shorter retelling.
 
 ## 10. Audit conclusion
 
-The uploaded planning log and the repository C2 constitution/programme describe the same approved architecture: **C2 Web-Native Monorepo, three equal first-class clients, full account-free Sreva, optional E2EE continuity, local plaintext authority, passkey/trusted-device/recovery-key boundaries, adaptive reminders, shared language-neutral contracts, and 258-ID anti-drift closure.**
+The uploaded planning log and the repository C2 constitution/programme describe the same approved architecture: **C2 Web-Native Monorepo, three equal first-class clients, full account-free Sreadya, optional E2EE continuity, local plaintext authority, passkey/trusted-device/recovery-key boundaries, adaptive reminders, shared language-neutral contracts, and 258-ID anti-drift closure.**
 
 No approved launch capability family or approved Section 0–25 architectural area is left without an architecture home and an implementation owner. Future/optional `FUT-*` capabilities remain explicitly future rather than being accidentally promoted to launch promises.
 

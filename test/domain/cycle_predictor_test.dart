@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sreva/features/predictions/domain/cycle_prediction.dart';
-import 'package:sreva/features/predictions/domain/cycle_predictor.dart';
+import 'package:sreadya/features/predictions/domain/cycle_prediction.dart';
+import 'package:sreadya/features/predictions/domain/cycle_predictor.dart';
 
 void main() {
   group('CyclePredictor prediction-v1', () {

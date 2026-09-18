@@ -41,7 +41,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(path)],
-          text: 'Encrypted Sreva CycleVault backup. Keep the recovery passphrase separately.',
+          text: 'Encrypted Sreadya CycleVault backup. Keep the recovery passphrase separately.',
         ),
       );
     } catch (error) {
@@ -72,7 +72,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
       builder: (context) => AlertDialog(
         title: const Text('Restore CycleVault'),
         content: const Text(
-          'Replace all local Sreva health data with the validated backup, or merge only records that are not already present? Replacement is atomic and only happens after validation.',
+          'Replace all local Sreadya health data with the validated backup, or merge only records that are not already present? Replacement is atomic and only happens after validation.',
         ),
         actions: [
           TextButton(
@@ -135,7 +135,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
             child: Padding(
               padding: EdgeInsets.all(16),
               child: Text(
-                'CycleVault encrypts a portable backup on this device using Argon2id + AES-256-GCM. Sreva never sends the passphrase or backup to our servers.',
+                'CycleVault encrypts a portable backup on this device using Argon2id + AES-256-GCM. Sreadya never sends the passphrase or backup to our servers.',
               ),
             ),
           ),
@@ -165,7 +165,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
           ),
           const SizedBox(height: 16),
           const Text(
-            'If the passphrase is lost, Sreva cannot recover the CycleVault. This is intentional: the developer does not hold a recovery copy of your health data or encryption key.',
+            'If the passphrase is lost, Sreadya cannot recover the CycleVault. This is intentional: the developer does not hold a recovery copy of your health data or encryption key.',
           ),
         ],
       ),

@@ -22,13 +22,13 @@ def test_design_tokens_define_approved_symbolic_roles_without_freezing_raw_colou
     assert payload["version"] == 1
     roles = {entry["name"] for entry in payload["colorRoles"]}
     assert {
-        "sreva-crimson",
-        "sreva-rose",
-        "sreva-pink",
-        "sreva-blush",
-        "sreva-pearl",
-        "sreva-ink",
-        "sreva-muted",
+        "sreadya-crimson",
+        "sreadya-rose",
+        "sreadya-pink",
+        "sreadya-blush",
+        "sreadya-pearl",
+        "sreadya-ink",
+        "sreadya-muted",
         "success",
         "warning",
         "danger",

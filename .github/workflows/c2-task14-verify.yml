@@ -59,7 +59,7 @@ jobs:
       - name: Static export with CycleVault verification harness
         working-directory: web
         env:
-          NEXT_PUBLIC_SREVA_CYCLEVAULT_TEST_HARNESS: '1'
+          NEXT_PUBLIC_SREADYA_CYCLEVAULT_TEST_HARNESS: '1'
         run: npm run build
       - name: CycleVault target-browser vector and resource proof
         working-directory: web

@@ -1,47 +1,47 @@
 {
   "version": 1,
   "contractStatus": "contract",
-  "authority": "docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md",
+  "authority": "docs/superpowers/specs/2026-09-16-sreadya-web-product-architecture-design.md",
   "purpose": "Cross-platform symbolic design contract. Exact colour values remain unfrozen until logo-informed WCAG contrast review.",
   "colorRoles": [
     {
-      "name": "sreva-crimson",
+      "name": "sreadya-crimson",
       "category": "brand",
-      "intent": "Primary deep Sreva accent for high-emphasis brand moments.",
+      "intent": "Primary deep Sreadya accent for high-emphasis brand moments.",
       "review": "pending_contrast_review"
     },
     {
-      "name": "sreva-rose",
+      "name": "sreadya-rose",
       "category": "brand",
-      "intent": "Secondary warm Sreva accent.",
+      "intent": "Secondary warm Sreadya accent.",
       "review": "pending_contrast_review"
     },
     {
-      "name": "sreva-pink",
+      "name": "sreadya-pink",
       "category": "brand",
-      "intent": "Supporting expressive Sreva accent used with restraint.",
+      "intent": "Supporting expressive Sreadya accent used with restraint.",
       "review": "pending_contrast_review"
     },
     {
-      "name": "sreva-blush",
+      "name": "sreadya-blush",
       "category": "brand_surface",
       "intent": "Soft supporting brand surface.",
       "review": "pending_contrast_review"
     },
     {
-      "name": "sreva-pearl",
+      "name": "sreadya-pearl",
       "category": "surface",
       "intent": "Warm light surface role.",
       "review": "pending_contrast_review"
     },
     {
-      "name": "sreva-ink",
+      "name": "sreadya-ink",
       "category": "content",
       "intent": "High-emphasis content and text role.",
       "review": "pending_contrast_review"
     },
     {
-      "name": "sreva-muted",
+      "name": "sreadya-muted",
       "category": "content",
       "intent": "Lower-emphasis supporting content role.",
       "review": "pending_contrast_review"

@@ -70,7 +70,7 @@ export function StructuredObservationWorkspace({ config }: { config: Config }) {
       setReady(true);
     })().catch(() => {
       if (cancelled) return;
-      setError('Sreva could not open this encrypted local workspace.');
+      setError('Sreadya could not open this encrypted local workspace.');
       setStatus('Local vault unavailable');
       setReady(true);
     });
@@ -121,7 +121,7 @@ export function StructuredObservationWorkspace({ config }: { config: Config }) {
       setSelectedKind(config.kinds[0]);
       setStatus('Saved locally · encrypted');
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Sreva could not save this local observation.');
+      setError(cause instanceof Error ? cause.message : 'Sreadya could not save this local observation.');
     }
   };
 
@@ -134,7 +134,7 @@ export function StructuredObservationWorkspace({ config }: { config: Config }) {
       await refresh(repository);
       setStatus('Record deleted locally');
     } catch {
-      setError('Sreva could not delete that local record.');
+      setError('Sreadya could not delete that local record.');
     }
   };
 

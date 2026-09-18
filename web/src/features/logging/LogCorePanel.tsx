@@ -60,7 +60,7 @@ export function LogCorePanel({
       </Card>
 
       <Card eyebrow="Medical boundary" title="Your notes stay observations">
-        <p>Sreva records what you choose to notice. It does not turn a symptom log into a diagnosis.</p>
+        <p>Sreadya records what you choose to notice. It does not turn a symptom log into a diagnosis.</p>
       </Card>
     </div>
   );

@@ -25,6 +25,6 @@ def test_ci_and_production_use_strong_signature_verifier_not_strict_pkix_chain()
     for workflow in (ci, production):
         assert "tool/verify_android_signatures.py" in workflow
         assert "jarsigner -verify -strict" not in workflow
-        assert "SREVA_ANDROID_KEYSTORE_PATH" in workflow
-        assert "SREVA_ANDROID_KEY_ALIAS" in workflow
-        assert "SREVA_ANDROID_KEYSTORE_PASSWORD" in workflow
+        assert "SREADYA_ANDROID_KEYSTORE_PATH" in workflow
+        assert "SREADYA_ANDROID_KEY_ALIAS" in workflow
+        assert "SREADYA_ANDROID_KEYSTORE_PASSWORD" in workflow

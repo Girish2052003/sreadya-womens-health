@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sreva/features/predictions/domain/cycle_prediction.dart';
-import 'package:sreva/features/predictions/domain/prediction_history.dart';
+import 'package:sreadya/features/predictions/domain/cycle_prediction.dart';
+import 'package:sreadya/features/predictions/domain/prediction_history.dart';
 
 CyclePrediction prediction({required PredictionConfidence confidence}) =>
     CyclePrediction(

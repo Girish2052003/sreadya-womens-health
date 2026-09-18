@@ -41,7 +41,7 @@ describe('VaultService atomic replacement', () => {
     );
 
     await expect(vault.read('health:period:new')).resolves.toEqual({ secret: 'NEW-HEALTH-SENTINEL' });
-    await expect(vault.read('health:period:old')).rejects.toThrow('Sreva vault record not found.');
+    await expect(vault.read('health:period:old')).rejects.toThrow('Sreadya vault record not found.');
     await expect(vault.read('preferences:reminders:v1')).resolves.toEqual({ enabledOffsetsDays: [3] });
 
     const persisted = JSON.stringify([...persistence.records.values()]);
@@ -63,6 +63,6 @@ describe('VaultService atomic replacement', () => {
     )).rejects.toThrow('simulated atomic persistence failure');
 
     await expect(vault.read('health:period:old')).resolves.toEqual({ version: 'old' });
-    await expect(vault.read('health:period:new')).rejects.toThrow('Sreva vault record not found.');
+    await expect(vault.read('health:period:new')).rejects.toThrow('Sreadya vault record not found.');
   });
 });

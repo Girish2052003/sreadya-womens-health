@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sreva/features/insights/domain/insight_engine.dart';
+import 'package:sreadya/features/insights/domain/insight_engine.dart';
 
 void main() {
   test('uses observational not causal wording', () {

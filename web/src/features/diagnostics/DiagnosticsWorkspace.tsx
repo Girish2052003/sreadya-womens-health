@@ -11,7 +11,7 @@ function download(report: DiagnosticReport) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = 'sreva-sanitized-diagnostics.json';
+  anchor.download = 'sreadya-sanitized-diagnostics.json';
   anchor.click();
   URL.revokeObjectURL(url);
 }
@@ -53,7 +53,7 @@ export function DiagnosticsWorkspace() {
         integrity: { state: 'ok' },
       }));
     } catch {
-      setError('Sreva could not create the sanitized technical report.');
+      setError('Sreadya could not create the sanitized technical report.');
     }
   };
 

@@ -15,7 +15,7 @@ class AppLockService {
     if (!await isAvailable()) return false;
     try {
       return await _authentication.authenticate(
-        localizedReason: 'Unlock Sreva to view private cycle information.',
+        localizedReason: 'Unlock Sreadya to view private cycle information.',
         persistAcrossBackgrounding: false,
         biometricOnly: false,
       );

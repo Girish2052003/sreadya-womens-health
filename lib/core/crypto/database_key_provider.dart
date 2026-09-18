@@ -7,7 +7,7 @@ class DatabaseKeyProvider {
   DatabaseKeyProvider({FlutterSecureStorage? secureStorage})
     : _secureStorage = secureStorage ?? const FlutterSecureStorage();
 
-  static const _keyName = 'sreva.database.raw-key.v1';
+  static const _keyName = 'sreadya.database.raw-key.v1';
   final FlutterSecureStorage _secureStorage;
 
   Future<List<int>> readOrCreate() async {
@@ -15,7 +15,7 @@ class DatabaseKeyProvider {
     if (existing != null) {
       final bytes = base64Decode(existing);
       if (bytes.length != 32) {
-        throw StateError('Invalid Sreva database key length.');
+        throw StateError('Invalid Sreadya database key length.');
       }
       return bytes;
     }

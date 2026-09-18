@@ -2,14 +2,14 @@ import AuthenticationServices
 import Flutter
 import UIKit
 
-final class SrevaCredentialBridge: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
-    static var shared: SrevaCredentialBridge?
+final class SreadyaCredentialBridge: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    static var shared: SreadyaCredentialBridge?
 
     private let channel: FlutterMethodChannel
     private var pendingResult: FlutterResult?
 
     private init(messenger: FlutterBinaryMessenger) {
-        channel = FlutterMethodChannel(name: "sreva/account", binaryMessenger: messenger)
+        channel = FlutterMethodChannel(name: "sreadya/account", binaryMessenger: messenger)
         super.init()
         channel.setMethodCallHandler { [weak self] call, result in
             self?.handle(call, result: result)
@@ -17,7 +17,7 @@ final class SrevaCredentialBridge: NSObject, ASAuthorizationControllerDelegate, 
     }
 
     static func register(messenger: FlutterBinaryMessenger) {
-        shared = SrevaCredentialBridge(messenger: messenger)
+        shared = SreadyaCredentialBridge(messenger: messenger)
     }
 
     private func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {

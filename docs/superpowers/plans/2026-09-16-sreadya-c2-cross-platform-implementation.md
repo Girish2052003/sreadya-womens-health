@@ -1,8 +1,8 @@
-# Sreva C2 Cross-Platform Implementation Plan
+# Sreadya C2 Cross-Platform Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: use `superpowers:subagent-driven-development` or `superpowers:executing-plans` to execute this plan task-by-task. Use `superpowers:test-driven-development` for implementation changes and `superpowers:verification-before-completion` before claiming a task/phase complete.
 
-**Goal:** Extend the already-verified Flutter Android/iOS Sreva baseline into the approved C2 product: one Sreva with three equal first-class clients (Android, iOS, Web/PWA), language-neutral shared contracts, encrypted local Web storage, offline PWA operation, and optional E2EE continuity—without weakening or rewriting the existing mobile product.
+**Goal:** Extend the already-verified Flutter Android/iOS Sreadya baseline into the approved C2 product: one Sreadya with three equal first-class clients (Android, iOS, Web/PWA), language-neutral shared contracts, encrypted local Web storage, offline PWA operation, and optional E2EE continuity—without weakening or rewriting the existing mobile product.
 
 **Architecture:** Preserve `lib/` + `platform_templates/` as the Flutter/mobile client. Add `web/` for a browser-native Next.js/React/TypeScript client. Add `shared/` for the 258-ID capability registry, canonical schemas, terminology, design tokens, prediction/reminder/CycleVault/sync vectors, and cross-platform conformance fixtures. Add `sync_service/` only after the E2EE protocol security gate. Core health functionality remains local/no-account/offline; account mode adds encrypted continuity only.
 
@@ -15,9 +15,9 @@
 - Optional sync-service target after protocol gate: Go **1.27.1**, `github.com/go-chi/chi/v5` **v5.3.2**, `github.com/jackc/pgx/v5` **v5.11.0**, `github.com/go-webauthn/webauthn` **v0.17.4**, PostgreSQL **18.6**. No ORM and no Redis unless measurements later justify them.
 - Package manager for Web: npm with committed `web/package-lock.json`; exact transitive versions come from the lockfile.
 
-**Spec:** `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`
+**Spec:** `docs/superpowers/specs/2026-09-16-sreadya-web-product-architecture-design.md`
 
-**Consistency audit:** `docs/superpowers/specs/2026-09-16-sreva-c2-consistency-audit.md`
+**Consistency audit:** `docs/superpowers/specs/2026-09-16-sreadya-c2-consistency-audit.md`
 
 ## Global Constraints
 
@@ -41,7 +41,7 @@
 ### Task 1: Add the 258-ID machine-readable capability registry
 
 **Files:**
-- Create: `shared/capabilities/sreva-capabilities.v1.json`
+- Create: `shared/capabilities/sreadya-capabilities.v1.json`
 - Create: `shared/capabilities/README.md`
 - Create: `verification/reference/test_cross_platform_capability_registry.py`
 - Later modify: `tool/verify_v1_traceability.py` only after the new registry test is green.
@@ -83,7 +83,7 @@ python tool/verify_v1_traceability.py
 python -m pytest -q verification/reference
 ```
 
-Commit: `contracts: add 258-id Sreva capability registry`
+Commit: `contracts: add 258-id Sreadya capability registry`
 
 ---
 
@@ -125,7 +125,7 @@ Include stable English canonical labels/definitions for period episode, flow, ob
 python -m pytest -q verification/reference/test_shared_schemas.py
 ```
 
-Commit: `contracts: define canonical Sreva schemas and terminology`
+Commit: `contracts: define canonical Sreadya schemas and terminology`
 
 ---
 
@@ -208,7 +208,7 @@ Commit: `contracts: add shared design and privacy policy contracts`
 
 **Step 1 — Write failing smoke test before real UI**
 
-Test that the root page renders “Sreva” and an “Open Sreva” action.
+Test that the root page renders “Sreadya” and an “Open Sreadya” action.
 
 **Step 2 — Initialize package with exact direct versions**
 
@@ -255,7 +255,7 @@ Private route shells: Home, Today, Calendar, Log, Cycle, Predictions, Reminders,
 
 **TDD steps:** accessibility/name tests first; implement minimal route shells; run Vitest; run Playwright back/forward/deep-link checks; run axe smoke scan.
 
-Commit: `web: add Sreva design system and route architecture`
+Commit: `web: add Sreadya design system and route architecture`
 
 ---
 
@@ -268,7 +268,7 @@ Commit: `web: add Sreva design system and route architecture`
 - Create: `web/src/pwa/install-capability.ts`
 - Create: `web/src/components/pwa/InstallGuide.tsx`
 - Create: `web/e2e/pwa.spec.ts`
-- Use existing approved Sreva logo/icon assets; do not invent new brand artwork in this task.
+- Use existing approved Sreadya logo/icon assets; do not invent new brand artwork in this task.
 
 **Step 1 — Tests first**
 
@@ -428,7 +428,7 @@ Commit: `web: implement adaptive reminder policy and health status`
 5. Partner baseline: local generated summary/QR/share; granular categories; revoke local grants.
 6. Privacy Center: actual local status, sync shown as unavailable/off until Phase F, no false green claims.
 
-Commit: `web: complete local-first Sreva intelligence and privacy features`
+Commit: `web: complete local-first Sreadya intelligence and privacy features`
 
 ---
 
@@ -442,7 +442,7 @@ Commit: `web: complete local-first Sreva intelligence and privacy features`
 - Create: `web/src/crypto/cyclevault.conformance.test.ts`
 - Implement: `web/src/app/app/vault/page.tsx`
 
-**Existing mobile format to preserve:** `SREVA-CYCLEVAULT` v1, Argon2id m=19 MiB/t=2/p=1, 32-byte key, AES-256-GCM, manifest as AAD.
+**Existing mobile format to preserve:** `SREADYA-CYCLEVAULT` v1, Argon2id m=19 MiB/t=2/p=1, 32-byte key, AES-256-GCM, manifest as AAD.
 
 **Web dependency gate:** `@noble/hashes@2.4.0` Argon2id may be used only after the exact mobile vectors pass in target browsers and latency/memory is acceptable. If not, STOP this task and perform a dedicated crypto-library review; do not silently change the backup format.
 
@@ -526,7 +526,7 @@ Acceptance on an iPhone using Safari/Add to Home Screen plus desktop browser:
 
 This milestone is valuable independently of Apple Developer membership and is completed **before** account/sync is allowed to block usability.
 
-Commit: `docs: record local Sreva PWA acceptance evidence`
+Commit: `docs: record local Sreadya PWA acceptance evidence`
 
 ---
 
@@ -568,7 +568,7 @@ Commit only after review: `security: freeze E2EE protocol v1 and interoperabilit
 **Files:**
 - Create: `sync_service/go.mod`
 - Create: `sync_service/go.sum`
-- Create: `sync_service/cmd/sreva-sync/main.go`
+- Create: `sync_service/cmd/sreadya-sync/main.go`
 - Create: `sync_service/internal/httpapi/router.go`
 - Create: `sync_service/internal/config/config.go`
 - Create: `sync_service/internal/store/store.go`
@@ -743,7 +743,7 @@ No production rollout if any privacy, migration, reminder, recovery, ciphertext-
 
 - Existing Flutter feature implementation under `lib/` during Phases A–E except conformance-test adapters explicitly named above.
 - `platform_templates/android/MainActivity.kt` and related Android tests until a native account/sync adapter task requires change.
-- `platform_templates/ios/SrevaPlatformBridge.swift` until a native account/sync adapter task requires change.
+- `platform_templates/ios/SreadyaPlatformBridge.swift` until a native account/sync adapter task requires change.
 - Android production/family-preview package identities.
 - Existing mobile release signing secrets/workflows except additive CI dependencies.
 - Existing CycleVault v1 crypto/format until Task 14 proves an interoperable change or keeps it identical.

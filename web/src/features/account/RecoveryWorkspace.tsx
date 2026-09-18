@@ -39,7 +39,7 @@ export function RecoveryWorkspace() {
   return (
     <div className="workspace-grid">
       <Card eyebrow="Emergency recovery" title="Verify user-held recovery material">
-        <p>Sreva can validate a user-held recovery key against a reviewed encrypted recovery package locally. The recovered vault-root secret is not displayed and is cleared immediately after verification.</p>
+        <p>Sreadya can validate a user-held recovery key against a reviewed encrypted recovery package locally. The recovered vault-root secret is not displayed and is cleared immediately after verification.</p>
         <div className="continuity-form">
           <label><span>Recovery key (hex)</span><input type="password" autoComplete="off" value={secret} onChange={(e) => setSecret(e.target.value)} /></label>
           <label><span>Encrypted recovery package</span><textarea value={envelope} onChange={(e) => setEnvelope(e.target.value)} /></label>

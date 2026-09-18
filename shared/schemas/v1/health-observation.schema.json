@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.sreva.local/v1/health-observation.schema.json",
-  "title": "Sreva HealthObservation v1",
+  "$id": "https://schemas.sreadya.local/v1/health-observation.schema.json",
+  "title": "Sreadya HealthObservation v1",
   "type": "object",
   "additionalProperties": false,
   "required": ["id", "kind", "occurredAt", "source"],

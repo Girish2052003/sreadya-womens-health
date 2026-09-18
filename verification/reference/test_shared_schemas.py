@@ -46,7 +46,7 @@ def test_all_canonical_schema_documents_exist_and_use_json_schema_2020_12() -> N
     for name in sorted(SCHEMAS):
         schema = _read(name)
         assert schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
-        assert schema["$id"].startswith("https://schemas.sreva.local/v1/")
+        assert schema["$id"].startswith("https://schemas.sreadya.local/v1/")
         assert schema["type"] == "object"
         assert schema.get("additionalProperties") is False
         assert schema.get("required")

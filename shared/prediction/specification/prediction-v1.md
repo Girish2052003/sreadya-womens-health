@@ -1,6 +1,6 @@
-# Sreva prediction-v1 contract
+# Sreadya prediction-v1 contract
 
-`prediction-v1` freezes the already-tested Flutter cycle-prediction semantics so every Sreva client can be checked against the **same golden vectors**. This document does not introduce a Web-specific predictor and does not make a medical, fertility, or contraceptive-effectiveness claim.
+`prediction-v1` freezes the already-tested Flutter cycle-prediction semantics so every Sreadya client can be checked against the **same golden vectors**. This document does not introduce a Web-specific predictor and does not make a medical, fertility, or contraceptive-effectiveness claim.
 
 ## Inputs and calendar semantics
 

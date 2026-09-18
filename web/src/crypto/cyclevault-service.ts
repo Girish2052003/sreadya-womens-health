@@ -52,7 +52,7 @@ function isOneOf<T extends string>(value: string, values: readonly T[]): value i
 
 function manifestFor(createdAtUtc: string): CycleVaultManifestV1 {
   return {
-    format: 'SREVA-CYCLEVAULT',
+    format: 'SREADYA-CYCLEVAULT',
     formatVersion: 1,
     createdAtUtc,
     appVersion: APP_VERSION,

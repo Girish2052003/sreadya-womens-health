@@ -11,7 +11,7 @@ export function Button({ children, className = '', variant = 'primary', type = '
   return (
     <button
       type={type}
-      className={`sreva-button sreva-button--${variant} ${className}`.trim()}
+      className={`sreadya-button sreadya-button--${variant} ${className}`.trim()}
       {...props}
     >
       {children}

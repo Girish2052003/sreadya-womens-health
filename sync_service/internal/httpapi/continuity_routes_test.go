@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"sreva.dev/sync_service/internal/continuity"
-	"sreva.dev/sync_service/internal/deviceauth"
+	"sreadya.dev/sync_service/internal/continuity"
+	"sreadya.dev/sync_service/internal/deviceauth"
 )
 
 type fakeContinuityAPI struct {
@@ -148,8 +148,8 @@ func TestTask23ApproveAndRevokeRequireSignedActiveDeviceRequest(t *testing.T) {
 			auth := &fakeContinuityAuthorizer{}
 			router := task23Router(api, auth)
 			request := httptest.NewRequest(http.MethodPost, tc.path, nil)
-			request.Header.Set("X-Sreva-Device-Challenge", "challenge-1")
-			request.Header.Set("X-Sreva-Device-Signature", base64.StdEncoding.EncodeToString([]byte{1, 2, 3}))
+			request.Header.Set("X-Sreadya-Device-Challenge", "challenge-1")
+			request.Header.Set("X-Sreadya-Device-Signature", base64.StdEncoding.EncodeToString([]byte{1, 2, 3}))
 			response := httptest.NewRecorder()
 			router.ServeHTTP(response, request)
 
@@ -179,8 +179,8 @@ func TestTask23InvalidDeviceSignatureBlocksMutation(t *testing.T) {
 	auth := &fakeContinuityAuthorizer{verifyErr: deviceauth.ErrInvalidSignature}
 	router := task23Router(api, auth)
 	request := httptest.NewRequest(http.MethodPost, "/v1/devices/dev-new/approve", nil)
-	request.Header.Set("X-Sreva-Device-Challenge", "challenge-1")
-	request.Header.Set("X-Sreva-Device-Signature", base64.StdEncoding.EncodeToString([]byte{1, 2, 3}))
+	request.Header.Set("X-Sreadya-Device-Challenge", "challenge-1")
+	request.Header.Set("X-Sreadya-Device-Signature", base64.StdEncoding.EncodeToString([]byte{1, 2, 3}))
 	response := httptest.NewRecorder()
 	router.ServeHTTP(response, request)
 
@@ -195,15 +195,15 @@ func TestTask23InvalidDeviceSignatureBlocksMutation(t *testing.T) {
 func TestTask23RecoveryWrapperPutHashesExactBodyAndReadNeedsOnlyAccountSession(t *testing.T) {
 	api := &fakeContinuityAPI{wrapper: continuity.RecoveryWrapper{
 		AccountID: "acct-a", VaultID: "vault-a", KeyEpoch: 3, ProtocolVersion: 1,
-		SuiteID: "SREVA-AES256GCM-HKDFSHA256-ED25519-V1",
+		SuiteID: "SREADYA-AES256GCM-HKDFSHA256-ED25519-V1",
 		KDFSalt: []byte{1, 2, 3}, Nonce: []byte{4, 5, 6}, CiphertextAndTag: []byte{7, 8, 9}, EnvelopeDigest: []byte{10, 11, 12},
 	}}
 	auth := &fakeContinuityAuthorizer{}
 	router := task23Router(api, auth)
-	body := `{"key_epoch":3,"protocol_version":1,"suite_id":"SREVA-AES256GCM-HKDFSHA256-ED25519-V1","kdf_salt":"AQID","nonce":"BAUG","ciphertext_and_tag":"BwgJ","envelope_digest":"CgsM"}`
+	body := `{"key_epoch":3,"protocol_version":1,"suite_id":"SREADYA-AES256GCM-HKDFSHA256-ED25519-V1","kdf_salt":"AQID","nonce":"BAUG","ciphertext_and_tag":"BwgJ","envelope_digest":"CgsM"}`
 	request := httptest.NewRequest(http.MethodPut, "/v1/recovery/vault-a", strings.NewReader(body))
-	request.Header.Set("X-Sreva-Device-Challenge", "challenge-1")
-	request.Header.Set("X-Sreva-Device-Signature", base64.StdEncoding.EncodeToString([]byte{9, 8, 7}))
+	request.Header.Set("X-Sreadya-Device-Challenge", "challenge-1")
+	request.Header.Set("X-Sreadya-Device-Signature", base64.StdEncoding.EncodeToString([]byte{9, 8, 7}))
 	response := httptest.NewRecorder()
 	router.ServeHTTP(response, request)
 
@@ -240,8 +240,8 @@ func TestTask23DeleteAccountReturnsTruthfulServerOnlyReceipt(t *testing.T) {
 	auth := &fakeContinuityAuthorizer{}
 	router := task23Router(api, auth)
 	request := httptest.NewRequest(http.MethodDelete, "/v1/account", nil)
-	request.Header.Set("X-Sreva-Device-Challenge", "challenge-1")
-	request.Header.Set("X-Sreva-Device-Signature", base64.StdEncoding.EncodeToString([]byte{4, 5, 6}))
+	request.Header.Set("X-Sreadya-Device-Challenge", "challenge-1")
+	request.Header.Set("X-Sreadya-Device-Signature", base64.StdEncoding.EncodeToString([]byte{4, 5, 6}))
 	response := httptest.NewRecorder()
 	router.ServeHTTP(response, request)
 

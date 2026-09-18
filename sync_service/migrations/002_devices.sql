@@ -1,4 +1,4 @@
--- Sreva C2 opaque device authorization scaffold. PostgreSQL target: 18.6.
+-- Sreadya C2 opaque device authorization scaffold. PostgreSQL target: 18.6.
 CREATE TABLE devices (
     device_id UUID PRIMARY KEY,
     account_id UUID NOT NULL REFERENCES accounts(account_id) ON DELETE CASCADE,

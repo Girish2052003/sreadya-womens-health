@@ -1,4 +1,4 @@
-package com.sreva.health.sreva
+package com.sreadya.health.sreadya
 
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -33,7 +33,7 @@ class ReminderWallClockTest {
             timestampMillis = ZonedDateTime.of(2026, 3, 28, 8, 0, 0, 0, helsinki)
                 .toInstant()
                 .toEpochMilli(),
-            title = "Sreva",
+            title = "Sreadya",
             body = "You have a reminder.",
             repeatDaily = true,
             label = null,
@@ -60,7 +60,7 @@ class ReminderWallClockTest {
             timestampMillis = ZonedDateTime.of(2026, 10, 24, 8, 0, 0, 0, helsinki)
                 .toInstant()
                 .toEpochMilli(),
-            title = "Sreva",
+            title = "Sreadya",
             body = "You have a reminder.",
             repeatDaily = true,
             label = null,
@@ -90,7 +90,7 @@ class ReminderWallClockTest {
             targetLocalDay = 17,
             targetLocalHour = 8,
             targetLocalMinute = 15,
-            title = "Sreva",
+            title = "Sreadya",
             body = "You have a reminder.",
             repeatDaily = false,
             label = null,
@@ -120,7 +120,7 @@ class ReminderWallClockTest {
                 timestampMillis = ZonedDateTime.of(2026, 6, 15, 8, 0, 0, 0, zone)
                     .toInstant()
                     .toEpochMilli(),
-                title = "Sreva",
+                title = "Sreadya",
                 body = "You have a reminder.",
                 repeatDaily = true,
                 label = null,
@@ -146,7 +146,7 @@ class ReminderWallClockTest {
             timestampMillis = ZonedDateTime.of(2026, 9, 17, 8, 15, 0, 0, helsinki)
                 .toInstant()
                 .toEpochMilli(),
-            title = "Sreva",
+            title = "Sreadya",
             body = "You have a reminder.",
             repeatDaily = false,
             label = null,

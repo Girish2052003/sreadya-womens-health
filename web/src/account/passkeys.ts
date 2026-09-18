@@ -1,4 +1,4 @@
-const PASSKEY_SESSION_HEADER = 'X-Sreva-Passkey-Session';
+const PASSKEY_SESSION_HEADER = 'X-Sreadya-Passkey-Session';
 
 type BeginResponse = {
   session_id: string;
@@ -19,25 +19,25 @@ type JsonRecord = Record<string, unknown>;
 
 function record(value: unknown, label: string): JsonRecord {
   if (value === null || typeof value !== 'object' || Array.isArray(value)) {
-    throw new Error(`Invalid Sreva ${label}.`);
+    throw new Error(`Invalid Sreadya ${label}.`);
   }
   return value as JsonRecord;
 }
 
 function nonEmptyString(value: unknown, label: string): string {
-  if (typeof value !== 'string' || value.length === 0) throw new Error(`Invalid Sreva ${label}.`);
+  if (typeof value !== 'string' || value.length === 0) throw new Error(`Invalid Sreadya ${label}.`);
   return value;
 }
 
 function decodeBase64Url(value: unknown, label: string): Uint8Array<ArrayBuffer> {
   const encoded = nonEmptyString(value, label);
-  if (!/^[A-Za-z0-9_-]+={0,2}$/.test(encoded)) throw new Error(`Invalid Sreva ${label}.`);
+  if (!/^[A-Za-z0-9_-]+={0,2}$/.test(encoded)) throw new Error(`Invalid Sreadya ${label}.`);
   const standard = encoded.replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');
   const padded = standard + '='.repeat((4 - (standard.length % 4)) % 4);
   try {
     return Uint8Array.from(atob(padded), (part) => part.charCodeAt(0));
   } catch {
-    throw new Error(`Invalid Sreva ${label}.`);
+    throw new Error(`Invalid Sreadya ${label}.`);
   }
 }
 
@@ -58,7 +58,7 @@ function publicKeyRecord(value: unknown): JsonRecord {
 
 function decodeDescriptors(value: unknown, label: string): PublicKeyCredentialDescriptor[] | undefined {
   if (value === undefined) return undefined;
-  if (!Array.isArray(value)) throw new Error(`Invalid Sreva ${label}.`);
+  if (!Array.isArray(value)) throw new Error(`Invalid Sreadya ${label}.`);
   return value.map((entry) => {
     const descriptor = record(entry, label);
     return {
@@ -73,7 +73,7 @@ function decodeCreationOptions(value: unknown): PublicKeyCredentialCreationOptio
   const source = publicKeyRecord(value);
   const user = record(source.user, 'passkey user');
   const rp = record(source.rp, 'passkey relying party');
-  if (!Array.isArray(source.pubKeyCredParams)) throw new Error('Invalid Sreva passkey parameters.');
+  if (!Array.isArray(source.pubKeyCredParams)) throw new Error('Invalid Sreadya passkey parameters.');
 
   const rpEntity: PublicKeyCredentialRpEntity = {
     name: nonEmptyString(rp.name, 'passkey relying-party name'),
@@ -148,16 +148,16 @@ function browserCredentials(explicit?: CredentialsContainer): CredentialsContain
 }
 
 async function readJSON<T>(response: Response, label: string): Promise<T> {
-  if (!response.ok) throw new Error(`Sreva ${label} was rejected.`);
+  if (!response.ok) throw new Error(`Sreadya ${label} was rejected.`);
   try {
     return await response.json() as T;
   } catch {
-    throw new Error(`Invalid Sreva ${label} response.`);
+    throw new Error(`Invalid Sreadya ${label} response.`);
   }
 }
 
 export async function registerPasskey(accountID: string, options: PasskeyClientOptions = {}): Promise<void> {
-  if (accountID.trim().length === 0) throw new Error('Sreva account id is required.');
+  if (accountID.trim().length === 0) throw new Error('Sreadya account id is required.');
   const fetchImpl = options.fetchImpl ?? fetch;
   const credentials = browserCredentials(options.credentials);
 
@@ -178,7 +178,7 @@ export async function registerPasskey(accountID: string, options: PasskeyClientO
     },
     body: JSON.stringify(credentialJSON(credential as PublicKeyCredential)),
   });
-  if (!finish.ok) throw new Error('Sreva passkey registration was rejected.');
+  if (!finish.ok) throw new Error('Sreadya passkey registration was rejected.');
 }
 
 export async function loginWithPasskey(options: PasskeyClientOptions = {}): Promise<string> {

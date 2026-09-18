@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sreva/features/cycle/domain/cycle_models.dart';
-import 'package:sreva/features/reports/data/doctor_report_service.dart';
-import 'package:sreva/features/reports/domain/report_selection.dart';
+import 'package:sreadya/features/cycle/domain/cycle_models.dart';
+import 'package:sreadya/features/reports/data/doctor_report_service.dart';
+import 'package:sreadya/features/reports/domain/report_selection.dart';
 
 import '../support/fake_health_repository.dart';
 

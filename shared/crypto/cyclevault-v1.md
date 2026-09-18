@@ -1,10 +1,10 @@
-# Sreva CycleVault v1 interoperability contract
+# Sreadya CycleVault v1 interoperability contract
 
 Status: frozen interoperability contract for C2 Task 14. This document records the existing mobile format; it does not define a new backup format.
 
 ## Format identity
 
-- `format`: `SREVA-CYCLEVAULT`
+- `format`: `SREADYA-CYCLEVAULT`
 - `formatVersion`: `1`
 - Recovery passphrase: UTF-8 string, production export requires at least 12 characters.
 - Salt: 16 random bytes, base64 encoded in the outer container.

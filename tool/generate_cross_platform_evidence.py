@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the explicit Sreva C2 258-ID / 1,032-cell evidence ledger."""
+"""Generate the explicit Sreadya C2 258-ID / 1,032-cell evidence ledger."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-REGISTRY = ROOT / "shared" / "capabilities" / "sreva-capabilities.v1.json"
+REGISTRY = ROOT / "shared" / "capabilities" / "sreadya-capabilities.v1.json"
 OUT = ROOT / "shared" / "capabilities" / "evidence.v1.json"
 PLATFORMS = ("android", "ios", "web", "pwa")
 
@@ -90,15 +90,15 @@ def trace(capability_id: str, platform: str) -> tuple[list[str], list[str]]:
         if platform == "android":
             return (["lib/features/health_integration/data/health_import_service.dart", "platform_templates/android/MainActivity.kt"], ["verification/reference/test_v1_closure_structure.py"])
         if platform == "ios":
-            return (["lib/features/health_integration/data/health_import_service.dart", "platform_templates/ios/SrevaPlatformBridge.swift"], ["verification/reference/test_v1_closure_structure.py"])
+            return (["lib/features/health_integration/data/health_import_service.dart", "platform_templates/ios/SreadyaPlatformBridge.swift"], ["verification/reference/test_v1_closure_structure.py"])
         if number == 8:
             return (["web/src/sync/reconcile.ts"], ["web/src/sync/reconcile.test.ts"])
         return (["web/src/vault/health-repository.ts"], ["web/src/vault/health-repository.test.ts"])
 
     if family == "ID" and number in {7, 8} and platform == "android":
-        return (["platform_templates/android/SrevaCredentialBridge.kt"], [".github/workflows/c2-task24-verify.yml"])
+        return (["platform_templates/android/SreadyaCredentialBridge.kt"], [".github/workflows/c2-task24-verify.yml"])
     if family == "ID" and number in {7, 8} and platform == "ios":
-        return (["platform_templates/ios/SrevaCredentialBridge.swift"], [".github/workflows/c2-task24-verify.yml"])
+        return (["platform_templates/ios/SreadyaCredentialBridge.swift"], [".github/workflows/c2-task24-verify.yml"])
 
     traces = MOBILE_TRACES if platform in {"android", "ios"} else WEB_TRACES
     if family not in traces:
@@ -145,9 +145,9 @@ def render() -> str:
         rows.append({"id": capability_id, "platforms": cells})
 
     payload = {
-        "contract": "SREVA C2 Cross-Platform Evidence Ledger",
+        "contract": "SREADYA C2 Cross-Platform Evidence Ledger",
         "version": 1,
-        "registry": "shared/capabilities/sreva-capabilities.v1.json",
+        "registry": "shared/capabilities/sreadya-capabilities.v1.json",
         "claim_boundary": "Applicable cells are conservatively recorded as implemented. A cell is not labelled verified merely because a referenced test file exists.",
         "capabilities": rows,
     }

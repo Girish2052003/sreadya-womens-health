@@ -19,7 +19,7 @@ function downloadCycleVault(container: string) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = `sreva-${new Date().toISOString().replaceAll(':', '-')}.cyclevault`;
+  anchor.download = `sreadya-${new Date().toISOString().replaceAll(':', '-')}.cyclevault`;
   anchor.click();
   URL.revokeObjectURL(url);
 }
@@ -58,7 +58,7 @@ export function CycleVaultWorkspace() {
   const [testKey, setTestKey] = useState('');
   const [testLatency, setTestLatency] = useState('');
   const [testPayload, setTestPayload] = useState('');
-  const testHarness = process.env.NEXT_PUBLIC_SREVA_CYCLEVAULT_TEST_HARNESS === '1';
+  const testHarness = process.env.NEXT_PUBLIC_SREADYA_CYCLEVAULT_TEST_HARNESS === '1';
 
   useEffect(() => {
     let cancelled = false;
@@ -74,7 +74,7 @@ export function CycleVaultWorkspace() {
     })().catch(() => {
       if (cancelled) return;
       setStatus('Local vault unavailable');
-      setError('Sreva could not open the encrypted local vault in this browser.');
+      setError('Sreadya could not open the encrypted local vault in this browser.');
       setReady(true);
     });
 
@@ -107,7 +107,7 @@ export function CycleVaultWorkspace() {
       setExportConfirmation('');
       setStatus('Encrypted CycleVault recovery file downloaded locally.');
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Sreva could not create the encrypted CycleVault recovery file.');
+      setError(cause instanceof Error ? cause.message : 'Sreadya could not create the encrypted CycleVault recovery file.');
     } finally {
       setExporting(false);
     }
@@ -123,7 +123,7 @@ export function CycleVaultWorkspace() {
       setRestoreContainer(await file.text());
       setStatus('CycleVault file selected. Nothing has been restored yet.');
     } catch {
-      setError('Sreva could not read that CycleVault file. Your local health data was not changed.');
+      setError('Sreadya could not read that CycleVault file. Your local health data was not changed.');
     }
   }
 
@@ -178,11 +178,11 @@ export function CycleVaultWorkspace() {
     <section className="account-free-core" data-testid="cyclevault-workspace" aria-busy={!ready}>
       <div className="account-free-core__status">
         <StatusChip tone={error ? 'danger' : ready ? 'success' : 'info'}>{status}</StatusChip>
-        <span className="workspace-note">Account-free · encrypted locally · nothing is uploaded to Sreva</span>
+        <span className="workspace-note">Account-free · encrypted locally · nothing is uploaded to Sreadya</span>
       </div>
       <p className="vault-local-panel__warning"><strong>Local-only storage warning.</strong> {LOCAL_ONLY_DATA_LOSS_WARNING}</p>
       <p className="workspace-note">
-        CycleVault creates a user-controlled encrypted CycleVault recovery file for period and observation history. The recovery passphrase is not sent to Sreva and cannot be recovered by Sreva.
+        CycleVault creates a user-controlled encrypted CycleVault recovery file for period and observation history. The recovery passphrase is not sent to Sreadya and cannot be recovered by Sreadya.
       </p>
       {error ? <p className="core-error" role="alert">{error}</p> : null}
 

@@ -3,7 +3,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SCAN_PATH = ROOT / 'tool' / 'privacy_scan.py'
-SPEC = importlib.util.spec_from_file_location('sreva_privacy_scan', SCAN_PATH)
+SPEC = importlib.util.spec_from_file_location('sreadya_privacy_scan', SCAN_PATH)
 assert SPEC and SPEC.loader
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)

@@ -1,4 +1,4 @@
-export const SYNC_SUITE_V1 = 'SREVA-AES256GCM-HKDFSHA256-ED25519-V1';
+export const SYNC_SUITE_V1 = 'SREADYA-AES256GCM-HKDFSHA256-ED25519-V1';
 
 export type WireSyncEvent = {
   protocol_version: number;
@@ -34,7 +34,7 @@ function utf8(value: string): Uint8Array<ArrayBuffer> {
 function lp16(fields: readonly Uint8Array<ArrayBuffer>[]): Uint8Array<ArrayBuffer> {
   let length = 0;
   for (const field of fields) {
-    if (field.byteLength > 0xffff) throw new Error('Sreva protocol field is too large.');
+    if (field.byteLength > 0xffff) throw new Error('Sreadya protocol field is too large.');
     length += 2 + field.byteLength;
   }
 
@@ -55,14 +55,14 @@ function decodeBase64(value: string): Uint8Array<ArrayBuffer> {
   try {
     binary = atob(value);
   } catch {
-    throw new Error('Invalid Sreva sync envelope encoding.');
+    throw new Error('Invalid Sreadya sync envelope encoding.');
   }
   return Uint8Array.from(binary, (part) => part.charCodeAt(0));
 }
 
 function assertCryptoContext(envelope: SyncEventCryptoContext): void {
   if (envelope.protocol_version !== 1 || envelope.suite_id !== SYNC_SUITE_V1) {
-    throw new Error('Unsupported Sreva sync suite.');
+    throw new Error('Unsupported Sreadya sync suite.');
   }
   if (
     envelope.account_id.length === 0 ||
@@ -77,20 +77,20 @@ function assertCryptoContext(envelope: SyncEventCryptoContext): void {
     envelope.base_revision < 0 ||
     (envelope.operation !== 'upsert' && envelope.operation !== 'tombstone')
   ) {
-    throw new Error('Invalid Sreva sync envelope metadata.');
+    throw new Error('Invalid Sreadya sync envelope metadata.');
   }
 }
 
 function assertEnvelope(envelope: WireSyncEvent): void {
   assertCryptoContext(envelope);
   if (!Number.isSafeInteger(envelope.committed_revision) || envelope.committed_revision < 1) {
-    throw new Error('Invalid Sreva sync envelope metadata.');
+    throw new Error('Invalid Sreadya sync envelope metadata.');
   }
 }
 
 function eventKeyInfo(envelope: SyncEventCryptoContext): Uint8Array<ArrayBuffer> {
   return lp16([
-    utf8('sreva-event-key-v1'),
+    utf8('sreadya-event-key-v1'),
     utf8(envelope.event_id),
     utf8(envelope.object_id),
     utf8(envelope.source_device_id),
@@ -102,7 +102,7 @@ function eventKeyInfo(envelope: SyncEventCryptoContext): Uint8Array<ArrayBuffer>
 export function syncEventAad(envelope: SyncEventCryptoContext): Uint8Array<ArrayBuffer> {
   assertCryptoContext(envelope);
   return lp16([
-    utf8('sreva-sync-event-v1'),
+    utf8('sreadya-sync-event-v1'),
     utf8(envelope.account_id),
     utf8(envelope.vault_id),
     utf8(envelope.event_id),
@@ -121,10 +121,10 @@ export async function deriveSyncEventKey(
   envelope: SyncEventCryptoContext,
 ): Promise<Uint8Array<ArrayBuffer>> {
   assertCryptoContext(envelope);
-  if (vaultRootSecret.byteLength !== 32) throw new Error('Sreva vault root secret must be 32 bytes.');
+  if (vaultRootSecret.byteLength !== 32) throw new Error('Sreadya vault root secret must be 32 bytes.');
 
   const salt = decodeBase64(envelope.kdf_salt);
-  if (salt.byteLength !== 32) throw new Error('Sreva sync event salt must be 32 bytes.');
+  if (salt.byteLength !== 32) throw new Error('Sreadya sync event salt must be 32 bytes.');
 
   const rootKey = await crypto.subtle.importKey('raw', vaultRootSecret, 'HKDF', false, ['deriveBits']);
   const derived = await crypto.subtle.deriveBits(
@@ -147,8 +147,8 @@ export async function decryptSyncEvent<T = unknown>(
   assertEnvelope(envelope);
   const nonce = decodeBase64(envelope.nonce);
   const ciphertextAndTag = decodeBase64(envelope.ciphertext_and_tag);
-  if (nonce.byteLength !== 12) throw new Error('Sreva sync event nonce must be 12 bytes.');
-  if (ciphertextAndTag.byteLength < 16) throw new Error('Sreva sync event ciphertext is invalid.');
+  if (nonce.byteLength !== 12) throw new Error('Sreadya sync event nonce must be 12 bytes.');
+  if (ciphertextAndTag.byteLength < 16) throw new Error('Sreadya sync event ciphertext is invalid.');
 
   const keyBytes = await deriveSyncEventKey(vaultRootSecret, envelope);
   const key = await crypto.subtle.importKey('raw', keyBytes, { name: 'AES-GCM' }, false, ['decrypt']);
@@ -166,6 +166,6 @@ export async function decryptSyncEvent<T = unknown>(
   try {
     return JSON.parse(decoder.decode(clear)) as T;
   } catch {
-    throw new Error('Decrypted Sreva sync event is not valid JSON.');
+    throw new Error('Decrypted Sreadya sync event is not valid JSON.');
   }
 }

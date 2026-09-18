@@ -1,8 +1,8 @@
-# Sreva Web Final Product-Completeness Closure
+# Sreadya Web Final Product-Completeness Closure
 
 **Date:** 18 September 2026  
 **Status:** APPROVED FOR IMPLEMENTATION by the product owner in chat  
-**Authority:** The frozen C2 Web Product Architecture, the 258-ID launch capability registry, and the uploaded SREVA planning specification.
+**Authority:** The frozen C2 Web Product Architecture, the 258-ID launch capability registry, and the uploaded SREADYA planning specification.
 
 ## Problem
 
@@ -34,7 +34,7 @@ For Web/PWA closure every applicable launch ID must have:
 ### Workspace header
 Every private route gets:
 - contextual Back action;
-- Sreva brand/home action;
+- Sreadya brand/home action;
 - current section identity;
 - direct access to the feature hub.
 
@@ -113,7 +113,7 @@ The final branch is eligible for merge/deployment only after:
 - Playwright navigation and product-completeness E2E;
 - shared/reference verification;
 - release-backlog scan including `web/src`;
-- full Sreva CI;
+- full Sreadya CI;
 - Task 25–28 workflows;
 - Pages deployment;
 - post-deploy live acceptance on the deployed Pages URL.

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"sreva.dev/sync_service/internal/devices"
+	"sreadya.dev/sync_service/internal/devices"
 )
 
 var (
@@ -140,12 +140,12 @@ func equalScope(left, right Scope) bool {
 		bytes.Equal(left.BodySHA256, right.BodySHA256)
 }
 
-// Transcript returns the frozen Task-19 sreva-device-auth-v1 LP16 transcript.
+// Transcript returns the frozen Task-19 sreadya-device-auth-v1 LP16 transcript.
 // The request-body digest is represented as lowercase hexadecimal UTF-8, exactly
 // as specified by the v1 interoperability vector.
 func Transcript(scope Scope, challenge string) []byte {
 	fields := [][]byte{
-		[]byte("sreva-device-auth-v1"),
+		[]byte("sreadya-device-auth-v1"),
 		[]byte(scope.AccountID),
 		[]byte(scope.DeviceID),
 		[]byte(strings.ToUpper(scope.Method)),

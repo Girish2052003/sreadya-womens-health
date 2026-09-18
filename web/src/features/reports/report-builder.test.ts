@@ -38,7 +38,7 @@ describe('Task 13 local doctor reports', () => {
     const preview = buildReportPreview({ periods, observations, selection });
     const csv = buildCsvReport({ periods, observations, selection });
 
-    expect(preview).toContain('Sreva cycle history report');
+    expect(preview).toContain('Sreadya cycle history report');
     expect(preview).toContain('Generated locally on this device. This report is not a diagnosis.');
     expect(preview).toContain('2026-09-01');
     expect(preview).toContain('menstrualFlow');
@@ -76,6 +76,6 @@ describe('Task 13 local doctor reports', () => {
     });
     const pdf = await PDFDocument.load(bytes);
     expect(pdf.getPageCount()).toBeGreaterThan(0);
-    expect(pdf.getTitle()).toBe('Sreva cycle history report');
+    expect(pdf.getTitle()).toBe('Sreadya cycle history report');
   });
 });

@@ -46,13 +46,13 @@ describe('browser health vault', () => {
 
   it('fails closed for tampered ciphertext and a wrong key', async () => {
     const key = await generateVaultKey();
-    const envelope = await sealJson(key, { symptom: 'sentinel' }, 'sreva:vault:v1:test');
+    const envelope = await sealJson(key, { symptom: 'sentinel' }, 'sreadya:vault:v1:test');
     const tampered = structuredClone(envelope);
     tampered.ciphertext = `${tampered.ciphertext.slice(0, -2)}AA`;
 
-    await expect(openJson(key, tampered, 'sreva:vault:v1:test')).rejects.toThrow();
+    await expect(openJson(key, tampered, 'sreadya:vault:v1:test')).rejects.toThrow();
     const wrongKey = await generateVaultKey();
-    await expect(openJson(wrongKey, envelope, 'sreva:vault:v1:test')).rejects.toThrow();
+    await expect(openJson(wrongKey, envelope, 'sreadya:vault:v1:test')).rejects.toThrow();
   });
 
   it('lock clears decrypted application state', () => {

@@ -77,7 +77,7 @@ export function buildPartnerSharePackage({
   if (grant.revokedAt) throw new Error('Partner grant is revoked.');
   assertCategories(grant.categories);
 
-  const lines = ['Sreva shared summary'];
+  const lines = ['Sreadya shared summary'];
   if (grant.categories.includes('prediction') && predictionWindow) {
     lines.push(`Expected period window: ${predictionWindow}`);
   }
@@ -90,7 +90,7 @@ export function buildPartnerSharePackage({
   if (grant.categories.includes('selectedWellness') && selectedWellness) {
     lines.push(`Wellness: ${selectedWellness}`);
   }
-  lines.push('Shared intentionally by the Sreva user.');
+  lines.push('Shared intentionally by the Sreadya user.');
   const summary = lines.join('\n');
 
   return Object.freeze({

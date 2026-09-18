@@ -14,14 +14,14 @@ import (
 	"strings"
 	"time"
 
-	"sreva.dev/sync_service/internal/deviceauth"
+	"sreadya.dev/sync_service/internal/deviceauth"
 )
 
 const challengeTTL = 2 * time.Minute
 
 const (
-	challengeHeader = "X-Sreva-Device-Challenge"
-	signatureHeader = "X-Sreva-Device-Signature"
+	challengeHeader = "X-Sreadya-Device-Challenge"
+	signatureHeader = "X-Sreadya-Device-Signature"
 )
 
 type SyncAPI interface {

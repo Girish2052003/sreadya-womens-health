@@ -24,14 +24,14 @@ import '../features/settings/domain/app_preferences.dart';
 import '../features/settings/presentation/settings_screen.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'providers.dart';
-import 'sreva_shell.dart';
+import 'sreadya_shell.dart';
 
 final GoRouter _router = GoRouter(
   initialLocation: '/',
   routes: [
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) =>
-          SrevaShell(navigationShell: navigationShell),
+          SreadyaShell(navigationShell: navigationShell),
       branches: [
         StatefulShellBranch(
           routes: [GoRoute(path: '/', builder: (_, _) => const HomeScreen())],
@@ -102,14 +102,14 @@ final GoRouter _router = GoRouter(
   ],
 );
 
-class SrevaApp extends ConsumerStatefulWidget {
-  const SrevaApp({super.key});
+class SreadyaApp extends ConsumerStatefulWidget {
+  const SreadyaApp({super.key});
 
   @override
-  ConsumerState<SrevaApp> createState() => _SrevaAppState();
+  ConsumerState<SreadyaApp> createState() => _SreadyaAppState();
 }
 
-class _SrevaAppState extends ConsumerState<SrevaApp> {
+class _SreadyaAppState extends ConsumerState<SreadyaApp> {
   @override
   void initState() {
     super.initState();
@@ -156,7 +156,7 @@ class _SrevaAppState extends ConsumerState<SrevaApp> {
       contrastLevel: preferences.highContrast ? 1.0 : 0.0,
     );
     return MaterialApp.router(
-      title: 'Sreva',
+      title: 'Sreadya',
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         AppLocalizations.delegate,

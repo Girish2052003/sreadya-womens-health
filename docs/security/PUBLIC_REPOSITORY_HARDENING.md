@@ -1,22 +1,22 @@
-# Sreva Public Repository Hardening State
+# Sreadya Public Repository Hardening State
 
 **Status date:** 15 September 2026  
 **C2 scope amendment:** 16 September 2026  
 **Maintainer:** Girish Nallan Chakravathy  
-**Canonical repository:** `Girish2052003/sreva-womens-health`  
+**Canonical repository:** `Girish2052003/sreadya-womens-health`  
 **Authoritative branch:** `main`
 
 > **C2 preservation note:** The complete public-repository controls established on 15 September are preserved below. C2 extends their scope to future Web/PWA/shared-contract/sync-service work; it does not remove the operational details or weaken the native release boundary.
 
-I maintain Sreva as a public source repository while preserving the product's local-first privacy model. Making the source visible does not change Sreva's health-data architecture: menstrual and reproductive-health data remains device-local unless the user explicitly chooses an operating-system health integration, export, or encrypted backup path.
+I maintain Sreadya as a public source repository while preserving the product's local-first privacy model. Making the source visible does not change Sreadya's health-data architecture: menstrual and reproductive-health data remains device-local unless the user explicitly chooses an operating-system health integration, export, or encrypted backup path.
 
 This document records the repository-level controls that must remain intact so future maintenance does not accidentally weaken the release boundary.
 
-> **C2 interpretation:** the statement above describes the currently implemented `1.0.0+1` mobile data flow. The approved future C2 architecture may add optional E2EE continuity in which authorized clients encrypt health content before upload and Sreva infrastructure stores only ciphertext plus minimum operational metadata without the health-vault decryption key. That future flow is not active merely because it is documented.
+> **C2 interpretation:** the statement above describes the currently implemented `1.0.0+1` mobile data flow. The approved future C2 architecture may add optional E2EE continuity in which authorized clients encrypt health content before upload and Sreadya infrastructure stores only ciphertext plus minimum operational metadata without the health-vault decryption key. That future flow is not active merely because it is documented.
 
 ## Hardened workflow boundary
 
-The normal `Sreva CI` workflow is verification-only for installable application binaries. It may compile, test, sign with disposable CI-only keys, and verify Android APK/AAB files, and it may compile the iOS application without production codesigning. It must not upload those installable CI builds as public Actions artifacts.
+The normal `Sreadya CI` workflow is verification-only for installable application binaries. It may compile, test, sign with disposable CI-only keys, and verify Android APK/AAB files, and it may compile the iOS application without production codesigning. It must not upload those installable CI builds as public Actions artifacts.
 
 Normal CI may publish non-secret verification evidence such as the CycloneDX SBOM and `pubspec.lock`.
 
@@ -30,8 +30,8 @@ Before upload, each controlled release workflow packages its APK/AAB, internal S
 
 The required encryption secrets are intentionally absent from Git:
 
-- production environment: `SREVA_PRODUCTION_ARTIFACT_PASSWORD`
-- family-preview environment: `SREVA_PREVIEW_ARTIFACT_PASSWORD`
+- production environment: `SREADYA_PRODUCTION_ARTIFACT_PASSWORD`
+- family-preview environment: `SREADYA_PREVIEW_ARTIFACT_PASSWORD`
 
 The existing Android signing secrets also remain environment-scoped and must never be copied into issues, commits, logs, documentation, or chat transcripts.
 
@@ -39,9 +39,9 @@ To decrypt an authorized downloaded production payload locally, the maintainer c
 
 ```bash
 openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 \
-  -in sreva-1.0.0+1-production-release.tar.gz.enc \
-  -out sreva-1.0.0+1-production-release.tar.gz \
-  -pass env:SREVA_PRODUCTION_ARTIFACT_PASSWORD
+  -in sreadya-1.0.0+1-production-release.tar.gz.enc \
+  -out sreadya-1.0.0+1-production-release.tar.gz \
+  -pass env:SREADYA_PRODUCTION_ARTIFACT_PASSWORD
 ```
 
 Use the corresponding preview password variable for the family-preview payload. Password values are never documented here.
@@ -66,17 +66,17 @@ Public pull requests must never be given release-signing or artifact-encryption 
 - signed public Actions payloads are encrypted before upload; and
 - this public security posture remains documented from both `README.md` and `SECURITY.md`.
 
-The existing Sreva verification suite remains authoritative for product behavior, distribution identity, privacy, release closure, and the worldwide-v1 capability contract. Repository hardening must not weaken or bypass those checks.
+The existing Sreadya verification suite remains authoritative for product behavior, distribution identity, privacy, release closure, and the worldwide-v1 capability contract. Repository hardening must not weaken or bypass those checks.
 
 ## Deliberate non-changes
 
 This hardening does **not** change:
 
-- Sreva's Flutter product code in `lib/`;
+- Sreadya's Flutter product code in `lib/`;
 - Android native capability templates in `platform_templates/android/`;
 - iOS native capability templates in `platform_templates/ios/`;
-- production package identity `com.sreva.health.sreva`;
-- family-preview package identity `com.sreva.health.sreva.preview`;
+- production package identity `com.sreadya.health.sreadya`;
+- family-preview package identity `com.sreadya.health.sreadya.preview`;
 - the local-sovereign health-data architecture;
 - the repository dedication/provenance; or
 - the v1 wellness/tracking boundary.
@@ -87,7 +87,7 @@ No software license is added by this security change. Public visibility alone sh
 
 Repository settings are not fully enforceable from source files. At the time this hardening pass began, GitHub reported `main` as unprotected and reported no repository rulesets. The maintainer should therefore keep the following settings as explicit repository-administration requirements:
 
-1. Protect `main` or create an equivalent repository ruleset so pull requests and required Sreva CI checks gate merges.
+1. Protect `main` or create an equivalent repository ruleset so pull requests and required Sreadya CI checks gate merges.
 2. Keep the default Actions `GITHUB_TOKEN` permission read-only unless a workflow has a reviewed need for write access.
 3. Do not allow fork-originated workflows to receive repository or environment secrets.
 4. Enable GitHub secret scanning and push protection where the account/repository plan makes those controls available.
@@ -97,7 +97,7 @@ Repository settings are not fully enforceable from source files. At the time thi
 
 Before changing release workflows, signing configuration, repository visibility, artifact handling, or CI permissions, read this file together with `SECURITY.md`, `docs/verification/ANDROID_FORMAL_CLOSURE.md`, and `docs/android/DISTRIBUTION_IDENTITY_BOUNDARY.md`.
 
-If a proposed change would expose signing material, publish plaintext signed binaries from routine public CI, weaken the canonical release guard, broaden workflow token privileges without justification, or bypass the Sreva verification gates, treat it as a release-blocking regression rather than a convenience change.
+If a proposed change would expose signing material, publish plaintext signed binaries from routine public CI, weaken the canonical release guard, broaden workflow token privileges without justification, or bypass the Sreadya verification gates, treat it as a release-blocking regression rather than a convenience change.
 
 ## C2 cross-platform hardening extension
 

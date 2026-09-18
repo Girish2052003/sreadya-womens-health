@@ -6,7 +6,7 @@ import (
 	"errors"
 	"testing"
 
-	"sreva.dev/sync_service/internal/devices"
+	"sreadya.dev/sync_service/internal/devices"
 )
 
 type memoryStore struct {
@@ -121,7 +121,7 @@ func TestRecoveryWrapperRoundTripRemainsOpaque(t *testing.T) {
 		VaultID:          "vault-a",
 		KeyEpoch:         2,
 		ProtocolVersion:  1,
-		SuiteID:          "SREVA-AES256GCM-HKDFSHA256-ED25519-V1",
+		SuiteID:          "SREADYA-AES256GCM-HKDFSHA256-ED25519-V1",
 		KDFSalt:          []byte{1, 2, 3, 4},
 		Nonce:            []byte{5, 6, 7, 8},
 		CiphertextAndTag: []byte{9, 10, 11, 12, 13},

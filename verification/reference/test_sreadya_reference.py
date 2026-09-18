@@ -1,7 +1,7 @@
 from datetime import date
 from pathlib import Path
 
-from sreva_reference import predict_cycle, parse_local_intent, build_diagnostic_report
+from sreadya_reference import predict_cycle, parse_local_intent, build_diagnostic_report
 
 
 def test_regular_cycle_prediction():
@@ -45,7 +45,7 @@ def test_diagnostics_never_contains_health_payload():
 
 
 def test_private_period_reminder_is_three_days_before_prediction():
-    from sreva_reference import plan_period_reminder
+    from sreadya_reference import plan_period_reminder
     from datetime import date, time
 
     plan = plan_period_reminder(date(2026, 9, 20), days_before=3, at=time(8, 0), privacy='maximum')
@@ -54,7 +54,7 @@ def test_private_period_reminder_is_three_days_before_prediction():
 
 
 def test_partner_share_only_contains_explicitly_selected_categories():
-    from sreva_reference import build_partner_summary
+    from sreadya_reference import build_partner_summary
 
     text = build_partner_summary({'prediction'}, prediction_window='18–22 September', wellness='cramps severe')
     assert '18–22 September' in text

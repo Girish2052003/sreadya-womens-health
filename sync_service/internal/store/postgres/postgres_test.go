@@ -3,7 +3,7 @@ package postgres
 import (
 	"testing"
 
-	"sreva.dev/sync_service/internal/store"
+	"sreadya.dev/sync_service/internal/store"
 )
 
 func TestStoreSatisfiesProviderIndependentContract(t *testing.T) {

@@ -8,7 +8,7 @@ export type AppLockRecord = {
   autoLockMinutes: number;
 };
 
-export const APP_LOCK_STORAGE_KEY = 'sreva:web-app-lock:v1';
+export const APP_LOCK_STORAGE_KEY = 'sreadya:web-app-lock:v1';
 const DEFAULT_ITERATIONS = 210_000;
 const ALLOWED_AUTO_LOCK = new Set([1, 5, 15, 30]);
 

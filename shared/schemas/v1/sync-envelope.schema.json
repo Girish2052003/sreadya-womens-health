@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.sreva.local/v1/sync-envelope.schema.json",
-  "title": "Sreva SyncEnvelope v1",
+  "$id": "https://schemas.sreadya.local/v1/sync-envelope.schema.json",
+  "title": "Sreadya SyncEnvelope v1",
   "$comment": "Transport metadata is deliberately health-semantic-free. Algorithm selection remains gated by the Task 19 E2EE protocol review.",
   "type": "object",
   "additionalProperties": false,

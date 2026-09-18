@@ -1,7 +1,7 @@
 {
-  "contract": "SREVA C2 Cross-Platform Evidence Ledger",
+  "contract": "SREADYA C2 Cross-Platform Evidence Ledger",
   "version": 1,
-  "registry": "shared/capabilities/sreva-capabilities.v1.json",
+  "registry": "shared/capabilities/sreadya-capabilities.v1.json",
   "claim_boundary": "Applicable cells are conservatively recorded as implemented. A cell is not labelled verified merely because a referenced test file exists.",
   "capabilities": [
     {
@@ -7173,7 +7173,7 @@
           "status": "implemented",
           "implementation": [
             "lib/features/health_integration/data/health_import_service.dart",
-            "platform_templates/ios/SrevaPlatformBridge.swift"
+            "platform_templates/ios/SreadyaPlatformBridge.swift"
           ],
           "evidence": [
             "verification/reference/test_v1_closure_structure.py"
@@ -7254,7 +7254,7 @@
           "status": "implemented",
           "implementation": [
             "lib/features/health_integration/data/health_import_service.dart",
-            "platform_templates/ios/SrevaPlatformBridge.swift"
+            "platform_templates/ios/SreadyaPlatformBridge.swift"
           ],
           "evidence": [
             "verification/reference/test_v1_closure_structure.py"
@@ -7297,7 +7297,7 @@
           "status": "implemented",
           "implementation": [
             "lib/features/health_integration/data/health_import_service.dart",
-            "platform_templates/ios/SrevaPlatformBridge.swift"
+            "platform_templates/ios/SreadyaPlatformBridge.swift"
           ],
           "evidence": [
             "verification/reference/test_v1_closure_structure.py"
@@ -7340,7 +7340,7 @@
           "status": "implemented",
           "implementation": [
             "lib/features/health_integration/data/health_import_service.dart",
-            "platform_templates/ios/SrevaPlatformBridge.swift"
+            "platform_templates/ios/SreadyaPlatformBridge.swift"
           ],
           "evidence": [
             "verification/reference/test_v1_closure_structure.py"
@@ -7383,7 +7383,7 @@
           "status": "implemented",
           "implementation": [
             "lib/features/health_integration/data/health_import_service.dart",
-            "platform_templates/ios/SrevaPlatformBridge.swift"
+            "platform_templates/ios/SreadyaPlatformBridge.swift"
           ],
           "evidence": [
             "verification/reference/test_v1_closure_structure.py"
@@ -7434,7 +7434,7 @@
           "status": "implemented",
           "implementation": [
             "lib/features/health_integration/data/health_import_service.dart",
-            "platform_templates/ios/SrevaPlatformBridge.swift"
+            "platform_templates/ios/SreadyaPlatformBridge.swift"
           ],
           "evidence": [
             "verification/reference/test_v1_closure_structure.py"
@@ -7485,7 +7485,7 @@
           "status": "implemented",
           "implementation": [
             "lib/features/health_integration/data/health_import_service.dart",
-            "platform_templates/ios/SrevaPlatformBridge.swift"
+            "platform_templates/ios/SreadyaPlatformBridge.swift"
           ],
           "evidence": [
             "verification/reference/test_v1_closure_structure.py"
@@ -7536,7 +7536,7 @@
           "status": "implemented",
           "implementation": [
             "lib/features/health_integration/data/health_import_service.dart",
-            "platform_templates/ios/SrevaPlatformBridge.swift"
+            "platform_templates/ios/SreadyaPlatformBridge.swift"
           ],
           "evidence": [
             "verification/reference/test_v1_closure_structure.py"
@@ -10857,7 +10857,7 @@
           "applicability": "adapted",
           "status": "implemented",
           "implementation": [
-            "platform_templates/android/SrevaCredentialBridge.kt"
+            "platform_templates/android/SreadyaCredentialBridge.kt"
           ],
           "evidence": [
             ".github/workflows/c2-task24-verify.yml"
@@ -10868,7 +10868,7 @@
           "applicability": "adapted",
           "status": "implemented",
           "implementation": [
-            "platform_templates/ios/SrevaCredentialBridge.swift"
+            "platform_templates/ios/SreadyaCredentialBridge.swift"
           ],
           "evidence": [
             ".github/workflows/c2-task24-verify.yml"
@@ -10906,7 +10906,7 @@
           "applicability": "adapted",
           "status": "implemented",
           "implementation": [
-            "platform_templates/android/SrevaCredentialBridge.kt"
+            "platform_templates/android/SreadyaCredentialBridge.kt"
           ],
           "evidence": [
             ".github/workflows/c2-task24-verify.yml"
@@ -10917,7 +10917,7 @@
           "applicability": "adapted",
           "status": "implemented",
           "implementation": [
-            "platform_templates/ios/SrevaCredentialBridge.swift"
+            "platform_templates/ios/SreadyaCredentialBridge.swift"
           ],
           "evidence": [
             ".github/workflows/c2-task24-verify.yml"

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sreva/core/diagnostics/diagnostic_report_builder.dart';
+import 'package:sreadya/core/diagnostics/diagnostic_report_builder.dart';
 
 void main() {
   test(

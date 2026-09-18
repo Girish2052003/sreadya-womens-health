@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-const recordId = 'sreva-e2e-vault-record';
+const recordId = 'sreadya-e2e-vault-record';
 const sentinel = 'KNOWN-PLAINTEXT-SENTINEL';
 
 async function readRawRecord(page: import('@playwright/test').Page, id = recordId) {
   return page.evaluate(async (recordKey) => new Promise<Record<string, unknown>>((resolve, reject) => {
-    const request = indexedDB.open('sreva-vault-v1');
+    const request = indexedDB.open('sreadya-vault-v1');
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
       const db = request.result;
@@ -39,7 +39,7 @@ test('IndexedDB contains ciphertext only and a non-extractable WebCrypto key', a
   expect(serialized).toContain('AES-GCM');
 
   const keyMetadata = await page.evaluate(async () => new Promise<{ extractable: boolean; algorithm: string; usages: string[] }>((resolve, reject) => {
-    const request = indexedDB.open('sreva-vault-v1');
+    const request = indexedDB.open('sreadya-vault-v1');
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
       const db = request.result;
@@ -74,7 +74,7 @@ test('tamper and wrong-key paths fail closed while lock clears the live session'
 
   const original = await readRawRecord(page);
   await page.evaluate(async ({ id }) => new Promise<void>((resolve, reject) => {
-    const request = indexedDB.open('sreva-vault-v1');
+    const request = indexedDB.open('sreadya-vault-v1');
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
       const db = request.result;
@@ -98,7 +98,7 @@ test('tamper and wrong-key paths fail closed while lock clears the live session'
   await expect(page.getByTestId('vault-test-result')).toHaveText('Vault read failed');
 
   await page.evaluate(async (row) => new Promise<void>((resolve, reject) => {
-    const request = indexedDB.open('sreva-vault-v1');
+    const request = indexedDB.open('sreadya-vault-v1');
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
       const db = request.result;

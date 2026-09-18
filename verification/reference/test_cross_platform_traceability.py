@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-REGISTRY = ROOT / "shared" / "capabilities" / "sreva-capabilities.v1.json"
+REGISTRY = ROOT / "shared" / "capabilities" / "sreadya-capabilities.v1.json"
 EVIDENCE = ROOT / "shared" / "capabilities" / "evidence.v1.json"
 VERIFIER = ROOT / "tool" / "verify_cross_platform_traceability.py"
 CI_WORKFLOW = ROOT / ".github" / "workflows" / "ci.yml"

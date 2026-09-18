@@ -34,10 +34,10 @@ describe('Task 13 partner sharing baseline', () => {
     });
 
     expect(share.summary).toBe([
-      'Sreva shared summary',
+      'Sreadya shared summary',
       'Expected period window: 20 Sep – 24 Sep',
       'Wellness: energy, sleep',
-      'Shared intentionally by the Sreva user.',
+      'Shared intentionally by the Sreadya user.',
     ].join('\n'));
     expect(share.qrPayload).toBe(share.summary);
     expect(share.shareText).toBe(share.summary);

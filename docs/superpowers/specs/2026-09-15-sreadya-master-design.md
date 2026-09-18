@@ -1,13 +1,13 @@
-# Sreva Master Product Specification v1.0
+# Sreadya Master Product Specification v1.0
 
 > **C2 preservation amendment — 16 September 2026:** The original 15 September mobile specification below is retained in full as the detailed Flutter/mobile baseline and as a machine-readable compatibility anchor for the existing 22-family verifier. Its historical details are intentionally not compressed or erased.
 >
-> The authoritative cross-platform constitution is `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`. Where the historical statements below conflict with the approved C2 architecture, the C2 constitution wins. In particular: Android, iOS, and Web/PWA are now equal first-class clients; account-free and account-based health experiences are equal-class; optional account mode may add E2EE ciphertext synchronization; and “no developer-operated reproductive-health database” now means no **plaintext or developer-decryptable** reproductive-health database. Core health functionality still requires no account or network.
+> The authoritative cross-platform constitution is `docs/superpowers/specs/2026-09-16-sreadya-web-product-architecture-design.md`. Where the historical statements below conflict with the approved C2 architecture, the C2 constitution wins. In particular: Android, iOS, and Web/PWA are now equal first-class clients; account-free and account-based health experiences are equal-class; optional account mode may add E2EE ciphertext synchronization; and “no developer-operated reproductive-health database” now means no **plaintext or developer-decryptable** reproductive-health database. Core health functionality still requires no account or network.
 >
-> **Compatibility note:** The exact title `Sreva Master Product Specification v1.0` and Sections `4.1`–`4.22` are preserved because current mobile traceability tooling depends on them. Historical launch-device/distribution wording below is provenance, not a product-wide priority rule after C2.
+> **Compatibility note:** The exact title `Sreadya Master Product Specification v1.0` and Sections `4.1`–`4.22` are preserved because current mobile traceability tooling depends on them. Historical launch-device/distribution wording below is provenance, not a product-wide priority rule after C2.
 
 **Date:** 2026-09-15  
-**Public product name:** Sreva  
+**Public product name:** Sreadya  
 **In honour of:** Sreedevi Girish Nallan Chakravathy  
 **Primary launch device:** iPhone 17  
 **Minimum iOS target:** iOS 17  
@@ -16,7 +16,7 @@
 
 ## 1. Product promise
 
-Sreva is a full women's cycle companion whose intelligence lives with the woman, not in a developer-operated health database. It must be genuinely useful for daily menstrual-cycle management while remaining understandable, private, reliable, and updateable like a production mobile product.
+Sreadya is a full women's cycle companion whose intelligence lives with the woman, not in a developer-operated health database. It must be genuinely useful for daily menstrual-cycle management while remaining understandable, private, reliable, and updateable like a production mobile product.
 
 The app must never present a predicted period date as biologically guaranteed. Predictions are estimates with an explicit likely window and confidence level.
 
@@ -39,7 +39,7 @@ The app must never present a predicted period date as biologically guaranteed. P
 
 - Laws 1–5 remain binding: plaintext health state and personal intelligence remain local to authorized clients; core health functionality needs no account/network.
 - Law 6 remains the native-mobile mechanism. C2 preserves one reminder intent/policy while Web/PWA uses honest browser-adapted delivery.
-- Law 7 is extended, not discarded: optional sync may store ciphertext and minimum operational metadata, while Sreva infrastructure must not possess the health-vault decryption key.
+- Law 7 is extended, not discarded: optional sync may store ciphertext and minimum operational metadata, while Sreadya infrastructure must not possess the health-vault decryption key.
 - Laws 8–12 remain binding. Web/PWA does not fake HealthKit/Health Connect; health telemetry remains prohibited; migrations/updates remain safe; medical/contraceptive boundaries remain intact.
 - C2 adds language-neutral capability/schema/crypto/sync contracts and conformance vectors so the mobile implementation and Web/PWA cannot silently diverge.
 
@@ -195,7 +195,7 @@ The worldwide v1.0 release contains all capability families below. Platform-spec
 - App-switcher privacy overlay on iOS and equivalent safeguards where available.
 - Notification privacy control.
 - Data-type transparency: location, purpose, sharing, platform integration, delete option.
-- Delete individual records and wipe all Sreva data.
+- Delete individual records and wipe all Sreadya data.
 - No developer health account required.
 
 ### 4.15 CycleVault backup and restore

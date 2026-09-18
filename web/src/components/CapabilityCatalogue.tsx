@@ -37,7 +37,7 @@ export function CapabilityCatalogue() {
   return (
     <section className="capability-catalogue" aria-labelledby="capability-catalogue-title">
       <p className="public-eyebrow">Complete launch contract</p>
-      <h2 id="capability-catalogue-title">Every Sreva launch capability has a home.</h2>
+      <h2 id="capability-catalogue-title">Every Sreadya launch capability has a home.</h2>
       <p className="public-lede">
         Public marketing says 40+ thoughtful capabilities. Engineering tracks 258 atomic launch requirements so important details cannot disappear behind a broad feature label.
       </p>
@@ -49,7 +49,7 @@ export function CapabilityCatalogue() {
       </div>
 
       <label className="core-field">
-        <span>Find a Sreva capability</span>
+        <span>Find a Sreadya capability</span>
         <input
           type="search"
           value={query}
@@ -71,7 +71,7 @@ export function CapabilityCatalogue() {
                 <span className="capability-catalogue__id">{item.id}</span>
                 <span>
                   <strong>{item.name}</strong><br />
-                  <small>{item.web_applicability === 'na' ? 'Native-only mechanism; underlying Sreva promise is adapted on Web.' : surfaceLabel(item.surface_type)}</small>
+                  <small>{item.web_applicability === 'na' ? 'Native-only mechanism; underlying Sreadya promise is adapted on Web.' : surfaceLabel(item.surface_type)}</small>
                 </span>
                 <Link href={item.route}>{surfaceLabel(item.surface_type)} →</Link>
               </li>
@@ -82,7 +82,7 @@ export function CapabilityCatalogue() {
 
       <div className="capability-catalogue__future">
         <h3>Future / optional — not launch promises</h3>
-        <p>These remain visible so the roadmap is transparent, but Sreva does not market them as finished launch functionality.</p>
+        <p>These remain visible so the roadmap is transparent, but Sreadya does not market them as finished launch functionality.</p>
         <ul>
           {catalog.future.map((item) => <li key={item.id}><strong>{item.id}</strong> · {item.name}</li>)}
         </ul>

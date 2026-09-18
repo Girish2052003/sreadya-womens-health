@@ -14,8 +14,8 @@ func TestTask22PushRejectsSourceDeviceDifferentFromAuthenticatedSigner(t *testin
 	handler := NewHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}}, authz)
 	body := `{"account_id":"acct-a","vault_id":"vault-a","event_id":"evt-1","object_id":"obj-1","source_device_id":"dev-b","ciphertext_and_tag":"` + base64.StdEncoding.EncodeToString([]byte("opaque")) + `"}`
 	request := httptest.NewRequest(http.MethodPost, "/v1/sync/push", strings.NewReader(body))
-	request.Header.Set("X-Sreva-Device-Challenge", "challenge-push")
-	request.Header.Set("X-Sreva-Device-Signature", base64.StdEncoding.EncodeToString([]byte{1, 2, 3}))
+	request.Header.Set("X-Sreadya-Device-Challenge", "challenge-push")
+	request.Header.Set("X-Sreadya-Device-Signature", base64.StdEncoding.EncodeToString([]byte{1, 2, 3}))
 	response := httptest.NewRecorder()
 	handler.ServeHTTP(response, request)
 

@@ -64,7 +64,7 @@ class MoreScreen extends StatelessWidget {
           ),
           (
             Icons.pin_outlined,
-            'Sreva PIN',
+            'Sreadya PIN',
             'Optional local PIN fallback; no plaintext PIN storage',
             '/more/pin',
           ),
@@ -99,7 +99,7 @@ class MoreScreen extends StatelessWidget {
               leading: Icon(Icons.shield_outlined),
               title: Text('Local Sovereign Core'),
               subtitle: Text(
-                'Your reproductive-health data stays in Sreva’s encrypted vault on this device.',
+                'Your reproductive-health data stays in Sreadya’s encrypted vault on this device.',
               ),
             ),
           ),

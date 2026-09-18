@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test('complete feature hub exposes every production workspace and workspace navigation behaves like an app', async ({ page }) => {
   await page.goto('/app/home/');
-  await expect(page.getByRole('link', { name: 'Sreva workspace home' }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Sreadya workspace home' }).first()).toBeVisible();
 
   await page.getByRole('link', { name: 'More', exact: true }).click();
   await expect(page).toHaveURL(/\/app\/more\/$/);
@@ -43,7 +43,7 @@ test('public Features catalogue exposes all 258 launch IDs and keeps future item
   await expect(page.getByRole('heading', { level: 1, name: 'Features' })).toBeVisible();
   await expect(page.locator('[data-capability-id]')).toHaveCount(258);
   await expect(page.getByText('Future / optional — not launch promises')).toBeVisible();
-  await page.getByLabel('Find a Sreva capability').fill('recovery');
+  await page.getByLabel('Find a Sreadya capability').fill('recovery');
   await expect(page.getByText('ID-009')).toBeVisible();
 });
 
@@ -64,6 +64,6 @@ test('sanitized diagnostics are user-generated and previewable', async ({ page }
   await page.goto('/app/diagnostics/');
   await page.getByRole('button', { name: 'Generate diagnostic preview' }).click();
   const preview = page.getByTestId('diagnostic-preview');
-  await expect(preview).toContainText('SREVA-DIAGNOSTIC');
+  await expect(preview).toContainText('SREADYA-DIAGNOSTIC');
   await expect(preview).not.toContainText('SYNTHETIC_PRODUCT_COMPLETENESS_NOTE');
 });

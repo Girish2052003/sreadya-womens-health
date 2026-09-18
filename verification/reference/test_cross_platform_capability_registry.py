@@ -7,8 +7,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-REGISTRY = ROOT / "shared" / "capabilities" / "sreva-capabilities.v1.json"
-SPEC = ROOT / "docs" / "superpowers" / "specs" / "2026-09-16-sreva-web-product-architecture-design.md"
+REGISTRY = ROOT / "shared" / "capabilities" / "sreadya-capabilities.v1.json"
+SPEC = ROOT / "docs" / "superpowers" / "specs" / "2026-09-16-sreadya-web-product-architecture-design.md"
 
 EXPECTED_FAMILIES = {
     "CYC": 15,

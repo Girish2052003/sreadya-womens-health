@@ -30,9 +30,9 @@ export function WorkspaceHeader() {
         <span aria-hidden="true">←</span>
         <span>Back</span>
       </button>
-      <Link className="workspace-topbar__brand" href="/app/home" aria-label="Sreva workspace home">
+      <Link className="workspace-topbar__brand" href="/app/home" aria-label="Sreadya workspace home">
         <span className="workspace-topbar__mark" aria-hidden="true">S</span>
-        <span>Sreva</span>
+        <span>Sreadya</span>
       </Link>
       <span className="workspace-topbar__section" aria-live="polite">{label}</span>
       <Link className="workspace-topbar__all" href="/app/more">All features</Link>

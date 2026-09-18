@@ -1,4 +1,4 @@
--- Sreva C2 ciphertext-only continuity scaffold. PostgreSQL target: 18.6.
+-- Sreadya C2 ciphertext-only continuity scaffold. PostgreSQL target: 18.6.
 -- No readable domain payload is stored by these tables.
 CREATE TABLE vaults (
     vault_id UUID PRIMARY KEY,

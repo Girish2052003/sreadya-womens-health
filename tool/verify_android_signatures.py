@@ -65,14 +65,14 @@ def main() -> None:
         if not artifact.is_file() or artifact.stat().st_size == 0:
             raise SystemExit(f"Android release artifact is missing or empty: {artifact}")
 
-    keystore = os.environ.get("SREVA_ANDROID_KEYSTORE_PATH", "")
-    password = os.environ.get("SREVA_ANDROID_KEYSTORE_PASSWORD", "")
-    alias = os.environ.get("SREVA_ANDROID_KEY_ALIAS", "")
+    keystore = os.environ.get("SREADYA_ANDROID_KEYSTORE_PATH", "")
+    password = os.environ.get("SREADYA_ANDROID_KEYSTORE_PASSWORD", "")
+    alias = os.environ.get("SREADYA_ANDROID_KEY_ALIAS", "")
     if not keystore or not password or not alias:
         raise SystemExit(
             "Expected signer configuration is incomplete: set "
-            "SREVA_ANDROID_KEYSTORE_PATH, SREVA_ANDROID_KEYSTORE_PASSWORD, "
-            "and SREVA_ANDROID_KEY_ALIAS."
+            "SREADYA_ANDROID_KEYSTORE_PATH, SREADYA_ANDROID_KEYSTORE_PASSWORD, "
+            "and SREADYA_ANDROID_KEY_ALIAS."
         )
 
     expected_output = run(

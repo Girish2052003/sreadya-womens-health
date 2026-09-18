@@ -129,6 +129,6 @@ describe('Task-19 sync-event crypto in production Web code', () => {
         ...envelope,
         suite_id: 'UNKNOWN-OR-DOWNGRADED',
       }),
-    ).rejects.toThrow('Unsupported Sreva sync suite.');
+    ).rejects.toThrow('Unsupported Sreadya sync suite.');
   });
 });

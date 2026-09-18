@@ -31,7 +31,7 @@ function isObservationKind(value: string): boolean {
 export function assertValidPeriodEpisode(episode: PeriodEpisodeInvariantInput): void {
   const endIsCanonical = episode.end === undefined || episode.end === null || isCanonicalUtcTimestamp(episode.end);
   if (!isCanonicalUtcTimestamp(episode.start) || !endIsCanonical || !isRecordSource(episode.source)) {
-    throw new Error('Period episode does not conform to Sreva PeriodEpisode v1 schema.');
+    throw new Error('Period episode does not conform to Sreadya PeriodEpisode v1 schema.');
   }
 
   if (episode.end !== undefined && episode.end !== null) {
@@ -47,7 +47,7 @@ export function assertValidHealthObservation(observation: HealthObservationInvar
     || !isCanonicalUtcTimestamp(observation.occurredAt)
     || !isRecordSource(observation.source)
   ) {
-    throw new Error('Health observation does not conform to Sreva HealthObservation v1 schema.');
+    throw new Error('Health observation does not conform to Sreadya HealthObservation v1 schema.');
   }
 }
 

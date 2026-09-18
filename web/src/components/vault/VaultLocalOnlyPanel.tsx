@@ -7,7 +7,7 @@ import { LOCAL_ONLY_DATA_LOSS_WARNING, VaultService } from '../../vault/vault-se
 import { Button } from '../ui/Button';
 import { StatusChip } from '../ui/StatusChip';
 
-const TEST_RECORD_ID = 'sreva-e2e-vault-record';
+const TEST_RECORD_ID = 'sreadya-e2e-vault-record';
 const CYCLEVAULT_KDF_MEMORY_KIB = 19 * 1024;
 
 function base64ToBytes(value: string) {
@@ -32,8 +32,8 @@ export function VaultLocalOnlyPanel() {
   const [cycleVaultKey, setCycleVaultKey] = useState('');
   const [cycleVaultLatency, setCycleVaultLatency] = useState('');
   const [cycleVaultPayload, setCycleVaultPayload] = useState('');
-  const testHarness = process.env.NEXT_PUBLIC_SREVA_VAULT_TEST_HARNESS === '1';
-  const cycleVaultTestHarness = process.env.NEXT_PUBLIC_SREVA_CYCLEVAULT_TEST_HARNESS === '1';
+  const testHarness = process.env.NEXT_PUBLIC_SREADYA_VAULT_TEST_HARNESS === '1';
+  const cycleVaultTestHarness = process.env.NEXT_PUBLIC_SREADYA_CYCLEVAULT_TEST_HARNESS === '1';
 
   useEffect(() => {
     let cancelled = false;
@@ -121,7 +121,7 @@ export function VaultLocalOnlyPanel() {
         <StatusChip tone={status.includes('ready') ? 'success' : 'info'}>{status}</StatusChip>
       </div>
       <p className="vault-local-panel__warning"><strong>Local-only storage warning.</strong> {LOCAL_ONLY_DATA_LOSS_WARNING}</p>
-      <p className="workspace-note">Sreva seals each persisted health record with native WebCrypto AES-256-GCM. Record bodies remain ciphertext in IndexedDB; browser storage is not presented as equivalent to secure hardware.</p>
+      <p className="workspace-note">Sreadya seals each persisted health record with native WebCrypto AES-256-GCM. Record bodies remain ciphertext in IndexedDB; browser storage is not presented as equivalent to secure hardware.</p>
 
       {testHarness ? (
         <div className="vault-test-harness" data-testid="vault-test-harness">

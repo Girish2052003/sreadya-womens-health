@@ -110,8 +110,8 @@ class _HealthIntegrationScreenState
                     status!.historicalReadGranted
                         ? 'Long-history access granted — previews can include older Health Connect records.'
                         : status.historicalReadAvailable
-                        ? 'Long-history access is not granted. Until you grant it, Sreva previews only the recent 30-day window.'
-                        : 'This Health Connect version does not expose long-history access. Sreva previews only the recent 30-day window.',
+                        ? 'Long-history access is not granted. Until you grant it, Sreadya previews only the recent 30-day window.'
+                        : 'This Health Connect version does not expose long-history access. Sreadya previews only the recent 30-day window.',
                   ),
                 ),
               const SizedBox(height: 16),
@@ -121,7 +121,7 @@ class _HealthIntegrationScreenState
               ),
               const SizedBox(height: 6),
               const Text(
-                'Sreva never requests every reproductive category by default. Sexual activity is off unless you explicitly select it.',
+                'Sreadya never requests every reproductive category by default. Sexual activity is off unless you explicitly select it.',
               ),
               const SizedBox(height: 8),
               ...HealthDataCategory.values.map(
@@ -187,7 +187,7 @@ class _HealthIntegrationScreenState
                 child: Padding(
                   padding: EdgeInsets.all(16),
                   child: Text(
-                    'Every imported record carries source provenance and duplicate checks. The Sreva vault remains authoritative; platform data never silently overwrites local history.',
+                    'Every imported record carries source provenance and duplicate checks. The Sreadya vault remains authoritative; platform data never silently overwrites local history.',
                   ),
                 ),
               ),

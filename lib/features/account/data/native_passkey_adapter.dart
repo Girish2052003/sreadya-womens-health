@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 class NativePasskeyAdapter {
   NativePasskeyAdapter({MethodChannel? channel})
-    : _channel = channel ?? const MethodChannel('sreva/account');
+    : _channel = channel ?? const MethodChannel('sreadya/account');
 
   final MethodChannel _channel;
 

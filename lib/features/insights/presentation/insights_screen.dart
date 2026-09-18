@@ -40,7 +40,7 @@ class InsightsScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 6),
                   const Text(
-                    'Sreva describes what you recorded. It does not invent medical causes.',
+                    'Sreadya describes what you recorded. It does not invent medical causes.',
                   ),
                   const SizedBox(height: 16),
                   if (insight.cycleSummary == null)
@@ -180,7 +180,7 @@ class _PredictionCalibration extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Text(
-            'Calibration begins after Sreva has made predictions and later observes actual period starts.',
+            'Calibration begins after Sreadya has made predictions and later observes actual period starts.',
           ),
         ),
       );

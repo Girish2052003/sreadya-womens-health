@@ -4,7 +4,7 @@ import '../domain/life_stage.dart';
 class LifeStageStore {
   LifeStageStore({LocalSettingsStore? settings})
     : _settings = settings ?? LocalSettingsStore();
-  static const _key = 'sreva.life-stage.v1';
+  static const _key = 'sreadya.life-stage.v1';
   final LocalSettingsStore _settings;
 
   Future<LifeStageMode> read() async {

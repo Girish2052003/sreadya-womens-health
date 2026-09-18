@@ -16,7 +16,7 @@ class HomeScreen extends ConsumerWidget {
     final locale = Localizations.localeOf(context);
     return CustomScrollView(
       slivers: [
-        const SliverAppBar.large(title: Text('Sreva')),
+        const SliverAppBar.large(title: Text('Sreadya')),
         SliverPadding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
           sliver: SliverList.list(
@@ -141,7 +141,7 @@ class _PredictionCard extends StatelessWidget {
                     ),
                     SizedBox(height: 6),
                     Text(
-                      'Record at least two period starts. Sreva will never pretend to know what the data cannot support.',
+                      'Record at least two period starts. Sreadya will never pretend to know what the data cannot support.',
                     ),
                   ],
                 );
@@ -203,7 +203,7 @@ class _ErrorCard extends StatelessWidget {
   Widget build(BuildContext context) => Card(
     child: Padding(
       padding: const EdgeInsets.all(16),
-      child: Text('Sreva could not open its local vault. $message'),
+      child: Text('Sreadya could not open its local vault. $message'),
     ),
   );
 }

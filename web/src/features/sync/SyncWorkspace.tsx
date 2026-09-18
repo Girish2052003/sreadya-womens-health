@@ -7,7 +7,7 @@ import { Card } from '../../components/ui/Card';
 import { DexieSyncQueuePersistence, SyncQueue } from '../../sync/queue';
 
 function baseUrl(): string {
-  return (process.env.NEXT_PUBLIC_SREVA_SYNC_BASE_URL ?? '').replace(/\/$/, '');
+  return (process.env.NEXT_PUBLIC_SREADYA_SYNC_BASE_URL ?? '').replace(/\/$/, '');
 }
 
 export function SyncWorkspace() {
@@ -56,7 +56,7 @@ export function SyncWorkspace() {
           <Button variant="secondary" onClick={() => { void run('resume'); }}>Resume sync</Button>
           <Button variant="quiet" onClick={() => { void run('disable'); }}>Disable sync</Button>
         </div>
-        {!endpoint ? <p className="workspace-note">Remote upload/download is unavailable until an approved Sreva sync service is configured. The UI reports that boundary instead of claiming a successful server sync.</p> : null}
+        {!endpoint ? <p className="workspace-note">Remote upload/download is unavailable until an approved Sreadya sync service is configured. The UI reports that boundary instead of claiming a successful server sync.</p> : null}
       </Card>
     </div>
   );

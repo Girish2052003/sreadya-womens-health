@@ -70,7 +70,7 @@ describe('Task 23 trusted-device production crypto', () => {
 
     expect(parsed.enrollmentId).toBe(vector.trustedDeviceTransfer.enrollmentId);
     expect(hex(parsed.transferSecret)).toBe(vector.trustedDeviceTransfer.ikmHex);
-    expect(() => parseTrustedDeviceQr(`SREVA-TRANSFER-2:${parsed.enrollmentId}:AAAA`)).toThrow();
+    expect(() => parseTrustedDeviceQr(`SREADYA-TRANSFER-2:${parsed.enrollmentId}:AAAA`)).toThrow();
   });
 
   it('derives and unwraps the frozen Web-to-mobile transfer vector exactly', async () => {

@@ -48,7 +48,7 @@ HealthDataCategory? _categoryByName(String name) {
 }
 
 class HealthPlatform {
-  static const MethodChannel _channel = MethodChannel('sreva/health');
+  static const MethodChannel _channel = MethodChannel('sreadya/health');
 
   Future<HealthPlatformStatus> status() async {
     try {

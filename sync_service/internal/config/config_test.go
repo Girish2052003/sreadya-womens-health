@@ -12,7 +12,7 @@ func TestLoadFromLookupRequiresDatabaseURL(t *testing.T) {
 func TestLoadFromLookupUsesProviderIndependentDefaults(t *testing.T) {
 	lookup := func(key string) (string, bool) {
 		values := map[string]string{
-			"SREVA_SYNC_DATABASE_URL": "postgres://sreva:test@db.example/sreva?sslmode=require",
+			"SREADYA_SYNC_DATABASE_URL": "postgres://sreadya:test@db.example/sreadya?sslmode=require",
 		}
 		value, ok := values[key]
 		return value, ok
@@ -25,7 +25,7 @@ func TestLoadFromLookupUsesProviderIndependentDefaults(t *testing.T) {
 	if cfg.ListenAddress != ":8080" {
 		t.Fatalf("ListenAddress = %q, want :8080", cfg.ListenAddress)
 	}
-	if cfg.DatabaseURL != "postgres://sreva:test@db.example/sreva?sslmode=require" {
+	if cfg.DatabaseURL != "postgres://sreadya:test@db.example/sreadya?sslmode=require" {
 		t.Fatalf("DatabaseURL = %q", cfg.DatabaseURL)
 	}
 	if cfg.PostgreSQLTarget != "18.6" {
@@ -36,8 +36,8 @@ func TestLoadFromLookupUsesProviderIndependentDefaults(t *testing.T) {
 func TestLoadFromLookupAllowsExplicitListenAddress(t *testing.T) {
 	lookup := func(key string) (string, bool) {
 		values := map[string]string{
-			"SREVA_SYNC_DATABASE_URL": "postgres://localhost/sreva",
-			"SREVA_SYNC_LISTEN_ADDR":   "127.0.0.1:9090",
+			"SREADYA_SYNC_DATABASE_URL": "postgres://localhost/sreadya",
+			"SREADYA_SYNC_LISTEN_ADDR":   "127.0.0.1:9090",
 		}
 		value, ok := values[key]
 		return value, ok

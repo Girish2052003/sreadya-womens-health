@@ -12,8 +12,8 @@ const primary = [
 
 export function WorkspaceNav({ active }: { active: PrimaryKey | string }) {
   return (
-    <nav className="workspace-nav" aria-label="Sreva workspace">
-      <Link className="workspace-nav__brand" href="/app/home" aria-label="Sreva workspace home" title="Sreva workspace home">
+    <nav className="workspace-nav" aria-label="Sreadya workspace">
+      <Link className="workspace-nav__brand" href="/app/home" aria-label="Sreadya workspace home" title="Sreadya workspace home">
         <span aria-hidden="true">S</span>
       </Link>
       <div className="workspace-nav__items">

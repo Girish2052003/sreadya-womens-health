@@ -25,7 +25,7 @@ function applyLocale(locale: string) {
   try { normalized = new Intl.Locale(locale).toString(); } catch { normalized = 'en'; }
   document.documentElement.lang = normalized;
   document.documentElement.dir = localeDirection(normalized);
-  document.documentElement.setAttribute('data-sreva-locale', normalized);
+  document.documentElement.setAttribute('data-sreadya-locale', normalized);
 }
 
 function applyTheme(theme: Preferences['theme']) {
@@ -39,8 +39,8 @@ function applyTheme(theme: Preferences['theme']) {
 function applyGeneralPreferences(preferences: Preferences) {
   applyTheme(preferences.theme);
   applyLocale(preferences.locale);
-  document.documentElement.setAttribute('data-sreva-units', preferences.units);
-  document.documentElement.setAttribute('data-sreva-time-format', preferences.time);
+  document.documentElement.setAttribute('data-sreadya-units', preferences.units);
+  document.documentElement.setAttribute('data-sreadya-time-format', preferences.time);
 }
 
 export function SettingsWorkspace() {

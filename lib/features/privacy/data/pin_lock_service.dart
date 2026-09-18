@@ -8,7 +8,7 @@ class PinLockService {
   PinLockService({FlutterSecureStorage? storage})
     : _storage = storage ?? const FlutterSecureStorage();
 
-  static const _key = 'sreva.app-pin.verifier.v1';
+  static const _key = 'sreadya.app-pin.verifier.v1';
   final FlutterSecureStorage _storage;
   final Argon2id _kdf = Argon2id(
     memory: 19 * 1024,
@@ -23,7 +23,7 @@ class PinLockService {
 
   Future<void> setPin(String pin) async {
     if (!isValidPin(pin)) {
-      throw ArgumentError('Sreva PIN must contain 6–10 digits.');
+      throw ArgumentError('Sreadya PIN must contain 6–10 digits.');
     }
     final random = Random.secure();
     final salt = List<int>.generate(16, (_) => random.nextInt(256));

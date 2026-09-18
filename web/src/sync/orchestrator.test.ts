@@ -126,7 +126,7 @@ describe('SyncOrchestrator', () => {
       {
         event: {
           protocol_version: 1,
-          suite_id: 'SREVA-AES256GCM-HKDFSHA256-ED25519-V1',
+          suite_id: 'SREADYA-AES256GCM-HKDFSHA256-ED25519-V1',
           account_id: 'acct-a',
           vault_id: 'vault-a',
           key_epoch: 1,

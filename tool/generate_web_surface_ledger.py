@@ -6,7 +6,7 @@ import argparse, json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-REGISTRY = ROOT / "shared/capabilities/sreva-capabilities.v1.json"
+REGISTRY = ROOT / "shared/capabilities/sreadya-capabilities.v1.json"
 LEDGER = ROOT / "shared/capabilities/web-surfaces.v2.json"
 CATALOG = ROOT / "web/src/content/capabilities.generated.json"
 
@@ -120,14 +120,14 @@ def render() -> tuple[str, str]:
             "user_promise": record["name"],
         })
     ledger = {
-        "contract": "SREVA Web Product Surface Ledger", "version": 2,
-        "registry": "shared/capabilities/sreva-capabilities.v1.json",
+        "contract": "SREADYA Web Product Surface Ledger", "version": 2,
+        "registry": "shared/capabilities/sreadya-capabilities.v1.json",
         "launch_requirement_count": 258,
         "claim_boundary": "A surface row proves discoverability/ownership and user-facing routing. Provider-dependent and platform-adapted rows remain visible without pretending that an optional backend or native-only mechanism is active on a static Web deployment.",
         "capabilities": rows,
     }
     catalog = {
-        "generated_from": "shared/capabilities/sreva-capabilities.v1.json",
+        "generated_from": "shared/capabilities/sreadya-capabilities.v1.json",
         "launch_requirement_count": 258, "future_requirement_count": len(future),
         "families": registry["families"],
         "launch": [{k:r[k] for k in ("id","name","family","route","surface_type","web_applicability")} for r in rows],

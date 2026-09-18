@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: sreva-task25-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: sreadya-task25-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:

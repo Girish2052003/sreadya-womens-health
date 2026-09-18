@@ -1,11 +1,11 @@
-# SREVA Cross-Platform Product Architecture Design
+# SREADYA Cross-Platform Product Architecture Design
 
-**Document:** `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`  
+**Document:** `docs/superpowers/specs/2026-09-16-sreadya-web-product-architecture-design.md`  
 **Status:** APPROVED DESIGN — authoritative C2 architecture constitution  
 **Date:** 16 September 2026  
-**Product:** Sreva  
+**Product:** Sreadya  
 **Scope:** Android, iOS, Browser Web, installable Web/PWA  
-**Repository:** `Girish2052003/sreva-womens-health`  
+**Repository:** `Girish2052003/sreadya-womens-health`  
 **Architecture:** **C2 — Web-Native Monorepo**  
 **Mobile:** Flutter / Dart  
 **Web/PWA:** Next.js + React + TypeScript  
@@ -13,16 +13,16 @@
 
 ## 0. Authority, purpose, and precedence
 
-This document is the authoritative architecture contract for Sreva after the 16 September 2026 C2 decision. It exists to prevent Android, iOS, and Web/PWA from becoming separate products.
+This document is the authoritative architecture contract for Sreadya after the 16 September 2026 C2 decision. It exists to prevent Android, iOS, and Web/PWA from becoming separate products.
 
-When this document conflicts with the older `2026-09-15-sreva-master-design.md` or `2026-09-15-sreva-v1-implementation.md`, **this document wins**. The older documents remain useful as the already-built Flutter/mobile baseline and historical implementation record; they must be interpreted as subordinate to this cross-platform contract.
+When this document conflicts with the older `2026-09-15-sreadya-master-design.md` or `2026-09-15-sreadya-v1-implementation.md`, **this document wins**. The older documents remain useful as the already-built Flutter/mobile baseline and historical implementation record; they must be interpreted as subordinate to this cross-platform contract.
 
 The core rule is:
 
-> **One Sreva. One heart. Three first-class clients. No weakened edition.**
+> **One Sreadya. One heart. Three first-class clients. No weakened edition.**
 
 ```text
-                         SREVA
+                         SREADYA
                            │
             ┌──────────────┼──────────────┐
             │              │              │
@@ -39,16 +39,16 @@ All clients MUST preserve the same product philosophy, health-data semantics, cy
 
 ### 0.1 Approved amendments to the 15 September mobile baseline
 
-1. **Web is first-class.** Sreva Web is a complete health client, not a brochure.
+1. **Web is first-class.** Sreadya Web is a complete health client, not a brochure.
 2. **PWA is first-class Web delivery.** The same Web client works in a normal browser and, where supported, as an installed PWA.
-3. **Account-free and account-based Sreva are equal-class.** Account mode adds encrypted continuity, not stronger health features.
+3. **Account-free and account-based Sreadya are equal-class.** Account mode adds encrypted continuity, not stronger health features.
 4. **Optional E2EE sync is permitted.** The operator still MUST NOT operate a plaintext or developer-decryptable reproductive-health database. Sync infrastructure may hold ciphertext and minimum operational metadata only.
 5. **Identity is flexible.** Email-only, mobile-only, or both are allowed; mobile number is optional; passkeys are preferred.
 6. **Recovery is hybrid.** Passkey + trusted-device approval + user-held recovery key. Email/SMS may recover account identity but MUST NOT independently decrypt old health history.
 7. **Reminder intent is shared, delivery is adapted.** Android/iOS use native scheduling; Web/PWA uses the strongest honest browser capability available.
 8. **C2 presentation split is deliberate.** Flutter remains mobile; Next.js/React/TypeScript is Web/PWA. Shared contracts and conformance—not UI-code reuse—prevent drift.
 
-### 0.2 Non-negotiable Sreva laws
+### 0.2 Non-negotiable Sreadya laws
 
 1. One product across Android, iOS, and Web/PWA.
 2. No supported client is intentionally a lite edition.
@@ -58,7 +58,7 @@ All clients MUST preserve the same product philosophy, health-data semantics, cy
 6. Personal insights execute locally.
 7. Plaintext reproductive-health data belongs on authorized user devices.
 8. Optional sync encrypts sensitive content before it leaves the client.
-9. Sreva infrastructure has no universal health-vault decryption secret.
+9. Sreadya infrastructure has no universal health-vault decryption secret.
 10. Sensitive health values never enter ordinary analytics, crash telemetry, or debugging logs.
 11. Updates and migrations preserve and validate existing history.
 12. HealthKit/Health Connect access is granular, optional, and explicit.
@@ -73,7 +73,7 @@ All clients MUST preserve the same product philosophy, health-data semantics, cy
 
 # SECTION 1 — MASTER CAPABILITY CONTRACT
 
-Public marketing may continue to say **40+ thoughtfully designed cycle, wellness, privacy, and reproductive-health capabilities**. Internally, Sreva uses a stricter engineering decomposition so nothing disappears behind a broad feature label.
+Public marketing may continue to say **40+ thoughtfully designed cycle, wellness, privacy, and reproductive-health capabilities**. Internally, Sreadya uses a stricter engineering decomposition so nothing disappears behind a broad feature label.
 
 **Approved internal contract:** 18 launch capability families, **258 atomic launch-contract requirements**, plus 11 future/optional capabilities. The number 258 is an engineering traceability count, not public feature marketing.
 
@@ -314,7 +314,7 @@ HEALTH-005 Explicit granular permissions
 HEALTH-006 Record provenance/source tracking
 HEALTH-007 External record ID/revision tracking
 HEALTH-008 Duplicate prevention/deduplication
-HEALTH-009 Sreva vault remains authoritative application datastore
+HEALTH-009 Sreadya vault remains authoritative application datastore
 ```
 
 ## 1.12 Accessibility and worldwide readiness — `A11Y`
@@ -401,8 +401,8 @@ DIAG-011 Never include health payloads by default
 ## 1.16 Identity and recovery — `ID`
 
 ```text
-ID-001 Full account-free Sreva experience
-ID-002 Full account-based Sreva experience
+ID-001 Full account-free Sreadya experience
+ID-002 Full account-based Sreadya experience
 ID-003 Email-only account permitted
 ID-004 Mobile-number-only account permitted
 ID-005 Email + mobile-number account permitted
@@ -439,7 +439,7 @@ SYNC-015 Infrastructure cannot decrypt health vault
 ## 1.18 Web and PWA — `WEB`
 
 ```text
-WEB-001 Full browser-based Sreva client
+WEB-001 Full browser-based Sreadya client
 WEB-002 Installable PWA
 WEB-003 Standalone Home Screen/Desktop experience
 WEB-004 Offline PWA application shell
@@ -475,11 +475,11 @@ FUT-011 Research participation with separate explicit consent
 
 # SECTION 2 — VISUAL DESIGN SYSTEM
 
-Sreva MUST feel premium, private, modern, warm, feminine, calm, elegant, futuristic, and accessible. It MUST NOT become childish-pink, clinically cold, hypersexualized, marketplace-dense, or neon-AI themed.
+Sreadya MUST feel premium, private, modern, warm, feminine, calm, elegant, futuristic, and accessible. It MUST NOT become childish-pink, clinically cold, hypersexualized, marketplace-dense, or neon-AI themed.
 
-Public Sreva may be expressive: warm white/pearl surfaces, deep rose/crimson, restrained gradients, subtle depth, gentle motion, visual storytelling. The private health workspace is calmer: clean surfaces, limited accents, large readable information, one obvious primary action, minimal decoration.
+Public Sreadya may be expressive: warm white/pearl surfaces, deep rose/crimson, restrained gradients, subtle depth, gentle motion, visual storytelling. The private health workspace is calmer: clean surfaces, limited accents, large readable information, one obvious primary action, minimal decoration.
 
-Use semantic design tokens rather than hard-coded colours: `sreva-crimson`, `sreva-rose`, `sreva-pink`, `sreva-blush`, `sreva-pearl`, `sreva-ink`, `sreva-muted`, plus `success`, `warning`, `danger`, and `info`. Exact values are finalized against the Sreva logo and accessibility contrast tests. Colour is never the only state signal.
+Use semantic design tokens rather than hard-coded colours: `sreadya-crimson`, `sreadya-rose`, `sreadya-pink`, `sreadya-blush`, `sreadya-pearl`, `sreadya-ink`, `sreadya-muted`, plus `success`, `warning`, `danger`, and `info`. Exact values are finalized against the Sreadya logo and accessibility contrast tests. Colour is never the only state signal.
 
 Typography must support worldwide scripts, scale accessibly, and use ultra-easy language. Components are shared conceptually across clients: buttons, inputs, date controls, cards, sheets/dialogs, banners/toasts, tabs, navigation, charts, calendars, timelines, status chips, permission cards, privacy indicators, empty/loading/error states.
 
@@ -489,7 +489,7 @@ Motion explains state, not decoration. Web honors `prefers-reduced-motion`; mobi
 
 # SECTION 3 — NAVIGATION AND RESPONSIVE BEHAVIOUR
 
-Public desktop navigation is intentionally concise: Features, How it works, Privacy, Security, Help, Download, and a clear **Open Sreva** action.
+Public desktop navigation is intentionally concise: Features, How it works, Privacy, Security, Help, Download, and a clear **Open Sreadya** action.
 
 Mobile/PWA private navigation targets five primary destinations: **Home, Today, Log, Calendar, More**. Desktop uses a compact rail with Home, Today, Calendar, Insights, Log Today, and More. The Home screen prioritizes: when is the next period, what needs logging, whether the period started, and reminder health.
 
@@ -501,13 +501,13 @@ Private health search operates locally after vault unlock wherever feasible; sen
 
 # SECTION 4 — LOCAL ENCRYPTED BROWSER VAULT
 
-Sreva Web stores sensitive health data only after application-layer encryption. Sensitive health values MUST NOT be stored in plaintext `localStorage` or URL state. Persistent records may use IndexedDB or another validated browser persistence API.
+Sreadya Web stores sensitive health data only after application-layer encryption. Sensitive health values MUST NOT be stored in plaintext `localStorage` or URL state. Persistent records may use IndexedDB or another validated browser persistence API.
 
-A cryptographically strong vault key is generated locally. Established, reviewed primitives/libraries are used; Sreva does not invent proprietary cryptography. Where supported, WebCrypto, non-exportable/protected key material, and WebAuthn/passkey gates are used. Browser protections MUST NOT be described as automatically equivalent to Android Keystore or Apple Keychain/Secure Enclave.
+A cryptographically strong vault key is generated locally. Established, reviewed primitives/libraries are used; Sreadya does not invent proprietary cryptography. Where supported, WebCrypto, non-exportable/protected key material, and WebAuthn/passkey gates are used. Browser protections MUST NOT be described as automatically equivalent to Android Keystore or Apple Keychain/Secure Enclave.
 
 Plaintext is decrypted only when needed and transient decrypted state/key references are cleared on lock/logout as far as browser controls permit.
 
-Account-free Web remains full Sreva. Users must be warned that clearing browser/site storage can remove a local-only vault; encrypted CycleVault backup is therefore strongly encouraged. Persistent browser storage is requested where appropriate but never treated as infallible.
+Account-free Web remains full Sreadya. Users must be warned that clearing browser/site storage can remove a local-only vault; encrypted CycleVault backup is therefore strongly encouraged. Persistent browser storage is requested where appropriate but never treated as infallible.
 
 Service workers may cache the application shell, CSS, fonts, icons, public assets, and version metadata, but MUST NOT accidentally cache plaintext health payloads.
 
@@ -518,7 +518,7 @@ Service workers may cache the application shell, CSS, fonts, icons, public asset
 Fundamental invariant:
 
 ```text
-AUTHORIZED CLIENT                 SREVA SYNC SERVICE                AUTHORIZED CLIENT
+AUTHORIZED CLIENT                 SREADYA SYNC SERVICE                AUTHORIZED CLIENT
 plaintext → encrypt locally  →   ciphertext + minimum metadata  →  decrypt locally → plaintext
                                    NO HEALTH DECRYPTION KEY
 ```
@@ -529,19 +529,19 @@ Sync prefers encrypted logical records/events rather than repeatedly uploading o
 
 Independent edits merge safely; ambiguous same-record conflicts are shown in health language and require user choice. Each authorized device has a cryptographic identity. Revocation blocks future authorization/sync and rotates/re-wraps secrets where required, but MUST NOT claim it can remotely erase data that a device already decrypted.
 
-Account-free → account transition preserves existing history and adds encrypted sync without re-entry. Disabling sync never disables local Sreva.
+Account-free → account transition preserves existing history and adds encrypted sync without re-entry. Disabling sync never disables local Sreadya.
 
 ---
 
 # SECTION 6 — AUTHENTICATION AND RECOVERY
 
-Account identifiers: email, mobile number, or both. Mobile number is optional. Sreva is passkey-first.
+Account identifiers: email, mobile number, or both. Mobile number is optional. Sreadya is passkey-first.
 
 Normal authentication prefers passkeys. Verified email/SMS may recover account identity, but account authentication is separate from health-vault decryption.
 
-Preferred new-device recovery: authenticate account → existing trusted device approves → secure vault-key authorization. Emergency recovery: account authentication + user-held Sreva recovery key → recover vault access.
+Preferred new-device recovery: authenticate account → existing trusted device approves → secure vault-key authorization. Emergency recovery: account authentication + user-held Sreadya recovery key → recover vault access.
 
-The recovery key is generated/handled so Sreva servers cannot use it to decrypt the vault. If every trusted device and the recovery key are lost but email/phone remains, the account identity may be recovered while the old E2EE vault remains unreadable. There is no undocumented administrator recovery key.
+The recovery key is generated/handled so Sreadya servers cannot use it to decrypt the vault. If every trusted device and the recovery key are lost but email/phone remains, the account identity may be recovered while the old E2EE vault remains unreadable. There is no undocumented administrator recovery key.
 
 Changing recovery contacts requires strong authentication, verification of the new destination, and security notification to existing trusted channels.
 
@@ -601,7 +601,7 @@ Every implementation PR SHOULD reference capability IDs and corresponding tests.
 One authoritative repository:
 
 ```text
-sreva-womens-health/
+sreadya-womens-health/
 ├── lib/                         # existing Flutter mobile client
 ├── platform_templates/{android,ios}/
 ├── web/                         # Next.js/React/TypeScript Web/PWA
@@ -614,7 +614,7 @@ sreva-womens-health/
 └── .github/workflows/
 ```
 
-Initial Web/PWA deployment is static and low-cost: Next.js static export → GitHub Pages. GitHub Pages hosts the frontend, not the sync service. Account-free Sreva therefore needs no Sreva backend for core operation.
+Initial Web/PWA deployment is static and low-cost: Next.js static export → GitHub Pages. GitHub Pages hosts the frontend, not the sync service. Account-free Sreadya therefore needs no Sreadya backend for core operation.
 
 The sync/identity protocol is provider-independent. Logical interfaces may include Identity API, Device API, Sync API, Recovery-metadata API, and optional Push relay. Avoid premature microservices.
 
@@ -687,11 +687,11 @@ CI progressively enforces dependency pinning, lock files, secret scanning, SAST,
 | Offline | Full | Full | Full PWA / adapted browser |
 | PWA installation | Optional Web path | Optional Web path | Native Web capability |
 
-`N/A` means an OS-specific integration does not exist on that platform; it does not mean the underlying Sreva health capability disappears.
+`N/A` means an OS-specific integration does not exist on that platform; it does not mean the underlying Sreadya health capability disappears.
 
 # 13. Authoritative shared-core law
 
-“Same heart and core engine” means the canonical Sreva domain is the cycle semantics, prediction specification, insight rules, reminder policy, life-stage rules, report semantics, privacy rules, data schemas, crypto formats, sync semantics, terminology, capability registry, and golden vectors. Android, iOS, and Web MUST conform.
+“Same heart and core engine” means the canonical Sreadya domain is the cycle semantics, prediction specification, insight rules, reminder policy, life-stage rules, report semantics, privacy rules, data schemas, crypto formats, sync semantics, terminology, capability registry, and golden vectors. Android, iOS, and Web MUST conform.
 
 # 14. Platform-adapter law
 
@@ -709,7 +709,7 @@ Public routes include `/`, `/features`, `/how-it-works`, `/cycle-tracking`, `/pr
 
 Private workspace includes `/app`, `/app/home`, `/app/today`, `/app/calendar`, `/app/log`, `/app/cycle`, `/app/predictions`, `/app/reminders`, `/app/symptoms`, `/app/wellness`, `/app/medication`, `/app/reproductive-health`, `/app/life-stage`, `/app/insights`, `/app/reports`, `/app/assistant`, `/app/sharing`, `/app/vault`, `/app/sync`, `/app/devices`, `/app/privacy`, `/app/account`, `/app/recovery`, `/app/settings`.
 
-The transition is “Sreva website → Open Sreva → my private Sreva space,” not a visual/product jump.
+The transition is “Sreadya website → Open Sreadya → my private Sreadya space,” not a visual/product jump.
 
 # 16. Privacy Center contract
 
@@ -740,7 +740,7 @@ Distinguish **local authoritative health state** from **remote encrypted synchro
 
 # 19. Medical/regulatory boundary
 
-Initial Sreva is cycle/menstrual-health tracking, wellness observations, reminders, estimates, and personal history. It does not casually claim diagnosis, treatment recommendation, certified contraception, disease prediction, or clinical fertility guarantee. Regulated functionality is a separate future programme.
+Initial Sreadya is cycle/menstrual-health tracking, wellness observations, reminders, estimates, and personal history. It does not casually claim diagnosis, treatment recommendation, certified contraception, disease prediction, or clinical fertility guarantee. Regulated functionality is a separate future programme.
 
 # 20. Definition of Done
 
@@ -753,7 +753,7 @@ Implementation MUST NOT silently alter account-free equality, local prediction/i
 # 22. Initial monorepo target
 
 ```text
-sreva-womens-health/
+sreadya-womens-health/
 ├── lib/                         # existing Flutter client
 ├── platform_templates/{android,ios}/
 ├── web/                         # Next.js/React/TypeScript
@@ -800,11 +800,11 @@ Documentation/alignment
 
 # 24. Final architecture statement
 
-> **Sreva is a full women's cycle and wellness companion whose personal health intelligence remains with the woman, while optional end-to-end encrypted synchronization gives her seamless continuity across Android, iOS, and Web.**
+> **Sreadya is a full women's cycle and wellness companion whose personal health intelligence remains with the woman, while optional end-to-end encrypted synchronization gives her seamless continuity across Android, iOS, and Web.**
 
 The clients have different operating environments, adapters, and presentation implementations where necessary, but retain the same product ideology, privacy philosophy, health semantics, prediction contract, data model, life-stage logic, reminder intent, insight boundaries, account model, recovery guarantees, encryption/sync format, and capability contract.
 
-**One Sreva. Three clients. No weakened edition.**
+**One Sreadya. Three clients. No weakened edition.**
 
 # 25. Approved design status
 
@@ -829,4 +829,4 @@ Account-free mode                                 FIRST-CLASS
 Account + E2EE sync mode                          FIRST-CLASS
 ```
 
-# END OF APPROVED SREVA CROSS-PLATFORM DESIGN SPECIFICATION
+# END OF APPROVED SREADYA CROSS-PLATFORM DESIGN SPECIFICATION

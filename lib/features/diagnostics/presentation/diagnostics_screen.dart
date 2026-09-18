@@ -54,7 +54,7 @@ class _DiagnosticsScreenState extends ConsumerState<DiagnosticsScreen> {
             const SizedBox(height: 12),
             OutlinedButton.icon(
               onPressed: () => SharePlus.instance.share(
-                ShareParams(text: _report!, title: 'Sreva diagnostic report'),
+                ShareParams(text: _report!, title: 'Sreadya diagnostic report'),
               ),
               icon: const Icon(Icons.ios_share),
               label: const Text('Share this report intentionally'),

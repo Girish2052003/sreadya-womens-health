@@ -10,8 +10,8 @@ import (
 
 	"github.com/jackc/pgx/v5"
 
-	"sreva.dev/sync_service/internal/deviceauth"
-	"sreva.dev/sync_service/internal/devices"
+	"sreadya.dev/sync_service/internal/deviceauth"
+	"sreadya.dev/sync_service/internal/devices"
 )
 
 var _ deviceauth.ChallengeStore = (*Store)(nil)

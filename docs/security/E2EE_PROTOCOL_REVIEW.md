@@ -1,4 +1,4 @@
-# Sreva E2EE Protocol v1 — Task-19 Review
+# Sreadya E2EE Protocol v1 — Task-19 Review
 
 **Review status:** INTERNAL DESIGN GATE PASS based on the three-client candidate verification recorded below. The closure commit that contains this ledger status must itself pass the same exact-head workflow before merge.
 
@@ -25,7 +25,7 @@
 
 Canonical suite:
 
-`SREVA-AES256GCM-HKDFSHA256-ED25519-V1`
+`SREADYA-AES256GCM-HKDFSHA256-ED25519-V1`
 
 Selected primitives are HKDF-SHA-256 for key derivation, AES-256-GCM for authenticated encryption, Ed25519 for device request authentication, SHA-256 for request-body digests, and platform CSPRNG for VRS/RS/TS/salts/nonces/opaque IDs/challenges.
 

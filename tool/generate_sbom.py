@@ -34,8 +34,8 @@ def main() -> None:
                 "version": version,
                 "purl": ref,
                 "properties": [
-                    {"name": "sreva:dependency-kind", "value": str(package.get("kind", "unknown"))},
-                    {"name": "sreva:dependency-source", "value": str(package.get("source", "unknown"))},
+                    {"name": "sreadya:dependency-kind", "value": str(package.get("kind", "unknown"))},
+                    {"name": "sreadya:dependency-source", "value": str(package.get("source", "unknown"))},
                 ],
             }
         )
@@ -48,17 +48,17 @@ def main() -> None:
         depends_on = [refs[d] for d in package.get("dependencies", []) if d in refs]
         dependencies.append({"ref": ref, "dependsOn": sorted(depends_on)})
 
-    root_name = str(data.get("root", "sreva"))
+    root_name = str(data.get("root", "sreadya"))
     root_ref = refs.get(root_name, f"pkg:pub/{root_name}")
     bom = {
         "bomFormat": "CycloneDX",
         "specVersion": "1.5",
-        "serialNumber": "urn:uuid:sreva-worldwide-v1",
+        "serialNumber": "urn:uuid:sreadya-worldwide-v1",
         "version": 1,
         "metadata": {
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "component": {"type": "application", "bom-ref": root_ref, "name": root_name},
-            "tools": {"components": [{"type": "application", "name": "Sreva SBOM generator", "version": "1"}]},
+            "tools": {"components": [{"type": "application", "name": "Sreadya SBOM generator", "version": "1"}]},
         },
         "components": sorted(components, key=lambda c: c["name"]),
         "dependencies": sorted(dependencies, key=lambda d: d["ref"]),

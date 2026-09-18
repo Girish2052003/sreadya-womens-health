@@ -1,4 +1,4 @@
-const E2EE_SUITE_V1 = 'SREVA-AES256GCM-HKDFSHA256-ED25519-V1';
+const E2EE_SUITE_V1 = 'SREADYA-AES256GCM-HKDFSHA256-ED25519-V1';
 
 export type RecoveryEnvelope = {
   protocol_version: number;
@@ -20,7 +20,7 @@ function utf8(value: string): Uint8Array<ArrayBuffer> {
 function lp16(fields: readonly Uint8Array<ArrayBuffer>[]): Uint8Array<ArrayBuffer> {
   let length = 0;
   for (const field of fields) {
-    if (field.byteLength > 0xffff) throw new Error('Sreva protocol field is too large.');
+    if (field.byteLength > 0xffff) throw new Error('Sreadya protocol field is too large.');
     length += 2 + field.byteLength;
   }
 
@@ -38,18 +38,18 @@ function lp16(fields: readonly Uint8Array<ArrayBuffer>[]): Uint8Array<ArrayBuffe
 
 function decodeBase64(value: string): Uint8Array<ArrayBuffer> {
   if (value.length === 0 || value.length % 4 === 1 || !/^[A-Za-z0-9+/]*={0,2}$/.test(value)) {
-    throw new Error('Invalid Sreva recovery envelope encoding.');
+    throw new Error('Invalid Sreadya recovery envelope encoding.');
   }
   try {
     return Uint8Array.from(atob(value), (part) => part.charCodeAt(0));
   } catch {
-    throw new Error('Invalid Sreva recovery envelope encoding.');
+    throw new Error('Invalid Sreadya recovery envelope encoding.');
   }
 }
 
 function assertEnvelope(envelope: RecoveryEnvelope): void {
   if (envelope.protocol_version !== 1 || envelope.suite_id !== E2EE_SUITE_V1) {
-    throw new Error('Unsupported Sreva recovery suite.');
+    throw new Error('Unsupported Sreadya recovery suite.');
   }
   if (
     envelope.account_id.length === 0 ||
@@ -57,7 +57,7 @@ function assertEnvelope(envelope: RecoveryEnvelope): void {
     !Number.isSafeInteger(envelope.key_epoch) ||
     envelope.key_epoch < 0
   ) {
-    throw new Error('Invalid Sreva recovery envelope metadata.');
+    throw new Error('Invalid Sreadya recovery envelope metadata.');
   }
 }
 
@@ -76,10 +76,10 @@ export async function deriveRecoveryWrapKey(
   envelope: RecoveryEnvelope,
 ): Promise<Uint8Array<ArrayBuffer>> {
   assertEnvelope(envelope);
-  if (recoverySecret.byteLength !== 32) throw new Error('Sreva recovery secret must be 32 bytes.');
+  if (recoverySecret.byteLength !== 32) throw new Error('Sreadya recovery secret must be 32 bytes.');
 
   const salt = decodeBase64(envelope.kdf_salt);
-  if (salt.byteLength !== 32) throw new Error('Sreva recovery salt must be 32 bytes.');
+  if (salt.byteLength !== 32) throw new Error('Sreadya recovery salt must be 32 bytes.');
 
   const inputKey = await crypto.subtle.importKey('raw', recoverySecret, 'HKDF', false, ['deriveBits']);
   const derived = await crypto.subtle.deriveBits(
@@ -87,7 +87,7 @@ export async function deriveRecoveryWrapKey(
       name: 'HKDF',
       hash: 'SHA-256',
       salt,
-      info: recoveryContext('sreva-recovery-wrap-key-v1', envelope),
+      info: recoveryContext('sreadya-recovery-wrap-key-v1', envelope),
     },
     inputKey,
     256,
@@ -102,8 +102,8 @@ export async function unwrapRecoveryEnvelope(
   assertEnvelope(envelope);
   const nonce = decodeBase64(envelope.nonce);
   const ciphertextAndTag = decodeBase64(envelope.ciphertext_and_tag);
-  if (nonce.byteLength !== 12) throw new Error('Sreva recovery nonce must be 12 bytes.');
-  if (ciphertextAndTag.byteLength < 16) throw new Error('Sreva recovery ciphertext is invalid.');
+  if (nonce.byteLength !== 12) throw new Error('Sreadya recovery nonce must be 12 bytes.');
+  if (ciphertextAndTag.byteLength < 16) throw new Error('Sreadya recovery ciphertext is invalid.');
 
   const keyBytes = await deriveRecoveryWrapKey(recoverySecret, envelope);
   const key = await crypto.subtle.importKey('raw', keyBytes, { name: 'AES-GCM' }, false, ['decrypt']);
@@ -111,7 +111,7 @@ export async function unwrapRecoveryEnvelope(
     {
       name: 'AES-GCM',
       iv: nonce,
-      additionalData: recoveryContext('sreva-recovery-envelope-v1', envelope),
+      additionalData: recoveryContext('sreadya-recovery-envelope-v1', envelope),
       tagLength: 128,
     },
     key,
@@ -119,6 +119,6 @@ export async function unwrapRecoveryEnvelope(
   );
 
   const vaultRootSecret = new Uint8Array(clear);
-  if (vaultRootSecret.byteLength !== 32) throw new Error('Invalid Sreva vault root secret.');
+  if (vaultRootSecret.byteLength !== 32) throw new Error('Invalid Sreadya vault root secret.');
   return vaultRootSecret;
 }

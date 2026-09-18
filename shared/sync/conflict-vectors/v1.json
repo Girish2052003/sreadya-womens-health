@@ -1,5 +1,5 @@
 {
-  "format": "sreva-sync-conflict-vectors-v1",
+  "format": "sreadya-sync-conflict-vectors-v1",
   "version": 1,
   "note": "Synthetic protocol-state fixtures only; no real health data.",
   "cases": [

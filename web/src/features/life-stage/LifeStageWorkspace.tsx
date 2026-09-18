@@ -42,7 +42,7 @@ export function LifeStageWorkspace() {
     })().catch(() => {
       if (cancelled) return;
       setStatus('Local vault unavailable');
-      setError('Sreva could not open the encrypted life-stage preference in this browser.');
+      setError('Sreadya could not open the encrypted life-stage preference in this browser.');
       setReady(true);
     });
 
@@ -63,7 +63,7 @@ export function LifeStageWorkspace() {
       await repository.save(mode);
       setStatus('Saved locally · encrypted');
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Sreva could not save the life-stage preference.');
+      setError(cause instanceof Error ? cause.message : 'Sreadya could not save the life-stage preference.');
     } finally {
       setSaving(false);
     }
@@ -82,7 +82,7 @@ export function LifeStageWorkspace() {
       {ready && !error ? (
         <div className="workspace-grid">
           <Card eyebrow="Context" title="Life stage">
-            <p>Choose the context that best matches how you want Sreva to behave now. Changing this setting never deletes earlier cycle history.</p>
+            <p>Choose the context that best matches how you want Sreadya to behave now. Changing this setting never deletes earlier cycle history.</p>
             <fieldset>
               <legend>Life-stage mode</legend>
               {LIFE_STAGE_MODES.map((candidate) => (

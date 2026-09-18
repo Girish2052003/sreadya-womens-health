@@ -1,4 +1,4 @@
-# Sreva Web/PWA Local Acceptance — Task 18
+# Sreadya Web/PWA Local Acceptance — Task 18
 
 **Status:** FORMALLY CLOSED FOR IMPLEMENTATION — desktop/live-production acceptance is green; two physical iPhone field observations are explicitly deferred and remain pending
 
@@ -6,13 +6,13 @@
 
 **Current Task-18 branch head before the closure decision:** `a4f6dd70e9e6987b0e8777f33047338893be62b3`
 
-**Live production URL:** `https://girish2052003.github.io/sreva-womens-health/`
+**Live production URL:** `https://girish2052003.github.io/sreadya-womens-health/`
 
-This evidence file tracks the wife PWA acceptance milestone for the local/account-free Sreva Web/PWA experience. No criterion is marked accepted unless there is direct evidence for that criterion. Synthetic test data only is used in automated acceptance.
+This evidence file tracks the wife PWA acceptance milestone for the local/account-free Sreadya Web/PWA experience. No criterion is marked accepted unless there is direct evidence for that criterion. Synthetic test data only is used in automated acceptance.
 
 ## Deployment and technical baseline
 
-- [x] Final Task-17 Sreva CI completed successfully on the closure baseline.
+- [x] Final Task-17 Sreadya CI completed successfully on the closure baseline.
 - [x] Final Task-17 dedicated Task 5–16 verification workflows completed successfully on the closure baseline.
 - [x] GitHub Pages static build workflow completed successfully on the closure baseline.
 - [x] GitHub Pages artifact was produced successfully for the project-path static export.
@@ -43,7 +43,7 @@ Latest exact-head proof:
 - Production acceptance step: **SUCCESS**
 - Test target: the public GitHub Pages HTTPS deployment, not a local development server
 
-The live test also verifies the PWA manifest (`name=Sreva`, `display=standalone`, project-path `start_url`/`scope`) and waits for the production service worker before entering the account-free workspace.
+The live test also verifies the PWA manifest (`name=Sreadya`, `display=standalone`, project-path `start_url`/`scope`) and waits for the production service worker before entering the account-free workspace.
 
 ## Required Task-18 acceptance
 
@@ -79,12 +79,12 @@ These two checks are intentionally not replaced by desktop emulation or CI. They
 - [x] Put the production page offline, reload it, and confirm the Home workspace and encrypted local vault reopen successfully.
 - [x] Inspect Cache Storage URLs/bodies for the synthetic private-note and historical-period sentinels and confirm they are absent.
 - [x] Inspect all observed request URLs and request bodies for those sensitive sentinels and confirm they are absent.
-- [x] Confirm every observed request stays on the deployed Sreva origin during the acceptance flow.
+- [x] Confirm every observed request stays on the deployed Sreadya origin during the acceptance flow.
 
 ## Closure boundary
 
 Task 18 is formally closed for implementation and automated/live-production acceptance by explicit product-owner decision dated 17 September 2026. No additional Task-18 coding is required to begin Task 20 or later C2 implementation.
 
-The two physical-iPhone observations above remain **PENDING** and are not waived as facts. They are deferred to field acceptance and must be completed before Sreva claims real-iPhone PWA installation/standalone acceptance. When they are observed, record device/browser, date, and result here without rewriting the historical closure decision.
+The two physical-iPhone observations above remain **PENDING** and are not waived as facts. They are deferred to field acceptance and must be completed before Sreadya claims real-iPhone PWA installation/standalone acceptance. When they are observed, record device/browser, date, and result here without rewriting the historical closure decision.
 
 Account/sync work must not be used as evidence for those physical-device checks.

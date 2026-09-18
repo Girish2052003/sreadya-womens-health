@@ -23,7 +23,7 @@ class PredictionDetailsScreen extends ConsumerWidget {
               child: Padding(
                 padding: EdgeInsets.all(24),
                 child: Text(
-                  'Sreva needs at least two valid period starts before it can estimate a future cycle.',
+                  'Sreadya needs at least two valid period starts before it can estimate a future cycle.',
                 ),
               ),
             );

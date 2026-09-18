@@ -69,7 +69,7 @@ def test_easy_language_and_rtl_are_real_user_preferences() -> None:
     settings = read("web/src/features/settings/SettingsWorkspace.tsx")
     guide = read("web/src/accessibility/EasyLanguageGuide.tsx")
     assert "easyLanguage" in preferences
-    assert "data-sreva-language-mode" in preferences
+    assert "data-sreadya-language-mode" in preferences
     assert "Easy language" in panel
     assert "EasyLanguageGuide" in layout
     assert "localeDirection" in settings
@@ -126,7 +126,7 @@ def test_theme_toggle_and_light_surface_contrast_are_release_contracts() -> None
     for label in ("System", "Light", "Dark"):
         assert f"label: '{label}'" in toggle
     assert "theme`" in toggle or "theme'" in toggle
-    assert "sreva:general-settings:v1" in theme
+    assert "sreadya:general-settings:v1" in theme
     assert "ThemeToggle" in header
     assert "--ink-on-light" in globals_css
     assert "--muted-on-light" in globals_css

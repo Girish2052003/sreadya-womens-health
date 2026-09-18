@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sreva/features/assistant/domain/local_intent_parser.dart';
-import 'package:sreva/features/reminders/domain/reminder_models.dart';
+import 'package:sreadya/features/assistant/domain/local_intent_parser.dart';
+import 'package:sreadya/features/reminders/domain/reminder_models.dart';
 
 void main() {
   final now = DateTime(2026, 9, 15, 9);

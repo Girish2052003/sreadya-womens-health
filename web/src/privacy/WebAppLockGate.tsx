@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from '../components/ui/Button';
 import { getAutoLockMinutes, isPinConfigured, verifyPin } from './app-lock';
 
-const CHANGE_EVENT = 'sreva-app-lock-changed';
+const CHANGE_EVENT = 'sreadya-app-lock-changed';
 
 export function WebAppLockGate({ children }: { children: ReactNode }) {
   const [hydrated, setHydrated] = useState(false);
@@ -88,14 +88,14 @@ export function WebAppLockGate({ children }: { children: ReactNode }) {
     if (nextFailures >= 5) {
       setBlockedUntil(Date.now() + 30_000);
       setFailures(0);
-      setError('Too many incorrect attempts. Sreva paused PIN attempts for 30 seconds.');
+      setError('Too many incorrect attempts. Sreadya paused PIN attempts for 30 seconds.');
     } else {
       setError('Incorrect PIN.');
     }
   };
 
   if (!hydrated) {
-    return <main className="app-lock-screen" aria-busy="true"><p>Opening private Sreva workspace…</p></main>;
+    return <main className="app-lock-screen" aria-busy="true"><p>Opening private Sreadya workspace…</p></main>;
   }
 
   if (configured && !unlocked) {
@@ -104,10 +104,10 @@ export function WebAppLockGate({ children }: { children: ReactNode }) {
         <section className="app-lock-card" aria-labelledby="app-lock-title">
           <span className="workspace-topbar__mark" aria-hidden="true">S</span>
           <p className="public-eyebrow">Private workspace locked</p>
-          <h1 id="app-lock-title">Unlock Sreva</h1>
+          <h1 id="app-lock-title">Unlock Sreadya</h1>
           <p>Your browser-local PIN is a privacy gate. It is separate from the encrypted vault key and is not used as the encryption key.</p>
           <form onSubmit={(event) => { event.preventDefault(); void unlock(); }}>
-            <label><span>PIN</span><input aria-label="Sreva PIN" type="password" inputMode="numeric" pattern="[0-9]*" autoComplete="off" value={pin} onChange={(event) => setPin(event.target.value)} /></label>
+            <label><span>PIN</span><input aria-label="Sreadya PIN" type="password" inputMode="numeric" pattern="[0-9]*" autoComplete="off" value={pin} onChange={(event) => setPin(event.target.value)} /></label>
             <Button type="submit" disabled={pin.length < 4}>Unlock</Button>
           </form>
           {error ? <p className="core-error" role="alert">{error}</p> : null}
@@ -120,4 +120,4 @@ export function WebAppLockGate({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
-export const SREVA_APP_LOCK_CHANGE_EVENT = CHANGE_EVENT;
+export const SREADYA_APP_LOCK_CHANGE_EVENT = CHANGE_EVENT;

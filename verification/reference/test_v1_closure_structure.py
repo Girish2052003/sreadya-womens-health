@@ -24,7 +24,7 @@ def test_calendar_has_month_timeline_and_year_views():
 
 def test_prediction_includes_period_duration_estimate_and_detail_route():
     model = read("lib/features/predictions/domain/cycle_prediction.dart")
-    app = read("lib/app/sreva_app.dart")
+    app = read("lib/app/sreadya_app.dart")
     assert "estimatedPeriodDurationDays" in model
     assert "/prediction" in app
 
@@ -72,7 +72,7 @@ def test_pin_fallback_is_independent_from_database_key():
     assert "Argon2id" in pin
     assert "FlutterSecureStorage" in pin
     assert "DatabaseKeyProvider" not in pin
-    assert "Use Sreva PIN" in bootstrap
+    assert "Use Sreadya PIN" in bootstrap
 
 
 def test_migration_recovery_snapshot_is_real():
@@ -101,7 +101,7 @@ def test_android_release_hardening_targets_play_and_forbids_debug_signing():
     assert "TARGET_API = 36" in src
     assert "targetSdk = {TARGET_API}" in src
     assert "compileSdk = {TARGET_API}" in src
-    assert "SREVA_ANDROID_KEYSTORE_PATH" in src
+    assert "SREADYA_ANDROID_KEYSTORE_PATH" in src
     assert "--require-signing" in src
     assert 'signingConfigs.getByName(\"debug\")' in src
     assert "debug signing key" in src
@@ -139,10 +139,10 @@ def test_production_workflow_requires_real_upload_key_secrets():
     assert "workflow_dispatch" in workflow
     assert "ref: main" in workflow
     assert "android-production" in workflow
-    assert "SREVA_ANDROID_UPLOAD_KEYSTORE_B64" in workflow
-    assert "SREVA_ANDROID_KEYSTORE_PASSWORD" in workflow
-    assert "SREVA_ANDROID_KEY_ALIAS" in workflow
-    assert "SREVA_ANDROID_KEY_PASSWORD" in workflow
+    assert "SREADYA_ANDROID_UPLOAD_KEYSTORE_B64" in workflow
+    assert "SREADYA_ANDROID_KEYSTORE_PASSWORD" in workflow
+    assert "SREADYA_ANDROID_KEY_ALIAS" in workflow
+    assert "SREADYA_ANDROID_KEY_PASSWORD" in workflow
     assert "tool/secret_scan.py" in workflow
     assert ":app:testReleaseUnitTest" in workflow
     assert "--require-signing" in workflow
@@ -151,14 +151,14 @@ def test_production_workflow_requires_real_upload_key_secrets():
 
 
 def test_privacy_policy_is_available_in_app_and_as_publishable_page_source():
-    app = read("lib/app/sreva_app.dart")
+    app = read("lib/app/sreadya_app.dart")
     center = read("lib/features/privacy/presentation/privacy_center_screen.dart")
     policy = read("lib/features/privacy/presentation/privacy_policy_screen.dart")
     public_page = read("docs/android/privacy-policy.html")
     assert "/more/privacy-policy" in app
     assert "Read full privacy policy" in center
-    assert "Sreva Privacy Policy" in policy
-    assert "Sreva Privacy Policy" in public_page
+    assert "Sreadya Privacy Policy" in policy
+    assert "Sreadya Privacy Policy" in public_page
     assert "reproductive-health" in public_page
 
 

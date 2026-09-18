@@ -10,7 +10,7 @@ export default function AppLandingPage() {
       <main className="workspace-main">
         <header className="workspace-heading">
           <div>
-            <p className="workspace-kicker">Private Sreva</p>
+            <p className="workspace-kicker">Private Sreadya</p>
             <h1>Open your space</h1>
             <p className="workspace-note">Choose a starting point. Account-free health features remain first class.</p>
           </div>

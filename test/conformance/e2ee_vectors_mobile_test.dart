@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:cryptography/cryptography.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sreva/core/crypto/e2ee/e2ee_v1.dart';
-import 'package:sreva/features/sync/domain/sync_envelope.dart';
+import 'package:sreadya/core/crypto/e2ee/e2ee_v1.dart';
+import 'package:sreadya/features/sync/domain/sync_envelope.dart';
 
 const _cryptoVectorPath = 'shared/crypto/interoperability-vectors/e2ee-v1.json';
 const _syncVectorPath = 'shared/sync/conflict-vectors/v1.json';
@@ -195,7 +195,7 @@ void main() {
           ),
           isFalse,
         );
-        expect(SyncConflictPolicy.acceptsSuite(srevaE2eeSuiteV1), isTrue);
+        expect(SyncConflictPolicy.acceptsSuite(sreadyaE2eeSuiteV1), isTrue);
       },
     );
   });

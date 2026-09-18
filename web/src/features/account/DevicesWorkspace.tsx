@@ -7,10 +7,10 @@ import { Card } from '../../components/ui/Card';
 import { parseTrustedDeviceQr } from '../../account/trusted-devices';
 
 type Device = { device_id: string; account_id: string; state: string };
-const ACCOUNT_KEY = 'sreva:account-id:v1';
+const ACCOUNT_KEY = 'sreadya:account-id:v1';
 
 function baseUrl(): string {
-  return (process.env.NEXT_PUBLIC_SREVA_SYNC_BASE_URL ?? '').replace(/\/$/, '');
+  return (process.env.NEXT_PUBLIC_SREADYA_SYNC_BASE_URL ?? '').replace(/\/$/, '');
 }
 
 export function DevicesWorkspace() {
@@ -32,7 +32,7 @@ export function DevicesWorkspace() {
       const value = await response.json() as Device[];
       setDevices(Array.isArray(value) ? value : []);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Sreva could not read the trusted-device list.');
+      setError(cause instanceof Error ? cause.message : 'Sreadya could not read the trusted-device list.');
     }
   };
 
@@ -63,7 +63,7 @@ export function DevicesWorkspace() {
           <Button variant="secondary" disabled={!qr.trim()} onClick={inspectQr}>Validate enrollment package locally</Button>
           {qrStatus ? <p role="status">{qrStatus}</p> : null}
         </div>
-        <p className="workspace-note">An already trusted device may approve another device through the authenticated continuity protocol; revoked devices cannot continue continuity. Actual approval/revocation requires an enrolled-device signer and continuity service. Sreva does not turn a QR parse into fake authorization.</p>
+        <p className="workspace-note">An already trusted device may approve another device through the authenticated continuity protocol; revoked devices cannot continue continuity. Actual approval/revocation requires an enrolled-device signer and continuity service. Sreadya does not turn a QR parse into fake authorization.</p>
       </Card>
     </div>
   );

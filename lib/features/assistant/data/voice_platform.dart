@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 
 class VoicePlatform {
-  static const MethodChannel _channel = MethodChannel('sreva/voice');
+  static const MethodChannel _channel = MethodChannel('sreadya/voice');
 
   Future<bool> supportsOfflineRecognition() async {
     try {

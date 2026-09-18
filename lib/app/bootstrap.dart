@@ -5,16 +5,16 @@ import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/privacy/data/app_lock_service.dart';
 import '../features/privacy/data/pin_lock_service.dart';
 import '../features/settings/data/privacy_settings_store.dart';
-import 'sreva_app.dart';
+import 'sreadya_app.dart';
 
-class SrevaBootstrap extends StatefulWidget {
-  const SrevaBootstrap({super.key});
+class SreadyaBootstrap extends StatefulWidget {
+  const SreadyaBootstrap({super.key});
 
   @override
-  State<SrevaBootstrap> createState() => _SrevaBootstrapState();
+  State<SreadyaBootstrap> createState() => _SreadyaBootstrapState();
 }
 
-class _SrevaBootstrapState extends State<SrevaBootstrap>
+class _SreadyaBootstrapState extends State<SreadyaBootstrap>
     with WidgetsBindingObserver {
   late Future<bool> _onboarding = OnboardingStore().isComplete();
   bool _unlocked = false;
@@ -91,7 +91,7 @@ class _SrevaBootstrapState extends State<SrevaBootstrap>
     final pin = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Enter Sreva PIN'),
+        title: const Text('Enter Sreadya PIN'),
         content: TextField(
           controller: controller,
           obscureText: true,
@@ -119,8 +119,9 @@ class _SrevaBootstrapState extends State<SrevaBootstrap>
     if (ok) {
       setState(() => _unlocked = true);
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Incorrect Sreva PIN.')));
+      const message = 'Incorrect Sreadya PIN.';
+      final messenger = ScaffoldMessenger.of(context);
+      messenger.showSnackBar(const SnackBar(content: Text(message)));
     }
   }
 
@@ -163,7 +164,7 @@ class _SrevaBootstrapState extends State<SrevaBootstrap>
                         const Icon(Icons.lock_outline, size: 56),
                         const SizedBox(height: 16),
                         const Text(
-                          'Sreva is locked',
+                          'Sreadya is locked',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w700,
@@ -188,7 +189,7 @@ class _SrevaBootstrapState extends State<SrevaBootstrap>
                                   child: OutlinedButton.icon(
                                     onPressed: _unlockWithPin,
                                     icon: const Icon(Icons.pin_outlined),
-                                    label: const Text('Use Sreva PIN'),
+                                    label: const Text('Use Sreadya PIN'),
                                   ),
                                 )
                               : const SizedBox.shrink(),
@@ -201,7 +202,7 @@ class _SrevaBootstrapState extends State<SrevaBootstrap>
             ),
           );
         }
-        return const SrevaApp();
+        return const SreadyaApp();
       },
     );
   }

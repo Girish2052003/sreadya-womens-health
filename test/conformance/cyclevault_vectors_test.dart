@@ -4,8 +4,8 @@ import 'dart:io';
 
 import 'package:cryptography/cryptography.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sreva/features/backup/data/cycle_vault_service.dart';
-import 'package:sreva/features/cycle/domain/cycle_models.dart';
+import 'package:sreadya/features/backup/data/cycle_vault_service.dart';
+import 'package:sreadya/features/cycle/domain/cycle_models.dart';
 
 const _vectorPath = 'shared/crypto/interoperability-vectors/cyclevault-v1.json';
 

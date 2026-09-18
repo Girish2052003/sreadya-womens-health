@@ -32,7 +32,7 @@ class _StagedRestore {
 class CycleVaultService {
   CycleVaultService({required this._repository});
 
-  static const String format = 'SREVA-CYCLEVAULT';
+  static const String format = 'SREADYA-CYCLEVAULT';
   static const int formatVersion = 1;
   final HealthRepository _repository;
   final AesGcm _cipher = AesGcm.with256bits();
@@ -87,7 +87,7 @@ class CycleVaultService {
     final bytes = await exportBytes(passphrase);
     final directory = await getTemporaryDirectory();
     final name =
-        'sreva-${DateTime.now().toUtc().toIso8601String().replaceAll(':', '-')}.cyclevault';
+        'sreadya-${DateTime.now().toUtc().toIso8601String().replaceAll(':', '-')}.cyclevault';
     final file = File(p.join(directory.path, name));
     await file.writeAsBytes(bytes, flush: true);
     return file.path;

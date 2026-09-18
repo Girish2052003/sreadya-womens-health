@@ -6,10 +6,10 @@ import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { registerPasskey, loginWithPasskey } from '../../account/passkeys';
 
-const ACCOUNT_KEY = 'sreva:account-id:v1';
+const ACCOUNT_KEY = 'sreadya:account-id:v1';
 
 function baseUrl(): string {
-  return (process.env.NEXT_PUBLIC_SREVA_SYNC_BASE_URL ?? '').replace(/\/$/, '');
+  return (process.env.NEXT_PUBLIC_SREADYA_SYNC_BASE_URL ?? '').replace(/\/$/, '');
 }
 
 export function AccountWorkspace() {
@@ -79,8 +79,8 @@ export function AccountWorkspace() {
   return (
     <div className="workspace-grid">
       <Card eyebrow="Optional account" title="Account-free remains complete">
-        <div className="continuity-state"><strong>Current mode</strong>{accountId ? 'Account identity is linked in this browser.' : 'Account-free local Sreva is active.'}</div>
-        <p>Creating an account adds encrypted continuity convenience. It does not unlock stronger health features and does not give Sreva a key to decrypt the local health vault.</p>
+        <div className="continuity-state"><strong>Current mode</strong>{accountId ? 'Account identity is linked in this browser.' : 'Account-free local Sreadya is active.'}</div>
+        <p>Creating an account adds encrypted continuity convenience. It does not unlock stronger health features and does not give Sreadya a key to decrypt the local health vault.</p>
         <p className="workspace-note">Deleting a server account is server-scoped: former devices may still hold their own local encrypted health data until it is deleted on those devices.</p>
         {!endpoint ? <p className="workspace-note">This static deployment has no approved identity/sync service URL configured. Account-free health features remain available; continuity controls stay disabled rather than pretending to work.</p> : null}
       </Card>

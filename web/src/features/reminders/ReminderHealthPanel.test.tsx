@@ -45,6 +45,6 @@ describe('ReminderHealthPanel', () => {
     );
 
     expect(html).toContain('Maximum Privacy');
-    expect(html.toLowerCase()).toContain('local to sreva');
+    expect(html.toLowerCase()).toContain('local to sreadya');
   });
 });

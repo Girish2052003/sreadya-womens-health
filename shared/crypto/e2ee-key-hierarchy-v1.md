@@ -1,10 +1,10 @@
-# Sreva E2EE Key Hierarchy v1
+# Sreadya E2EE Key Hierarchy v1
 
 **Status:** Task-19 protocol design candidate. No production account/sync code is authorized until the Task-19 review and three-client conformance gate are green.
 
 ## 1. Security objective
 
-Sreva optional account continuity preserves the local-first privacy model. Health plaintext is created and interpreted only on authorized clients. The sync service may store ciphertext, wrapped key material, public device material, opaque identifiers, minimum operational metadata, and authorization state. It must not possess the secret required to decrypt the health vault.
+Sreadya optional account continuity preserves the local-first privacy model. Health plaintext is created and interpreted only on authorized clients. The sync service may store ciphertext, wrapped key material, public device material, opaque identifiers, minimum operational metadata, and authorization state. It must not possess the secret required to decrypt the health vault.
 
 Account authentication and health-vault decryption are separate security domains. A valid passkey, email verification, SMS verification, session cookie, administrator credential, or database credential MUST NOT by itself derive the health-vault key.
 
@@ -20,19 +20,19 @@ Protocol v1 uses established primitives with maintained implementation paths in 
 
 Canonical suite identifier:
 
-`SREVA-AES256GCM-HKDFSHA256-ED25519-V1`
+`SREADYA-AES256GCM-HKDFSHA256-ED25519-V1`
 
-Sreva does not define a new cipher, hash, KDF, signature primitive, or public-key encryption construction in v1. Ed25519 signs the canonical transcript bytes directly; v1 does not use Ed25519ph or an extra pre-hash of the complete transcript. SHA-256 remains inside the transcript as the request-body digest.
+Sreadya does not define a new cipher, hash, KDF, signature primitive, or public-key encryption construction in v1. Ed25519 signs the canonical transcript bytes directly; v1 does not use Ed25519ph or an extra pre-hash of the complete transcript. SHA-256 remains inside the transcript as the request-body digest.
 
 ## 3. Canonical framing
 
-Cryptographic context uses `sreva-lp16-v1` framing. Every field is encoded as raw bytes or UTF-8 and prefixed with an unsigned 16-bit big-endian byte length. The first field is always the domain-separation label. This prevents concatenation ambiguity and makes the same byte transcript reproducible in Dart, Web, and Go.
+Cryptographic context uses `sreadya-lp16-v1` framing. Every field is encoded as raw bytes or UTF-8 and prefixed with an unsigned 16-bit big-endian byte length. The first field is always the domain-separation label. This prevents concatenation ambiguity and makes the same byte transcript reproducible in Dart, Web, and Go.
 
 No implementation may replace canonical framing with ad-hoc JSON serialization for a key-derivation, AAD, or request-signature transcript.
 
 ## 4. Vault Root Secret
 
-Each E2EE vault has a client-generated 32-byte **Vault Root Secret (VRS)**. The VRS is generated with a CSPRNG on an authorized client and is never intentionally sent to Sreva infrastructure in plaintext.
+Each E2EE vault has a client-generated 32-byte **Vault Root Secret (VRS)**. The VRS is generated with a CSPRNG on an authorized client and is never intentionally sent to Sreadya infrastructure in plaintext.
 
 The VRS is the root secret for encrypted synchronization. It is separate from the existing device-local storage encryption key. A client may protect its locally stored VRS using its platform-specific secure-storage/vault boundary, but those local wrapping details do not change the cross-platform E2EE protocol.
 
@@ -44,10 +44,10 @@ Every encrypted logical event has a fresh random `event_id` and opaque `object_i
 
 - input key material: VRS;
 - fresh 32-byte random salt stored with the event envelope;
-- info: canonical frame of `sreva-event-key-v1`, `event_id`, `object_id`, `source_device_id`, `key_epoch`, and suite ID;
+- info: canonical frame of `sreadya-event-key-v1`, `event_id`, `object_id`, `source_device_id`, `key_epoch`, and suite ID;
 - output length: 32 bytes.
 
-AES-256-GCM AAD binds the ciphertext to the canonical frame of `sreva-sync-event-v1`, opaque account ID, vault ID, event ID, object ID, source device ID, key epoch, logical schema/version, base revision, operation, and suite ID.
+AES-256-GCM AAD binds the ciphertext to the canonical frame of `sreadya-sync-event-v1`, opaque account ID, vault ID, event ID, object ID, source device ID, key epoch, logical schema/version, base revision, operation, and suite ID.
 
 Changing account/vault/object/event/device/revision/operation metadata therefore breaks authentication instead of silently reinterpreting ciphertext. Duplicate event IDs are rejected or recognized idempotently and MUST NOT authorize a fresh encryption under a reused key/nonce pair.
 
@@ -57,9 +57,9 @@ Emergency recovery uses a separate 32-byte CSPRNG-generated **Recovery Secret (R
 
 The human-facing representation includes a version marker and checksum so common transcription errors can be detected before decryption. The raw 32-byte secret remains the cryptographic input.
 
-A recovery wrapping key is derived with HKDF-SHA-256 from RS, a fresh 32-byte salt, and canonical context binding account ID, vault ID, key epoch, and suite under `sreva-recovery-wrap-key-v1`. The VRS is wrapped with AES-256-GCM and AAD under `sreva-recovery-envelope-v1` binding the same context.
+A recovery wrapping key is derived with HKDF-SHA-256 from RS, a fresh 32-byte salt, and canonical context binding account ID, vault ID, key epoch, and suite under `sreadya-recovery-wrap-key-v1`. The VRS is wrapped with AES-256-GCM and AAD under `sreadya-recovery-envelope-v1` binding the same context.
 
-Sreva infrastructure may store the encrypted recovery envelope and its non-secret salt/nonce/metadata. Without the user-held RS it cannot unwrap the VRS. If every authorized device and the RS are lost, old vault content is cryptographically unrecoverable by design even if account identity is later recovered.
+Sreadya infrastructure may store the encrypted recovery envelope and its non-secret salt/nonce/metadata. Without the user-held RS it cannot unwrap the VRS. If every authorized device and the RS are lost, old vault content is cryptographically unrecoverable by design even if account identity is later recovered.
 
 ## 7. Trusted-device enrollment
 

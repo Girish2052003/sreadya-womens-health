@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sreva/core/settings/user_formatters.dart';
-import 'package:sreva/features/settings/domain/app_preferences.dart';
+import 'package:sreadya/core/settings/user_formatters.dart';
+import 'package:sreadya/features/settings/domain/app_preferences.dart';
 
 void main() {
   test(

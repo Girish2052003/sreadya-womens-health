@@ -52,7 +52,7 @@ A wife-alpha acceptance receipt should therefore say that the required flows wer
 
 For Web/PWA and Android, exercise the same product promise rather than matching pixels:
 
-- open Sreva without an account and confirm the health feature set remains complete;
+- open Sreadya without an account and confirm the health feature set remains complete;
 - log synthetic or user-controlled data locally and confirm persistence;
 - check predictions/confidence wording and non-diagnostic safety language;
 - configure reminders and verify privacy wording;
