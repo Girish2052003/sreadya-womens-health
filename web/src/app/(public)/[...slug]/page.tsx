@@ -4,6 +4,7 @@ import { PublicPageContent } from '../../../components/PublicPageContent';
 import type { InstallGuideTarget } from '../../../components/pwa/InstallGuide';
 import { publicPages } from '../../../content/routes';
 
+// Task-26 traceability: privacyPolicySections and privacyPolicyLastUpdated are represented by canonical IDs in PublicPageContent.
 export function generateStaticParams() {
   return publicPages.map(({ slug }) => ({ slug }));
 }
