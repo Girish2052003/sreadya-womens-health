@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import messages from '../i18n/messages/en.json';
+import { useI18n } from '../i18n/I18nProvider';
 import { AccessibilityPreferencesPanel } from './AccessibilityPreferencesPanel';
 import {
   DEFAULT_ACCESSIBILITY_PREFERENCES,
@@ -13,9 +13,8 @@ import {
 } from './preferences';
 
 export function AccessibilityPreferencesWorkspace() {
-  const [preferences, setPreferences] = useState<AccessibilityPreferences>({
-    ...DEFAULT_ACCESSIBILITY_PREFERENCES,
-  });
+  const { t } = useI18n();
+  const [preferences, setPreferences] = useState<AccessibilityPreferences>({ ...DEFAULT_ACCESSIBILITY_PREFERENCES });
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
@@ -37,18 +36,13 @@ export function AccessibilityPreferencesWorkspace() {
 
   return (
     <div className="workspace-grid accessibility-workspace">
-      <AccessibilityPreferencesPanel
-        preferences={preferences}
-        saving={false}
-        onChange={changePreferences}
-        onSave={savePreferences}
-      />
+      <AccessibilityPreferencesPanel preferences={preferences} saving={false} onChange={changePreferences} onSave={savePreferences} />
       <section className="sreadya-card" aria-labelledby="accessibility-local-title">
-        <p className="sreadya-card__eyebrow">Local preference</p>
-        <h2 className="sreadya-card__title" id="accessibility-local-title">Stored on this browser</h2>
+        <p className="sreadya-card__eyebrow">{t('accessibility.local.eyebrow')}</p>
+        <h2 className="sreadya-card__title" id="accessibility-local-title">{t('accessibility.local.title')}</h2>
         <div className="sreadya-card__body">
-          <p>These presentation preferences stay in this browser and do not require an account.</p>
-          {saved ? <p role="status" className="workspace-note">{messages['accessibility.saved']}</p> : null}
+          <p>{t('accessibility.local.body')}</p>
+          {saved ? <p role="status" className="workspace-note">{t('accessibility.saved')}</p> : null}
         </div>
       </section>
     </div>
