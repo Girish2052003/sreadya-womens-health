@@ -147,6 +147,18 @@ export function ReminderSettingsPanel({
         </div>
       </Card>
 
+      <Card eyebrow="Personal reminder families" title="More than cycle reminders">
+        <ul>
+          <li>Medication reminder</li>
+          <li>Contraception reminder</li>
+          <li>Supplement reminder</li>
+          <li>Ovulation-test reminder</li>
+          <li>Pregnancy-test reminder</li>
+        </ul>
+        <p>Snooze is configured per personal reminder in the reminder manager below.</p>
+        <p className="workspace-note">These are user-created wellness reminder intents. Sreva does not prescribe medicine, contraception, tests, or treatment.</p>
+      </Card>
+
       <Card eyebrow="Notification wording" title="Privacy level">
         <div className="reminder-privacy-options" role="radiogroup" aria-label="Notification privacy">
           {PRIVACY_OPTIONS.map((option) => (

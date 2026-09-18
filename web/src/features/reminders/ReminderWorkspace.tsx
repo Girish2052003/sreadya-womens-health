@@ -10,6 +10,7 @@ import { HealthVaultRepository } from '../../vault/health-repository';
 import { VaultService } from '../../vault/vault-service';
 import { continuePrivately } from '../onboarding/private-onboarding';
 import { ReminderHealthPanel } from './ReminderHealthPanel';
+import { PersonalReminderPanel } from './PersonalReminderPanel';
 import {
   DEFAULT_REMINDER_SETTINGS,
   ReminderSettingsRepository,
@@ -135,6 +136,7 @@ export function ReminderWorkspace() {
             privacy={notificationPrivacy(settings.privacy)}
             nextReminder={schedule.plans[0] ?? null}
           />
+          <PersonalReminderPanel />
           {!schedule.prediction ? (
             <p className="workspace-note reminder-no-prediction">
               More cycle history is needed before a cycle-relative reminder date can be prepared. No date is invented.
