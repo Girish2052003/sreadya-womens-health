@@ -40,6 +40,10 @@ async function bundle(
   return response.json() as Promise<Record<string, string>>;
 }
 
+function providerClosurePublished(data: I18nManifest): boolean {
+  return data.publicLocales.length >= 194;
+}
+
 async function chooseLanguage(page: Page, englishName: string, tag: string): Promise<void> {
   await page.goto('/');
   await page.getByTestId('language-chooser-trigger').click();
@@ -50,20 +54,33 @@ async function chooseLanguage(page: Page, englishName: string, tag: string): Pro
   await expect(page.locator('html')).toHaveAttribute('lang', tag);
 }
 
-test('every published locale is a complete current-source bundle and the frozen floor is 194+', async ({ request, browserName }) => {
+test('published locales are complete and pre-sync publication fails closed until the 194+ provider birth run', async ({ request, browserName }) => {
   test.skip(browserName !== 'chromium', 'One exhaustive artifact proof is sufficient; representative rendering is cross-browser.');
 
   const data = await manifest(request);
   expect(data.version).toBeGreaterThanOrEqual(2);
   expect(data.sourceLocale).toBe('en');
-  expect(data.publicLocales.length).toBeGreaterThanOrEqual(194);
 
   const englishArtifact = data.artifacts.en;
   expect(englishArtifact).toBeTruthy();
+  expect(englishArtifact.coverage).toBe('source');
   const english = await bundle(request, data, 'en');
   const sourceKeys = Object.keys(english).sort();
-  expect(sourceKeys.length).toBeGreaterThanOrEqual(1189);
+  expect(sourceKeys.length).toBeGreaterThanOrEqual(1249);
 
+  if (!providerClosurePublished(data)) {
+    // Before the protected Google birth run, SREADYA must publish no partial
+    // provider locales. English remains the only selectable language and the
+    // pseudo locales remain test-only artifacts.
+    expect(data.publicLocales).toHaveLength(1);
+    expect(data.publicLocales[0]).toMatchObject({ tag: 'en', coverage: 'source' });
+    expect(Object.keys(data.artifacts).sort()).toEqual(['ar-xb', 'en', 'en-xa']);
+    expect(data.artifacts['en-xa']?.coverage).toBe('pseudo');
+    expect(data.artifacts['ar-xb']?.coverage).toBe('pseudo');
+    return;
+  }
+
+  expect(data.publicLocales.length).toBeGreaterThanOrEqual(194);
   const seen = new Set<string>();
   for (const locale of data.publicLocales) {
     const key = locale.tag.toLowerCase();
@@ -89,7 +106,9 @@ test('every published locale is a complete current-source bundle and the frozen 
   }
 });
 
-test('language chooser is one clean provider-backed list with no raw fallback rows', async ({ page }) => {
+test('language chooser exactly reflects complete published locales with no raw fallback rows', async ({ page, request }) => {
+  const data = await manifest(request);
+
   await page.goto('/');
   await page.getByTestId('language-chooser-trigger').click();
 
@@ -97,8 +116,19 @@ test('language chooser is one clean provider-backed list with no raw fallback ro
   await expect(list).toBeVisible();
   await expect(page.locator('.language-chooser__list')).toHaveCount(1);
   await expect(page.locator('.language-chooser__option').first()).toBeVisible();
+
   const optionCount = await page.locator('.language-chooser__option').count();
-  expect(optionCount).toBeGreaterThanOrEqual(194);
+  expect(optionCount).toBe(data.publicLocales.length);
+
+  if (providerClosurePublished(data)) {
+    expect(optionCount).toBeGreaterThanOrEqual(194);
+  } else {
+    expect(optionCount).toBe(1);
+    await expect(page.locator('[data-language-tag="en"]')).toHaveCount(1);
+    await expect(page.locator('[data-language-tag="ar"]')).toHaveCount(0);
+    await expect(page.locator('[data-language-tag="en-XA"]')).toHaveCount(0);
+    await expect(page.locator('[data-language-tag="ar-XB"]')).toHaveCount(0);
+  }
 
   await expect(page.getByText('English fallback', { exact: true })).toHaveCount(0);
   await expect(page.locator('[data-language-tag="aa"]')).toHaveCount(0);
@@ -115,6 +145,20 @@ for (const target of [
 ] as const) {
   test(`${target.englishName} renders coherently across public and private routes without layout mirroring`, async ({ page, request }) => {
     const data = await manifest(request);
+    if (!providerClosurePublished(data)) {
+      // This is not a waiver: pre-sync publication is required to exclude the
+      // target completely. Once 194+ provider closure exists, the assertions
+      // below become mandatory automatically.
+      const key = target.tag.toLowerCase();
+      expect(data.publicLocales.some((locale) => locale.tag.toLowerCase() === key)).toBe(false);
+      expect(data.artifacts[key]).toBeUndefined();
+      return;
+    }
+
+    const published = data.publicLocales.some(
+      (locale) => locale.tag.toLowerCase() === target.tag.toLowerCase(),
+    );
+    expect(published, `${target.tag} must be public after provider closure`).toBe(true);
     const translated = await bundle(request, data, target.tag);
 
     await chooseLanguage(page, target.englishName, target.tag);

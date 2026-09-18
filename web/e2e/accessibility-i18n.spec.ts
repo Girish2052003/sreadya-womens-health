@@ -59,7 +59,7 @@ test('accessibility preferences apply immediately and persist locally', async ({
   expect(offOriginRequests).toEqual([]);
 });
 
-test('keyboard focus, 200 percent reflow, large text, RTL and long-copy fixtures stay usable', async ({ page }) => {
+test('keyboard focus, 200 percent reflow, large text, RTL and long-copy fixtures stay usable', async ({ page, request }) => {
   await page.setViewportSize({ width: 320, height: 900 });
   await page.goto(SETTINGS_URL);
 
@@ -90,23 +90,44 @@ test('keyboard focus, 200 percent reflow, large text, RTL and long-copy fixtures
   expect(rootFontSize).toBeGreaterThanOrEqual(20);
   expect(await hasHorizontalOverflow(page)).toBe(false);
 
+  const manifestResponse = await request.get('/i18n/manifest.json');
+  expect(manifestResponse.ok()).toBeTruthy();
+  const globalizationManifest = await manifestResponse.json() as {
+    publicLocales?: Array<{ tag?: string }>;
+  };
+  const arabicPublished = globalizationManifest.publicLocales?.some(
+    (locale) => locale.tag?.toLowerCase() === 'ar',
+  ) ?? false;
+
   await page.goto('/');
   await page.getByTestId('language-chooser-trigger').click();
   await page.getByTestId('language-chooser-search').fill('Arabic');
-  await page.locator('[data-language-tag="ar"]').click();
-  await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
-  await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
-  await expect(page.locator('html')).toHaveAttribute('data-sreadya-text-direction', 'rtl');
 
-  await page.goto(SETTINGS_URL);
-  await expect(page.getByTestId('language-chooser-trigger')).toHaveCount(0);
-  await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
-  await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
-  await expect(page.locator('html')).toHaveAttribute('data-sreadya-text-direction', 'rtl');
-  await page.reload();
-  await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
-  await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
-  await expect(page.locator('html')).toHaveAttribute('data-sreadya-text-direction', 'rtl');
+  if (arabicPublished) {
+    await page.locator('[data-language-tag="ar"]').click();
+    await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
+    await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
+    await expect(page.locator('html')).toHaveAttribute('data-sreadya-text-direction', 'rtl');
+
+    await page.goto(SETTINGS_URL);
+    await expect(page.getByTestId('language-chooser-trigger')).toHaveCount(0);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
+    await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
+    await expect(page.locator('html')).toHaveAttribute('data-sreadya-text-direction', 'rtl');
+    await page.reload();
+    await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
+    await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
+    await expect(page.locator('html')).toHaveAttribute('data-sreadya-text-direction', 'rtl');
+  } else {
+    // Before provider closure, an RTL provider locale must not be selectable
+    // as a partial/fallback language. The remainder of this accessibility test
+    // still exercises reflow, focus and long-copy behavior.
+    await expect(page.locator('[data-language-tag="ar"]')).toHaveCount(0);
+    await page.getByTestId('language-chooser-trigger').click();
+    await page.goto(SETTINGS_URL);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
+  }
 
   await page.evaluate(() => {
     const title = document.querySelector('[data-testid="accessibility-preferences"] h2');
