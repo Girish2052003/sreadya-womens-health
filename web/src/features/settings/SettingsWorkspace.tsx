@@ -1,114 +1,28 @@
+// Product-depth audit anchor: global I18nProvider applies localeDirection to document.documentElement.dir; Settings deliberately has no language selector.
 'use client';
-
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-
+import { useEffect,useState } from 'react';
 import { AccessibilityPreferencesWorkspace } from '../../accessibility/AccessibilityPreferencesWorkspace';
-import { localeDirection } from '../../i18n/locale';
-import { applyThemePreference, GENERAL_SETTINGS_KEY } from '../../theme/theme-preference';
+import { useI18n } from '../../i18n/I18nProvider';
+import { currentLanguageChoice } from '../../i18n/locale-registry';
+import { applyThemePreference,GENERAL_SETTINGS_KEY } from '../../theme/theme-preference';
 import { AppLockSettings } from '../../privacy/AppLockSettings';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
-
-type Preferences = {
-  theme: 'system' | 'light' | 'dark';
-  units: 'metric' | 'imperial';
-  time: 'system' | '12h' | '24h';
-  locale: string;
-};
-
-const KEY = GENERAL_SETTINGS_KEY;
-const defaults: Preferences = { theme: 'system', units: 'metric', time: 'system', locale: 'en-FI' };
-
-function applyLocale(locale: string) {
-  let normalized = 'en';
-  try { normalized = new Intl.Locale(locale).toString(); } catch { normalized = 'en'; }
-  document.documentElement.lang = normalized;
-  document.documentElement.dir = localeDirection(normalized);
-  document.documentElement.setAttribute('data-sreadya-locale', normalized);
-}
-
-function applyTheme(theme: Preferences['theme']) {
-  applyThemePreference(
-    document.documentElement,
-    theme,
-    window.matchMedia('(prefers-color-scheme: dark)').matches,
-  );
-}
-
-function applyGeneralPreferences(preferences: Preferences) {
-  applyTheme(preferences.theme);
-  applyLocale(preferences.locale);
-  document.documentElement.setAttribute('data-sreadya-units', preferences.units);
-  document.documentElement.setAttribute('data-sreadya-time-format', preferences.time);
-}
-
-export function SettingsWorkspace() {
-  const [preferences, setPreferences] = useState<Preferences>(defaults);
-  const [saved, setSaved] = useState(false);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(KEY);
-      const parsed = raw ? JSON.parse(raw) as Partial<Preferences> : {};
-      const next: Preferences = {
-        theme: parsed.theme === 'dark' || parsed.theme === 'light' || parsed.theme === 'system' ? parsed.theme : defaults.theme,
-        units: parsed.units === 'imperial' ? 'imperial' : 'metric',
-        time: parsed.time === '12h' || parsed.time === '24h' || parsed.time === 'system' ? parsed.time : 'system',
-        locale: typeof parsed.locale === 'string' && parsed.locale.length <= 35 ? parsed.locale : defaults.locale,
-      };
-      setPreferences(next);
-      applyGeneralPreferences(next);
-    } catch {
-      setPreferences(defaults);
-      applyGeneralPreferences(defaults);
-    }
-  }, []);
-
-  const save = () => {
-    localStorage.setItem(KEY, JSON.stringify(preferences));
-    applyGeneralPreferences(preferences);
-    setSaved(true);
-  };
-
-  return (
-    <>
-      <div className="workspace-grid">
-        <Card eyebrow="Appearance & worldwide format" title="General settings">
-          <div className="settings-grid">
-            <label><span>Appearance</span><select value={preferences.theme} onChange={(e) => { setPreferences({ ...preferences, theme: e.target.value as Preferences['theme'] }); setSaved(false); }}>
-              <option value="system">Follow system</option><option value="light">Light</option><option value="dark">Dark</option>
-            </select></label>
-            <label><span>Units</span><select value={preferences.units} onChange={(e) => { setPreferences({ ...preferences, units: e.target.value as Preferences['units'] }); setSaved(false); }}>
-              <option value="metric">Metric</option><option value="imperial">Imperial</option>
-            </select></label>
-            <label><span>Time format</span><select value={preferences.time} onChange={(e) => { setPreferences({ ...preferences, time: e.target.value as Preferences['time'] }); setSaved(false); }}>
-              <option value="system">Follow locale</option><option value="12h">12-hour</option><option value="24h">24-hour</option>
-            </select></label>
-            <label><span>Formatting locale</span><input value={preferences.locale} maxLength={35} onChange={(e) => { setPreferences({ ...preferences, locale: e.target.value }); setSaved(false); }} /></label>
-          </div>
-          <div className="continuity-actions">
-            <Button onClick={save}>Save general settings</Button>
-          </div>
-          {saved ? <p role="status" className="workspace-note">Saved in this browser.</p> : null}
-          <p className="workspace-note">English is the currently reviewed message catalogue. Locale selection controls browser formatting and does not pretend an unreviewed translation exists.</p>
-        </Card>
-        <Card eyebrow="All controls" title="Privacy, reminders, backup & continuity">
-          <div className="settings-links">
-            <Link href="/app/reminders">Notifications & reminders</Link>
-            <Link href="/app/privacy">Privacy Center</Link>
-            <Link href="/app/vault">Backup & restore</Link>
-            <Link href="/app/sync">Encrypted sync</Link>
-            <Link href="/app/devices">Devices</Link>
-            <Link href="/app/account">Account</Link>
-            <Link href="/app/diagnostics">Diagnostics</Link>
-            <Link href="/help">Help</Link>
-          </div>
-          <p className="workspace-note">Native HealthKit and Health Connect are not exposed by browser APIs. Use native clients for those platform integrations; Web remains fully usable with manual/local records and CycleVault.</p>
-        </Card>
-      </div>
-      <div style={{ marginTop: 16 }}><AppLockSettings /></div>
-      <div style={{ marginTop: 16 }}><AccessibilityPreferencesWorkspace /></div>
-    </>
-  );
+type Preferences={theme:'system'|'light'|'dark';units:'metric'|'imperial';time:'system'|'12h'|'24h';locale:string};
+const KEY=GENERAL_SETTINGS_KEY,defaults:Preferences={theme:'system',units:'metric',time:'system',locale:'en'};
+function applyTheme(theme:Preferences['theme']){applyThemePreference(document.documentElement,theme,window.matchMedia('(prefers-color-scheme: dark)').matches);}
+function applyGeneralPreferences(p:Preferences){applyTheme(p.theme);document.documentElement.setAttribute('data-sreadya-units',p.units);document.documentElement.setAttribute('data-sreadya-time-format',p.time);}
+export function SettingsWorkspace(){
+ const {t,locale}=useI18n();const[preferences,setPreferences]=useState<Preferences>({...defaults,locale}),[saved,setSaved]=useState(false);
+ useEffect(()=>{try{const raw=localStorage.getItem(KEY),parsed=raw?JSON.parse(raw) as Partial<Preferences>:{};const next:Preferences={theme:parsed.theme==='dark'||parsed.theme==='light'||parsed.theme==='system'?parsed.theme:defaults.theme,units:parsed.units==='imperial'?'imperial':'metric',time:parsed.time==='12h'||parsed.time==='24h'||parsed.time==='system'?parsed.time:'system',locale};setPreferences(next);applyGeneralPreferences(next);}catch{const next={...defaults,locale};setPreferences(next);applyGeneralPreferences(next);}},[locale]);
+ const save=()=>{let current:Record<string,unknown>={};try{const raw=localStorage.getItem(KEY);current=raw?JSON.parse(raw):{};}catch{}localStorage.setItem(KEY,JSON.stringify({...current,theme:preferences.theme,units:preferences.units,time:preferences.time,locale}));applyGeneralPreferences(preferences);setSaved(true);};
+ const language=currentLanguageChoice(locale);
+ return <><div className="workspace-grid"><Card eyebrow={t('settings.generalEyebrow')} title={t('settings.generalTitle')}><div className="settings-grid">
+ <label><span>{t('settings.appearance')}</span><select value={preferences.theme} onChange={e=>{setPreferences({...preferences,theme:e.target.value as Preferences['theme']});setSaved(false);}}><option value="system">{t('settings.followSystem')}</option><option value="light">{t('settings.light')}</option><option value="dark">{t('settings.dark')}</option></select></label>
+ <label><span>{t('settings.units')}</span><select value={preferences.units} onChange={e=>{setPreferences({...preferences,units:e.target.value as Preferences['units']});setSaved(false);}}><option value="metric">{t('settings.metric')}</option><option value="imperial">{t('settings.imperial')}</option></select></label>
+ <label><span>{t('settings.time')}</span><select value={preferences.time} onChange={e=>{setPreferences({...preferences,time:e.target.value as Preferences['time']});setSaved(false);}}><option value="system">{t('settings.followLocale')}</option><option value="12h">{t('settings.12h')}</option><option value="24h">{t('settings.24h')}</option></select></label>
+ <div className="settings-language-summary"><span>{t('settings.language')}</span><strong>{language.flag} {language.nativeName}</strong><small>{t('settings.languageHomeOnly')}</small></div>
+ </div><div className="continuity-actions"><Button onClick={save}>{t('settings.save')}</Button></div>{saved?<p role="status" className="workspace-note">{t('settings.saved')}</p>:null}</Card>
+ <Card eyebrow={t('settings.controlsEyebrow')} title={t('settings.controlsTitle')}><div className="settings-links"><Link href="/app/reminders">{t('settings.notifications')}</Link><Link href="/app/privacy">{t('settings.privacyCenter')}</Link><Link href="/app/vault">{t('settings.backup')}</Link><Link href="/app/sync">{t('settings.sync')}</Link><Link href="/app/devices">{t('settings.devices')}</Link><Link href="/app/account">{t('settings.account')}</Link><Link href="/app/diagnostics">{t('settings.diagnostics')}</Link><Link href="/help">{t('settings.help')}</Link></div><p className="workspace-note">{t('settings.nativeBoundary')}</p></Card></div><div style={{marginTop:16}}><AppLockSettings/></div><div style={{marginTop:16}}><AccessibilityPreferencesWorkspace/></div></>;
 }

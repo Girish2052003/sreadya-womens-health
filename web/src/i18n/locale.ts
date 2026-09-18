@@ -1,8 +1,10 @@
-export type MessageLocale = 'en';
+export type MessageLocale = string;
 export type LocaleDirection = 'ltr' | 'rtl';
 export type TimeFormatPreference = '12h' | '24h';
 
-const RTL_LANGUAGES = new Set(['ar', 'fa', 'he', 'ur']);
+const RTL_SCRIPTS = new Set([
+  'Adlm', 'Arab', 'Hebr', 'Mand', 'Nkoo', 'Rohg', 'Samr', 'Syrc', 'Thaa', 'Yezi',
+]);
 
 function toDate(value: Date | string | number): Date {
   const date = value instanceof Date ? value : new Date(value);
@@ -10,24 +12,30 @@ function toDate(value: Date | string | number): Date {
   return date;
 }
 
-function normalizedLocale(locale: string): Intl.Locale {
+export function normalizeLocaleTag(locale?: string | null): string {
+  if (!locale) return 'en';
   try {
-    return new Intl.Locale(locale);
+    return new Intl.Locale(locale).toString();
   } catch {
-    return new Intl.Locale('en');
+    return 'en';
   }
 }
 
+function normalizedLocale(locale: string): Intl.Locale {
+  return new Intl.Locale(normalizeLocaleTag(locale));
+}
+
 export function messageLocale(locale?: string | null): MessageLocale {
-  // English is the only reviewed message catalog in Task 15. Formatting may
-  // follow another BCP-47 locale, but copy must not pretend a translation exists.
-  if (locale) normalizedLocale(locale);
-  return 'en';
+  return normalizeLocaleTag(locale);
 }
 
 export function localeDirection(locale: string): LocaleDirection {
-  const language = normalizedLocale(locale).language.toLowerCase();
-  return RTL_LANGUAGES.has(language) ? 'rtl' : 'ltr';
+  try {
+    const maximized = normalizedLocale(locale).maximize();
+    return maximized.script && RTL_SCRIPTS.has(maximized.script) ? 'rtl' : 'ltr';
+  } catch {
+    return 'ltr';
+  }
 }
 
 export function formatLocaleDate(
@@ -35,10 +43,29 @@ export function formatLocaleDate(
   locale: string,
   timeZone?: string,
 ): string {
-  return new Intl.DateTimeFormat(locale, {
+  return new Intl.DateTimeFormat(normalizeLocaleTag(locale), {
     dateStyle: 'medium',
     ...(timeZone ? { timeZone } : {}),
   }).format(toDate(value));
+}
+
+export function formatLocaleDateLong(
+  value: Date | string | number,
+  locale: string,
+  timeZone?: string,
+): string {
+  const normalized = normalizeLocaleTag(locale);
+  const language = new Intl.Locale(normalized).language.toLowerCase();
+  return new Intl.DateTimeFormat(language === 'en' ? 'en-GB' : normalized, {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    ...(timeZone ? { timeZone } : {}),
+  }).format(toDate(value));
+}
+
+export function isEnglishLocale(locale: string): boolean {
+  return new Intl.Locale(normalizeLocaleTag(locale)).language.toLowerCase() === 'en';
 }
 
 export function formatLocaleTime(
@@ -47,7 +74,7 @@ export function formatLocaleTime(
   preference: TimeFormatPreference,
   timeZone?: string,
 ): string {
-  return new Intl.DateTimeFormat(locale, {
+  return new Intl.DateTimeFormat(normalizeLocaleTag(locale), {
     hour: 'numeric',
     minute: '2-digit',
     hourCycle: preference === '12h' ? 'h12' : 'h23',
@@ -56,7 +83,7 @@ export function formatLocaleTime(
 }
 
 export function formatLocaleUnit(value: number, unit: string, locale: string): string {
-  return new Intl.NumberFormat(locale, {
+  return new Intl.NumberFormat(normalizeLocaleTag(locale), {
     style: 'unit',
     unit,
     unitDisplay: 'short',

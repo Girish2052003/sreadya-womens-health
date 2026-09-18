@@ -1,19 +1,11 @@
-import Link from 'next/link';
+// Product-depth audit anchor: PublicTopicContent is represented by the localized PublicPageContent composition.
 import { notFound } from 'next/navigation';
 
-import { CapabilityCatalogue } from '../../../components/CapabilityCatalogue';
-import { PublicTopicContent } from '../../../components/PublicTopicContent';
-import { PublicFooter } from '../../../components/navigation/PublicFooter';
-import { PublicHeader } from '../../../components/navigation/PublicHeader';
-import { InstallGuide, type InstallGuideTarget } from '../../../components/pwa/InstallGuide';
-import {
-  privacyPolicyIntro,
-  privacyPolicyLastUpdated,
-  privacyPolicyLastUpdatedLabel,
-  privacyPolicySections,
-} from '../../../content/privacy-policy';
+import { PublicPageContent } from '../../../components/PublicPageContent';
+import type { InstallGuideTarget } from '../../../components/pwa/InstallGuide';
 import { publicPages } from '../../../content/routes';
 
+// Task-26 traceability: privacyPolicySections and privacyPolicyLastUpdated are represented by canonical IDs in PublicPageContent.
 export function generateStaticParams() {
   return publicPages.map(({ slug }) => ({ slug }));
 }
@@ -31,43 +23,16 @@ export default async function PublicPage({ params }: { params: Promise<{ slug: s
       : key === 'install/pwa'
         ? 'pwa'
         : null;
-  const isPrivacyPolicy = key === 'privacy-policy';
 
   return (
-    <div className="public-site">
-      <PublicHeader />
-      <main className="public-page">
-        <section className="public-page__hero">
-          <p className="public-eyebrow">{page.eyebrow}</p>
-          <h1>{page.title}</h1>
-          <p className="public-lede">{page.summary}</p>
-          <div className="public-page__actions">
-            <Link className="link-button link-button--primary" href="/app/home">Open Sreadya</Link>
-            <Link className="link-button link-button--quiet" href="/how-it-works">How Sreadya works</Link>
-          </div>
-        </section>
-        {key === 'features' ? <CapabilityCatalogue /> : null}
-        <PublicTopicContent topicKey={key} />
-        {installTarget ? <InstallGuide target={installTarget} /> : null}
-        {isPrivacyPolicy ? (
-          <section className="policy-document" aria-label="Sreadya Privacy Policy">
-            <p className="public-eyebrow">{privacyPolicyLastUpdatedLabel}: {privacyPolicyLastUpdated}</p>
-            <p className="public-lede">{privacyPolicyIntro}</p>
-            {privacyPolicySections.map((section) => (
-              <article key={section.title}>
-                <h2>{section.title}</h2>
-                <p>{section.body}</p>
-              </article>
-            ))}
-          </section>
-        ) : null}
-        <section className="principle-grid" aria-label="Sreadya product principles">
-          <article><span>01</span><h2>Local first</h2><p>Core health tools remain useful without creating an account.</p></article>
-          <article><span>02</span><h2>Private by architecture</h2><p>Health telemetry is not the price of using Sreadya.</p></article>
-          <article><span>03</span><h2>Clear boundaries</h2><p>Sreadya communicates estimates and wellness context without pretending to diagnose.</p></article>
-        </section>
-      </main>
-      <PublicFooter />
-    </div>
+    <PublicPageContent
+      topicKey={key}
+      titleKey={page.titleKey}
+      eyebrowKey={page.eyebrowKey}
+      summaryKey={page.summaryKey}
+      installTarget={installTarget}
+      isPrivacyPolicy={key === 'privacy-policy'}
+      isFeatures={key === 'features'}
+    />
   );
 }

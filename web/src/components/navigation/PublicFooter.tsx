@@ -1,18 +1,24 @@
+'use client';
+
 import Link from 'next/link';
 
+import { useI18n } from '../../i18n/I18nProvider';
+
 export function PublicFooter() {
+  const { t } = useI18n();
+
   return (
     <footer className="public-footer">
       <div>
-        <strong>Sreadya</strong>
-        <p>Private, local-first women&apos;s health.</p>
+        <strong>{t('brand.name')}</strong>
+        <p>{t('footer.tagline')}</p>
       </div>
-      <div className="public-footer__links" aria-label="Footer links">
-        <Link href="/privacy-policy">Privacy Policy</Link>
-        <Link href="/terms">Terms</Link>
-        <Link href="/security/report">Security</Link>
+      <div className="public-footer__links" aria-label={t('footer.links')}>
+        <Link href="/privacy-policy">{t('footer.privacyPolicy')}</Link>
+        <Link href="/terms">{t('footer.terms')}</Link>
+        <Link href="/security/report">{t('footer.security')}</Link>
       </div>
-      <div className="forge-lockup" aria-label="Technology provenance: FORGE by NC CORP">
+      <div className="forge-lockup" aria-label={t('footer.provenance')}>
         <span>FORGE</span>
         <small>by NC CORP</small>
       </div>

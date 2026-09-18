@@ -90,9 +90,19 @@ test('keyboard focus, 200 percent reflow, large text, RTL and long-copy fixtures
   expect(rootFontSize).toBeGreaterThanOrEqual(20);
   expect(await hasHorizontalOverflow(page)).toBe(false);
 
-  await page.getByLabel('Formatting locale').fill('ar-EG');
-  await page.getByRole('button', { name: 'Save general settings' }).click();
-  await expect(page.locator('html')).toHaveAttribute('lang', 'ar-EG');
+  await page.goto('/');
+  await page.getByTestId('language-chooser-trigger').click();
+  await page.getByTestId('language-chooser-search').fill('Arabic');
+  await page.locator('[data-language-tag="ar"]').click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
+  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+
+  await page.goto(SETTINGS_URL);
+  await expect(page.getByTestId('language-chooser-trigger')).toHaveCount(0);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
+  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
 
   await page.evaluate(() => {

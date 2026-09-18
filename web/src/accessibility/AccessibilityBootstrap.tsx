@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 
-import { localeDirection } from '../i18n/locale';
 import { applyThemePreference, readThemePreference } from '../theme/theme-preference';
 import { applyAccessibilityPreferences, loadAccessibilityPreferences } from './preferences';
 
@@ -16,9 +15,6 @@ export function AccessibilityBootstrap() {
       const theme = readThemePreference(window.localStorage);
       const units = parsed.units === 'imperial' ? 'imperial' : 'metric';
       const time = parsed.time === '12h' || parsed.time === '24h' || parsed.time === 'system' ? parsed.time : 'system';
-      const locale = typeof parsed.locale === 'string' && parsed.locale.length <= 35 ? parsed.locale : 'en-FI';
-      let normalized = 'en';
-      try { normalized = new Intl.Locale(locale).toString(); } catch { normalized = 'en'; }
       applyThemePreference(
         document.documentElement,
         theme,
@@ -26,12 +22,8 @@ export function AccessibilityBootstrap() {
       );
       document.documentElement.setAttribute('data-sreadya-units', units);
       document.documentElement.setAttribute('data-sreadya-time-format', time);
-      document.documentElement.setAttribute('data-sreadya-locale', normalized);
-      document.documentElement.lang = normalized;
-      document.documentElement.dir = localeDirection(normalized);
     } catch {
-      document.documentElement.lang = 'en';
-      document.documentElement.dir = 'ltr';
+      // Locale ownership lives in I18nProvider; accessibility bootstrap remains independent.
     }
   }, []);
 

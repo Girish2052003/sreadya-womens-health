@@ -1,67 +1,69 @@
+'use client';
+
 import Link from 'next/link';
 
 import { PublicFooter } from '../components/navigation/PublicFooter';
 import { PublicHeader } from '../components/navigation/PublicHeader';
+import { useI18n } from '../i18n/I18nProvider';
 
 export default function HomePage() {
+  const { t } = useI18n();
+
   return (
     <div className="public-site">
-      <PublicHeader />
+      <PublicHeader showLanguageChooser />
       <main>
         <section className="hero" aria-labelledby="sreadya-title">
           <div className="hero__copy">
-            <p className="public-eyebrow">Private by architecture. Gentle by design.</p>
+            <p className="public-eyebrow">{t('home.eyebrow')}</p>
             <h1 id="sreadya-title">SREADYA</h1>
             <p className="hero__motto">Prakritim Svam Avashtabhya.</p>
-            <p className="hero__headline">Your cycle, your context, your private space.</p>
-            <p className="hero__lede">
-              A local-first women&apos;s cycle and menstrual health companion designed to feel calm,
-              personal and beautifully simple—without making an account the price of care.
-            </p>
+            <p className="hero__headline">{t('home.headline')}</p>
+            <p className="hero__lede">{t('home.lede')}</p>
             <div className="hero__actions">
-              <Link className="link-button link-button--primary" href="/app/home">Open Sreadya</Link>
-              <Link className="link-button link-button--quiet" href="/how-it-works">See how it works</Link>
+              <Link className="link-button link-button--primary" href="/app/home">{t('common.openSreadya')}</Link>
+              <Link className="link-button link-button--quiet" href="/how-it-works">{t('home.seeHow')}</Link>
             </div>
-            <p className="hero__trust">No health telemetry · Local predictions · Optional encrypted continuity</p>
+            <p className="hero__trust">{t('home.trust')}</p>
           </div>
-          <div className="hero__visual" aria-label="A private Sreadya cycle summary preview">
+          <div className="hero__visual" aria-label={t('home.previewAria')}>
             <div className="hero-orbit hero-orbit--one" aria-hidden="true" />
             <div className="hero-orbit hero-orbit--two" aria-hidden="true" />
             <div className="preview-card">
               <div className="preview-card__top">
-                <span>Today</span>
-                <span className="preview-lock">Private</span>
+                <span>{t('common.today')}</span>
+                <span className="preview-lock">{t('common.private')}</span>
               </div>
-              <p className="preview-kicker">Your next period</p>
-              <strong>About 6 days</strong>
+              <p className="preview-kicker">{t('home.preview.nextPeriod')}</p>
+              <strong>{t('home.preview.aboutSixDays')}</strong>
               <div className="preview-meter" aria-hidden="true"><span /></div>
-              <p className="preview-copy">An estimate from your local history, with confidence shown clearly.</p>
+              <p className="preview-copy">{t('home.preview.copy')}</p>
             </div>
           </div>
         </section>
 
-        <section className="promise-strip" aria-label="Sreadya promises">
-          <article><span>01</span><strong>Account-free is complete</strong><p>Core tracking, predictions, insights and reports remain available locally.</p></article>
-          <article><span>02</span><strong>Privacy is structural</strong><p>Your reproductive-health history is not developer analytics data.</p></article>
-          <article><span>03</span><strong>Built for real life</strong><p>Periods, symptoms, medication, life stages and appointments live in one calm space.</p></article>
+        <section className="promise-strip" aria-label={t('home.promisesAria')}>
+          <article><span>01</span><strong>{t('home.promise1.title')}</strong><p>{t('home.promise1.body')}</p></article>
+          <article><span>02</span><strong>{t('home.promise2.title')}</strong><p>{t('home.promise2.body')}</p></article>
+          <article><span>03</span><strong>{t('home.promise3.title')}</strong><p>{t('home.promise3.body')}</p></article>
         </section>
 
         <section className="story-section">
           <div className="story-section__intro">
-            <p className="public-eyebrow">One Sreadya</p>
-            <h2>Thoughtful enough for sensitive days. Powerful enough for the whole journey.</h2>
+            <p className="public-eyebrow">{t('home.story.eyebrow')}</p>
+            <h2>{t('home.story.title')}</h2>
           </div>
           <div className="story-grid">
-            <Link href="/cycle-tracking" className="story-card story-card--wide"><span>Cycle</span><h3>Track without turning your life into a spreadsheet.</h3><p>Simple daily logging, clear history and respectful language.</p></Link>
-            <Link href="/predictions" className="story-card"><span>Predictions</span><h3>Estimates, not false certainty.</h3><p>Confidence-aware local prediction semantics shared across Sreadya clients.</p></Link>
-            <Link href="/privacy" className="story-card"><span>Privacy</span><h3>Your body is not a data business.</h3><p>No health telemetry. Optional continuity stays a separate boundary.</p></Link>
+            <Link href="/cycle-tracking" className="story-card story-card--wide"><span>{t('home.story.cycle.label')}</span><h3>{t('home.story.cycle.title')}</h3><p>{t('home.story.cycle.body')}</p></Link>
+            <Link href="/predictions" className="story-card"><span>{t('home.story.predictions.label')}</span><h3>{t('home.story.predictions.title')}</h3><p>{t('home.story.predictions.body')}</p></Link>
+            <Link href="/privacy" className="story-card"><span>{t('home.story.privacy.label')}</span><h3>{t('home.story.privacy.title')}</h3><p>{t('home.story.privacy.body')}</p></Link>
           </div>
         </section>
 
         <section className="closing-cta">
-          <p className="public-eyebrow">Start privately</p>
-          <h2>A health companion should earn trust before it asks for anything.</h2>
-          <Link className="link-button link-button--primary" href="/app/home">Continue without an account</Link>
+          <p className="public-eyebrow">{t('home.close.eyebrow')}</p>
+          <h2>{t('home.close.title')}</h2>
+          <Link className="link-button link-button--primary" href="/app/home">{t('home.close.cta')}</Link>
         </section>
       </main>
       <PublicFooter />

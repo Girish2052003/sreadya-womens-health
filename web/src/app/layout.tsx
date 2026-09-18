@@ -3,11 +3,13 @@ import type { ReactNode } from 'react';
 
 import { AccessibilityBootstrap } from '../accessibility/AccessibilityBootstrap';
 import { PwaBootstrap } from '../components/pwa/PwaBootstrap';
+import { I18nProvider } from '../i18n/I18nProvider';
 import './globals.css';
 import './accessibility.css';
 import './pwa.css';
 import './vault.css';
 import './product-completeness.css';
+import './globalization.css';
 
 export const metadata: Metadata = {
   title: 'Sreadya — Private, local-first women\'s health',
@@ -19,7 +21,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   const basePath = process.env.NEXT_PUBLIC_SREADYA_BASE_PATH ?? '';
 
   return (
-    <html lang="en">
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <head>
         <link rel="manifest" href={`${basePath}/manifest.webmanifest`} />
         <meta name="theme-color" content="#75153a" />
@@ -27,9 +29,11 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <meta name="apple-mobile-web-app-title" content="Sreadya" />
       </head>
       <body>
-        <AccessibilityBootstrap />
-        <PwaBootstrap />
-        {children}
+        <I18nProvider>
+          <AccessibilityBootstrap />
+          <PwaBootstrap />
+          {children}
+        </I18nProvider>
       </body>
     </html>
   );

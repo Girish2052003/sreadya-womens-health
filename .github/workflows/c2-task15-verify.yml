@@ -19,6 +19,15 @@ jobs:
           node-version: '24.21.0'
           cache: npm
           cache-dependency-path: web/package-lock.json
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Verify Sreadya globalization contract
+        run: |
+          python -m py_compile tool/i18n_pipeline.py tool/verify_globalization.py
+          python tool/verify_globalization.py
+          python tool/i18n_pipeline.py --check
+          python tool/i18n_pipeline.py --dry-run --locales fi,ta,hi,ar,ja,sw
       - name: Install locked Web dependencies
         working-directory: web
         run: npm ci --ignore-scripts
