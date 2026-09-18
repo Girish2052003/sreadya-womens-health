@@ -263,9 +263,9 @@ jobs:
         run: |
           python -m py_compile tool/i18n_pipeline.py tool/verify_globalization.py
           python tool/i18n_pipeline.py --check-google-baseline
-          python tool/verify_globalization.py --require-global-closure
           python tool/i18n_pipeline.py --check
           python tool/i18n_pipeline.py --dry-run --locales fi,ta,hi,ar,ja,sw
+          python tool/verify_globalization.py --require-global-closure
       - name: Shared schema and release-structure reference checks
         run: >-
           python -m pytest -q
