@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""High-signal repository secret scan for Sreva release gates.
+"""High-signal repository secret scan for Sreadya release gates.
 
 This is intentionally conservative: it looks for credential formats that must
 never appear in source control while avoiding generic words such as "password"
@@ -57,11 +57,11 @@ def main() -> None:
                 findings.append(f"{path.relative_to(ROOT)}:{line}: {label}")
 
     if findings:
-        print("Sreva secret scan: FAIL")
+        print("Sreadya secret scan: FAIL")
         for finding in findings:
             print(f"  {finding}")
         raise SystemExit(1)
-    print("Sreva secret scan: PASS — no high-signal committed credentials found")
+    print("Sreadya secret scan: PASS — no high-signal committed credentials found")
 
 
 if __name__ == "__main__":

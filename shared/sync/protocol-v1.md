@@ -1,12 +1,12 @@
-# Sreva Ciphertext Sync Protocol v1
+# Sreadya Ciphertext Sync Protocol v1
 
 **Status:** Task-19 protocol design candidate. Provider-independent. No production service is authorized until the Task-19 gate is green.
 
 ## 1. Purpose and non-goals
 
-Protocol v1 provides optional cross-device continuity for an existing local Sreva vault. It transports authenticated opaque ciphertext and minimum operational metadata. It does not move Sreva cycle logic, predictions, insights, reports, life-stage reasoning, or plaintext health interpretation to the server.
+Protocol v1 provides optional cross-device continuity for an existing local Sreadya vault. It transports authenticated opaque ciphertext and minimum operational metadata. It does not move Sreadya cycle logic, predictions, insights, reports, life-stage reasoning, or plaintext health interpretation to the server.
 
-Account-free Sreva remains complete. Enabling, disabling, losing, or interrupting sync MUST NOT prevent local logging or local health functionality.
+Account-free Sreadya remains complete. Enabling, disabling, losing, or interrupting sync MUST NOT prevent local logging or local health functionality.
 
 ## 2. Server-visible model
 

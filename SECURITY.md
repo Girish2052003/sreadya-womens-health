@@ -1,12 +1,12 @@
 # Security Policy
 
-Sreva handles sensitive reproductive-health information. Security defects affecting confidentiality, integrity, authentication, recovery, backup/restore, notification privacy, release signing, synchronization authorization, browser-vault protection, or data deletion are release blockers for the affected release.
+Sreadya handles sensitive reproductive-health information. Security defects affecting confidentiality, integrity, authentication, recovery, backup/restore, notification privacy, release signing, synchronization authorization, browser-vault protection, or data deletion are release blockers for the affected release.
 
 ## Cross-platform security model
 
-Sreva is one product with Android, iOS, and Web/PWA as equal first-class clients. Different platform security mechanisms are expected, but the clients must conform to the same privacy/data semantics and approved cryptographic formats.
+Sreadya is one product with Android, iOS, and Web/PWA as equal first-class clients. Different platform security mechanisms are expected, but the clients must conform to the same privacy/data semantics and approved cryptographic formats.
 
-The authoritative cross-platform architecture is `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`.
+The authoritative cross-platform architecture is `docs/superpowers/specs/2026-09-16-sreadya-web-product-architecture-design.md`.
 
 ## Non-negotiable rules
 
@@ -19,13 +19,13 @@ The authoritative cross-platform architecture is `docs/superpowers/specs/2026-09
 7. Do not commit signing keys, App Store Connect keys, Play signing keys, provisioning profiles, store credentials, backend administration credentials, SMS/email provider secrets, recovery keys, vault secrets, private artifact passwords, or real user data.
 8. Sensitive health values must not appear in URLs/query strings, ordinary browser caches, service-worker caches, client telemetry, or unencrypted network payloads.
 9. Account authentication is not health-vault decryption. Email/SMS recovery alone must not unlock old E2EE health history.
-10. Sreva infrastructure must not hold a universal/developer-accessible key capable of decrypting users' reproductive-health vaults.
+10. Sreadya infrastructure must not hold a universal/developer-accessible key capable of decrypting users' reproductive-health vaults.
 
 ## Implemented E2EE continuity boundary
 
 Optional encrypted continuity is implemented behind the reviewed C2 protocol boundary. An authorized client encrypts health content before network transmission. The service operates on ciphertext, wrapped key/recovery material, and minimum operational metadata required for account/device authorization, versioning, sequencing, replay protection, synchronization, and revocation.
 
-The server may know opaque account/device/object identifiers, public device-verification material, sizes, versions/revisions, minimum timestamps, and authorization/revocation state. It must not parse or store readable reproductive-health payloads. Sreva infrastructure does not possess the health-vault decryption key.
+The server may know opaque account/device/object identifiers, public device-verification material, sizes, versions/revisions, minimum timestamps, and authorization/revocation state. It must not parse or store readable reproductive-health payloads. Sreadya infrastructure does not possess the health-vault decryption key.
 
 The frozen protocol includes:
 
@@ -89,7 +89,7 @@ This repository is public source. Public CI is verification-only for installable
 
 Production and family-preview Android releases are manually dispatched from the canonical repository on `main`. Signing credentials and release-artifact encryption passwords are environment-scoped GitHub secrets. Signed release payloads must be encrypted before any Actions artifact upload, and decoded keystores plus plaintext staging material must be removed in an `always()` cleanup step.
 
-External GitHub Actions used by Sreva workflows must be pinned to immutable commit SHAs. Workflow permissions remain least-privilege unless a separately reviewed job proves broader permissions are necessary. Future GitHub Pages deployment may require Pages/OIDC permissions only in the dedicated deployment job; sync-service secrets must never be exposed to the static Web build.
+External GitHub Actions used by Sreadya workflows must be pinned to immutable commit SHAs. Workflow permissions remain least-privilege unless a separately reviewed job proves broader permissions are necessary. Future GitHub Pages deployment may require Pages/OIDC permissions only in the dedicated deployment job; sync-service secrets must never be exposed to the static Web build.
 
 The maintained public-repository protection state and release-boundary rationale are documented in `docs/security/PUBLIC_REPOSITORY_HARDENING.md`.
 
