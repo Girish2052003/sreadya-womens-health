@@ -34,10 +34,10 @@ const DAY_MS = 86_400_000;
 
 function parseDateOnly(value: string): number {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
-  if (!match) throw new Error(`reminder-v1 requires YYYY-MM-DD: ${value}`);
+  if (!match) throw new Error('reminder_invalid_date_format');
   const millis = Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
   if (new Date(millis).toISOString().slice(0, 10) !== value) {
-    throw new Error(`reminder-v1 received an invalid calendar date: ${value}`);
+    throw new Error('reminder_invalid_calendar_date');
   }
   return millis;
 }
@@ -52,7 +52,7 @@ function twoDigits(value: number): string {
 
 function privacy(value: string): NotificationPrivacy {
   if (value === 'maximum' || value === 'balanced' || value === 'detailed') return value;
-  throw new Error(`unsupported notification privacy level: ${value}`);
+  throw new Error('reminder_unsupported_privacy');
 }
 
 function kindForOffset(offset: number): PeriodReminderKind | null {
@@ -83,7 +83,7 @@ function targetLocal(date: string, settings: ReminderPolicySettings): string {
 function wallClockMillis(value: string): number {
   const normalized = value.length === 16 ? `${value}:00` : value;
   const millis = Date.parse(`${normalized}Z`);
-  if (!Number.isFinite(millis)) throw new Error(`invalid local wall-clock value: ${value}`);
+  if (!Number.isFinite(millis)) throw new Error('reminder_invalid_wall_clock');
   return millis;
 }
 
@@ -91,7 +91,7 @@ export function planPeriodReminders(input: PeriodReminderInput): ReminderPlan[] 
   // sourcePredictionId is deliberately accepted at the policy boundary so callers
   // can tie regenerated schedules to a prediction generation. The frozen shared
   // vector shape contains only the delivery plan itself.
-  if (input.sourcePredictionId.length === 0) throw new Error('sourcePredictionId is required');
+  if (input.sourcePredictionId.length === 0) throw new Error('reminder_prediction_id_required');
 
   const settings = input.settings;
   const output: ReminderPlan[] = [];
