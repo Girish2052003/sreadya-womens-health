@@ -4,7 +4,7 @@ export function PublicFooter() {
   return (
     <footer className="public-footer">
       <div>
-        <strong>Sreva</strong>
+        <strong>Sreadya</strong>
         <p>Private, local-first women&apos;s health.</p>
       </div>
       <div className="public-footer__links" aria-label="Footer links">

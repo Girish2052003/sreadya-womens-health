@@ -12,9 +12,9 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"sreva.dev/sync_service/internal/devices"
-	"sreva.dev/sync_service/internal/store"
-	srevasync "sreva.dev/sync_service/internal/sync"
+	"sreadya.dev/sync_service/internal/devices"
+	"sreadya.dev/sync_service/internal/store"
+	sreadyasync "sreadya.dev/sync_service/internal/sync"
 )
 
 // TargetVersion is the reviewed PostgreSQL compatibility target.
@@ -100,9 +100,9 @@ type Store struct {
 var (
 	_ store.Store                = (*Store)(nil)
 	_ devices.Lookup             = (*Store)(nil)
-	_ srevasync.Repository       = (*Store)(nil)
-	_ srevasync.AtomicRepository = (*Store)(nil)
-	_ srevasync.PullRepository   = (*Store)(nil)
+	_ sreadyasync.Repository       = (*Store)(nil)
+	_ sreadyasync.AtomicRepository = (*Store)(nil)
+	_ sreadyasync.PullRepository   = (*Store)(nil)
 )
 
 // Open creates a PostgreSQL-backed store without assuming any cloud provider.
@@ -198,10 +198,10 @@ WHERE vault_id = $1
 }
 
 // ExistingEvent looks up only idempotency metadata for an event ID.
-func (s *Store) ExistingEvent(ctx context.Context, eventID string) ([]byte, srevasync.Ack, bool, error) {
+func (s *Store) ExistingEvent(ctx context.Context, eventID string) ([]byte, sreadyasync.Ack, bool, error) {
 	db, err := s.database()
 	if err != nil {
-		return nil, srevasync.Ack{}, false, err
+		return nil, sreadyasync.Ack{}, false, err
 	}
 	var digest []byte
 	var committedRevision int64
@@ -214,12 +214,12 @@ FROM sync_events
 WHERE event_id = $1
 `, eventID).Scan(&digest, &committedRevision, &conflict)
 	if errors.Is(err, pgx.ErrNoRows) {
-		return nil, srevasync.Ack{}, false, nil
+		return nil, sreadyasync.Ack{}, false, nil
 	}
 	if err != nil {
-		return nil, srevasync.Ack{}, false, err
+		return nil, sreadyasync.Ack{}, false, err
 	}
-	return digest, srevasync.Ack{
+	return digest, sreadyasync.Ack{
 		EventID:           eventID,
 		CommittedRevision: committedRevision,
 		Conflict:          conflict,
@@ -245,7 +245,7 @@ WHERE vault_id = $1 AND object_id = $2
 
 // Commit satisfies the basic repository boundary for non-atomic callers. The
 // production sync service uses CommitEnvelope instead.
-func (s *Store) Commit(ctx context.Context, envelope srevasync.Envelope, ack srevasync.Ack) error {
+func (s *Store) Commit(ctx context.Context, envelope sreadyasync.Envelope, ack sreadyasync.Ack) error {
 	db, err := s.database()
 	if err != nil {
 		return err
@@ -264,14 +264,14 @@ func (s *Store) Commit(ctx context.Context, envelope srevasync.Envelope, ack sre
 // CommitEnvelope performs idempotency, object-revision allocation and insert in
 // one PostgreSQL transaction. Locking the vault row serializes commits to that
 // vault across service instances without interpreting health data.
-func (s *Store) CommitEnvelope(ctx context.Context, envelope srevasync.Envelope) (srevasync.Ack, error) {
+func (s *Store) CommitEnvelope(ctx context.Context, envelope sreadyasync.Envelope) (sreadyasync.Ack, error) {
 	db, err := s.database()
 	if err != nil {
-		return srevasync.Ack{}, err
+		return sreadyasync.Ack{}, err
 	}
 	tx, err := db.Begin(ctx)
 	if err != nil {
-		return srevasync.Ack{}, err
+		return sreadyasync.Ack{}, err
 	}
 	defer func() { _ = tx.Rollback(ctx) }()
 
@@ -282,10 +282,10 @@ FROM vaults
 WHERE vault_id = $1
 FOR UPDATE
 `, envelope.VaultID).Scan(&accountID); err != nil {
-		return srevasync.Ack{}, err
+		return sreadyasync.Ack{}, err
 	}
 	if envelope.AccountID != "" && accountID != envelope.AccountID {
-		return srevasync.Ack{}, srevasync.ErrCrossAccount
+		return sreadyasync.Ack{}, sreadyasync.ErrCrossAccount
 	}
 
 	var existingDigest []byte
@@ -300,9 +300,9 @@ WHERE event_id = $1
 `, envelope.EventID).Scan(&existingDigest, &existingRevision, &existingConflict)
 	if err == nil {
 		if !bytes.Equal(existingDigest, envelope.EnvelopeDigest) {
-			return srevasync.Ack{}, srevasync.ErrEventIDReuse
+			return sreadyasync.Ack{}, sreadyasync.ErrEventIDReuse
 		}
-		return srevasync.Ack{
+		return sreadyasync.Ack{
 			EventID:           envelope.EventID,
 			CommittedRevision: existingRevision,
 			Conflict:          existingConflict,
@@ -310,7 +310,7 @@ WHERE event_id = $1
 		}, nil
 	}
 	if !errors.Is(err, pgx.ErrNoRows) {
-		return srevasync.Ack{}, err
+		return sreadyasync.Ack{}, err
 	}
 
 	var currentRevision int64
@@ -319,23 +319,23 @@ SELECT COALESCE(MAX(committed_revision), 0)
 FROM sync_events
 WHERE vault_id = $1 AND object_id = $2
 `, envelope.VaultID, envelope.ObjectID).Scan(&currentRevision); err != nil {
-		return srevasync.Ack{}, err
+		return sreadyasync.Ack{}, err
 	}
-	ack := srevasync.Ack{
+	ack := sreadyasync.Ack{
 		EventID:           envelope.EventID,
 		CommittedRevision: currentRevision + 1,
 		Conflict:          envelope.BaseRevision != currentRevision,
 	}
 	if err := insertEvent(ctx, tx, envelope, ack); err != nil {
-		return srevasync.Ack{}, err
+		return sreadyasync.Ack{}, err
 	}
 	if err := tx.Commit(ctx); err != nil {
-		return srevasync.Ack{}, err
+		return sreadyasync.Ack{}, err
 	}
 	return ack, nil
 }
 
-func insertEvent(ctx context.Context, tx transaction, envelope srevasync.Envelope, ack srevasync.Ack) error {
+func insertEvent(ctx context.Context, tx transaction, envelope sreadyasync.Envelope, ack sreadyasync.Ack) error {
 	return tx.Exec(ctx, `
 INSERT INTO sync_events (
     event_id,
@@ -380,14 +380,14 @@ INSERT INTO sync_events (
 
 // EventsAfter returns a vault page in server-sequence order. The cursor is
 // versioned and opaque to clients; object revisions remain independent.
-func (s *Store) EventsAfter(ctx context.Context, vaultID, cursor string, limit int) (srevasync.PullPage, error) {
+func (s *Store) EventsAfter(ctx context.Context, vaultID, cursor string, limit int) (sreadyasync.PullPage, error) {
 	db, err := s.database()
 	if err != nil {
-		return srevasync.PullPage{}, err
+		return sreadyasync.PullPage{}, err
 	}
 	sequence, err := decodeCursor(cursor)
 	if err != nil {
-		return srevasync.PullPage{}, err
+		return sreadyasync.PullPage{}, err
 	}
 	rows, err := db.Query(ctx, `
 SELECT
@@ -417,14 +417,14 @@ ORDER BY e.server_sequence ASC
 LIMIT $3
 `, vaultID, sequence, limit)
 	if err != nil {
-		return srevasync.PullPage{}, err
+		return sreadyasync.PullPage{}, err
 	}
 	defer rows.Close()
 
-	page := srevasync.PullPage{NextCursor: cursor}
+	page := sreadyasync.PullPage{NextCursor: cursor}
 	var lastSequence int64
 	for rows.Next() {
-		var event srevasync.StoredEvent
+		var event sreadyasync.StoredEvent
 		if err := rows.Scan(
 			&event.Envelope.AccountID,
 			&event.Envelope.VaultID,
@@ -446,12 +446,12 @@ LIMIT $3
 			&event.Conflict,
 			&lastSequence,
 		); err != nil {
-			return srevasync.PullPage{}, err
+			return sreadyasync.PullPage{}, err
 		}
 		page.Events = append(page.Events, event)
 	}
 	if err := rows.Err(); err != nil {
-		return srevasync.PullPage{}, err
+		return sreadyasync.PullPage{}, err
 	}
 	if len(page.Events) > 0 {
 		page.NextCursor = encodeCursor(lastSequence)
@@ -470,11 +470,11 @@ func decodeCursor(cursor string) (int64, error) {
 		return 0, nil
 	}
 	if !strings.HasPrefix(cursor, cursorPrefix) {
-		return 0, srevasync.ErrInvalidCursor
+		return 0, sreadyasync.ErrInvalidCursor
 	}
 	raw, err := base64.RawURLEncoding.DecodeString(strings.TrimPrefix(cursor, cursorPrefix))
 	if err != nil || len(raw) != 8 || raw[0]&0x80 != 0 {
-		return 0, srevasync.ErrInvalidCursor
+		return 0, sreadyasync.ErrInvalidCursor
 	}
 	return int64(binary.BigEndian.Uint64(raw)), nil
 }

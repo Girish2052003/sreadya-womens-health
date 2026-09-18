@@ -11,7 +11,7 @@ export function AccessibilityBootstrap() {
     const preferences = loadAccessibilityPreferences(window.localStorage);
     applyAccessibilityPreferences(document.documentElement, preferences);
     try {
-      const raw = window.localStorage.getItem('sreva:general-settings:v1');
+      const raw = window.localStorage.getItem('sreadya:general-settings:v1');
       const parsed = raw ? JSON.parse(raw) as Record<string, unknown> : {};
       const theme = readThemePreference(window.localStorage);
       const units = parsed.units === 'imperial' ? 'imperial' : 'metric';
@@ -24,9 +24,9 @@ export function AccessibilityBootstrap() {
         theme,
         window.matchMedia('(prefers-color-scheme: dark)').matches,
       );
-      document.documentElement.setAttribute('data-sreva-units', units);
-      document.documentElement.setAttribute('data-sreva-time-format', time);
-      document.documentElement.setAttribute('data-sreva-locale', normalized);
+      document.documentElement.setAttribute('data-sreadya-units', units);
+      document.documentElement.setAttribute('data-sreadya-time-format', time);
+      document.documentElement.setAttribute('data-sreadya-locale', normalized);
       document.documentElement.lang = normalized;
       document.documentElement.dir = localeDirection(normalized);
     } catch {
