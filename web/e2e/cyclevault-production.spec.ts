@@ -19,7 +19,7 @@ type StoredRecordSnapshot = {
 
 async function storedHealthSnapshot(page: import('@playwright/test').Page): Promise<StoredRecordSnapshot> {
   return page.evaluate(async () => new Promise<StoredRecordSnapshot>((resolve, reject) => {
-    const request = indexedDB.open('sreva-vault-v1');
+    const request = indexedDB.open('sreadya-vault-v1');
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
       const database = request.result;
@@ -47,7 +47,7 @@ test('CycleVault production restore/export remains account-free, local and atomi
 
   await page.goto('/app/vault/');
   await expect(page.getByTestId('cyclevault-workspace')).toBeVisible();
-  await expect(page.getByText('Account-free · encrypted locally · nothing is uploaded to Sreva')).toBeVisible();
+  await expect(page.getByText('Account-free · encrypted locally · nothing is uploaded to Sreadya')).toBeVisible();
   await expect(page.getByText('Encrypted local vault ready')).toBeVisible();
 
   const restoreButton = page.getByRole('button', { name: 'Replace local health data' });
@@ -96,12 +96,12 @@ test('CycleVault production restore/export remains account-free, local and atomi
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Download encrypted backup' }).click();
   const download = await downloadPromise;
-  expect(download.suggestedFilename()).toMatch(/^sreva-.*\.cyclevault$/);
+  expect(download.suggestedFilename()).toMatch(/^sreadya-.*\.cyclevault$/);
   const path = await download.path();
   expect(path).not.toBeNull();
   const exported = readFileSync(path!, 'utf8');
   const outer = JSON.parse(exported) as { manifest: { format: string; formatVersion: number }; salt: string; sealedPayload: string };
-  expect(outer.manifest.format).toBe('SREVA-CYCLEVAULT');
+  expect(outer.manifest.format).toBe('SREADYA-CYCLEVAULT');
   expect(outer.manifest.formatVersion).toBe(1);
   expect(outer.salt.length).toBeGreaterThan(0);
   expect(outer.sealedPayload.length).toBeGreaterThan(0);

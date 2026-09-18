@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const LIVE_ROOT = process.env.SREVA_LIVE_BASE_URL ?? 'https://girish2052003.github.io/sreva-womens-health/';
+const LIVE_ROOT = process.env.SREADYA_LIVE_BASE_URL ?? 'https://girish2052003.github.io/sreadya-womens-health/';
 const LIVE_ORIGIN = new URL(LIVE_ROOT).origin;
 const SYNTHETIC_NOTE = 'Task18 synthetic private note 8F2A';
 
@@ -45,18 +45,18 @@ test('Task 18 live production desktop/account-free acceptance preflight', async 
   const manifestResponse = await request.get(live('manifest.webmanifest'));
   expect(manifestResponse.ok()).toBeTruthy();
   const manifest = await manifestResponse.json() as { name: string; display: string; start_url: string; scope: string };
-  expect(manifest.name).toBe('Sreva');
+  expect(manifest.name).toBe('Sreadya');
   expect(manifest.display).toBe('standalone');
   expect(manifest.start_url).toBe('./app/home/');
   expect(manifest.scope).toBe('./');
 
   await page.goto(live());
-  await expect(page.getByRole('heading', { level: 1, name: 'Sreva' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Sreadya' })).toBeVisible();
   await expect(page.getByRole('group', { name: 'Appearance' })).toBeVisible();
   await page.getByRole('button', { name: 'Dark theme' }).click();
-  await expect(page.locator('html')).toHaveAttribute('data-sreva-theme', 'dark');
+  await expect(page.locator('html')).toHaveAttribute('data-sreadya-theme', 'dark');
   await page.goto(live('features/'));
-  await expect(page.locator('html')).toHaveAttribute('data-sreva-theme', 'dark');
+  await expect(page.locator('html')).toHaveAttribute('data-sreadya-theme', 'dark');
   const liveCapabilityContrast = await page.locator('.capability-catalogue__item').first().evaluate((item) => {
     const title = item.querySelector('strong');
     if (!title) throw new Error('Capability title missing');
@@ -76,7 +76,7 @@ test('Task 18 live production desktop/account-free acceptance preflight', async 
   expect(liveCapabilityContrast).toBeGreaterThanOrEqual(4.5);
   await page.goto(live());
   await page.getByRole('button', { name: 'Light theme' }).click();
-  await expect(page.locator('html')).toHaveAttribute('data-sreva-theme', 'light');
+  await expect(page.locator('html')).toHaveAttribute('data-sreadya-theme', 'light');
   const continuePrivately = page.getByRole('link', { name: 'Continue without an account' });
   await expect(continuePrivately).toBeVisible();
   await page.evaluate(async () => {
@@ -95,7 +95,7 @@ test('Task 18 live production desktop/account-free acceptance preflight', async 
   await expect(page.getByText('Encrypted local vault ready')).toBeVisible();
 
   await page.goto(live('install/iphone/'));
-  await expect(page.getByRole('heading', { level: 2, name: 'Install Sreva on iPhone' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Install Sreadya on iPhone' })).toBeVisible();
   await expect(page.getByText('Add to Home Screen')).toBeVisible();
 
   await page.goto(live('app/home/'));
@@ -160,7 +160,7 @@ test('Task 18 live production desktop/account-free acceptance preflight', async 
   const reportDownload = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Download CSV' }).click();
   const report = await reportDownload;
-  expect(report.suggestedFilename()).toBe('sreva-health-report.csv');
+  expect(report.suggestedFilename()).toBe('sreadya-health-report.csv');
   expect(await report.path()).not.toBeNull();
 
   await page.goto(live('app/privacy/'));
@@ -180,7 +180,7 @@ test('Task 18 live production desktop/account-free acceptance preflight', async 
   const vaultDownloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Download encrypted backup' }).click();
   const vaultDownload = await vaultDownloadPromise;
-  expect(vaultDownload.suggestedFilename()).toMatch(/^sreva-.*\.cyclevault$/);
+  expect(vaultDownload.suggestedFilename()).toMatch(/^sreadya-.*\.cyclevault$/);
   const vaultPath = await vaultDownload.path();
   expect(vaultPath).not.toBeNull();
 

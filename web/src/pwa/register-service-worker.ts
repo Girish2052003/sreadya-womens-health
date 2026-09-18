@@ -1,7 +1,7 @@
-export async function registerSrevaServiceWorker(): Promise<ServiceWorkerRegistration | null> {
+export async function registerSreadyaServiceWorker(): Promise<ServiceWorkerRegistration | null> {
   if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return null;
 
-  const basePath = process.env.NEXT_PUBLIC_SREVA_BASE_PATH ?? '';
+  const basePath = process.env.NEXT_PUBLIC_SREADYA_BASE_PATH ?? '';
   const scriptUrl = `${basePath}/sw.js`;
   const scope = `${basePath || ''}/`;
 

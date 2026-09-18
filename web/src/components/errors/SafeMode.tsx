@@ -15,21 +15,21 @@ const ACTION_LABELS: Record<SafeModeAction, string> = {
 
 export function SafeMode({ state, onAction }: Props) {
   return (
-    <section className="sreva-card safe-mode" aria-labelledby="safe-mode-title" data-safe-mode-reason={state.reason}>
-      <p className="sreva-card__eyebrow">Read-only recovery</p>
-      <h2 className="sreva-card__title" id="safe-mode-title">
+    <section className="sreadya-card safe-mode" aria-labelledby="safe-mode-title" data-safe-mode-reason={state.reason}>
+      <p className="sreadya-card__eyebrow">Read-only recovery</p>
+      <h2 className="sreadya-card__title" id="safe-mode-title">
         {state.title}
       </h2>
-      <div className="sreva-card__body">
+      <div className="sreadya-card__body">
         <p>{state.message}</p>
         <p>
-          Health-data writes stay disabled until this condition is resolved. Sreva will not automatically reset the local vault.
+          Health-data writes stay disabled until this condition is resolved. Sreadya will not automatically reset the local vault.
         </p>
         <div className="safe-mode__actions" aria-label="Safe recovery options">
           {state.actions.map((action) =>
             onAction ? (
               <button
-                className="sreva-button sreva-button--quiet"
+                className="sreadya-button sreadya-button--quiet"
                 key={action}
                 type="button"
                 onClick={() => onAction(action)}

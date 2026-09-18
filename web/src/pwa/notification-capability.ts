@@ -38,7 +38,7 @@ export function evaluateNotificationCapability(
       ...common,
       mechanism: 'in-app',
       closedAppDelivery: 'not-guaranteed',
-      reason: 'Maximum Privacy keeps reminder delivery local to Sreva.',
+      reason: 'Maximum Privacy keeps reminder delivery local to Sreadya.',
     };
   }
 
@@ -47,7 +47,7 @@ export function evaluateNotificationCapability(
       ...common,
       mechanism: 'in-app',
       closedAppDelivery: 'not-guaranteed',
-      reason: 'This browser does not expose notification delivery, so Sreva will show reminders while the app is open.',
+      reason: 'This browser does not expose notification delivery, so Sreadya will show reminders while the app is open.',
     };
   }
 
@@ -79,7 +79,7 @@ export function evaluateNotificationCapability(
     ...common,
     mechanism: 'browser-notification',
     closedAppDelivery: 'not-guaranteed',
-    reason: 'Browser notifications are available while Sreva is active, but no reviewed push relay is configured for guaranteed closed-app delivery.',
+    reason: 'Browser notifications are available while Sreadya is active, but no reviewed push relay is configured for guaranteed closed-app delivery.',
   };
 }
 

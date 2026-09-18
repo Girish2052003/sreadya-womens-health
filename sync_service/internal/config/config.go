@@ -23,21 +23,21 @@ type Config struct {
 // Keeping lookup injectable makes the configuration boundary deterministic in tests
 // and avoids coupling the package to any hosting provider.
 func LoadFromLookup(lookup func(string) (string, bool)) (Config, error) {
-	databaseURL, ok := lookup("SREVA_SYNC_DATABASE_URL")
+	databaseURL, ok := lookup("SREADYA_SYNC_DATABASE_URL")
 	if !ok || strings.TrimSpace(databaseURL) == "" {
-		return Config{}, errors.New("SREVA_SYNC_DATABASE_URL is required")
+		return Config{}, errors.New("SREADYA_SYNC_DATABASE_URL is required")
 	}
 
 	listenAddress := ":8080"
-	if value, ok := lookup("SREVA_SYNC_LISTEN_ADDR"); ok && strings.TrimSpace(value) != "" {
+	if value, ok := lookup("SREADYA_SYNC_LISTEN_ADDR"); ok && strings.TrimSpace(value) != "" {
 		listenAddress = strings.TrimSpace(value)
 	}
 
 	otpEnabled := false
-	if value, ok := lookup("SREVA_SYNC_OTP_ENABLED"); ok && strings.TrimSpace(value) != "" {
+	if value, ok := lookup("SREADYA_SYNC_OTP_ENABLED"); ok && strings.TrimSpace(value) != "" {
 		parsed, err := strconv.ParseBool(strings.TrimSpace(value))
 		if err != nil {
-			return Config{}, fmt.Errorf("SREVA_SYNC_OTP_ENABLED must be a boolean: %w", err)
+			return Config{}, fmt.Errorf("SREADYA_SYNC_OTP_ENABLED must be a boolean: %w", err)
 		}
 		otpEnabled = parsed
 	}
