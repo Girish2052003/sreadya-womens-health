@@ -143,7 +143,7 @@ test('Task 18 live production desktop/account-free acceptance preflight', async 
   await expect(page.getByText('Encrypted local vault ready')).toBeVisible();
   await expect(page.getByText('Privacy center')).toBeVisible();
   await expect(page.getByText('Truthful boundary')).toBeVisible();
-  await expect(page.getByText('Platform health access').locator('..')).toContainText('Not connected');
+  await expect(page.getByText('Platform health access').locator('..')).toContainText('Native HealthKit / Health Connect unavailable in Web');
   await expect(page.getByText(/HealthKit (connected|enabled|synced)/i)).toHaveCount(0);
 
   await page.goto(live('app/vault/'));
