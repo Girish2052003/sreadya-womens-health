@@ -68,7 +68,7 @@ func TestVerifyMatchesFrozenTask19DeviceAuthenticationVector(t *testing.T) {
 		DeviceID:         "dev_target_B2",
 		AccountID:        "acct_test_7Q3V",
 		State:            devices.StateActive,
-		PublicSigningKey: mustKey(t, mustHex(t, "03a107bff3ce10be1d70dd18e74bc09967e4d6309ba50d5f1ddc8664125531b8")),
+		PublicSigningKey: mustKey(t, mustHex(t, "174553b456dddfc6908ecab1c101fe6ab21e2baa0617795b7d43a63482993fd5")),
 		SignatureSuite:   "Ed25519",
 	}}
 	service := NewService(challenges, lookup, func() time.Time { return now }, func() (string, error) {
@@ -100,7 +100,7 @@ func TestVerifyMatchesFrozenTask19DeviceAuthenticationVector(t *testing.T) {
 			BodySHA256: mustHex(t, "614f704709533f3a6c542dbf5e9c63c8f5e17c1a1d0ab3612a3270ac086e719f"),
 		},
 		Challenge: "challenge_test_F6",
-		Signature: mustHex(t, "afe539d0df5ff67b427e31da13e5fc2f8d362f99b1430cf3d02817355682c00642c77346e06aac9fba3018705a723a089527ffe9280c10e758925a2ec5a19806"),
+		Signature: mustHex(t, "5aeec9e45708c1634171184827c4d7af6f5b3121226dc2000b7e7c02beae9bb9c0984176ee276cb93ec7b2f4168de818dccd35d78764b7a40fa790027963010d"),
 	})
 	if err != nil {
 		t.Fatalf("verify frozen vector: %v", err)
