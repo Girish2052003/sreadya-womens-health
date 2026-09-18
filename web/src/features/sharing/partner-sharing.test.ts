@@ -6,7 +6,20 @@ import {
   buildPartnerSharePackage,
   createPartnerGrant,
   revokePartnerGrant,
+  type PartnerShareCopy,
 } from './partner-sharing';
+
+const copy: PartnerShareCopy = {
+  title: 'Sreadya shared summary',
+  footer: 'Shared intentionally by the Sreadya user.',
+  labels: {
+    prediction: 'Expected period window',
+    cyclePhase: 'Cycle phase / cycle day',
+    selectedReminder: 'One selected reminder',
+    selectedWellness: 'Selected wellness summary',
+  },
+  formatRow: (label, value) => `${label}: ${value}`,
+};
 
 describe('Task 13 partner sharing baseline', () => {
   it('covers PART-001 through PART-010 with only the approved V1 categories', () => {
@@ -19,7 +32,7 @@ describe('Task 13 partner sharing baseline', () => {
     ]);
   });
 
-  it('builds summary/QR/share payload from exactly the granted categories', () => {
+  it('builds localized summary/QR/share payload from exactly the granted categories', () => {
     const grant = createPartnerGrant({
       id: 'grant-1',
       categories: ['prediction', 'selectedWellness'],
@@ -27,6 +40,7 @@ describe('Task 13 partner sharing baseline', () => {
     });
     const share = buildPartnerSharePackage({
       grant,
+      copy,
       predictionWindow: '20 Sep – 24 Sep',
       cyclePhase: 'cycle day 12',
       selectedReminder: '22 Sep 08:00',
@@ -36,7 +50,7 @@ describe('Task 13 partner sharing baseline', () => {
     expect(share.summary).toBe([
       'Sreadya shared summary',
       'Expected period window: 20 Sep – 24 Sep',
-      'Wellness: energy, sleep',
+      'Selected wellness summary: energy, sleep',
       'Shared intentionally by the Sreadya user.',
     ].join('\n'));
     expect(share.qrPayload).toBe(share.summary);
@@ -52,7 +66,7 @@ describe('Task 13 partner sharing baseline', () => {
     expect(PARTNER_SHARE_CATEGORIES).not.toContain('pregnancyData');
   });
 
-  it('revokes a local grant immediately while remaining truthful about already-shared manual copies', () => {
+  it('revokes a local grant immediately while keeping domain errors language-neutral', () => {
     const grant = createPartnerGrant({
       id: 'grant-2',
       categories: ['cyclePhase'],
@@ -61,7 +75,7 @@ describe('Task 13 partner sharing baseline', () => {
     const revoked = revokePartnerGrant(grant, '2026-09-16T17:05:00.000Z');
 
     expect(revoked.revokedAt).toBe('2026-09-16T17:05:00.000Z');
-    expect(() => buildPartnerSharePackage({ grant: revoked, cyclePhase: 'cycle day 8' }))
-      .toThrow('Partner grant is revoked.');
+    expect(() => buildPartnerSharePackage({ grant: revoked, copy, cyclePhase: 'cycle day 8' }))
+      .toThrow('partner_grant_revoked');
   });
 });
