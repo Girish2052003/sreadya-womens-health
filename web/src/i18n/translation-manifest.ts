@@ -8,6 +8,17 @@ export type TranslationAvailability = {
   reviewStatus: string;
 };
 
+type GeneratedAvailabilityValue = {
+  locale?: string;
+  coverage: 'source' | 'complete' | 'partial';
+  method: string;
+  reviewStatus: string;
+  provider?: string;
+  englishName?: string;
+};
+
+const generatedAvailability = GENERATED_TRANSLATION_AVAILABILITY as Record<string, GeneratedAvailabilityValue>;
+
 const ALIASES: Record<string, string> = {
   zh: 'zh-cn',
   tl: 'fil',
@@ -29,9 +40,7 @@ function candidates(locale: string): string[] {
 
 export function translationAvailability(locale: string): TranslationAvailability {
   for (const candidate of candidates(locale)) {
-    const value = GENERATED_TRANSLATION_AVAILABILITY[
-      candidate as keyof typeof GENERATED_TRANSLATION_AVAILABILITY
-    ];
+    const value = generatedAvailability[candidate];
     if (value) {
       return {
         available: true,
@@ -56,9 +65,9 @@ export function hasCompleteTranslation(locale: string): boolean {
 }
 
 export function selectableTranslationLanguages(): string[] {
-  return Object.entries(GENERATED_TRANSLATION_AVAILABILITY)
+  return Object.entries(generatedAvailability)
     .filter(([, value]) => value.coverage === 'source' || value.coverage === 'complete')
-    .map(([tag, value]) => ('locale' in value && typeof value.locale === 'string' ? value.locale : tag))
+    .map(([tag, value]) => value.locale ?? tag)
     .sort((a, b) => a.localeCompare(b, 'en'));
 }
 
