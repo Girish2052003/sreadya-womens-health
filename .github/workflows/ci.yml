@@ -259,13 +259,13 @@ jobs:
           python-version: '3.12'
       - run: flutter pub get
       - run: python -m pip install pytest
-      - name: Verify Sreadya globalization contract and generated artifacts
+      - name: Verify Sreadya release-ready globalization contract and generated artifacts
         run: |
           python -m py_compile tool/i18n_pipeline.py tool/verify_globalization.py
           python tool/i18n_pipeline.py --check-google-baseline
           python tool/i18n_pipeline.py --check
           python tool/i18n_pipeline.py --dry-run --locales fi,ta,hi,ar,ja,sw
-          python tool/verify_globalization.py --require-global-closure
+          python tool/verify_globalization.py --require-release-ready
       - name: Shared schema and release-structure reference checks
         run: >-
           python -m pytest -q
