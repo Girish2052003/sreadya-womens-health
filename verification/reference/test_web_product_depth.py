@@ -52,3 +52,46 @@ def test_privacy_center_has_real_data_control_navigation_and_storage_transparenc
         assert route in privacy
     assert "Why is this stored?" in privacy
     assert "PIN" in privacy
+
+
+def test_default_cycle_reminder_matches_frozen_three_day_contract() -> None:
+    settings = read("web/src/features/reminders/reminder-settings-repository.ts")
+    panel = read("web/src/features/reminders/ReminderSettingsPanel.tsx")
+    assert "enabledOffsetsDays: [3]" in settings
+    assert "3-day" in panel or "3 day" in panel.lower()
+    assert "all cycle reminders off" not in panel.lower()
+
+def test_easy_language_and_rtl_are_real_user_preferences() -> None:
+    preferences = read("web/src/accessibility/preferences.ts")
+    panel = read("web/src/accessibility/AccessibilityPreferencesPanel.tsx")
+    layout = read("web/src/app/app/layout.tsx")
+    settings = read("web/src/features/settings/SettingsWorkspace.tsx")
+    guide = read("web/src/accessibility/EasyLanguageGuide.tsx")
+    assert "easyLanguage" in preferences
+    assert "data-sreva-language-mode" in preferences
+    assert "Easy language" in panel
+    assert "EasyLanguageGuide" in layout
+    assert "localeDirection" in settings
+    assert "document.documentElement.dir" in settings
+    assert "easy" in guide.lower()
+
+def test_public_architecture_pages_have_topic_specific_content() -> None:
+    content = read("web/src/content/public-topic-content.ts")
+    component = read("web/src/components/PublicTopicContent.tsx")
+    public_page = read("web/src/app/(public)/[...slug]/page.tsx")
+    for key in (
+        "cycle-tracking", "predictions", "reminders", "insights", "life-stages",
+        "doctor-reports", "privacy", "security", "sync", "accessibility",
+        "download", "help",
+    ):
+        assert f'"{key}"' in content or f"'{key}'" in content
+    assert "PublicTopicContent" in public_page
+    assert "topic.sections" in component or "sections.map" in component
+
+def test_provider_dependent_capabilities_are_not_marketed_as_live_local_interactions() -> None:
+    import json
+    ledger = json.loads(read("shared/capabilities/web-surfaces.v2.json"))
+    by_id = {row["id"]: row for row in ledger["capabilities"]}
+    for capability_id in ("ID-002", "ID-007", "ID-008", "SYNC-001", "SYNC-006", "SYNC-014", "PART-010"):
+        assert by_id[capability_id]["surface_type"] == "provider-dependent", capability_id
+    assert by_id["INT-003"]["surface_type"] == "platform-adapted"

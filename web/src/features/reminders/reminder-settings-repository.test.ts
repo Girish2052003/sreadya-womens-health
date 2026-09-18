@@ -16,14 +16,14 @@ class MemoryPersistence implements VaultPersistence {
 }
 
 describe('encrypted reminder settings', () => {
-  it('starts opt-in/default-off and persists health-revealing reminder preferences as ciphertext', async () => {
+  it('enables the frozen private 3-day default and persists health-revealing reminder preferences as ciphertext', async () => {
     const persistence = new MemoryPersistence();
     const vault = new VaultService(persistence);
     await vault.createOrOpen();
     const repository = new ReminderSettingsRepository(vault);
 
     await expect(repository.load()).resolves.toEqual(DEFAULT_REMINDER_SETTINGS);
-    expect(DEFAULT_REMINDER_SETTINGS.enabledOffsetsDays).toEqual([]);
+    expect(DEFAULT_REMINDER_SETTINGS.enabledOffsetsDays).toEqual([3]);
 
     const settings = {
       ...DEFAULT_REMINDER_SETTINGS,

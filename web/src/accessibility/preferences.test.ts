@@ -46,6 +46,7 @@ describe('accessibility preferences', () => {
       textScale: 'large',
       motion: 'reduced',
       contrast: 'high',
+      easyLanguage: true,
     };
 
     saveAccessibilityPreferences(preferences, storage);
@@ -61,6 +62,7 @@ describe('accessibility preferences', () => {
       'data-sreva-text-scale': 'large',
       'data-sreva-motion': 'reduced',
       'data-sreva-contrast': 'high',
+      'data-sreva-language-mode': 'easy',
     });
 
     expect(accessibilityDataAttributes(DEFAULT_ACCESSIBILITY_PREFERENCES)).toEqual({
@@ -82,6 +84,7 @@ describe('accessibility preferences', () => {
       textScale: 'large',
       motion: 'reduced',
       contrast: 'high',
+      easyLanguage: true,
     });
 
     expect(Object.fromEntries(applied)).toEqual({

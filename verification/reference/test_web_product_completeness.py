@@ -34,6 +34,7 @@ ALLOWED_SURFACE_TYPES = {
     "status",
     "protection",
     "platform-adapted",
+    "provider-dependent",
 }
 
 
