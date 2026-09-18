@@ -495,13 +495,24 @@ def sync_google_locale(
         else:
             to_translate[key] = value
 
-    translated = provider.translate(provider_locale, to_translate)
-    if set(translated) != set(to_translate):
-        missing = sorted(set(to_translate) - set(translated))
-        extra = sorted(set(translated) - set(to_translate))
+    groups: dict[str, list[str]] = {}
+    for key, value in to_translate.items():
+        groups.setdefault(value, []).append(key)
+    representatives = {keys[0]: value for value, keys in groups.items()}
+    translated_representatives = provider.translate(provider_locale, representatives)
+    if set(translated_representatives) != set(representatives):
+        missing = sorted(set(representatives) - set(translated_representatives))
+        extra = sorted(set(translated_representatives) - set(representatives))
         raise SystemExit(
             f"{canonical_locale}: provider result mismatch missing={missing[:5]} extra={extra[:5]}"
         )
+
+    translated: dict[str, str] = {}
+    for source_value, keys in groups.items():
+        representative = keys[0]
+        translated_value = translated_representatives[representative]
+        for key in keys:
+            translated[key] = translated_value
 
     for key, value in translated.items():
         if not value.strip():
@@ -569,6 +580,7 @@ def google_sync_plan(
         existing_hashes = existing.get("sourceHashes", {}) if isinstance(existing.get("sourceHashes"), dict) else {}
         existing_is_google = str(meta.get("provider", "")) == GOOGLE_PROVIDER_ID
 
+        pending_values: set[str] = set()
         for key, value in source.items():
             digest = source_value_hash(value)
             reusable = (
@@ -581,6 +593,9 @@ def google_sync_plan(
                 reused_messages += 1
                 continue
             translated_messages += 1
+            pending_values.add(value)
+
+        for value in pending_values:
             protected, _ = protect_text(value)
             provider_input_characters += len(protected)
 
