@@ -41,7 +41,7 @@ jobs:
       # persistence on this same head. Playwright/Linux WebKit currently fails
       # its synthetic offline reload primitive before application assertions,
       # so Task 10 keeps the required offline proof in Chromium rather than
-      # misclassifying a WebKit runner error as a Sreva product failure.
+      # misclassifying a WebKit runner error as a Sreadya product failure.
       - name: Real account-free encrypted offline persistence
         working-directory: web
         run: npx playwright test e2e/account-free-core.spec.ts --project=chromium

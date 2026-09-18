@@ -1,4 +1,4 @@
-name: Sreva Android family preview
+name: Sreadya Android family preview
 
 on:
   workflow_dispatch:
@@ -7,21 +7,21 @@ permissions:
   contents: read
 
 concurrency:
-  group: sreva-android-family-preview
+  group: sreadya-android-family-preview
   cancel-in-progress: false
 
 env:
-  SREVA_PREVIEW_APPLICATION_ID: com.sreva.health.sreva.preview
+  SREADYA_PREVIEW_APPLICATION_ID: com.sreadya.health.sreadya.preview
 
 jobs:
   family-preview:
     name: Verify and build full-capability family preview
-    if: ${{ github.repository == 'Girish2052003/sreva-womens-health' && github.ref == 'refs/heads/main' }}
+    if: ${{ github.repository == 'Girish2052003/sreadya-womens-health' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     environment: android-family-preview
     steps:
       - name: Set isolated runner signing path
-        run: echo "SREVA_ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/sreva-preview.jks" >> "$GITHUB_ENV"
+        run: echo "SREADYA_ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/sreadya-preview.jks" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: main
@@ -37,20 +37,20 @@ jobs:
 
       - name: Require dedicated preview signing and artifact-encryption secrets
         env:
-          KEYSTORE_B64: ${{ secrets.SREVA_PREVIEW_ANDROID_UPLOAD_KEYSTORE_B64 }}
-          STORE_PASSWORD: ${{ secrets.SREVA_PREVIEW_ANDROID_KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.SREVA_PREVIEW_ANDROID_KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.SREVA_PREVIEW_ANDROID_KEY_PASSWORD }}
-          ARTIFACT_PASSWORD: ${{ secrets.SREVA_PREVIEW_ARTIFACT_PASSWORD }}
+          KEYSTORE_B64: ${{ secrets.SREADYA_PREVIEW_ANDROID_UPLOAD_KEYSTORE_B64 }}
+          STORE_PASSWORD: ${{ secrets.SREADYA_PREVIEW_ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.SREADYA_PREVIEW_ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.SREADYA_PREVIEW_ANDROID_KEY_PASSWORD }}
+          ARTIFACT_PASSWORD: ${{ secrets.SREADYA_PREVIEW_ARTIFACT_PASSWORD }}
         run: |
           test -n "$KEYSTORE_B64"
           test -n "$STORE_PASSWORD"
           test -n "$KEY_ALIAS"
           test -n "$KEY_PASSWORD"
           test -n "$ARTIFACT_PASSWORD"
-          printf '%s' "$KEYSTORE_B64" | base64 --decode > "$SREVA_ANDROID_KEYSTORE_PATH"
-          chmod 600 "$SREVA_ANDROID_KEYSTORE_PATH"
-          test -s "$SREVA_ANDROID_KEYSTORE_PATH"
+          printf '%s' "$KEYSTORE_B64" | base64 --decode > "$SREADYA_ANDROID_KEYSTORE_PATH"
+          chmod 600 "$SREADYA_ANDROID_KEYSTORE_PATH"
+          test -s "$SREADYA_ANDROID_KEYSTORE_PATH"
 
       - run: flutter pub get
       - run: dart format --output=none --set-exit-if-changed lib test tool
@@ -83,11 +83,11 @@ jobs:
         run: |
           mkdir -p build/security
           dart pub deps --json > build/security/pub-deps.json
-          python tool/generate_sbom.py build/security/pub-deps.json build/security/sreva-cyclonedx.json
+          python tool/generate_sbom.py build/security/pub-deps.json build/security/sreadya-cyclonedx.json
 
       - name: Generate Android host
-        run: flutter create --platforms=android --org com.sreva.health .
-      - name: Configure complete Sreva Android host
+        run: flutter create --platforms=android --org com.sreadya.health .
+      - name: Configure complete Sreadya Android host
         run: |
           python3 tool/configure_platforms.py android
           python3 tool/configure_platforms.py android --check
@@ -97,13 +97,13 @@ jobs:
         run: |
           python3 tool/configure_android_preview.py
           python3 tool/configure_android_preview.py --check
-          grep -F 'applicationId = "com.sreva.health.sreva.preview"' android/app/build.gradle.kts
+          grep -F 'applicationId = "com.sreadya.health.sreadya.preview"' android/app/build.gradle.kts
           grep -F 'android.permission.health.READ_MENSTRUATION' android/app/src/main/AndroidManifest.xml
       - name: Configure preview signing and Play-compatible target
         env:
-          SREVA_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SREVA_PREVIEW_ANDROID_KEYSTORE_PASSWORD }}
-          SREVA_ANDROID_KEY_ALIAS: ${{ secrets.SREVA_PREVIEW_ANDROID_KEY_ALIAS }}
-          SREVA_ANDROID_KEY_PASSWORD: ${{ secrets.SREVA_PREVIEW_ANDROID_KEY_PASSWORD }}
+          SREADYA_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SREADYA_PREVIEW_ANDROID_KEYSTORE_PASSWORD }}
+          SREADYA_ANDROID_KEY_ALIAS: ${{ secrets.SREADYA_PREVIEW_ANDROID_KEY_ALIAS }}
+          SREADYA_ANDROID_KEY_PASSWORD: ${{ secrets.SREADYA_PREVIEW_ANDROID_KEY_PASSWORD }}
         run: |
           python3 tool/configure_android_release.py --require-signing
           python3 tool/configure_android_release.py --check --require-signing
@@ -112,16 +112,16 @@ jobs:
         run: ./gradlew :app:testReleaseUnitTest --stacktrace
       - name: Build signed family-preview AAB and APK
         env:
-          SREVA_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SREVA_PREVIEW_ANDROID_KEYSTORE_PASSWORD }}
-          SREVA_ANDROID_KEY_ALIAS: ${{ secrets.SREVA_PREVIEW_ANDROID_KEY_ALIAS }}
-          SREVA_ANDROID_KEY_PASSWORD: ${{ secrets.SREVA_PREVIEW_ANDROID_KEY_PASSWORD }}
+          SREADYA_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SREADYA_PREVIEW_ANDROID_KEYSTORE_PASSWORD }}
+          SREADYA_ANDROID_KEY_ALIAS: ${{ secrets.SREADYA_PREVIEW_ANDROID_KEY_ALIAS }}
+          SREADYA_ANDROID_KEY_PASSWORD: ${{ secrets.SREADYA_PREVIEW_ANDROID_KEY_PASSWORD }}
         run: |
           flutter build appbundle --release
           flutter build apk --release
       - name: Verify preview signatures
         env:
-          SREVA_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SREVA_PREVIEW_ANDROID_KEYSTORE_PASSWORD }}
-          SREVA_ANDROID_KEY_ALIAS: ${{ secrets.SREVA_PREVIEW_ANDROID_KEY_ALIAS }}
+          SREADYA_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SREADYA_PREVIEW_ANDROID_KEYSTORE_PASSWORD }}
+          SREADYA_ANDROID_KEY_ALIAS: ${{ secrets.SREADYA_PREVIEW_ANDROID_KEY_ALIAS }}
         run: |
           python3 tool/verify_android_signatures.py \
             --aab build/app/outputs/bundle/release/app-release.aab \
@@ -129,33 +129,33 @@ jobs:
       - name: Create preview release checksums
         run: |
           mkdir -p build/release
-          cp build/app/outputs/bundle/release/app-release.aab build/release/sreva-1.0.0+1-family-preview.aab
-          cp build/app/outputs/flutter-apk/app-release.apk build/release/sreva-1.0.0+1-family-preview.apk
-          sha256sum build/release/sreva-1.0.0+1-family-preview.aab build/release/sreva-1.0.0+1-family-preview.apk > build/release/SHA256SUMS.txt
+          cp build/app/outputs/bundle/release/app-release.aab build/release/sreadya-1.0.0+1-family-preview.aab
+          cp build/app/outputs/flutter-apk/app-release.apk build/release/sreadya-1.0.0+1-family-preview.apk
+          sha256sum build/release/sreadya-1.0.0+1-family-preview.aab build/release/sreadya-1.0.0+1-family-preview.apk > build/release/SHA256SUMS.txt
       - name: Encrypt family-preview release payload for public Actions storage
         env:
-          ARTIFACT_PASSWORD: ${{ secrets.SREVA_PREVIEW_ARTIFACT_PASSWORD }}
+          ARTIFACT_PASSWORD: ${{ secrets.SREADYA_PREVIEW_ARTIFACT_PASSWORD }}
         run: |
           test -n "$ARTIFACT_PASSWORD"
           mkdir -p build/private-release-payload build/public-artifacts
-          cp build/release/sreva-1.0.0+1-family-preview.aab build/private-release-payload/
-          cp build/release/sreva-1.0.0+1-family-preview.apk build/private-release-payload/
+          cp build/release/sreadya-1.0.0+1-family-preview.aab build/private-release-payload/
+          cp build/release/sreadya-1.0.0+1-family-preview.apk build/private-release-payload/
           cp build/release/SHA256SUMS.txt build/private-release-payload/
-          cp build/security/sreva-cyclonedx.json build/private-release-payload/
+          cp build/security/sreadya-cyclonedx.json build/private-release-payload/
           cp pubspec.lock build/private-release-payload/
-          tar -C build/private-release-payload -czf "$RUNNER_TEMP/sreva-1.0.0+1-family-preview-release.tar.gz" .
+          tar -C build/private-release-payload -czf "$RUNNER_TEMP/sreadya-1.0.0+1-family-preview-release.tar.gz" .
           printf '%s' "$ARTIFACT_PASSWORD" | openssl enc -aes-256-cbc -salt -pbkdf2 -iter 200000 \
-            -in "$RUNNER_TEMP/sreva-1.0.0+1-family-preview-release.tar.gz" \
-            -out build/public-artifacts/sreva-1.0.0+1-family-preview-release.tar.gz.enc \
+            -in "$RUNNER_TEMP/sreadya-1.0.0+1-family-preview-release.tar.gz" \
+            -out build/public-artifacts/sreadya-1.0.0+1-family-preview-release.tar.gz.enc \
             -pass stdin
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: sreva-android-1.0.0-family-preview-encrypted
-          path: build/public-artifacts/sreva-1.0.0+1-family-preview-release.tar.gz.enc
+          name: sreadya-android-1.0.0-family-preview-encrypted
+          path: build/public-artifacts/sreadya-1.0.0+1-family-preview-release.tar.gz.enc
           retention-days: 30
       - name: Remove preview signing and plaintext release material
         if: always()
         run: |
-          rm -f "$SREVA_ANDROID_KEYSTORE_PATH"
-          rm -f "$RUNNER_TEMP/sreva-1.0.0+1-family-preview-release.tar.gz"
+          rm -f "$SREADYA_ANDROID_KEYSTORE_PATH"
+          rm -f "$RUNNER_TEMP/sreadya-1.0.0+1-family-preview-release.tar.gz"
           rm -rf build/private-release-payload build/release

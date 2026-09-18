@@ -9,8 +9,8 @@ on:
       - 'lib/core/crypto/e2ee/**'
       - 'lib/features/account/**'
       - 'lib/features/sync/**'
-      - 'platform_templates/android/SrevaCredentialBridge.kt'
-      - 'platform_templates/ios/SrevaCredentialBridge.swift'
+      - 'platform_templates/android/SreadyaCredentialBridge.kt'
+      - 'platform_templates/ios/SreadyaCredentialBridge.swift'
       - 'tool/configure_platforms.py'
       - 'test/conformance/e2ee_vectors_mobile_test.dart'
       - 'shared/crypto/**'
@@ -70,7 +70,7 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
-      - run: flutter create --platforms=android --org com.sreva.health .
+      - run: flutter create --platforms=android --org com.sreadya.health .
       - name: Materialize Android passkey boundary
         run: |
           python3 tool/configure_platforms.py android
@@ -92,7 +92,7 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
-      - run: flutter create --platforms=ios --org com.sreva.health .
+      - run: flutter create --platforms=ios --org com.sreadya.health .
       - name: Materialize iOS passkey boundary
         run: |
           python3 tool/configure_platforms.py ios
