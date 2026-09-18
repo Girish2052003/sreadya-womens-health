@@ -34,7 +34,7 @@ export function CycleCorePanel({
   return (
     <div className="core-panel-grid">
       <Card eyebrow="Cycle" title="Cycle & periods">
-        <p>Record the dates that are true for you. Sreva does not force a 28-day-cycle assumption.</p>
+        <p>Record the dates that are true for you. Sreadya does not force a 28-day-cycle assumption.</p>
         <Button onClick={onStartPeriodToday}>Period started today</Button>
       </Card>
 

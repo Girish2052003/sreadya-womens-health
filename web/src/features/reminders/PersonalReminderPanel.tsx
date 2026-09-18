@@ -52,7 +52,7 @@ export function PersonalReminderPanel() {
       setReady(true);
     })().catch(() => {
       if (cancelled) return;
-      setError('Sreva could not open the encrypted personal reminder store.');
+      setError('Sreadya could not open the encrypted personal reminder store.');
       setStatus('Personal reminder store unavailable');
       setReady(true);
     });
@@ -99,7 +99,7 @@ export function PersonalReminderPanel() {
       form.reset();
       setStatus('Personal reminder saved locally · encrypted');
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Sreva could not save the personal reminder.');
+      setError(cause instanceof Error ? cause.message : 'Sreadya could not save the personal reminder.');
     }
   };
 

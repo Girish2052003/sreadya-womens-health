@@ -81,7 +81,7 @@ export function ReminderHealthPanel({
 
       <Card eyebrow="Notification privacy" title={privacy === 'maximum' ? 'Maximum Privacy' : titleCase(privacy)}>
         {privacy === 'maximum' ? (
-          <p>Reminder delivery stays local to Sreva. Background push is not required.</p>
+          <p>Reminder delivery stays local to Sreadya. Background push is not required.</p>
         ) : (
           <p>Notification wording follows the selected privacy level and never changes the underlying reminder schedule.</p>
         )}

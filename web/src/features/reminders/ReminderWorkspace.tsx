@@ -75,7 +75,7 @@ export function ReminderWorkspace() {
     })().catch(() => {
       if (cancelled) return;
       setVaultStatus('Local vault unavailable');
-      setError('Sreva could not open the encrypted local reminder settings in this browser.');
+      setError('Sreadya could not open the encrypted local reminder settings in this browser.');
       setReady(true);
     });
 
@@ -108,7 +108,7 @@ export function ReminderWorkspace() {
       setCapability(detectNotificationCapability(notificationPrivacy(settings.privacy)));
       setVaultStatus('Saved locally · encrypted');
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Sreva could not save the local reminder settings.');
+      setError(cause instanceof Error ? cause.message : 'Sreadya could not save the local reminder settings.');
     } finally {
       setSaving(false);
     }

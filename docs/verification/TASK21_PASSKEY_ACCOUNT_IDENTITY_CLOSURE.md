@@ -17,7 +17,7 @@ The documentation commit containing this note is not a replacement verification 
 
 ## Frozen Task-21 requirement coverage
 
-Task 21 is the provider-independent account/passkey identity boundary defined in `docs/superpowers/plans/2026-09-16-sreva-c2-cross-platform-implementation.md`.
+Task 21 is the provider-independent account/passkey identity boundary defined in `docs/superpowers/plans/2026-09-16-sreadya-c2-cross-platform-implementation.md`.
 
 - go-webauthn is pinned to `v0.17.4` with a reproducible dependency graph.
 - Account identity accepts email-only, phone-only, or both, while remaining separate from health-vault key material and health semantics.
