@@ -27,7 +27,8 @@ export const publicPages: PublicPage[] = [
   { slug: ['release-notes'], title: 'Release Notes', eyebrow: 'What changed', summary: 'Release notes make meaningful product, privacy and compatibility changes visible.' },
   { slug: ['privacy-policy'], title: 'Privacy Policy', eyebrow: 'Plain-language policy', summary: 'Read how local account-free use and optional end-to-end encrypted continuity handle health content, operational metadata, recovery, retention and deletion.' },
   { slug: ['terms'], title: 'Terms', eyebrow: 'Product terms', summary: 'Terms are kept separate from health guidance and never expand Sreva into unvalidated diagnostic or contraception claims.' },
-  { slug: ['security-report'], title: 'Security Report', eyebrow: 'Responsible disclosure', summary: 'Security reporting follows the repository disclosure process without asking users to expose health records.' },
+  { slug: ['security', 'report'], title: 'Security Report', eyebrow: 'Responsible disclosure', summary: 'Security reporting follows the repository disclosure process without asking users to expose health records.' },
+  { slug: ['security-report'], title: 'Security Report', eyebrow: 'Legacy route', summary: 'This compatibility route points users to the canonical security reporting guidance.' },
 ];
 
 export const workspaceSections = [

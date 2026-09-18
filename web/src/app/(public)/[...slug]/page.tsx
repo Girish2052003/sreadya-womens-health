@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { CapabilityCatalogue } from '../../../components/CapabilityCatalogue';
+import { PublicTopicContent } from '../../../components/PublicTopicContent';
 import { PublicFooter } from '../../../components/navigation/PublicFooter';
 import { PublicHeader } from '../../../components/navigation/PublicHeader';
 import { InstallGuide, type InstallGuideTarget } from '../../../components/pwa/InstallGuide';
@@ -46,6 +47,7 @@ export default async function PublicPage({ params }: { params: Promise<{ slug: s
           </div>
         </section>
         {key === 'features' ? <CapabilityCatalogue /> : null}
+        <PublicTopicContent topicKey={key} />
         {installTarget ? <InstallGuide target={installTarget} /> : null}
         {isPrivacyPolicy ? (
           <section className="policy-document" aria-label="Sreva Privacy Policy">
