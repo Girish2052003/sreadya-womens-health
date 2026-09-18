@@ -257,7 +257,7 @@ def check_translation_artifacts() -> list[str]:
                 failures.append(f"{path.relative_to(ROOT)}: empty/non-string translation {key}")
                 continue
             if set(MESSAGE_VARIABLE.findall(value)) != set(MESSAGE_VARIABLE.findall(source[key])):
-                failures.append(f"{path.relative_to(ROOT)}: placeholder mismatch {key}")
+                failures.append(f"{path.relative_to(ROOT)}: message-variable mismatch {key}")
             if isinstance(hashes, dict) and key in hashes and hashes[key] != source_value_hash(source[key]):
                 failures.append(f"{path.relative_to(ROOT)}: stale source hash {key}")
     return failures
