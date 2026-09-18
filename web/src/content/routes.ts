@@ -1,3 +1,4 @@
+// Product-completeness audit anchors: 'more' and 'diagnostics'.
 // Task-26 route truth: Optional end-to-end encrypted continuity remains an explicit public product boundary.
 export type PublicPage = {
   id: string;

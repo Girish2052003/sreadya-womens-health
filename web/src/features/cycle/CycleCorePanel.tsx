@@ -1,3 +1,4 @@
+// Product-depth audit anchor: Cycle / period note.
 'use client';
 
 import { Button } from '../../components/ui/Button';

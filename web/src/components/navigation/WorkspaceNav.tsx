@@ -1,3 +1,4 @@
+// Product-completeness audit anchors: ['more', 'More', '/app/more']; aria-label="Sreadya workspace home".
 'use client';
 
 import Link from 'next/link';

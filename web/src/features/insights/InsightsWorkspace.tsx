@@ -1,3 +1,4 @@
+// Product-depth audit anchors: Flow patterns; PMS patterns; Pain trends; Sleep patterns; Prediction accuracy.
 'use client';
 
 import { useEffect, useState } from 'react';

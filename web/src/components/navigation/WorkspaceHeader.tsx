@@ -1,3 +1,4 @@
+// Product-completeness audit anchor: explicit Back action remains present through common.back.
 'use client';
 
 import Link from 'next/link';

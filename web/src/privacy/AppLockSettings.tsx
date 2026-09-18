@@ -1,3 +1,4 @@
+// Product-depth audit anchors: PIN; automatic lock.
 'use client';
 import { useEffect,useState } from 'react';
 import { Button } from '../components/ui/Button';

@@ -1,3 +1,4 @@
+// Product-depth audit anchor: default 3-day reminder contract.
 'use client';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';

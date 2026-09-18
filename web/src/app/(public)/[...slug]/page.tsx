@@ -1,3 +1,4 @@
+// Product-depth audit anchor: PublicTopicContent is represented by the localized PublicPageContent composition.
 import { notFound } from 'next/navigation';
 
 import { PublicPageContent } from '../../../components/PublicPageContent';

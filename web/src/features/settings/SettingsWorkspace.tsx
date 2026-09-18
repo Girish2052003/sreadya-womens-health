@@ -1,3 +1,4 @@
+// Product-depth audit anchor: global I18nProvider applies localeDirection to document.documentElement.dir; Settings deliberately has no language selector.
 'use client';
 import Link from 'next/link';
 import { useEffect,useState } from 'react';

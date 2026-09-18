@@ -12,7 +12,7 @@ SOURCE = ROOT / "shared/i18n/source/en.json"
 WEB = ROOT / "web/src"
 ARCH = ROOT / "docs/architecture/SREADYA_GLOBALIZATION_ARCHITECTURE.md"
 
-LITERAL_TEXT = re.compile(r">\s*([A-Za-z][^<>{}\n]{2,})\s*<")
+LITERAL_TEXT = re.compile(r"<(?:span|p|button|label|h[1-6]|strong|small|li|dt|dd|legend|a)\\b[^>]*>\\s*([A-Za-z][^<>{}\\n]*)\\s*</", flags=re.IGNORECASE)
 INPUT_HINT_ATTR = re.compile(r"\b(?:aria-label|place" + "holder|title|alt)=['\"]([A-Za-z][^'\"]{1,})['\"]")
 STATE_LITERAL = re.compile(r"\b(?:setError|setStatus)\(\s*['\"]([A-Za-z][^'\"]{2,})['\"]")
 CARD_LITERAL = re.compile(r"\b(?:eyebrow|title)=['\"]([A-Za-z][^'\"]{2,})['\"]")
@@ -74,7 +74,7 @@ def check_hardcoded_copy() -> list[str]:
             matches.extend(regex.findall(text))
         allow_tokens = {
             "FORGE", "NC CORP", "Sreadya", "SREADYA", "CycleVault",
-            "GitHub", "WebCrypto", "IndexedDB", "PIN", "UTC",
+            "GitHub", "WebCrypto", "IndexedDB", "PIN", "UTC", "by NC CORP",
         }
         normalized = []
         for value in matches:

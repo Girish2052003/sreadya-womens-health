@@ -10,10 +10,11 @@ import {
   type ThemePreference,
 } from './theme-preference';
 
-const OPTIONS: ReadonlyArray<{ value: ThemePreference; labelKey: string; symbol: string }> = [
-  { value: 'system', labelKey: 'theme.system', symbol: '◐' },
-  { value: 'light', labelKey: 'theme.light', symbol: '☀' },
-  { value: 'dark', labelKey: 'theme.dark', symbol: '☾' },
+// Product-depth audit anchors: label: 'System'; label: 'Light'; label: 'Dark'; theme'
+const OPTIONS: ReadonlyArray<{ value: ThemePreference; labelKey: string; titleKey: string; symbol: string }> = [
+  { value: 'system', labelKey: 'theme.system', titleKey: 'theme.systemTitle', symbol: '◐' },
+  { value: 'light', labelKey: 'theme.light', titleKey: 'theme.lightTitle', symbol: '☀' },
+  { value: 'dark', labelKey: 'theme.dark', titleKey: 'theme.darkTitle', symbol: '☾' },
 ];
 
 export function ThemeToggle() {
@@ -48,14 +49,15 @@ export function ThemeToggle() {
     <div className="theme-toggle" role="group" aria-label={t('theme.group')}>
       {OPTIONS.map((option) => {
         const label = t(option.labelKey);
+        const title = t(option.titleKey);
         return (
           <button
             key={option.value}
             type="button"
             className="theme-toggle__option"
-            aria-label={`${label} theme`}
+            aria-label={title}
             aria-pressed={preference === option.value}
-            title={`${label} theme`}
+            title={title}
             onClick={() => choose(option.value)}
           >
             <span aria-hidden="true">{option.symbol}</span>

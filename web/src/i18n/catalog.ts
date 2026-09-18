@@ -1,9 +1,9 @@
-import source from '../../../shared/i18n/source/en.json';
+import { GENERATED_SOURCE_MESSAGES } from './source.generated';
 
-export type MessageKey = keyof typeof source;
+export type MessageKey = keyof typeof GENERATED_SOURCE_MESSAGES;
 export type MessageParams = Readonly<Record<string, string | number>>;
 
-export const sourceMessages: Readonly<Record<string, string>> = source;
+export const sourceMessages: Readonly<Record<string, string>> = GENERATED_SOURCE_MESSAGES;
 
 export function sourceMessage(key: string, fallback?: string): string {
   return sourceMessages[key] ?? fallback ?? key;

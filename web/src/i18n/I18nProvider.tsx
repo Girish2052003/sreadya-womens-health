@@ -20,4 +20,16 @@ export function I18nProvider({children}:{children:ReactNode}){const[locale,setLo
  const t=useCallback((key:string,params:MessageParams={},fallback?:string)=>interpolateMessage(messages[key]??sourceMessage(key,fallback),params),[messages]);
  const plural=useCallback((baseKey:string,count:number,params:MessageParams={},fallback?:string)=>{const category=new Intl.PluralRules(locale).select(count),categoryKey=`${baseKey}.${category}`,otherKey=`${baseKey}.other`,template=messages[categoryKey]??messages[otherKey]??sourceMessage(categoryKey,sourceMessage(otherKey,fallback));return interpolateMessage(template,{...params,count});},[locale,messages]);
  const value=useMemo<I18nContextValue>(()=>({locale,status,setLocale:(next)=>activate(next,true),t,plural,hasTranslation:hasShippedTranslation}),[activate,locale,plural,status,t]);return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;}
-export function useI18n():I18nContextValue{const value=useContext(I18nContext);if(!value)throw new Error('useI18n must be used inside I18nProvider.');return value;}
+const sourceOnlyI18n:I18nContextValue={
+ locale:'en',
+ status:'source',
+ setLocale:()=>{},
+ t:(key,params={},fallback)=>interpolateMessage(sourceMessage(key,fallback),params),
+ plural:(baseKey,count,params={},fallback)=>{
+   const category=new Intl.PluralRules('en').select(count);
+   const categoryKey=`${baseKey}.${category}`,otherKey=`${baseKey}.other`;
+   return interpolateMessage(sourceMessage(categoryKey,sourceMessage(otherKey,fallback)),{...params,count});
+ },
+ hasTranslation:hasShippedTranslation,
+};
+export function useI18n():I18nContextValue{return useContext(I18nContext)??sourceOnlyI18n;}

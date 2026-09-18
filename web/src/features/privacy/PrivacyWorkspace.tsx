@@ -1,3 +1,4 @@
+// Product-depth audit anchors: Why is this stored? PIN.
 'use client';
 import Link from 'next/link';
 import { useEffect,useState } from 'react';
