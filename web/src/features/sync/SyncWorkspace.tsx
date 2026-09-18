@@ -50,7 +50,7 @@ export function SyncWorkspace() {
         <p role="status">{status}</p>
       </Card>
       <Card eyebrow="Local sync controls" title="Pause, resume or disable">
-        <p>These controls affect only the local encrypted continuity queue. Disabling sync never deletes the local health vault.</p>
+        <p>Encrypted sync is optional and can be paused, resumed, or disabled. These controls affect only the local encrypted continuity queue. Disabling sync never deletes the local health vault.</p>
         <div className="continuity-actions">
           <Button variant="secondary" onClick={() => { void run('pause'); }}>Pause sync</Button>
           <Button variant="secondary" onClick={() => { void run('resume'); }}>Resume sync</Button>

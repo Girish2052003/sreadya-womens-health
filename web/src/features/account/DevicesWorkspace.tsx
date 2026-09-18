@@ -63,7 +63,7 @@ export function DevicesWorkspace() {
           <Button variant="secondary" disabled={!qr.trim()} onClick={inspectQr}>Validate enrollment package locally</Button>
           {qrStatus ? <p role="status">{qrStatus}</p> : null}
         </div>
-        <p className="workspace-note">Actual approval/revocation requires an authenticated enrolled-device signer and continuity service. Sreva does not turn a QR parse into fake authorization.</p>
+        <p className="workspace-note">An already trusted device may approve another device through the authenticated continuity protocol; revoked devices cannot continue continuity. Actual approval/revocation requires an enrolled-device signer and continuity service. Sreva does not turn a QR parse into fake authorization.</p>
       </Card>
     </div>
   );

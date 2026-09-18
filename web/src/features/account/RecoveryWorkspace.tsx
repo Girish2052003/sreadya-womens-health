@@ -49,7 +49,7 @@ export function RecoveryWorkspace() {
         </div>
       </Card>
       <Card eyebrow="Boundary" title="Email or SMS is not a vault key">
-        <p>Email or SMS may help recover account identity when a reviewed provider is configured, but neither can independently decrypt the old health vault.</p>
+        <p>Email or SMS may help recover account identity when a reviewed provider is configured, but Email or SMS cannot unlock the old health vault and neither can independently decrypt it.</p>
         <p className="workspace-note">If every trusted device and the recovery key are lost, old encrypted vault continuity can become unrecoverable. That is part of the E2EE guarantee.</p>
       </Card>
     </div>
