@@ -11,7 +11,8 @@ export default function HomePage() {
         <section className="hero" aria-labelledby="sreadya-title">
           <div className="hero__copy">
             <p className="public-eyebrow">Private by architecture. Gentle by design.</p>
-            <h1 id="sreadya-title">SREADYA</h1>\n            <p className="hero__motto">Prakritim Svam Avashtabhya.</p>
+            <h1 id="sreadya-title">SREADYA</h1>
+            <p className="hero__motto">Prakritim Svam Avashtabhya.</p>
             <p className="hero__headline">Your cycle, your context, your private space.</p>
             <p className="hero__lede">
               A local-first women&apos;s cycle and menstrual health companion designed to feel calm,
