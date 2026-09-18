@@ -96,10 +96,9 @@ test('language chooser is one clean provider-backed list with no raw fallback ro
   const list = page.locator('.language-chooser__list');
   await expect(list).toBeVisible();
   await expect(page.locator('.language-chooser__list')).toHaveCount(1);
-  await expect(page.locator('.language-chooser__option')).toHaveCount(194, { timeout: 15_000 }).catch(async () => {
-    const count = await page.locator('.language-chooser__option').count();
-    expect(count).toBeGreaterThanOrEqual(194);
-  });
+  await expect(page.locator('.language-chooser__option').first()).toBeVisible();
+  const optionCount = await page.locator('.language-chooser__option').count();
+  expect(optionCount).toBeGreaterThanOrEqual(194);
 
   await expect(page.getByText('English fallback', { exact: true })).toHaveCount(0);
   await expect(page.locator('[data-language-tag="aa"]')).toHaveCount(0);
