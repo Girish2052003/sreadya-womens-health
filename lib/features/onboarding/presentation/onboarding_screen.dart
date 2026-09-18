@@ -14,7 +14,7 @@ import '../../settings/data/privacy_settings_store.dart';
 class OnboardingStore {
   OnboardingStore({LocalSettingsStore? settings})
     : _settings = settings ?? LocalSettingsStore();
-  static const _key = 'sreva.onboarding.complete.v1';
+  static const _key = 'sreadya.onboarding.complete.v1';
   final LocalSettingsStore _settings;
   Future<bool> isComplete() => _settings.readBool(_key);
   Future<void> complete() => _settings.writeBool(_key, true);
@@ -152,7 +152,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           children: [
             const SizedBox(height: 28),
             Text(
-              'Sreva',
+              'Sreadya',
               style: Theme.of(context).textTheme.displaySmall
                   ?.copyWith(fontWeight: FontWeight.w800),
             ),
@@ -166,7 +166,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               child: Padding(
                 padding: EdgeInsets.all(18),
                 child: Text(
-                  'Sreva stores and processes reproductive-health information on this device. No account is required. Predictions are estimates, not medical diagnoses or contraceptive guarantees.',
+                  'Sreadya stores and processes reproductive-health information on this device. No account is required. Predictions are estimates, not medical diagnoses or contraceptive guarantees.',
                 ),
               ),
             ),
@@ -246,7 +246,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             ),
             const SizedBox(height: 8),
             const Text(
-              'Sreva enables the private 3-day-before reminder by default. You can change reminder days and time later.',
+              'Sreadya enables the private 3-day-before reminder by default. You can change reminder days and time later.',
             ),
             const SizedBox(height: 20),
             SwitchListTile(
@@ -279,7 +279,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             FilledButton(
               onPressed: _saving ? null : _finish,
               child: Text(
-                _saving ? 'Preparing your private vault…' : 'Start using Sreva',
+                _saving ? 'Preparing your private vault…' : 'Start using Sreadya',
               ),
             ),
             const SizedBox(height: 12),

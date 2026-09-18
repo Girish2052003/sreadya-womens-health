@@ -61,7 +61,7 @@ export function AccountFreeWorkspace({ section }: { section: Task10CoreSection }
       .catch(() => {
         if (!cancelled) {
           setVaultStatus('Local vault unavailable');
-          setError('Sreva could not open the encrypted local vault in this browser.');
+          setError('Sreadya could not open the encrypted local vault in this browser.');
         }
       });
 
@@ -84,7 +84,7 @@ export function AccountFreeWorkspace({ section }: { section: Task10CoreSection }
 
   useEffect(() => {
     if (!repository) return;
-    void refresh(repository).catch(() => setError('Sreva could not read the encrypted local health history.'));
+    void refresh(repository).catch(() => setError('Sreadya could not read the encrypted local health history.'));
   }, [repository, refresh, revision]);
 
   useEffect(() => {
@@ -101,7 +101,7 @@ export function AccountFreeWorkspace({ section }: { section: Task10CoreSection }
         setCalendarPeriods([]);
         setYearGroups(await history.year());
       }
-    })().catch(() => setError('Sreva could not prepare the local calendar history.'));
+    })().catch(() => setError('Sreadya could not prepare the local calendar history.'));
   }, [repository, section, calendarMode, selectedYear, selectedMonth, revision]);
 
   const mutate = useCallback(async (operation: (activeRepository: HealthVaultRepository) => Promise<void>) => {

@@ -1,6 +1,6 @@
 import { argon2id, argon2idAsync } from '@noble/hashes/argon2.js';
 
-const FORMAT = 'SREVA-CYCLEVAULT';
+const FORMAT = 'SREADYA-CYCLEVAULT';
 const FORMAT_VERSION = 1;
 const KDF_LABEL = 'argon2id-m19MiB-t2-p1';
 const CIPHER_LABEL = 'aes-256-gcm';
@@ -19,7 +19,7 @@ const ARGON2_OPTIONS = {
 } as const;
 
 export type CycleVaultManifestV1 = {
-  format: 'SREVA-CYCLEVAULT';
+  format: 'SREADYA-CYCLEVAULT';
   formatVersion: 1;
   createdAtUtc: string;
   appVersion: string;

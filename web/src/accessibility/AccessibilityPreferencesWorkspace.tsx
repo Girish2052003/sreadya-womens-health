@@ -43,10 +43,10 @@ export function AccessibilityPreferencesWorkspace() {
         onChange={changePreferences}
         onSave={savePreferences}
       />
-      <section className="sreva-card" aria-labelledby="accessibility-local-title">
-        <p className="sreva-card__eyebrow">Local preference</p>
-        <h2 className="sreva-card__title" id="accessibility-local-title">Stored on this browser</h2>
-        <div className="sreva-card__body">
+      <section className="sreadya-card" aria-labelledby="accessibility-local-title">
+        <p className="sreadya-card__eyebrow">Local preference</p>
+        <h2 className="sreadya-card__title" id="accessibility-local-title">Stored on this browser</h2>
+        <div className="sreadya-card__body">
           <p>These presentation preferences stay in this browser and do not require an account.</p>
           {saved ? <p role="status" className="workspace-note">{messages['accessibility.saved']}</p> : null}
         </div>

@@ -36,15 +36,15 @@ const CONTRAST_CHOICES: Choice<ContrastPreference>[] = [
 export function AccessibilityPreferencesPanel({ preferences, saving, onChange, onSave }: Props) {
   return (
     <section
-      className="sreva-card accessibility-preferences"
+      className="sreadya-card accessibility-preferences"
       aria-labelledby="accessibility-preferences-title"
       data-testid="accessibility-preferences"
     >
-      <p className="sreva-card__eyebrow">Settings</p>
-      <h2 className="sreva-card__title" id="accessibility-preferences-title">
+      <p className="sreadya-card__eyebrow">Settings</p>
+      <h2 className="sreadya-card__title" id="accessibility-preferences-title">
         {messages['accessibility.title']}
       </h2>
-      <div className="sreva-card__body">
+      <div className="sreadya-card__body">
         <p>{messages['accessibility.summary']}</p>
 
         <fieldset className="accessibility-preferences__group">
@@ -108,7 +108,7 @@ export function AccessibilityPreferencesPanel({ preferences, saving, onChange, o
           <p className="workspace-note">Easy language adds short, plain-English guidance to each private workspace while keeping the same health and privacy meaning.</p>
         </fieldset>
 
-        <button className="sreva-button sreva-button--primary" type="button" disabled={saving} onClick={onSave}>
+        <button className="sreadya-button sreadya-button--primary" type="button" disabled={saving} onClick={onSave}>
           {saving ? 'Saving…' : 'Save accessibility preferences'}
         </button>
       </div>

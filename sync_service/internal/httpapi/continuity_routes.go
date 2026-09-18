@@ -14,16 +14,16 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"sreva.dev/sync_service/internal/continuity"
-	"sreva.dev/sync_service/internal/deviceauth"
-	"sreva.dev/sync_service/internal/devices"
+	"sreadya.dev/sync_service/internal/continuity"
+	"sreadya.dev/sync_service/internal/deviceauth"
+	"sreadya.dev/sync_service/internal/devices"
 )
 
 const continuityChallengeTTL = 2 * time.Minute
 
 const (
-	continuityChallengeHeader = "X-Sreva-Device-Challenge"
-	continuitySignatureHeader = "X-Sreva-Device-Signature"
+	continuityChallengeHeader = "X-Sreadya-Device-Challenge"
+	continuitySignatureHeader = "X-Sreadya-Device-Signature"
 )
 
 type ContinuitySession struct {
