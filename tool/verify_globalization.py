@@ -427,9 +427,44 @@ def check_global_closure() -> list[str]:
     return failures
 
 
+def check_release_ready() -> list[str]:
+    """Accept the current English-only launch or require full provider closure."""
+    if not WEB_MANIFEST.exists():
+        return ["release-ready: generated Web i18n manifest is missing"]
+
+    manifest = json.loads(WEB_MANIFEST.read_text("utf-8"))
+    public_locales = manifest.get("publicLocales", [])
+    artifacts = manifest.get("artifacts", {})
+    if not isinstance(public_locales, list):
+        return ["release-ready: manifest publicLocales is invalid"]
+
+    # Zero-provider-cost launch mode: English is the only public locale and the
+    # chooser stays hidden. Provider tooling remains dormant for future use.
+    if len(public_locales) == 1:
+        row = public_locales[0]
+        failures: list[str] = []
+        if not isinstance(row, dict) or locale_key(str(row.get("tag", ""))) != "en":
+            failures.append("release-ready: English must be the only public locale in English-only mode")
+        elif row.get("coverage") != "source":
+            failures.append("release-ready: English public locale must have source coverage")
+
+        english_artifact = artifacts.get("en") if isinstance(artifacts, dict) else None
+        if not isinstance(english_artifact, dict):
+            failures.append("release-ready: English source artifact is missing")
+        elif english_artifact.get("coverage") != "source":
+            failures.append("release-ready: English artifact must have source coverage")
+        return failures
+
+    # The instant multilingual publication is enabled, the strict 194+ Google
+    # provider contract becomes mandatory again.
+    return check_global_closure()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--require-global-closure", action="store_true")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--require-global-closure", action="store_true")
+    mode.add_argument("--require-release-ready", action="store_true")
     args = parser.parse_args()
 
     failures = (
@@ -444,6 +479,8 @@ def main() -> None:
     )
     if args.require_global_closure:
         failures += check_global_closure()
+    elif args.require_release_ready:
+        failures += check_release_ready()
 
     if failures:
         print("SREADYA GLOBALIZATION CONTRACT FAILED", file=sys.stderr)
@@ -453,6 +490,8 @@ def main() -> None:
 
     if args.require_global_closure:
         print("SREADYA GLOBALIZATION FORMAL CLOSURE PASS")
+    elif args.require_release_ready:
+        print("SREADYA GLOBALIZATION RELEASE-READY PASS")
     else:
         print("SREADYA GLOBALIZATION CONTRACT PASS")
 
