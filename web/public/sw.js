@@ -1,7 +1,7 @@
-/* Sreadya PWA shell + immutable globalization-artifact cache. Health payloads are deliberately excluded. */
+/* Sreadya PWA shell + versioned globalization cache. Health payloads are deliberately excluded. */
 const SHELL_CACHE = 'sreadya-shell-v1';
-const I18N_CACHE = 'sreadya-i18n-v1';
-const SHELL_FILES = ['./', './offline.html', './manifest.webmanifest', './i18n/manifest.json'];
+const I18N_CACHE = 'sreadya-i18n-v2';
+const SHELL_FILES = ['./', './offline.html', './manifest.webmanifest'];
 const OFFLINE_CORE_SHELLS = new Set(['app/home','app/today','app/log','app/calendar','app/cycle']);
 
 function scopedUrl(relative) { return new URL(relative, self.registration.scope).toString(); }
@@ -16,10 +16,15 @@ function isPrivateWorkspace(pathname) { return pathname === 'app' || pathname.st
 function isOfflineCoreShell(pathname) { return OFFLINE_CORE_SHELLS.has(normalizedPath(pathname)); }
 function isSensitiveNetworkSurface(pathname) { return pathname === 'api' || pathname.startsWith('api/') || pathname.startsWith('sync/'); }
 function isImmutableShellAsset(pathname) { return pathname.startsWith('_next/static/'); }
-function isLanguageArtifact(pathname) { return pathname.startsWith('i18n/'); }
+function isLanguageManifest(pathname) { return pathname === 'i18n/manifest.json'; }
+function isLanguageArtifact(pathname) { return pathname.startsWith('i18n/') && !isLanguageManifest(pathname); }
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(SHELL_CACHE).then((cache) => cache.addAll(SHELL_FILES.map(scopedUrl))).then(() => self.skipWaiting()));
+  event.waitUntil(
+    caches.open(SHELL_CACHE)
+      .then((cache) => cache.addAll(SHELL_FILES.map(scopedUrl)))
+      .then(() => self.skipWaiting()),
+  );
 });
 
 self.addEventListener('activate', (event) => {
@@ -42,7 +47,25 @@ self.addEventListener('fetch', (event) => {
   const pathname = relativePath(url);
   if (isSensitiveNetworkSurface(pathname)) return;
 
+  if (isLanguageManifest(pathname)) {
+    // Network-first: the manifest is mutable release metadata. Cache only the
+    // latest successful response so new provider languages and source hashes
+    // become visible immediately while remaining available offline.
+    event.respondWith((async () => {
+      const cache = await caches.open(I18N_CACHE);
+      try {
+        const response = await fetch(request, { cache: 'no-cache' });
+        if (response.ok) await cache.put(request, response.clone());
+        return response;
+      } catch {
+        return (await cache.match(request)) || Response.error();
+      }
+    })());
+    return;
+  }
+
   if (isLanguageArtifact(pathname)) {
+    // Locale bundle filenames are content-addressed and therefore immutable.
     event.respondWith((async () => {
       const cache = await caches.open(I18N_CACHE);
       const cached = await cache.match(request);
@@ -65,7 +88,9 @@ self.addEventListener('fetch', (event) => {
         try {
           const response = await fetch(request);
           const contentType = response.headers.get('content-type') ?? '';
-          if (isOfflineCoreShell(pathname) && response.ok && contentType.includes('text/html')) await cache.put(request, response.clone());
+          if (isOfflineCoreShell(pathname) && response.ok && contentType.includes('text/html')) {
+            await cache.put(request, response.clone());
+          }
           return response;
         } catch {
           if (isOfflineCoreShell(pathname)) {
