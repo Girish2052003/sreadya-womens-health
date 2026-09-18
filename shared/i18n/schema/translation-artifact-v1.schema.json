@@ -71,6 +71,14 @@
       "additionalProperties": {
         "type": "string"
       }
+    },
+    "sourceHashes": {
+      "type": "object",
+      "description": "Optional per-message SHA-256 source hashes used for incremental machine-translation reuse.",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
     }
   },
   "additionalProperties": false
