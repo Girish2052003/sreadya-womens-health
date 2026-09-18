@@ -534,7 +534,7 @@ def sync_google_locale(
             "provider": GOOGLE_PROVIDER_ID,
             "providerModel": provider.model_id,
             "reviewStatus": "machine-unreviewed",
-            "risk": "standard-ui",
+            "risk": "mixed",
         },
         "messages": messages,
         "sourceHashes": hashes,
