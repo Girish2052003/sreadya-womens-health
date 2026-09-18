@@ -79,6 +79,6 @@ Staged production remains blocked until every prior external stage is accepted w
 
 ## Transition rule
 
-The verifier in `tool/verify_task28_acceptance.py` fails closed. It will reject an accepted external stage without evidence and will **cannot mark production ready** while any required external stage remains pending. The current repository therefore intentionally remains `blocked_external_acceptance`.
+The verifier in `tool/verify_task28_acceptance.py` fails closed. It rejects an accepted external stage without evidence and **cannot mark production ready** while any required external stage remains pending. The current repository therefore intentionally remains `blocked_external_acceptance`.
 
 When real external acceptance occurs, add sanitized evidence references and change only the corresponding stage state. Do not change production readiness first.
