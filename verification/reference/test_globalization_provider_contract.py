@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import os
+import sys
 from pathlib import Path
 
 import pytest
@@ -12,6 +13,7 @@ MODULE_PATH = ROOT / "tool" / "i18n_pipeline.py"
 spec = importlib.util.spec_from_file_location("sreadya_i18n_pipeline", MODULE_PATH)
 assert spec is not None and spec.loader is not None
 pipeline = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = pipeline
 spec.loader.exec_module(pipeline)
 
 
