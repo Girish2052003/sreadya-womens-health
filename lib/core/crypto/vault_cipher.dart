@@ -8,7 +8,7 @@ class VaultCipher {
   VaultCipher({FlutterSecureStorage? secureStorage})
     : _secureStorage = secureStorage ?? const FlutterSecureStorage();
 
-  static const _keyName = 'sreva.vault.master.v1';
+  static const _keyName = 'sreadya.vault.master.v1';
   final FlutterSecureStorage _secureStorage;
   final AesGcm _algorithm = AesGcm.with256bits();
   SecretKey? _cachedKey;

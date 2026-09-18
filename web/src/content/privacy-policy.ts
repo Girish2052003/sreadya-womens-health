@@ -7,16 +7,16 @@ export const privacyPolicyLastUpdatedLabel = 'Last updated';
 export const privacyPolicyLastUpdated = '17 September 2026';
 
 export const privacyPolicyIntro =
-  'Sreva Privacy Policy. Account-free Sreva and account-based Sreva are equal first-class experiences. Core health tools remain available without an account, while optional end-to-end encrypted continuity adds cross-device convenience without creating a developer-readable reproductive-health database.';
+  'Sreadya Privacy Policy. Account-free Sreadya and account-based Sreadya are equal first-class experiences. Core health tools remain available without an account, while optional end-to-end encrypted continuity adds cross-device convenience without creating a developer-readable reproductive-health database.';
 
 export const privacyPolicySections: PrivacyPolicySection[] = [
   {
     title: 'Account-free and local core',
-    body: 'You can use Sreva without an account. Cycle tracking, logging, predictions, insights, reminders, reports, privacy controls and encrypted backup remain local-first core health features. Disabling sync does not disable local Sreva.',
+    body: 'You can use Sreadya without an account. Cycle tracking, logging, predictions, insights, reminders, reports, privacy controls and encrypted backup remain local-first core health features. Disabling sync does not disable local Sreadya.',
   },
   {
     title: 'Account and encrypted continuity',
-    body: 'If you enable optional continuity, your health content is encrypted before leaving an authorized device. The synchronization service receives ciphertext, wrapped key or recovery material and only the minimum operational metadata needed for account/device authorization and synchronization. Sreva infrastructure does not possess the health-vault decryption key.',
+    body: 'If you enable optional continuity, your health content is encrypted before leaving an authorized device. The synchronization service receives ciphertext, wrapped key or recovery material and only the minimum operational metadata needed for account/device authorization and synchronization. Sreadya infrastructure does not possess the health-vault decryption key.',
   },
   {
     title: 'Minimum operational metadata',
@@ -28,11 +28,11 @@ export const privacyPolicySections: PrivacyPolicySection[] = [
   },
   {
     title: 'Retention and deletion',
-    body: 'Local records remain until you edit or delete them, wipe Sreva data, uninstall the client, or replace them with a validated restore. Account deletion removes server-side account and synchronized ciphertext state controlled by Sreva. Sreva cannot remotely erase former device copies, screenshots, user-created export files, CycleVault backups or data already sent to another destination; those copies must be deleted where they are stored.',
+    body: 'Local records remain until you edit or delete them, wipe Sreadya data, uninstall the client, or replace them with a validated restore. Account deletion removes server-side account and synchronized ciphertext state controlled by Sreadya. Sreadya cannot remotely erase former device copies, screenshots, user-created export files, CycleVault backups or data already sent to another destination; those copies must be deleted where they are stored.',
   },
   {
     title: 'Sharing, reports and backups',
-    body: 'Reports, partner summaries, QR codes, CycleVault backups and other exports leave Sreva only after explicit user action. CycleVault uses a user-held backup passphrase and remains separate from account-continuity recovery.',
+    body: 'Reports, partner summaries, QR codes, CycleVault backups and other exports leave Sreadya only after explicit user action. CycleVault uses a user-held backup passphrase and remains separate from account-continuity recovery.',
   },
   {
     title: 'Health integrations',
@@ -40,7 +40,7 @@ export const privacyPolicySections: PrivacyPolicySection[] = [
   },
   {
     title: 'Diagnostics and analytics',
-    body: 'Sreva does not use advertising SDKs, behavioral analytics, remote session replay or developer health-payload telemetry. Diagnostics are limited to reviewed operational status and must not contain readable reproductive-health payloads.',
+    body: 'Sreadya does not use advertising SDKs, behavioral analytics, remote session replay or developer health-payload telemetry. Diagnostics are limited to reviewed operational status and must not contain readable reproductive-health payloads.',
   },
   {
     title: 'Email, SMS and external providers',
