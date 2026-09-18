@@ -10,7 +10,7 @@ describe('CycleVaultWorkspace', () => {
     expect(html).toContain('Opening encrypted local vault');
     expect(html).toContain('Account-free');
     expect(html).toContain('encrypted CycleVault recovery file');
-    expect(html).toContain('nothing is uploaded to Sreva');
+    expect(html).toContain('nothing is uploaded to Sreadya');
     expect(html).not.toContain('Sign in required');
   });
 });

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqlite3/sqlite3.dart';
-import 'package:sreva/core/database/migration_coordinator.dart';
+import 'package:sreadya/core/database/migration_coordinator.dart';
 
 Database databaseAtVersion(int version) {
   final db = sqlite3.openInMemory();
