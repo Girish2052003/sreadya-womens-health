@@ -62,6 +62,7 @@ export default function MorePage() {
         <p className="feature-hub__intro">
           The five-item primary navigation stays calm for daily use. This hub is the complete map for cycle tracking,
           predictions, reminders, reproductive observations, reports, privacy, backup and optional encrypted continuity.
+          <br /><Link className="workspace-text-link" href="/features">Browse the complete 258-ID capability catalogue</Link>
         </p>
         <div className="feature-hub__groups">
           {groups.map((group) => (
