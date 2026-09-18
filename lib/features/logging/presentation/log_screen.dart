@@ -329,7 +329,7 @@ class LogScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
           const Text(
-            'Sreva records observations. It does not turn a symptom log into a diagnosis.',
+            'Sreadya records observations. It does not turn a symptom log into a diagnosis.',
           ),
         ],
       ),
