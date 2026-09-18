@@ -28,15 +28,31 @@ export type InsightProvenance = {
   dateRange: { from: string; to: string } | null;
 };
 
+export type TimingInsight = {
+  kind: ObservationKind;
+  cycleDay: number;
+};
+
+export type PmsPatternInsight = {
+  kind: ObservationKind;
+  count: number;
+};
+
+export type FlowPatternInsight = {
+  flow: FlowLevel;
+  count: number;
+};
+
 export type InsightSnapshot = {
   cycleSummary: CycleSummary | null;
   averagePeriodDurationDays: number | null;
   flowCounts: Partial<Record<FlowLevel, number>>;
   observationCounts: Partial<Record<ObservationKind, number>>;
-  observationalMessages: string[];
+  timingInsights: TimingInsight[];
   predictionEvaluation?: PredictionEvaluation;
   cycleLengths: number[];
-  pmsPatternMessages: string[];
+  pmsPatterns: PmsPatternInsight[];
+  topFlowPattern: FlowPatternInsight | null;
   provenance: InsightProvenance;
 };
 
@@ -88,10 +104,8 @@ function cycleDaysFor(
   return result;
 }
 
-function symptomTimingInsight(symptomLabel: string, cycleDays: number[]): string {
-  if (cycleDays.length === 0) {
-    return `${symptomLabel} has not been recorded often enough for a timing insight.`;
-  }
+function mostFrequentCycleDay(cycleDays: number[]): number | null {
+  if (cycleDays.length === 0) return null;
 
   const counts = new Map<number, number>();
   for (const day of cycleDays) counts.set(day, (counts.get(day) ?? 0) + 1);
@@ -103,12 +117,7 @@ function symptomTimingInsight(symptomLabel: string, cycleDays: number[]): string
       topCount = count;
     }
   }
-
-  return `${symptomLabel} were recorded most often around cycle day ${topDay}. This is an observation, not a medical cause or diagnosis.`;
-}
-
-function title(value: string): string {
-  return value.length === 0 ? value : `${value[0].toUpperCase()}${value.slice(1)}`;
+  return topDay;
 }
 
 function buildProvenance(
@@ -166,23 +175,33 @@ export function summarizeInsights({
     }
   }
 
-  const observationalMessages: string[] = [];
-  const pmsPatternMessages: string[] = [];
-  const timingKinds: Array<[ObservationKind, string]> = [
-    ['cramps', 'Cramps'],
-    ['headache', 'Headaches'],
-    ['migraine', 'Migraines'],
-    ['mood', 'Mood observations'],
-    ['sleep', 'Sleep observations'],
-    ['energy', 'Energy observations'],
-    ['stress', 'Stress observations'],
+  const timingInsights: TimingInsight[] = [];
+  const timingKinds: ObservationKind[] = [
+    'cramps',
+    'headache',
+    'migraine',
+    'mood',
+    'sleep',
+    'energy',
+    'stress',
   ];
-  for (const [kind, label] of timingKinds) {
+  for (const kind of timingKinds) {
     const days = cycleDaysFor(kind, ordered, observations);
-    if (days.length >= 2) observationalMessages.push(symptomTimingInsight(label, days));
+    if (days.length < 2) continue;
+    const cycleDay = mostFrequentCycleDay(days);
+    if (cycleDay !== null) timingInsights.push({ kind, cycleDay });
   }
 
-  const pmsKinds = new Set<ObservationKind>(['cramps', 'bloating', 'breastTenderness', 'headache', 'migraine', 'fatigue', 'mood', 'irritability']);
+  const pmsKinds = new Set<ObservationKind>([
+    'cramps',
+    'bloating',
+    'breastTenderness',
+    'headache',
+    'migraine',
+    'fatigue',
+    'mood',
+    'irritability',
+  ]);
   const pmsCounts = new Map<ObservationKind, number>();
   for (const observation of observations) {
     if (!pmsKinds.has(observation.kind)) continue;
@@ -194,21 +213,16 @@ export function summarizeInsights({
       pmsCounts.set(observation.kind, (pmsCounts.get(observation.kind) ?? 0) + 1);
     }
   }
-  for (const [kind, count] of pmsCounts) {
-    pmsPatternMessages.push(
-      `${title(kind)} was recorded ${count} time${count === 1 ? '' : 's'} in the seven days before a recorded period. This is an observed timing pattern, not a PMS diagnosis.`,
-    );
-  }
+  const pmsPatterns = [...pmsCounts.entries()].map(([kind, count]) => ({ kind, count }));
 
   const flowEntries = Object.entries(flowCounts) as Array<[FlowLevel, number]>;
+  let topFlowPattern: FlowPatternInsight | null = null;
   if (flowEntries.length > 0) {
     let top = flowEntries[0];
     for (const entry of flowEntries.slice(1)) {
       if (entry[1] > top[1]) top = entry;
     }
-    observationalMessages.push(
-      `${title(top[0])} flow was your most frequently recorded flow level (${top[1]} logs). This is a summary of your entries, not a medical interpretation.`,
-    );
+    topFlowPattern = { flow: top[0], count: top[1] };
   }
 
   return {
@@ -216,10 +230,11 @@ export function summarizeInsights({
     averagePeriodDurationDays,
     flowCounts,
     observationCounts,
-    observationalMessages,
+    timingInsights,
     ...(predictionEvaluation ? { predictionEvaluation } : {}),
     cycleLengths,
-    pmsPatternMessages,
+    pmsPatterns,
+    topFlowPattern,
     provenance: buildProvenance(ordered, observations),
   };
 }
