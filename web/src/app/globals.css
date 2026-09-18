@@ -26,7 +26,7 @@
 }
 
 * { box-sizing: border-box; }
-html { min-width: 320px; background: var(--sreadya-pearl); scroll-behavior: smooth; }
+html { background: var(--sreadya-pearl); scroll-behavior: smooth; }
 body { margin: 0; min-height: 100vh; background: var(--sreadya-pearl); color: var(--sreadya-ink); }
 a { color: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }

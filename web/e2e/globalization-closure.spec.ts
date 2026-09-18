@@ -124,7 +124,7 @@ test('language chooser exactly reflects complete published locales with no raw f
     expect(optionCount).toBeGreaterThanOrEqual(194);
   } else {
     expect(optionCount).toBe(1);
-    await expect(page.locator('[data-language-tag="en"]')).toHaveCount(1);
+    await expect(page.locator('.language-chooser__option[data-language-tag="en"]')).toHaveCount(1);
     await expect(page.locator('[data-language-tag="ar"]')).toHaveCount(0);
     await expect(page.locator('[data-language-tag="en-XA"]')).toHaveCount(0);
     await expect(page.locator('[data-language-tag="ar-XB"]')).toHaveCount(0);
