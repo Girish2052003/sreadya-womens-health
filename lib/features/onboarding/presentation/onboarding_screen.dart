@@ -279,7 +279,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             FilledButton(
               onPressed: _saving ? null : _finish,
               child: Text(
-                _saving ? 'Preparing your private vault…' : 'Start using Sreadya',
+                _saving
+                    ? 'Preparing your private vault…'
+                    : 'Start using Sreadya',
               ),
             ),
             const SizedBox(height: 12),
