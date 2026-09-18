@@ -1,4 +1,4 @@
--- Sreva C2 one-use device authorization challenges. PostgreSQL target: 18.6.
+-- Sreadya C2 one-use device authorization challenges. PostgreSQL target: 18.6.
 -- This table stores only operational authorization scope. It never stores health plaintext or sync ciphertext.
 CREATE TABLE device_challenges (
     challenge_value TEXT PRIMARY KEY,

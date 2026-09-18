@@ -1,8 +1,8 @@
 {
   "version": 1,
   "contractStatus": "contract",
-  "authority": "docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md",
-  "purpose": "Initial Sreva product-claim boundary. This contract records what the current product programme may and may not claim; regulated functionality requires a separate future programme and validation path.",
+  "authority": "docs/superpowers/specs/2026-09-16-sreadya-web-product-architecture-design.md",
+  "purpose": "Initial Sreadya product-claim boundary. This contract records what the current product programme may and may not claim; regulated functionality requires a separate future programme and validation path.",
   "allowedInitialScope": [
     "cycle_and_menstrual_health_tracking",
     "wellness_observations",
@@ -16,7 +16,7 @@
       "claim": "diagnosis",
       "launchStatus": "forbidden_without_separate_regulated_programme",
       "affirmativeClaimAllowed": false,
-      "statement": "Sreva observations and pattern summaries must not be presented as a medical diagnosis.",
+      "statement": "Sreadya observations and pattern summaries must not be presented as a medical diagnosis.",
       "capabilityRefs": ["INS-013", "INS-014", "INS-015"]
     },
     {
@@ -24,7 +24,7 @@
       "claim": "treatment_recommendation",
       "launchStatus": "forbidden_without_separate_regulated_programme",
       "affirmativeClaimAllowed": false,
-      "statement": "The initial Sreva programme must not present wellness tracking or personal-history output as a treatment recommendation.",
+      "statement": "The initial Sreadya programme must not present wellness tracking or personal-history output as a treatment recommendation.",
       "capabilityRefs": ["INS-015", "RPT-012"]
     },
     {
