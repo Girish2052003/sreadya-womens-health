@@ -3,6 +3,13 @@
 **Authority:** `docs/architecture/SREADYA_GLOBALIZATION_ARCHITECTURE.md`  
 **Purpose:** Operational runbook for provider-backed globalization. This document does not redefine architecture.
 
+
+## Current release mode
+
+The current production release is intentionally **English-only**. With no protected Google credential configured, the language chooser remains hidden and the provider workflow performs no translation call. This is a supported release state, not an error.
+
+Provider execution is deferred until multilingual publication is deliberately enabled. At that point the existing 194+ discovery, budget ceiling, completeness, and formal-closure gates become mandatory before any non-English locale is exposed.
+
 ## Production model
 
 SREADYA authors English once and generates non-English locale artifacts in protected build infrastructure.
@@ -70,9 +77,9 @@ It must never enumerate the raw CLDR universe and must never show raw fallback-o
 
 RTL text is rendered with locale-aware text direction without using document direction as a global layout-mirroring mechanism.
 
-## Release gates
+## Multilingual release gates
 
-A release is not globalization-complete unless:
+A multilingual release is not globalization-complete unless:
 
 - frozen baseline count is 194;
 - provider discovery contains all baseline targets;
