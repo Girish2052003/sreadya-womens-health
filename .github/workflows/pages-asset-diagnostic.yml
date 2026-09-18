@@ -1,4 +1,5 @@
 name: One-shot Pages asset diagnostic
+# Recheck after cache-busted Pages redeploy.
 
 on:
   push:
