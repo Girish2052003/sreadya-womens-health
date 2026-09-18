@@ -13,7 +13,7 @@ WEB = ROOT / "web/src"
 ARCH = ROOT / "docs/architecture/SREADYA_GLOBALIZATION_ARCHITECTURE.md"
 
 LITERAL_TEXT = re.compile(r">\s*([A-Za-z][^<>{}\n]{2,})\s*<")
-INPUT_HINT_ATTR = re.compile(r"\\b(?:aria-label|place" + "holder|title|alt)=['\\\"]([A-Za-z][^'\\\"]{1,})['\\\"]")
+INPUT_HINT_ATTR = re.compile(r"\b(?:aria-label|place" + "holder|title|alt)=['\"]([A-Za-z][^'\"]{1,})['\"]")
 STATE_LITERAL = re.compile(r"\b(?:setError|setStatus)\(\s*['\"]([A-Za-z][^'\"]{2,})['\"]")
 CARD_LITERAL = re.compile(r"\b(?:eyebrow|title)=['\"]([A-Za-z][^'\"]{2,})['\"]")
 
