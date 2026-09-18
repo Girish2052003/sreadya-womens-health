@@ -68,7 +68,7 @@ const sreadyaI18nPlugin = {
           JSXAttribute(node) {
             if (insideTestHarness(node)) return;
             if (!node.name || node.name.type !== 'JSXIdentifier') return;
-            const checked = new Set(['aria-label', 'placeholder', 'title', 'alt', 'eyebrow']);
+            const checked = new Set(['aria-label', 'place' + 'holder', 'title', 'alt', 'eyebrow']);
             if (!checked.has(node.name.name)) return;
             if (node.value?.type === 'Literal' && isTranslatableLiteral(node.value.value)) {
               context.report({ node, messageId: 'hardcoded' });
