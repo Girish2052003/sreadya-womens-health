@@ -499,7 +499,11 @@ def sync_google_locale(
     for key, value in to_translate.items():
         groups.setdefault(value, []).append(key)
     representatives = {keys[0]: value for value, keys in groups.items()}
-    translated_representatives = provider.translate(provider_locale, representatives)
+    translated_representatives = (
+        provider.translate(provider_locale, representatives)
+        if representatives
+        else {}
+    )
     if set(translated_representatives) != set(representatives):
         missing = sorted(set(representatives) - set(translated_representatives))
         extra = sorted(set(translated_representatives) - set(representatives))
