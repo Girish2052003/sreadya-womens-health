@@ -64,7 +64,7 @@ class MobileSyncEnvelope {
     String text(String key) {
       final value = json[key];
       if (value is! String || value.isEmpty) {
-        throw FormatException('Invalid Sreva sync envelope field: $key');
+        throw FormatException('Invalid Sreadya sync envelope field: $key');
       }
       return value;
     }
@@ -72,7 +72,7 @@ class MobileSyncEnvelope {
     int integer(String key) {
       final value = json[key];
       if (value is! int) {
-        throw FormatException('Invalid Sreva sync envelope field: $key');
+        throw FormatException('Invalid Sreadya sync envelope field: $key');
       }
       return value;
     }
@@ -81,13 +81,13 @@ class MobileSyncEnvelope {
       try {
         return Uint8List.fromList(base64Decode(text(key)));
       } on FormatException {
-        throw FormatException('Invalid Sreva sync envelope encoding: $key');
+        throw FormatException('Invalid Sreadya sync envelope encoding: $key');
       }
     }
 
     final createdAt = DateTime.tryParse(text('created_at'));
     if (createdAt == null) {
-      throw const FormatException('Invalid Sreva sync creation timestamp.');
+      throw const FormatException('Invalid Sreadya sync creation timestamp.');
     }
     final committed = json['committed_revision'];
     final conflict = json['conflict'];
@@ -144,7 +144,7 @@ class SyncConflictPolicy {
     required int baseRevision,
   }) => baseRevision != serverRevision;
 
-  static bool acceptsSuite(String suiteId) => suiteId == srevaE2eeSuiteV1;
+  static bool acceptsSuite(String suiteId) => suiteId == sreadyaE2eeSuiteV1;
 
   static List<MobileSyncEnvelope> orderByRevisionGraph(
     Iterable<MobileSyncEnvelope> events,

@@ -31,7 +31,7 @@ def measure(root: Path) -> dict[str, int]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Verify deterministic Sreva Web static performance budgets.")
+    parser = argparse.ArgumentParser(description="Verify deterministic Sreadya Web static performance budgets.")
     parser.add_argument("--root", type=Path, required=True)
     parser.add_argument("--config", type=Path, required=True)
     args = parser.parse_args()

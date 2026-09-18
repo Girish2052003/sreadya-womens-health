@@ -29,7 +29,7 @@ export type DiagnosticTechnicalInput = {
 };
 
 export type DiagnosticReport = DiagnosticTechnicalInput & {
-  format: 'SREVA-DIAGNOSTIC';
+  format: 'SREADYA-DIAGNOSTIC';
   version: 1;
 };
 
@@ -45,7 +45,7 @@ const INTEGRITY_CODES = new Set<DiagnosticIntegrityCode>([
 function isTechnicalString(value: unknown, maxLength: number): value is string {
   return typeof value === 'string' && value.length > 0 && value.length <= maxLength && !/[\r\n\0]/u.test(value);
 }
-function fail(): never { throw new Error('Unsupported Sreva diagnostic technical state.'); }
+function fail(): never { throw new Error('Unsupported Sreadya diagnostic technical state.'); }
 
 export function buildDiagnosticReport(input: DiagnosticTechnicalInput): DiagnosticReport {
   const candidate = input as DiagnosticTechnicalInput;
@@ -61,7 +61,7 @@ export function buildDiagnosticReport(input: DiagnosticTechnicalInput): Diagnost
   if (candidate.integrity.code !== undefined && !INTEGRITY_CODES.has(candidate.integrity.code)) fail();
 
   return {
-    format: 'SREVA-DIAGNOSTIC', version: 1,
+    format: 'SREADYA-DIAGNOSTIC', version: 1,
     appVersion: candidate.appVersion,
     predictionEngine: candidate.predictionEngine,
     reminderEngine: candidate.reminderEngine,

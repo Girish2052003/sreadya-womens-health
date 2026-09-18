@@ -107,7 +107,7 @@ function selectedRecords(input: ReportInput) {
 function previewLines(input: ReportInput): string[] {
   const { categories, periods, observations } = selectedRecords(input);
   const lines = [
-    'Sreva cycle history report',
+    'Sreadya cycle history report',
     `${input.selection.from} – ${input.selection.to}`,
     'Generated locally on this device. This report is not a diagnosis.',
   ];
@@ -184,9 +184,9 @@ function wrapLine(line: string, width = 88): string[] {
 
 export async function buildPdfReport(input: ReportInput): Promise<Uint8Array> {
   const document = await PDFDocument.create();
-  document.setTitle('Sreva cycle history report');
-  document.setSubject('Locally generated Sreva health report');
-  document.setProducer('Sreva Web local report generator');
+  document.setTitle('Sreadya cycle history report');
+  document.setSubject('Locally generated Sreadya health report');
+  document.setProducer('Sreadya Web local report generator');
   const font = await document.embedFont(StandardFonts.Helvetica);
   const bold = await document.embedFont(StandardFonts.HelveticaBold);
 

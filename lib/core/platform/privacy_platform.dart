@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 
 class PrivacyPlatform {
-  static const MethodChannel _channel = MethodChannel('sreva/privacy');
+  static const MethodChannel _channel = MethodChannel('sreadya/privacy');
 
   Future<void> excludePathFromBackup(String path) async {
     try {
