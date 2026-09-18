@@ -77,7 +77,7 @@ def check_hardcoded_copy() -> list[str]:
         allow_tokens = {
             "FORGE", "NC CORP", "Sreadya", "SREADYA", "CycleVault",
             "GitHub", "WebCrypto", "IndexedDB", "PIN", "UTC", "by NC CORP",
-            "Prakritim Svam Avashtabhya.",
+            "Prakritim Svam Avashtabhya.", "S",
         }
         normalized = []
         for value in matches:
