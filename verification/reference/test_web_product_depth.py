@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -95,3 +96,22 @@ def test_provider_dependent_capabilities_are_not_marketed_as_live_local_interact
     for capability_id in ("ID-002", "ID-007", "ID-008", "SYNC-001", "SYNC-006", "SYNC-014", "PART-010"):
         assert by_id[capability_id]["surface_type"] == "provider-dependent", capability_id
     assert by_id["INT-003"]["surface_type"] == "platform-adapted"
+
+
+def test_public_topic_links_resolve_to_real_routes() -> None:
+    content = read("web/src/content/public-topic-content.ts")
+    routes = read("web/src/content/routes.ts")
+    public_routes = {
+        "/" + "/".join(re.findall(r"'([^']+)'", body))
+        for body in re.findall(r"slug:\s*\[([^\]]+)\]", routes)
+    }
+    workspace_match = re.search(r"export const workspaceSections = \[([\s\S]*?)\] as const;", routes)
+    assert workspace_match is not None
+    workspace_routes = {
+        "/app/" + section
+        for section in re.findall(r"'([^']+)'", workspace_match.group(1))
+    }
+    valid = {"/", "/app"} | public_routes | workspace_routes
+    hrefs = set(re.findall(r'href:\s*"([^"]+)"', content))
+    missing = sorted(hrefs - valid)
+    assert not missing, f"public topic content has dead internal routes: {missing}"

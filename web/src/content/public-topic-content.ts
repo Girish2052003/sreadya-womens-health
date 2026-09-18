@@ -137,7 +137,7 @@ export const publicTopicContent: Record<string, PublicTopic> = {
     intro: "Sreva is a personal tracking and wellness product. Its estimates and observations are not a substitute for professional medical diagnosis, treatment or emergency care.",
     sections: [
       { title: "Predictions are estimates", body: "Expected dates, PMS, ovulation or fertile-window estimates can be uncertain and must not be treated as guarantees.", href: "/predictions", action: "Understand predictions" },
-      { title: "No certified contraception claim", body: "The initial release does not claim contraceptive effectiveness or a certified avoid-pregnancy method.", href: "/reproductive-health", action: "Review reproductive-health boundaries" },
+      { title: "No certified contraception claim", body: "The initial release does not claim contraceptive effectiveness or a certified avoid-pregnancy method.", href: "/app/reproductive-health", action: "Review reproductive-health boundaries" },
       { title: "You control exports and sharing", body: "Doctor reports, partner summaries and diagnostics require explicit user actions and have separate scopes.", href: "/privacy", action: "Review privacy" },
     ],
   },
