@@ -108,6 +108,8 @@ The Web/PWA runtime and its pinned Node/Next/React/TypeScript toolchain are defi
 
 ## Architecture and implementation documents
 
+**Globalization authority:** `docs/architecture/SREADYA_GLOBALIZATION_ARCHITECTURE.md` is the single authoritative home for SREADYA language, locale, translation, provenance, fallback, and future content-scale rules. Implementation plans must cross-reference it rather than redefine those rules.
+
 The authority chain is:
 
 1. **Cross-platform constitution:** `docs/superpowers/specs/2026-09-16-sreva-web-product-architecture-design.md`
