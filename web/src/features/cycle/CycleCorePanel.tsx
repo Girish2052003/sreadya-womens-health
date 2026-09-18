@@ -2,7 +2,7 @@
 
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
-import type { PeriodEpisode } from '../../domain/cycle/types';
+import type { HealthObservation, PeriodEpisode } from '../../domain/cycle/types';
 import { formatDateInput, formatUtcDate, periodDurationDays } from '../core/presentation';
 import type { PeriodEdit } from './period-actions';
 
@@ -12,16 +12,22 @@ function dateInputToUtc(value: string): string {
 
 export function CycleCorePanel({
   periods,
+  cycleNotes,
   onStartPeriodToday,
   onEndPeriod,
   onEditPeriod,
   onDeletePeriod,
+  onSaveCycleNote,
+  onDeleteCycleNote,
 }: {
   periods: PeriodEpisode[];
+  cycleNotes: HealthObservation[];
   onStartPeriodToday: () => void;
   onEndPeriod: (id: string) => void;
   onEditPeriod: (id: string, edit: PeriodEdit) => void;
   onDeletePeriod: (id: string) => void;
+  onSaveCycleNote: (period: PeriodEpisode, note: string) => void;
+  onDeleteCycleNote: (id: string) => void;
 }) {
   const recent = [...periods].reverse();
 
@@ -37,6 +43,7 @@ export function CycleCorePanel({
           <div className="core-period-list">
             {recent.map((period) => {
               const duration = periodDurationDays(period);
+              const note = cycleNotes.find((item) => item.label === `cycle-note:${period.id}`);
               return (
                 <section key={period.id} className="core-period-card" aria-labelledby={`period-${period.id}`}>
                   <div className="core-period-card__summary">
@@ -57,15 +64,27 @@ export function CycleCorePanel({
                       });
                     }}
                   >
-                    <label>
-                      <span>Start</span>
-                      <input name="start" type="date" required defaultValue={formatDateInput(period.start)} />
-                    </label>
-                    <label>
-                      <span>End</span>
-                      <input name="end" type="date" defaultValue={period.end ? formatDateInput(period.end) : ''} />
-                    </label>
+                    <label><span>Start</span><input name="start" type="date" required defaultValue={formatDateInput(period.start)} /></label>
+                    <label><span>End</span><input name="end" type="date" defaultValue={period.end ? formatDateInput(period.end) : ''} /></label>
                     <Button type="submit" variant="secondary">Save dates</Button>
+                  </form>
+
+                  <form
+                    className="structured-observation__form"
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      const value = String(new FormData(event.currentTarget).get('cycle-note') ?? '').trim();
+                      if (value) onSaveCycleNote(period, value);
+                    }}
+                  >
+                    <label>
+                      <span>Cycle / period note</span>
+                      <textarea name="cycle-note" rows={2} maxLength={2000} defaultValue={note?.note ?? ''} />
+                    </label>
+                    <div className="core-actions">
+                      <Button type="submit" variant="secondary">Save cycle note</Button>
+                      {note ? <Button variant="quiet" onClick={() => onDeleteCycleNote(note.id)}>Delete note</Button> : null}
+                    </div>
                   </form>
 
                   <div className="core-actions">

@@ -153,3 +153,28 @@
   .capability-catalogue__item { grid-template-columns: 74px 1fr; }
   .capability-catalogue__item a { grid-column: 2; }
 }
+
+.app-lock-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--sreva-pearl);
+}
+.app-lock-card {
+  width: min(480px, 100%);
+  padding: 34px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.app-lock-card h1 { margin: 12px 0; font-size: 2.3rem; letter-spacing: -.045em; }
+.app-lock-card form { display: grid; gap: 12px; margin-top: 24px; }
+.app-lock-card label { display: grid; gap: 7px; font-weight: 750; }
+.app-lock-card input { min-height: 48px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 14px; }
+.insight-bars { display: grid; gap: 8px; }
+.insight-bars > div { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+.insight-bars > div::before { content: ""; grid-column: 1; grid-row: 1; height: 10px; border-radius: 999px; background: var(--sreva-blush); }
+.insight-bars span { grid-column: 1; grid-row: 1; height: 10px; border-radius: 999px; background: var(--sreva-rose); z-index: 1; }
+.insight-bars strong { grid-column: 2; grid-row: 1; }

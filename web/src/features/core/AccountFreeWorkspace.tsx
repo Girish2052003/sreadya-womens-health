@@ -144,6 +144,25 @@ export function AccountFreeWorkspace({ section }: { section: Task10CoreSection }
     await new ObservationActions(activeRepository).deleteObservation(id);
   });
 
+  const onSaveCycleNote = (period: PeriodEpisode, note: string) => void mutate(async (activeRepository) => {
+    const actions = new ObservationActions(activeRepository);
+    const existing = (await activeRepository.listObservations()).find(
+      (item) => item.kind === 'dailyNote' && item.label === `cycle-note:${period.id}`,
+    );
+    if (existing) {
+      await actions.editObservation(existing.id, { note, occurredAt: period.start, label: `cycle-note:${period.id}` });
+    } else {
+      await actions.logObservation({
+        kind: 'dailyNote',
+        occurredAt: period.start,
+        label: `cycle-note:${period.id}`,
+        note,
+      });
+    }
+  });
+
+  const onDeleteCycleNote = (id: string) => deleteObservation(id);
+
   return (
     <section className="account-free-core" data-testid="account-free-core" aria-busy={repository == null}>
       <div className="account-free-core__status">
@@ -172,10 +191,13 @@ export function AccountFreeWorkspace({ section }: { section: Task10CoreSection }
       {section === 'cycle' ? (
         <CycleCorePanel
           periods={periods}
+          cycleNotes={observations.filter((item) => item.kind === 'dailyNote' && item.label?.startsWith('cycle-note:'))}
           onStartPeriodToday={startPeriodToday}
           onEndPeriod={endPeriodToday}
           onEditPeriod={editPeriod}
           onDeletePeriod={deletePeriod}
+          onSaveCycleNote={onSaveCycleNote}
+          onDeleteCycleNote={onDeleteCycleNote}
         />
       ) : null}
     </section>

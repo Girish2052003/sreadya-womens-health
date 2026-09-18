@@ -39,6 +39,10 @@ export function DiagnosticsWorkspace() {
 
       setReport(buildDiagnosticReport({
         appVersion: '1.0.0-web',
+        predictionEngine: 'prediction-v1',
+        reminderEngine: 'reminder-v1',
+        healthAdapter: 'web-manual-v1',
+        lastMigration: 'schema-v1-no-migration-required',
         browser: { name: browserName(), version: 'current-runtime' },
         schema: { vaultVersion: 1, supported: true },
         engine: {

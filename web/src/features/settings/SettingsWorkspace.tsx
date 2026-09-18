@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { AccessibilityPreferencesWorkspace } from '../../accessibility/AccessibilityPreferencesWorkspace';
+import { AppLockSettings } from '../../privacy/AppLockSettings';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 
@@ -88,6 +89,7 @@ export function SettingsWorkspace() {
           <p className="workspace-note">Native HealthKit and Health Connect are not exposed by browser APIs. Use native clients for those platform integrations; Web remains fully usable with manual/local records and CycleVault.</p>
         </Card>
       </div>
+      <div style={{ marginTop: 16 }}><AppLockSettings /></div>
       <div style={{ marginTop: 16 }}><AccessibilityPreferencesWorkspace /></div>
     </>
   );

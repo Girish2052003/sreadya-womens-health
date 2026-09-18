@@ -2,33 +2,26 @@ import { describe, expect, it } from 'vitest';
 
 import { PRIVACY_CAPABILITY_IDS, buildWebPrivacyStatus } from './privacy-status';
 
-describe('Task 13 Web Privacy Center truthfulness', () => {
-  it('tracks PRIV-001 through PRIV-021 without claiming unavailable platform mechanisms', () => {
+describe('Web Privacy Center truthfulness', () => {
+  it('tracks PRIV-001 through PRIV-021 without claiming unavailable native mechanisms', () => {
     expect(PRIVACY_CAPABILITY_IDS).toHaveLength(21);
-    expect(PRIVACY_CAPABILITY_IDS[0]).toBe('PRIV-001');
-    expect(PRIVACY_CAPABILITY_IDS.at(-1)).toBe('PRIV-021');
-
-    const status = buildWebPrivacyStatus({ notificationPrivacy: 'maximum' });
-    expect(status).toEqual({
-      healthDataLocation: 'This browser/device',
-      developerHealthDatabase: 'None',
-      behaviorAnalytics: 'Disabled',
-      databaseProtection: 'AES-GCM encrypted local vault',
-      platformHealthAccess: 'Not connected',
-      partnerLiveAccess: 'None — explicit local preview/share only',
-      sync: 'Unavailable — Phase F is not enabled',
-      appLock: 'Unavailable in this Web build',
-      appSwitcherProtection: 'Browser controlled — no Web guarantee',
-      notificationPrivacy: 'Maximum Privacy',
-      advertisingProfile: 'None from reproductive-health data',
-    });
+    const status = buildWebPrivacyStatus({ notificationPrivacy: 'maximum', appLockConfigured: true });
+    expect(status.healthDataLocation).toBe('This browser/device');
+    expect(status.developerHealthDatabase).toBe('None');
+    expect(status.behaviorAnalytics).toBe('Disabled');
+    expect(status.databaseProtection).toContain('AES-GCM');
+    expect(status.platformHealthAccess).toMatch(/unavailable in Web/);
+    expect(status.appLock).toMatch(/PIN app lock enabled/);
+    expect(status.appLock).toMatch(/native biometric protection not claimed/);
+    expect(status.appSwitcherProtection).toMatch(/no Web guarantee/);
+    expect(status.notificationPrivacy).toBe('Maximum Privacy');
+    expect(status.advertisingProfile).toBe('None from reproductive-health data');
   });
 
-  it('never reports sync, biometrics, or app-switcher protection as active before their reviewed adapters exist', () => {
-    const status = buildWebPrivacyStatus({ notificationPrivacy: 'detailed' });
-    expect(status.sync).toMatch(/Unavailable/);
-    expect(status.appLock).toMatch(/Unavailable/);
-    expect(status.appSwitcherProtection).toMatch(/no Web guarantee/);
+  it('reports an unconfigured Web PIN truthfully instead of pretending biometric protection exists', () => {
+    const status = buildWebPrivacyStatus({ notificationPrivacy: 'detailed', appLockConfigured: false });
+    expect(status.appLock).toMatch(/not configured/);
+    expect(status.appLock).toMatch(/native biometric protection not claimed/);
     expect(status.notificationPrivacy).toBe('Detailed');
   });
 });

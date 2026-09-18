@@ -13,6 +13,7 @@ export type LocalIntent =
   | 'addReminder'
   | 'nextPeriodQuery'
   | 'historyQuery'
+  | 'searchHistory'
   | 'unknown';
 
 export type ReminderKind =
@@ -185,6 +186,11 @@ export function parseLocalIntent(input: string, now: Date): ParsedCommand {
 
   if (containsAny(text, ['last six periods', 'period history', 'show my periods'])) {
     return { intent: 'historyQuery', requiresConfirmation: false, rawText: input };
+  }
+
+  const searchMatch = /^(?:search|find|show)\s+(?:my\s+)?(?:history\s+for\s+)?(.+)$/.exec(text);
+  if (searchMatch && searchMatch[1]) {
+    return { intent: 'searchHistory', value: searchMatch[1].trim(), requiresConfirmation: false, rawText: input };
   }
 
   return { intent: 'unknown', date, requiresConfirmation: true, rawText: input, note: input };

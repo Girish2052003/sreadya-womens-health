@@ -81,6 +81,17 @@ export function AssistantWorkspace() {
       setAnswer(recent.length === 0
         ? 'No period history is stored yet.'
         : recent.map((period) => displayDate(period.start.slice(0, 10))).join(' · '));
+    } else if (parsed.intent === 'searchHistory') {
+      const query = (parsed.value ?? '').toLowerCase();
+      const observations = await repository.listObservations();
+      const matches = observations.filter((item) =>
+        item.kind.toLowerCase().includes(query)
+        || item.label?.toLowerCase().includes(query)
+        || item.note?.toLowerCase().includes(query)
+      ).slice(-10).reverse();
+      setAnswer(matches.length === 0
+        ? `No local observation matched “${parsed.value ?? ''}”.`
+        : matches.map((item) => `${displayDate(item.occurredAt.slice(0, 10))}: ${item.label ?? item.kind}`).join(' · '));
     } else if (parsed.intent === 'addReminder') {
       setAnswer('The reminder was parsed locally. Review the type, label and time, then confirm to save it in the encrypted personal reminder store.');
     } else if (parsed.intent === 'unknown') {
@@ -150,7 +161,7 @@ export function AssistantWorkspace() {
       {ready ? (
         <div className="workspace-grid">
           <Card eyebrow="Private assistant" title="Tell Sreva">
-            <p>Try “My period started yesterday”, “Yesterday was heavy”, “I have severe cramps today”, “When is my next period?”, or “Show my last six periods”.</p>
+            <p>Try “My period started yesterday”, “Yesterday was heavy”, “I have severe cramps today”, “When is my next period?”, “Show my last six periods”, “Find cramps”, or “Remind me about medicine at 8”.</p>
             <label>
               <span>Private command</span>
               <textarea
