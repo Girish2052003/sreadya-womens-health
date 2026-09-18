@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
+import { useI18n } from '../i18n/I18nProvider';
 import {
   applyThemePreference,
   readThemePreference,
@@ -9,13 +10,14 @@ import {
   type ThemePreference,
 } from './theme-preference';
 
-const OPTIONS: ReadonlyArray<{ value: ThemePreference; label: string; symbol: string }> = [
-  { value: 'system', label: 'System', symbol: '◐' },
-  { value: 'light', label: 'Light', symbol: '☀' },
-  { value: 'dark', label: 'Dark', symbol: '☾' },
+const OPTIONS: ReadonlyArray<{ value: ThemePreference; labelKey: string; symbol: string }> = [
+  { value: 'system', labelKey: 'theme.system', symbol: '◐' },
+  { value: 'light', labelKey: 'theme.light', symbol: '☀' },
+  { value: 'dark', labelKey: 'theme.dark', symbol: '☾' },
 ];
 
 export function ThemeToggle() {
+  const { t } = useI18n();
   const [preference, setPreference] = useState<ThemePreference>('system');
 
   useEffect(() => {
@@ -43,21 +45,24 @@ export function ThemeToggle() {
   };
 
   return (
-    <div className="theme-toggle" role="group" aria-label="Appearance">
-      {OPTIONS.map((option) => (
-        <button
-          key={option.value}
-          type="button"
-          className="theme-toggle__option"
-          aria-label={`${option.label} theme`}
-          aria-pressed={preference === option.value}
-          title={`${option.label} theme`}
-          onClick={() => choose(option.value)}
-        >
-          <span aria-hidden="true">{option.symbol}</span>
-          <span className="theme-toggle__text">{option.label}</span>
-        </button>
-      ))}
+    <div className="theme-toggle" role="group" aria-label={t('theme.group')}>
+      {OPTIONS.map((option) => {
+        const label = t(option.labelKey);
+        return (
+          <button
+            key={option.value}
+            type="button"
+            className="theme-toggle__option"
+            aria-label={`${label} theme`}
+            aria-pressed={preference === option.value}
+            title={`${label} theme`}
+            onClick={() => choose(option.value)}
+          >
+            <span aria-hidden="true">{option.symbol}</span>
+            <span className="theme-toggle__text">{label}</span>
+          </button>
+        );
+      })}
     </div>
   );
 }

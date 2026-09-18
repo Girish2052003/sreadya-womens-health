@@ -1,30 +1,37 @@
+'use client';
+
 import Link from 'next/link';
 
+import { useI18n } from '../../i18n/I18nProvider';
 import { ThemeToggle } from '../../theme/ThemeToggle';
+import { LanguageChooser } from './LanguageChooser';
 
 const publicLinks = [
-  ['Features', '/features'],
-  ['How it works', '/how-it-works'],
-  ['Privacy', '/privacy'],
-  ['Security', '/security'],
-  ['Help', '/help'],
-  ['Download', '/download'],
+  ['nav.public.features', '/features'],
+  ['nav.public.how', '/how-it-works'],
+  ['nav.public.privacy', '/privacy'],
+  ['nav.public.security', '/security'],
+  ['nav.public.help', '/help'],
+  ['nav.public.download', '/download'],
 ] as const;
 
-export function PublicHeader() {
+export function PublicHeader({ showLanguageChooser = false }: { showLanguageChooser?: boolean }) {
+  const { t } = useI18n();
+
   return (
     <header className="public-header">
       <Link className="public-header__brand" href="/" aria-label="Sreadya home" title="Sreadya home">
         <span className="public-header__mark" aria-hidden="true">S</span>
-        <span>Sreadya</span>
+        <span>{t('brand.name')}</span>
       </Link>
-      <nav className="public-header__nav" aria-label="Public navigation">
-        {publicLinks.map(([label, href]) => (
-          <Link key={href} href={href}>{label}</Link>
+      <nav className="public-header__nav" aria-label={t('nav.public.label')}>
+        {publicLinks.map(([labelKey, href]) => (
+          <Link key={href} href={href}>{t(labelKey)}</Link>
         ))}
       </nav>
+      {showLanguageChooser ? <LanguageChooser /> : null}
       <ThemeToggle />
-      <Link className="public-header__cta" href="/app/home">Open Sreadya</Link>
+      <Link className="public-header__cta" href="/app/home">{t('common.openSreadya')}</Link>
     </header>
   );
 }
