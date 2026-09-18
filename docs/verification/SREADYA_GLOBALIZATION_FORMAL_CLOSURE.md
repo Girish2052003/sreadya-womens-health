@@ -3,8 +3,20 @@
 **Authority:** `docs/architecture/SREADYA_GLOBALIZATION_ARCHITECTURE.md`  
 **Implementation branch:** `fix/sreadya-complete-locales`  
 **Pull request:** #25  
-**Status:** **OPEN — provider execution not yet proven**  
-**Rule:** This ledger must not say PASS until the exact final PR head satisfies every required gate.
+**Status:** **DEFERRED — English-only release mode is active; provider execution is future work**  
+**Rule:** English-only release readiness is evaluated independently. This ledger may say provider formal closure PASS only after multilingual publication is deliberately enabled and the exact final head satisfies every provider gate.
+
+
+## Current release decision
+
+SREADYA is launching with English as the only public locale. The language chooser is hidden when the manifest exposes only `en`, and no Google Cloud API key or paid translation run is required for this release.
+
+The repository keeps the complete provider pipeline, 194-row baseline, chooser implementation, translation memory, RTL handling, and future browser proofs intact. Normal CI now uses `--require-release-ready`, which accepts exactly two safe states:
+
+1. **English-only mode:** only `en` is public and the chooser is hidden; or
+2. **Multilingual mode:** full `--require-global-closure` succeeds.
+
+This prevents partial multilingual publication while allowing a zero-provider-cost production launch.
 
 ## Frozen contract
 
@@ -38,7 +50,7 @@ The branch contains:
 
 ## Provider execution gate
 
-The provider stage intentionally fails closed when `SREADYA_GOOGLE_TRANSLATE_API_KEY` is absent.
+The provider stage is optional while English-only mode is active. When `SREADYA_GOOGLE_TRANSLATE_API_KEY` is absent, the synchronization workflow performs no provider call and exits successfully after local baseline validation.
 
 Once the protected credential is available, the workflow must:
 
@@ -53,9 +65,9 @@ Once the protected credential is available, the workflow must:
 9. commit generated artifacts back to the implementation branch;
 10. trigger the full repository gates again on the resulting exact head.
 
-## Formal PASS conditions
+## Future multilingual formal PASS conditions
 
-The closure may be changed to PASS only when all of the following are evidenced on one exact final head:
+When multilingual publication is enabled, provider closure may be changed to PASS only when all of the following are evidenced on one exact final head:
 
 - [ ] Google provider discovery snapshot exists.
 - [ ] Discovered logical language count is at least 194.
@@ -74,4 +86,4 @@ The closure may be changed to PASS only when all of the following are evidenced 
 - [ ] PR is still based on current `main` with no unresolved divergence.
 - [ ] Post-merge `main` and live GitHub Pages are re-verified.
 
-Until those boxes are supported by evidence, the implementation is a **formal-closure candidate**, not a completed closure.
+Until those boxes are supported by evidence, **multilingual provider closure remains deferred**. This does not block a verified English-only release.
