@@ -38,7 +38,7 @@ export function evaluateNotificationCapability(
       ...common,
       mechanism: 'in-app',
       closedAppDelivery: 'not-guaranteed',
-      reason: 'Maximum Privacy keeps reminder delivery local to Sreadya.',
+      reason: 'reminder.capabilityReason.maximumLocal',
     };
   }
 
@@ -47,7 +47,7 @@ export function evaluateNotificationCapability(
       ...common,
       mechanism: 'in-app',
       closedAppDelivery: 'not-guaranteed',
-      reason: 'This browser does not expose notification delivery, so Sreadya will show reminders while the app is open.',
+      reason: 'reminder.capabilityReason.notificationUnsupported',
     };
   }
 
@@ -57,8 +57,8 @@ export function evaluateNotificationCapability(
       mechanism: 'in-app',
       closedAppDelivery: 'not-guaranteed',
       reason: input.permission === 'denied'
-        ? 'Browser notification permission is denied; in-app reminders remain available.'
-        : 'Browser notification permission has not been granted; in-app reminders remain available.',
+        ? 'reminder.capabilityReason.permissionDenied'
+        : 'reminder.capabilityReason.permissionNotGranted',
     };
   }
 
@@ -71,7 +71,7 @@ export function evaluateNotificationCapability(
       ...common,
       mechanism: 'web-push',
       closedAppDelivery: 'available-with-reviewed-relay',
-      reason: 'A reviewed push relay and the required browser capabilities are configured.',
+      reason: 'reminder.capabilityReason.reviewedRelay',
     };
   }
 
@@ -79,7 +79,7 @@ export function evaluateNotificationCapability(
     ...common,
     mechanism: 'browser-notification',
     closedAppDelivery: 'not-guaranteed',
-    reason: 'Browser notifications are available while Sreadya is active, but no reviewed push relay is configured for guaranteed closed-app delivery.',
+    reason: 'reminder.capabilityReason.browserActiveOnly',
   };
 }
 
