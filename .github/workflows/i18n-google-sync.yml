@@ -1,0 +1,94 @@
+name: SREADYA Google Translation Sync
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - shared/i18n/source/en.json
+      - shared/i18n/providers/google-nmt-baseline.json
+  schedule:
+    - cron: '17 3 * * 1'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sreadya-google-i18n-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  synchronize:
+    runs-on: ubuntu-latest
+    env:
+      SREADYA_GOOGLE_TRANSLATE_API_KEY: ${{ secrets.SREADYA_GOOGLE_TRANSLATE_API_KEY }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+
+      - name: Require protected Google Cloud Translation credential
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${SREADYA_GOOGLE_TRANSLATE_API_KEY:-}" ]; then
+            echo "::error::Add SREADYA_GOOGLE_TRANSLATE_API_KEY as a protected GitHub Actions secret. Never paste it into client code or commit it."
+            exit 1
+          fi
+
+      - name: Verify frozen 194-language Google baseline
+        run: |
+          python -m py_compile tool/i18n_pipeline.py tool/verify_globalization.py
+          python tool/i18n_pipeline.py --check-google-baseline
+
+      - name: Discover Google targets and synchronize every supported locale
+        run: python tool/i18n_pipeline.py --sync-google-all
+
+      - name: Prove formal globalization closure before publishing artifacts
+        run: |
+          python tool/i18n_pipeline.py --check
+          python tool/verify_globalization.py --require-global-closure
+
+      - name: Detect generated changes
+        id: changes
+        shell: bash
+        run: |
+          if git diff --quiet --             shared/i18n/providers/google-discovered.json             shared/i18n/translations             shared/i18n/generated             web/public/i18n             web/src/i18n/source.generated.ts             web/src/i18n/translation-manifest.generated.ts; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit generated translations to the manually selected feature branch
+        if: steps.changes.outputs.changed == 'true' && github.event_name == 'workflow_dispatch' && github.ref_name != 'main'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "sreadya-i18n-bot"
+          git config user.email "sreadya-i18n-bot@users.noreply.github.com"
+          git add             shared/i18n/providers/google-discovered.json             shared/i18n/translations             shared/i18n/generated             web/public/i18n             web/src/i18n/source.generated.ts             web/src/i18n/translation-manifest.generated.ts
+          git commit -m "chore(i18n): synchronize Google 194+ translations"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Create generated translation branch from main
+        if: steps.changes.outputs.changed == 'true' && (github.event_name != 'workflow_dispatch' || github.ref_name == 'main')
+        id: automation
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          BRANCH="automation/sreadya-i18n-${GITHUB_RUN_ID}"
+          git switch -c "$BRANCH"
+          git config user.name "sreadya-i18n-bot"
+          git config user.email "sreadya-i18n-bot@users.noreply.github.com"
+          git add             shared/i18n/providers/google-discovered.json             shared/i18n/translations             shared/i18n/generated             web/public/i18n             web/src/i18n/source.generated.ts             web/src/i18n/translation-manifest.generated.ts
+          git commit -m "chore(i18n): synchronize Google 194+ translations"
+          git push origin "$BRANCH"
+          gh pr create             --base main             --head "$BRANCH"             --title "chore(i18n): synchronize Google 194+ translations"             --body "Automated SREADYA globalization synchronization. Google Cloud supported-language discovery must remain a superset of the frozen 194-language NMT baseline. All published bundles passed completeness, placeholder, source-hash, provider, and formal-closure gates."
