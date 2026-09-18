@@ -5,7 +5,7 @@ const REMINDER_SETTINGS_ID = 'preferences:reminders:v1';
 const SUPPORTED_OFFSETS = new Set([7, 3, 1, 0]);
 
 export const DEFAULT_REMINDER_SETTINGS: ReminderPolicySettings = Object.freeze({
-  enabledOffsetsDays: [],
+  enabledOffsetsDays: [3],
   lateDays: 0,
   hour: 8,
   minute: 0,
@@ -43,7 +43,7 @@ export class ReminderSettingsRepository {
   async load(): Promise<ReminderPolicySettings> {
     const ids = await this.vault.listRecordIds();
     if (!ids.includes(REMINDER_SETTINGS_ID)) {
-      return { ...DEFAULT_REMINDER_SETTINGS, enabledOffsetsDays: [] };
+      return { ...DEFAULT_REMINDER_SETTINGS, enabledOffsetsDays: [...DEFAULT_REMINDER_SETTINGS.enabledOffsetsDays] };
     }
     const stored = await this.vault.read<unknown>(REMINDER_SETTINGS_ID);
     assertSettings(stored);

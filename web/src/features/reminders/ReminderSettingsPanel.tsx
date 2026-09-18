@@ -48,7 +48,7 @@ export function ReminderSettingsPanel({
       <Card eyebrow="Account-free preferences" title="Reminder settings">
         <fieldset className="reminder-fieldset">
           <legend>Cycle reminders</legend>
-          <p className="workspace-note">Choose only the reminders you want. New local vaults start with all cycle reminders off.</p>
+          <p className="workspace-note">Sreva enables the private 3-day-before reminder by default. You can change reminder days and time whenever you want.</p>
           <div className="reminder-option-grid">
             {OFFSET_OPTIONS.map(({ days, label }) => (
               <label key={days} className="reminder-option">
