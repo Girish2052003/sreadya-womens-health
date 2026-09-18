@@ -3,6 +3,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 CI = (ROOT / '.github' / 'workflows' / 'ci.yml').read_text(encoding='utf-8')
 PAGES_PATH = ROOT / '.github' / 'workflows' / 'web-pages.yml'
+PLAYWRIGHT_CONFIG = (ROOT / 'web' / 'playwright.config.ts').read_text(encoding='utf-8')
 PRIVACY_SCAN = (ROOT / 'tool' / 'privacy_scan.py').read_text(encoding='utf-8')
 SECRET_SCAN = (ROOT / 'tool' / 'secret_scan.py').read_text(encoding='utf-8')
 
@@ -75,6 +76,26 @@ def test_pages_deployment_is_static_secret_free_and_least_privilege():
     assert 'secrets.' not in pages
     assert 'NEXT_PUBLIC_SREVA_VAULT_TEST_HARNESS' not in pages
     assert 'NEXT_PUBLIC_SREVA_CYCLEVAULT_TEST_HARNESS' not in pages
+
+
+def test_pages_deployment_runs_synthetic_live_acceptance_only_after_successful_deploy():
+    pages = PAGES_PATH.read_text(encoding='utf-8')
+
+    for required in [
+        'outputs:',
+        'page_url: ${{ steps.deployment.outputs.page_url }}',
+        'live-web-acceptance:',
+        'needs: deploy-pages',
+        'SREVA_LIVE_BASE_URL: ${{ needs.deploy-pages.outputs.page_url }}',
+        'npx playwright install --with-deps chromium',
+        'npx playwright test e2e/task18-live-acceptance.spec.ts --project=chromium',
+    ]:
+        assert required in pages
+
+    assert pages.index('deploy-pages:') < pages.index('live-web-acceptance:')
+    assert "if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'" in pages
+    assert 'SREVA_LIVE_BASE_URL' in PLAYWRIGHT_CONFIG
+    assert 'process.env.SREVA_LIVE_BASE_URL ? undefined' in PLAYWRIGHT_CONFIG
 
 
 def test_privacy_scan_covers_web_health_logging_transport_cache_and_analytics_packages():
