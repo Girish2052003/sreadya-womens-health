@@ -1,4 +1,5 @@
 name: Sreadya Web Pages
+# Redeploy marker after repository rename to refresh the GitHub Pages base path.
 
 on:
   pull_request:
