@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { StatusChip } from '../../components/ui/StatusChip';
 import type { HealthObservation, PeriodEpisode } from '../../domain/cycle/types';
 import type { PredictionResult } from '../../domain/prediction/types';
+import { useI18n } from '../../i18n/I18nProvider';
 import { DexieVaultPersistence } from '../../vault/db';
 import { HealthVaultRepository } from '../../vault/health-repository';
 import { VaultService } from '../../vault/vault-service';
@@ -28,15 +29,13 @@ function localDateKey(date = new Date()): string {
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
-
-function utcMidnight(dateKey: string): string {
-  return `${dateKey}T00:00:00.000Z`;
-}
+function utcMidnight(dateKey: string): string { return `${dateKey}T00:00:00.000Z`; }
 
 export function AccountFreeWorkspace({ section }: { section: Task10CoreSection }) {
+  const { t } = useI18n();
   const today = useMemo(() => localDateKey(), []);
   const [repository, setRepository] = useState<HealthVaultRepository | null>(null);
-  const [vaultStatus, setVaultStatus] = useState('Opening encrypted local vault…');
+  const [vaultStatus, setVaultStatus] = useState(() => t('core.vault.opening'));
   const [error, setError] = useState('');
   const [periods, setPeriods] = useState<PeriodEpisode[]>([]);
   const [observations, setObservations] = useState<HealthObservation[]>([]);
@@ -51,155 +50,66 @@ export function AccountFreeWorkspace({ section }: { section: Task10CoreSection }
   useEffect(() => {
     let cancelled = false;
     const vault = new VaultService(new DexieVaultPersistence());
-
-    void continuePrivately(vault)
-      .then(() => {
-        if (cancelled) return;
-        setRepository(new HealthVaultRepository(vault));
-        setVaultStatus('Encrypted local vault ready');
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setVaultStatus('Local vault unavailable');
-          setError('Sreadya could not open the encrypted local vault in this browser.');
-        }
-      });
-
-    return () => {
-      cancelled = true;
-      vault.lock();
-    };
-  }, []);
+    void continuePrivately(vault).then(() => {
+      if (cancelled) return;
+      setRepository(new HealthVaultRepository(vault));
+      setVaultStatus(t('core.vault.ready'));
+    }).catch(() => {
+      if (!cancelled) { setVaultStatus(t('core.vault.unavailable')); setError(t('core.error.openVault')); }
+    });
+    return () => { cancelled = true; vault.lock(); };
+  }, [t]);
 
   const refresh = useCallback(async (activeRepository: HealthVaultRepository) => {
     const [nextPeriods, nextObservations, nextPrediction] = await Promise.all([
-      activeRepository.listPeriods(),
-      activeRepository.listObservations(),
-      predictFromRepository(activeRepository, new Date().toISOString()),
+      activeRepository.listPeriods(), activeRepository.listObservations(), predictFromRepository(activeRepository, new Date().toISOString()),
     ]);
-    setPeriods(nextPeriods);
-    setObservations(nextObservations);
-    setPrediction(nextPrediction);
+    setPeriods(nextPeriods); setObservations(nextObservations); setPrediction(nextPrediction);
   }, []);
 
   useEffect(() => {
     if (!repository) return;
-    void refresh(repository).catch(() => setError('Sreadya could not read the encrypted local health history.'));
-  }, [repository, refresh, revision]);
+    void refresh(repository).catch(() => setError(t('core.error.readHistory')));
+  }, [repository, refresh, revision, t]);
 
   useEffect(() => {
     if (!repository || section !== 'calendar') return;
     const history = new CalendarHistory(repository);
     void (async () => {
-      if (calendarMode === 'month') {
-        setCalendarPeriods(await history.month(selectedYear, selectedMonth));
-        setYearGroups([]);
-      } else if (calendarMode === 'timeline') {
-        setCalendarPeriods(await history.timeline());
-        setYearGroups([]);
-      } else {
-        setCalendarPeriods([]);
-        setYearGroups(await history.year());
-      }
-    })().catch(() => setError('Sreadya could not prepare the local calendar history.'));
-  }, [repository, section, calendarMode, selectedYear, selectedMonth, revision]);
+      if (calendarMode === 'month') { setCalendarPeriods(await history.month(selectedYear, selectedMonth)); setYearGroups([]); }
+      else if (calendarMode === 'timeline') { setCalendarPeriods(await history.timeline()); setYearGroups([]); }
+      else { setCalendarPeriods([]); setYearGroups(await history.year()); }
+    })().catch(() => setError(t('core.error.calendar')));
+  }, [repository, section, calendarMode, selectedYear, selectedMonth, revision, t]);
 
   const mutate = useCallback(async (operation: (activeRepository: HealthVaultRepository) => Promise<void>) => {
-    if (!repository) return;
-    setError('');
-    try {
-      await operation(repository);
-      setRevision((value) => value + 1);
-      setVaultStatus('Saved locally · encrypted');
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Local health update failed.');
-    }
-  }, [repository]);
+    if (!repository) return; setError('');
+    try { await operation(repository); setRevision((value) => value + 1); setVaultStatus(t('core.saved')); }
+    catch (cause) { setError(cause instanceof Error ? cause.message : t('core.error.update')); }
+  }, [repository, t]);
 
-  const startPeriodToday = () => void mutate(async (activeRepository) => {
-    await new PeriodActions(activeRepository).startPeriod(utcMidnight(today));
+  const startPeriodToday = () => void mutate(async (r) => { await new PeriodActions(r).startPeriod(utcMidnight(today)); });
+  const endPeriodToday = (id: string) => void mutate(async (r) => { await new PeriodActions(r).endPeriod(id, utcMidnight(today)); });
+  const editPeriod = (id: string, edit: PeriodEdit) => void mutate(async (r) => { await new PeriodActions(r).editPeriod(id, edit); });
+  const deletePeriod = (id: string) => void mutate(async (r) => { await new PeriodActions(r).deletePeriod(id); });
+  const logObservation = (kind: HealthObservation['kind'], note?: string) => void mutate(async (r) => { await new ObservationActions(r).logObservation({ kind, occurredAt: new Date().toISOString(), ...(note ? { note } : {}) }); });
+  const deleteObservation = (id: string) => void mutate(async (r) => { await new ObservationActions(r).deleteObservation(id); });
+  const onSaveCycleNote = (period: PeriodEpisode, note: string) => void mutate(async (r) => {
+    const actions = new ObservationActions(r);
+    const existing = (await r.listObservations()).find((item) => item.kind === 'dailyNote' && item.label === `cycle-note:${period.id}`);
+    if (existing) await actions.editObservation(existing.id, { note, occurredAt: period.start, label: `cycle-note:${period.id}` });
+    else await actions.logObservation({ kind: 'dailyNote', occurredAt: period.start, label: `cycle-note:${period.id}`, note });
   });
-
-  const endPeriodToday = (id: string) => void mutate(async (activeRepository) => {
-    await new PeriodActions(activeRepository).endPeriod(id, utcMidnight(today));
-  });
-
-  const editPeriod = (id: string, edit: PeriodEdit) => void mutate(async (activeRepository) => {
-    await new PeriodActions(activeRepository).editPeriod(id, edit);
-  });
-
-  const deletePeriod = (id: string) => void mutate(async (activeRepository) => {
-    await new PeriodActions(activeRepository).deletePeriod(id);
-  });
-
-  const logObservation = (kind: HealthObservation['kind'], note?: string) => void mutate(async (activeRepository) => {
-    await new ObservationActions(activeRepository).logObservation({
-      kind,
-      occurredAt: new Date().toISOString(),
-      ...(note ? { note } : {}),
-    });
-  });
-
-  const deleteObservation = (id: string) => void mutate(async (activeRepository) => {
-    await new ObservationActions(activeRepository).deleteObservation(id);
-  });
-
-  const onSaveCycleNote = (period: PeriodEpisode, note: string) => void mutate(async (activeRepository) => {
-    const actions = new ObservationActions(activeRepository);
-    const existing = (await activeRepository.listObservations()).find(
-      (item) => item.kind === 'dailyNote' && item.label === `cycle-note:${period.id}`,
-    );
-    if (existing) {
-      await actions.editObservation(existing.id, { note, occurredAt: period.start, label: `cycle-note:${period.id}` });
-    } else {
-      await actions.logObservation({
-        kind: 'dailyNote',
-        occurredAt: period.start,
-        label: `cycle-note:${period.id}`,
-        note,
-      });
-    }
-  });
-
-  const onDeleteCycleNote = (id: string) => deleteObservation(id);
 
   return (
     <section className="account-free-core" data-testid="account-free-core" aria-busy={repository == null}>
-      <div className="account-free-core__status">
-        <StatusChip tone={error ? 'danger' : repository ? 'success' : 'info'}>{vaultStatus}</StatusChip>
-        <span className="workspace-note">Account-free · no health telemetry · local authoritative data</span>
-      </div>
+      <div className="account-free-core__status"><StatusChip tone={error ? 'danger' : repository ? 'success' : 'info'}>{vaultStatus}</StatusChip><span className="workspace-note">{t('core.accountFree.status')}</span></div>
       {error ? <p className="core-error" role="alert">{error}</p> : null}
-
       {section === 'home' ? <HomeCorePanel periods={periods} observations={observations} prediction={prediction} onStartPeriodToday={startPeriodToday} /> : null}
       {section === 'today' ? <TodayCorePanel observations={observations} today={today} /> : null}
       {section === 'log' ? <LogCorePanel observations={observations} onLog={logObservation} onDelete={deleteObservation} /> : null}
-      {section === 'calendar' ? (
-        <CalendarCorePanel
-          mode={calendarMode}
-          periods={calendarPeriods}
-          yearGroups={yearGroups}
-          selectedYear={selectedYear}
-          selectedMonth={selectedMonth}
-          onModeChange={setCalendarMode}
-          onMonthChange={(year, month) => {
-            setSelectedYear(year);
-            setSelectedMonth(month);
-          }}
-        />
-      ) : null}
-      {section === 'cycle' ? (
-        <CycleCorePanel
-          periods={periods}
-          cycleNotes={observations.filter((item) => item.kind === 'dailyNote' && item.label?.startsWith('cycle-note:'))}
-          onStartPeriodToday={startPeriodToday}
-          onEndPeriod={endPeriodToday}
-          onEditPeriod={editPeriod}
-          onDeletePeriod={deletePeriod}
-          onSaveCycleNote={onSaveCycleNote}
-          onDeleteCycleNote={onDeleteCycleNote}
-        />
-      ) : null}
+      {section === 'calendar' ? <CalendarCorePanel mode={calendarMode} periods={calendarPeriods} yearGroups={yearGroups} selectedYear={selectedYear} selectedMonth={selectedMonth} onModeChange={setCalendarMode} onMonthChange={(year, month) => { setSelectedYear(year); setSelectedMonth(month); }} /> : null}
+      {section === 'cycle' ? <CycleCorePanel periods={periods} cycleNotes={observations.filter((item) => item.kind === 'dailyNote' && item.label?.startsWith('cycle-note:'))} onStartPeriodToday={startPeriodToday} onEndPeriod={endPeriodToday} onEditPeriod={editPeriod} onDeletePeriod={deletePeriod} onSaveCycleNote={onSaveCycleNote} onDeleteCycleNote={deleteObservation} /> : null}
     </section>
   );
 }
