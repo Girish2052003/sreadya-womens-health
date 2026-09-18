@@ -3,12 +3,62 @@ import { expect, test } from '@playwright/test';
 
 const SETTINGS_URL = '/app/settings/';
 
-async function hasHorizontalOverflow(page: import('@playwright/test').Page): Promise<boolean> {
+async function horizontalOverflowEvidence(page: import('@playwright/test').Page): Promise<{
+  hasOverflow: boolean;
+  clientWidth: number;
+  scrollWidth: number;
+  offenders: Array<{
+    tag: string;
+    className: string;
+    text: string;
+    left: number;
+    right: number;
+    width: number;
+    scrollWidth: number;
+    clientWidth: number;
+  }>;
+}> {
   return page.evaluate(() => {
     const root = document.documentElement;
     const body = document.body;
-    return Math.max(root.scrollWidth, body.scrollWidth) > root.clientWidth + 1;
+    const clientWidth = root.clientWidth;
+    const scrollWidth = Math.max(root.scrollWidth, body.scrollWidth);
+    const offenders = Array.from(document.querySelectorAll<HTMLElement>('body *'))
+      .map((element) => {
+        const rect = element.getBoundingClientRect();
+        return {
+          tag: element.tagName.toLowerCase(),
+          className: typeof element.className === 'string' ? element.className : '',
+          text: (element.textContent ?? '').trim().replace(/\\s+/g, ' ').slice(0, 100),
+          left: Math.round(rect.left * 10) / 10,
+          right: Math.round(rect.right * 10) / 10,
+          width: Math.round(rect.width * 10) / 10,
+          scrollWidth: element.scrollWidth,
+          clientWidth: element.clientWidth,
+        };
+      })
+      .filter((item) =>
+        item.width > 0
+        && (item.right > clientWidth + 1 || item.left < -1 || item.scrollWidth > item.clientWidth + 1),
+      )
+      .sort((a, b) => Math.max(b.right - clientWidth, b.scrollWidth - b.clientWidth)
+        - Math.max(a.right - clientWidth, a.scrollWidth - a.clientWidth))
+      .slice(0, 12);
+    return {
+      hasOverflow: scrollWidth > clientWidth + 1,
+      clientWidth,
+      scrollWidth,
+      offenders,
+    };
   });
+}
+
+async function expectNoHorizontalOverflow(page: import('@playwright/test').Page): Promise<void> {
+  const evidence = await horizontalOverflowEvidence(page);
+  expect(
+    evidence.hasOverflow,
+    `horizontal overflow evidence: ${JSON.stringify(evidence)}`,
+  ).toBe(false);
 }
 
 test('accessibility preferences apply immediately and persist locally', async ({ page }) => {
@@ -83,12 +133,12 @@ test('keyboard focus, 200 percent reflow, large text, RTL and long-copy fixtures
   expect(focusEvidence!.outlineStyle).not.toBe('none');
   expect(Number.parseFloat(focusEvidence!.outlineWidth)).toBeGreaterThanOrEqual(2);
 
-  expect(await hasHorizontalOverflow(page)).toBe(false);
+  await expectNoHorizontalOverflow(page);
 
   await page.getByLabel('Large').check();
   const rootFontSize = await page.locator('html').evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
   expect(rootFontSize).toBeGreaterThanOrEqual(20);
-  expect(await hasHorizontalOverflow(page)).toBe(false);
+  await expectNoHorizontalOverflow(page);
 
   const manifestResponse = await request.get('/i18n/manifest.json');
   expect(manifestResponse.ok()).toBeTruthy();
@@ -132,7 +182,7 @@ test('keyboard focus, 200 percent reflow, large text, RTL and long-copy fixtures
     const title = document.querySelector('[data-testid="accessibility-preferences"] h2');
     if (title) title.textContent = Array.from({ length: 9 }, () => 'Long localized accessibility preference wording').join(' ');
   });
-  expect(await hasHorizontalOverflow(page)).toBe(false);
+  await expectNoHorizontalOverflow(page);
 });
 
 test('system reduced motion remains honored and explicit high contrast strengthens presentation', async ({ page }) => {
