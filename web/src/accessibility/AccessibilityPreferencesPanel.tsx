@@ -95,6 +95,19 @@ export function AccessibilityPreferencesPanel({ preferences, saving, onChange, o
           ))}
         </fieldset>
 
+        <fieldset className="accessibility-preferences__group">
+          <legend>Language clarity</legend>
+          <label>
+            <input type="radio" name="language-clarity" checked={!preferences.easyLanguage} onChange={() => onChange({ ...preferences, easyLanguage: false })} />
+            <span>Standard language</span>
+          </label>
+          <label>
+            <input type="radio" name="language-clarity" checked={preferences.easyLanguage} onChange={() => onChange({ ...preferences, easyLanguage: true })} />
+            <span>Easy language</span>
+          </label>
+          <p className="workspace-note">Easy language adds short, plain-English guidance to each private workspace while keeping the same health and privacy meaning.</p>
+        </fieldset>
+
         <button className="sreva-button sreva-button--primary" type="button" disabled={saving} onClick={onSave}>
           {saving ? 'Saving…' : 'Save accessibility preferences'}
         </button>

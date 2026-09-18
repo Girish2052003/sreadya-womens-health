@@ -40,6 +40,16 @@ describe('accessibility preferences', () => {
     ).toEqual(DEFAULT_ACCESSIBILITY_PREFERENCES);
   });
 
+  it('migrates the earlier v1 preference shape with easy language safely off', () => {
+    const legacy = JSON.stringify({ version: 1, textScale: 'large', motion: 'reduced', contrast: 'high' });
+    expect(parseAccessibilityPreferences(legacy)).toEqual({
+      textScale: 'large',
+      motion: 'reduced',
+      contrast: 'high',
+      easyLanguage: false,
+    });
+  });
+
   it('persists only the reviewed non-health presentation preferences on this device', () => {
     const { values, storage } = memoryStorage();
     const preferences: AccessibilityPreferences = {
@@ -69,6 +79,7 @@ describe('accessibility preferences', () => {
       'data-sreva-text-scale': 'normal',
       'data-sreva-motion': 'system',
       'data-sreva-contrast': 'system',
+      'data-sreva-language-mode': 'standard',
     });
   });
 
@@ -91,6 +102,7 @@ describe('accessibility preferences', () => {
       'data-sreva-text-scale': 'large',
       'data-sreva-motion': 'reduced',
       'data-sreva-contrast': 'high',
+      'data-sreva-language-mode': 'easy',
     });
   });
 });

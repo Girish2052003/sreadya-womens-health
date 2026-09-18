@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { AccessibilityPreferencesWorkspace } from '../../accessibility/AccessibilityPreferencesWorkspace';
+import { localeDirection } from '../../i18n/locale';
 import { AppLockSettings } from '../../privacy/AppLockSettings';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
@@ -18,11 +19,26 @@ type Preferences = {
 const KEY = 'sreva:general-settings:v1';
 const defaults: Preferences = { theme: 'system', units: 'metric', time: 'system', locale: 'en-FI' };
 
+function applyLocale(locale: string) {
+  let normalized = 'en';
+  try { normalized = new Intl.Locale(locale).toString(); } catch { normalized = 'en'; }
+  document.documentElement.lang = normalized;
+  document.documentElement.dir = localeDirection(normalized);
+  document.documentElement.setAttribute('data-sreva-locale', normalized);
+}
+
 function applyTheme(theme: Preferences['theme']) {
   const resolved = theme === 'system'
     ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
     : theme;
   document.documentElement.setAttribute('data-sreva-theme', resolved);
+}
+
+function applyGeneralPreferences(preferences: Preferences) {
+  applyTheme(preferences.theme);
+  applyLocale(preferences.locale);
+  document.documentElement.setAttribute('data-sreva-units', preferences.units);
+  document.documentElement.setAttribute('data-sreva-time-format', preferences.time);
 }
 
 export function SettingsWorkspace() {
@@ -40,16 +56,16 @@ export function SettingsWorkspace() {
         locale: typeof parsed.locale === 'string' && parsed.locale.length <= 35 ? parsed.locale : defaults.locale,
       };
       setPreferences(next);
-      applyTheme(next.theme);
+      applyGeneralPreferences(next);
     } catch {
       setPreferences(defaults);
-      applyTheme(defaults.theme);
+      applyGeneralPreferences(defaults);
     }
   }, []);
 
   const save = () => {
     localStorage.setItem(KEY, JSON.stringify(preferences));
-    applyTheme(preferences.theme);
+    applyGeneralPreferences(preferences);
     setSaved(true);
   };
 
