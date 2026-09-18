@@ -2,7 +2,7 @@
 
 import { Card } from '../../components/ui/Card';
 import type { PredictionEvaluation } from '../../domain/prediction/prediction-history';
-import { formatLocaleDate } from '../../i18n/locale';
+import { formatLocaleDateLong } from '../../i18n/locale';
 import { useI18n } from '../../i18n/I18nProvider';
 import type { PredictionResult } from './prediction-engine';
 
@@ -14,7 +14,7 @@ export function PredictionCorePanel({ prediction, historyCount = 0, evaluation, 
   prediction: PredictionResult | null; historyCount?: number; evaluation?: PredictionEvaluation; fertilityEstimatesEnabled?: boolean;
 }) {
   const { t, locale } = useI18n();
-  const displayDate = (value: string) => formatLocaleDate(`${value}T00:00:00Z`, locale, 'UTC');
+  const displayDate = (value: string) => formatLocaleDateLong(`${value}T00:00:00Z`, locale, 'UTC');
   if (!prediction) return <div className="core-panel-grid" data-testid="prediction-core-panel">
     <Card eyebrow={t('prediction.eyebrow.local')} title={t('prediction.title')}><p>{t('prediction.needHistory')}</p><p className="workspace-note">{t('prediction.noInvent')}</p></Card>
     <Card eyebrow={t('prediction.historyEyebrow')} title={t('prediction.historyAccuracy')}><p>{t('prediction.historyCount',{count:historyCount})}</p><p>{t('prediction.noAccuracy')}</p></Card>
@@ -35,7 +35,7 @@ export function PredictionCorePanel({ prediction, historyCount = 0, evaluation, 
     </Card>
     <Card eyebrow={t('prediction.pmsEyebrow')} title={t('prediction.pmsTitle')}><p>{displayDate(pmsStart)} – {displayDate(pmsEnd)}</p><p className="workspace-note">{t('prediction.pmsBoundary')}</p></Card>
     <Card eyebrow={t('prediction.fertilityEyebrow')} title={t('prediction.fertilityTitle')}>
-      {fertilityEstimatesEnabled?<><p>{t('prediction.ovulation',{date:displayDate(ovulation)})}</p><p>{t('prediction.fertileWindow',{start:displayDate(fertileStart),end:displayDate(fertileEnd)})}</p><p className="workspace-note">{t('prediction.fertilityBoundary')}</p></>:<><p>{t('prediction.fertilityUnavailable')}</p><p className="workspace-note">{t('prediction.fertilityHidden')}</p></>}
+      {fertilityEstimatesEnabled?<><p>{t('prediction.ovulation',{date:displayDate(ovulation)})}</p><p>{t('prediction.fertileWindow',{start:displayDate(fertileStart),end:displayDate(fertileEnd)})}</p><p className="workspace-note">{t('prediction.fertilityBoundary')}</p></>:<><p>{t('prediction.ovulationUnavailable')}</p><p>{t('prediction.fertileWindowUnavailable')}</p><p className="workspace-note">{t('prediction.fertilityHidden')}</p></>}
     </Card>
     <Card eyebrow={t('prediction.historyEyebrow')} title={t('prediction.localAccuracy')}>
       <p>{t('prediction.historyCount',{count:historyCount})}</p>

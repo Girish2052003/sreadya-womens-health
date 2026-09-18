@@ -16,8 +16,8 @@ export default function HomePage() {
         <section className="hero" aria-labelledby="sreadya-title">
           <div className="hero__copy">
             <p className="public-eyebrow">{t('home.eyebrow')}</p>
-            <h1 id="sreadya-title">{t('brand.nameUpper')}</h1>
-            <p className="hero__motto">{t('home.motto')}</p>
+            <h1 id="sreadya-title">SREADYA</h1>
+            <p className="hero__motto">Prakritim Svam Avashtabhya.</p>
             <p className="hero__headline">{t('home.headline')}</p>
             <p className="hero__lede">{t('home.lede')}</p>
             <div className="hero__actions">

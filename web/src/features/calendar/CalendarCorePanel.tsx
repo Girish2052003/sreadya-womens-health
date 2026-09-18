@@ -2,16 +2,16 @@
 
 import { Card } from '../../components/ui/Card';
 import type { PeriodEpisode } from '../../domain/cycle/types';
-import { formatLocaleDate } from '../../i18n/locale';
+import { formatLocaleDate, isEnglishLocale } from '../../i18n/locale';
 import { useI18n } from '../../i18n/I18nProvider';
-import { periodDurationDays } from '../core/presentation';
+import { formatUtcDate, periodDurationDays } from '../core/presentation';
 import type { YearHistoryGroup } from './calendar-history';
 
 export type CalendarMode = 'month' | 'timeline' | 'year';
 
 function PeriodList({ periods }: { periods: PeriodEpisode[] }) {
   const { t, locale } = useI18n();
-  const date = (value: string) => formatLocaleDate(value, locale, 'UTC');
+  const date = (value: string) => isEnglishLocale(locale) ? formatUtcDate(value) : formatLocaleDate(value, locale, 'UTC');
   if (periods.length === 0) return <p>{t('calendar.noPeriod')}</p>;
   return (
     <ul className="core-record-list">

@@ -55,7 +55,6 @@
   "language.representativeFlag": "Representative region flag; languages may be used in many countries.",
   "language.translationFallbackNotice": "This language is selectable, but untranslated Sreadya copy safely falls back to English until a reviewed or machine-translated bundle is available.",
   "home.eyebrow": "Private by architecture. Gentle by design.",
-  "home.motto": "Prakritim Svam Avashtabhya.",
   "home.headline": "Your cycle, your context, your private space.",
   "home.lede": "A local-first women's cycle and menstrual health companion designed to feel calm, personal and beautifully simple—without making an account the price of care.",
   "home.seeHow": "See how it works",
@@ -1191,5 +1190,11 @@
   "vault.confirmPassphraseAria": "Confirm CycleVault export passphrase",
   "vault.restorePassphraseAria": "CycleVault restore passphrase",
   "vault.ackAria": "Acknowledge CycleVault replacement",
-  "catalogue.searchHint": "Try reminders, privacy, recovery, flow, mood…"
+  "catalogue.searchHint": "Try reminders, privacy, recovery, flow, mood…",
+  "homeCore.periodCount.one": "{count} recorded period",
+  "homeCore.periodCount.other": "{count} recorded periods",
+  "homeCore.observationCount.one": "{count} local observation",
+  "homeCore.observationCount.other": "{count} local observations",
+  "prediction.ovulationUnavailable": "Ovulation estimate: available only when Trying to Conceive mode is enabled.",
+  "prediction.fertileWindowUnavailable": "Estimated fertile window: available only when Trying to Conceive mode is enabled."
 }

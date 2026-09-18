@@ -49,6 +49,25 @@ export function formatLocaleDate(
   }).format(toDate(value));
 }
 
+export function formatLocaleDateLong(
+  value: Date | string | number,
+  locale: string,
+  timeZone?: string,
+): string {
+  const normalized = normalizeLocaleTag(locale);
+  const language = new Intl.Locale(normalized).language.toLowerCase();
+  return new Intl.DateTimeFormat(language === 'en' ? 'en-GB' : normalized, {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    ...(timeZone ? { timeZone } : {}),
+  }).format(toDate(value));
+}
+
+export function isEnglishLocale(locale: string): boolean {
+  return new Intl.Locale(normalizeLocaleTag(locale)).language.toLowerCase() === 'en';
+}
+
 export function formatLocaleTime(
   value: Date | string | number,
   locale: string,

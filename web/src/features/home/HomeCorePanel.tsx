@@ -6,9 +6,9 @@ import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import type { HealthObservation, PeriodEpisode } from '../../domain/cycle/types';
 import type { PredictionResult } from '../../domain/prediction/types';
-import { formatLocaleDate } from '../../i18n/locale';
+import { formatLocaleDate, isEnglishLocale } from '../../i18n/locale';
 import { useI18n } from '../../i18n/I18nProvider';
-import { observationLabel, titleCase } from '../core/presentation';
+import { formatUtcDate, observationLabel, titleCase } from '../core/presentation';
 
 export function HomeCorePanel({ periods, observations, prediction, onStartPeriodToday }: {
   periods: PeriodEpisode[];
@@ -16,16 +16,16 @@ export function HomeCorePanel({ periods, observations, prediction, onStartPeriod
   prediction: PredictionResult | null;
   onStartPeriodToday: () => void;
 }) {
-  const { t, locale } = useI18n();
+  const { t, plural, locale } = useI18n();
   const latestPeriod = periods.at(-1);
   const latestObservation = observations.at(-1);
-  const date = (value: string) => formatLocaleDate(value, locale, 'UTC');
+  const date = (value: string) => isEnglishLocale(locale) ? formatUtcDate(value) : formatLocaleDate(value, locale, 'UTC');
   const observationName = (kind: HealthObservation['kind']) => t(`observation.kind.${kind}`, {}, observationLabel(kind));
 
   return (
     <div className="core-panel-grid">
       <Card eyebrow={t('homeCore.eyebrow.summary')} title={t('homeCore.title.today')}>
-        <p>{t('homeCore.counts', { periods: periods.length, observations: observations.length })}</p>
+        <p>{plural('homeCore.periodCount', periods.length, { count: periods.length })} · {plural('homeCore.observationCount', observations.length, { count: observations.length })}</p>
         <div className="core-actions">
           <Button onClick={onStartPeriodToday}>{t('homeCore.periodStarted')}</Button>
           <Link className="link-button link-button--quiet" href="/app/log">{t('homeCore.logFeel')}</Link>
