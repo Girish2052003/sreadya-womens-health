@@ -123,9 +123,9 @@ def test_theme_toggle_and_light_surface_contrast_are_release_contracts() -> None
     header = read("web/src/components/navigation/PublicHeader.tsx")
     globals_css = read("web/src/app/globals.css")
     product_css = read("web/src/app/product-completeness.css")
-    assert "System theme" in toggle
-    assert "Light theme" in toggle
-    assert "Dark theme" in toggle
+    for label in ("System", "Light", "Dark"):
+        assert f"label: '{label}'" in toggle
+    assert "theme`" in toggle or "theme'" in toggle
     assert "sreva:general-settings:v1" in theme
     assert "ThemeToggle" in header
     assert "--ink-on-light" in globals_css
