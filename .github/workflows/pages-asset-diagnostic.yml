@@ -1,5 +1,6 @@
 name: One-shot Pages asset diagnostic
 # Recheck after cache-busted Pages redeploy.
+# Final fingerprint verification.
 
 on:
   push:
