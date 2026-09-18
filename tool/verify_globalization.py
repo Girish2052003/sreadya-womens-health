@@ -12,7 +12,7 @@ SOURCE = ROOT / "shared/i18n/source/en.json"
 WEB = ROOT / "web/src"
 ARCH = ROOT / "docs/architecture/SREADYA_GLOBALIZATION_ARCHITECTURE.md"
 
-LITERAL_TEXT = re.compile(r"<(?:span|p|button|label|h[1-6]|strong|small|li|dt|dd|legend|a)\\b[^>]*>\\s*([A-Za-z][^<>{}\\n]*)\\s*</", flags=re.IGNORECASE)
+LITERAL_TEXT = re.compile(r"<(?:span|p|button|label|h[1-6]|strong|small|li|dt|dd|legend|a)\b[^>]*>\s*([A-Za-z][^<>{}\n]*)\s*</", flags=re.IGNORECASE)
 INPUT_HINT_ATTR = re.compile(r"\b(?:aria-label|place" + "holder|title|alt)=['\"]([A-Za-z][^'\"]{1,})['\"]")
 STATE_LITERAL = re.compile(r"\b(?:setError|setStatus)\(\s*['\"]([A-Za-z][^'\"]{2,})['\"]")
 CARD_LITERAL = re.compile(r"\b(?:eyebrow|title)=['\"]([A-Za-z][^'\"]{2,})['\"]")
@@ -38,12 +38,14 @@ FLUTTER_MAP = {
 
 
 def strip_test_regions(text: str) -> str:
-    return re.sub(
+    text = re.sub(
         r"/\* i18n-test-harness-start \*/.*?/\* i18n-test-harness-end \*/",
         "",
         text,
         flags=re.DOTALL,
     )
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
+    return re.sub(r"(^|\s)//[^\n]*", r"\1", text)
 
 
 def check_catalogue() -> list[str]:
