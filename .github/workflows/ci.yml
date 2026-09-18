@@ -330,6 +330,7 @@ jobs:
           e2e/accessibility-i18n.spec.ts
           e2e/pwa.spec.ts
           e2e/product-completeness.spec.ts
+          e2e/theme-contrast.spec.ts
 
   web-security:
     runs-on: ubuntu-latest
