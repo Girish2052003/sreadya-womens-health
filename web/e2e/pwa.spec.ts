@@ -63,3 +63,32 @@ test('reviewed install guidance is explicit for iPhone and Android', async ({ pa
   await expect(page.getByRole('heading', { level: 2, name: 'Install Sreadya on Android' })).toBeVisible();
   await expect(page.getByText('Install app')).toBeVisible();
 });
+
+
+test('selected language bundle is cached as a static globalization artifact', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(async () => {
+    if (!('serviceWorker' in navigator)) throw new Error('Service worker unavailable');
+    await navigator.serviceWorker.ready;
+  });
+  await page.reload();
+
+  await page.getByTestId('language-chooser-trigger').click();
+  await page.getByTestId('language-chooser-search').fill('Arabic');
+  await page.locator('[data-language-tag="ar"]').click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
+  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+
+  const languageAssets = await page.evaluate(async () => {
+    const names = await caches.keys();
+    const urls: string[] = [];
+    for (const name of names.filter((candidate) => candidate.startsWith('sreadya-i18n-'))) {
+      const cache = await caches.open(name);
+      const requests = await cache.keys();
+      urls.push(...requests.map((request) => new URL(request.url).pathname));
+    }
+    return urls;
+  });
+
+  expect(languageAssets.some((pathname) => /\/i18n\/ar\.[a-f0-9]{16}\.json$/.test(pathname))).toBe(true);
+});
