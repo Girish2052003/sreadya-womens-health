@@ -1,0 +1,3879 @@
+{
+  "contract": "SREVA Web Product Surface Ledger",
+  "version": 2,
+  "registry": "shared/capabilities/sreva-capabilities.v1.json",
+  "launch_requirement_count": 258,
+  "claim_boundary": "A surface row proves discoverability/ownership and user-facing routing. Provider-dependent and platform-adapted rows remain visible without pretending that an optional backend or native-only mechanism is active on a static Web deployment.",
+  "capabilities": [
+    {
+      "id": "CYC-001",
+      "name": "One-tap \"Period started today\"",
+      "family": "CYC",
+      "route": "/app/cycle",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/cycle/CycleCorePanel.tsx"
+      ],
+      "evidence": [
+        "web/e2e/account-free-core.spec.ts"
+      ],
+      "user_promise": "One-tap \"Period started today\""
+    },
+    {
+      "id": "CYC-002",
+      "name": "End current period",
+      "family": "CYC",
+      "route": "/app/cycle",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/cycle/CycleCorePanel.tsx"
+      ],
+      "evidence": [
+        "web/e2e/account-free-core.spec.ts"
+      ],
+      "user_promise": "End current period"
+    },
+    {
+      "id": "CYC-003",
+      "name": "Backdate or correct period dates",
+      "family": "CYC",
+      "route": "/app/cycle",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/cycle/CycleCorePanel.tsx"
+      ],
+      "evidence": [
+        "web/e2e/account-free-core.spec.ts"
+      ],
+      "user_promise": "Backdate or correct period dates"
+    },
+    {
+      "id": "CYC-004",
+      "name": "Flow logging: spotting/light/medium/heavy",
+      "family": "CYC",
+      "route": "/app/reproductive-health",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/ReproductiveHealthWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/account-free-core.spec.ts"
+      ],
+      "user_promise": "Flow logging: spotting/light/medium/heavy"
+    },
+    {
+      "id": "CYC-005",
+      "name": "Period-duration tracking",
+      "family": "CYC",
+      "route": "/app/cycle",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/cycle/CycleCorePanel.tsx"
+      ],
+      "evidence": [
+        "web/e2e/account-free-core.spec.ts"
+      ],
+      "user_promise": "Period-duration tracking"
+    },
+    {
+      "id": "CYC-006",
+      "name": "Cycle-length tracking",
+      "family": "CYC",
+      "route": "/app/cycle",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/cycle/CycleCorePanel.tsx"
+      ],
+      "evidence": [
+        "web/e2e/account-free-core.spec.ts"
+      ],
+      "user_promise": "Cycle-length tracking"
+    },
+    {
+      "id": "CYC-007",
+      "name": "Previous-period history",
+      "family": "CYC",
+      "route": "/app/calendar",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/calendar/CalendarCorePanel.tsx"
+      ],
+      "evidence": [
+        "web/e2e/account-free-core.spec.ts"
+      ],
+      "user_promise": "Previous-period history"
+    },
+    {
+      "id": "CYC-008",
+      "name": "Irregular-cycle support",
+      "family": "CYC",
+      "route": "/app/cycle",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/cycle/CycleCorePanel.tsx"
+      ],
+      "evidence": [
+        "web/e2e/account-free-core.spec.ts"
+      ],
+      "user_promise": "Irregular-cycle support"
+    },
+    {
+      "id": "CYC-009",
+      "name": "Monthly calendar",
+      "family": "CYC",
+      "route": "/app/calendar",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/calendar/CalendarCorePanel.tsx"
+      ],
+      "evidence": [
+        "web/e2e/account-free-core.spec.ts"
+      ],
+      "user_promise": "Monthly calendar"
+    },
+    {
+      "id": "CYC-010",
+      "name": "Timeline view",
+      "family": "CYC",
+      "route": "/app/calendar",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/calendar/CalendarCorePanel.tsx"
+      ],
+      "evidence": [
+        "web/e2e/account-free-core.spec.ts"
+      ],
+      "user_promise": "Timeline view"
+    },
+    {
+      "id": "CYC-011",
+      "name": "Year view",
+      "family": "CYC",
+      "route": "/app/calendar",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/calendar/CalendarCorePanel.tsx"
+      ],
+      "evidence": [
+        "web/e2e/account-free-core.spec.ts"
+      ],
+      "user_promise": "Year view"
+    },
+    {
+      "id": "CYC-012",
+      "name": "Historical editing",
+      "family": "CYC",
+      "route": "/app/calendar",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/calendar/CalendarCorePanel.tsx"
+      ],
+      "evidence": [
+        "web/e2e/account-free-core.spec.ts"
+      ],
+      "user_promise": "Historical editing"
+    },
+    {
+      "id": "CYC-013",
+      "name": "Cycle/period notes",
+      "family": "CYC",
+      "route": "/app/cycle",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/cycle/CycleCorePanel.tsx"
+      ],
+      "evidence": [
+        "web/e2e/account-free-core.spec.ts"
+      ],
+      "user_promise": "Cycle/period notes"
+    },
+    {
+      "id": "CYC-014",
+      "name": "Automatic cycle statistics",
+      "family": "CYC",
+      "route": "/app/insights",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/account-free-core.spec.ts"
+      ],
+      "user_promise": "Automatic cycle statistics"
+    },
+    {
+      "id": "CYC-015",
+      "name": "Never force a 28-day-cycle assumption",
+      "family": "CYC",
+      "route": "/app/cycle",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/cycle/CycleCorePanel.tsx"
+      ],
+      "evidence": [
+        "web/e2e/account-free-core.spec.ts"
+      ],
+      "user_promise": "Never force a 28-day-cycle assumption"
+    },
+    {
+      "id": "PRED-001",
+      "name": "Next expected period",
+      "family": "PRED",
+      "route": "/app/predictions",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/predictions/PredictionWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/prediction-local.spec.ts"
+      ],
+      "user_promise": "Next expected period"
+    },
+    {
+      "id": "PRED-002",
+      "name": "Expected period window",
+      "family": "PRED",
+      "route": "/app/predictions",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/predictions/PredictionWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/prediction-local.spec.ts"
+      ],
+      "user_promise": "Expected period window"
+    },
+    {
+      "id": "PRED-003",
+      "name": "Prediction confidence",
+      "family": "PRED",
+      "route": "/app/predictions",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/predictions/PredictionWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/prediction-local.spec.ts"
+      ],
+      "user_promise": "Prediction confidence"
+    },
+    {
+      "id": "PRED-004",
+      "name": "Cycle-length trend",
+      "family": "PRED",
+      "route": "/app/predictions",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/predictions/PredictionWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/prediction-local.spec.ts"
+      ],
+      "user_promise": "Cycle-length trend"
+    },
+    {
+      "id": "PRED-005",
+      "name": "Period-duration prediction",
+      "family": "PRED",
+      "route": "/app/predictions",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/predictions/PredictionWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/prediction-local.spec.ts"
+      ],
+      "user_promise": "Period-duration prediction"
+    },
+    {
+      "id": "PRED-006",
+      "name": "PMS window",
+      "family": "PRED",
+      "route": "/app/predictions",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/predictions/PredictionWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/prediction-local.spec.ts"
+      ],
+      "user_promise": "PMS window"
+    },
+    {
+      "id": "PRED-007",
+      "name": "Ovulation estimate where enabled",
+      "family": "PRED",
+      "route": "/app/predictions",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/predictions/PredictionWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/prediction-local.spec.ts"
+      ],
+      "user_promise": "Ovulation estimate where enabled"
+    },
+    {
+      "id": "PRED-008",
+      "name": "Fertile-window estimate where enabled",
+      "family": "PRED",
+      "route": "/app/predictions",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/predictions/PredictionWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/prediction-local.spec.ts"
+      ],
+      "user_promise": "Fertile-window estimate where enabled"
+    },
+    {
+      "id": "PRED-009",
+      "name": "Automatic recalculation when health history changes",
+      "family": "PRED",
+      "route": "/app/predictions",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/predictions/PredictionWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/prediction-local.spec.ts"
+      ],
+      "user_promise": "Automatic recalculation when health history changes"
+    },
+    {
+      "id": "PRED-010",
+      "name": "Wider uncertainty windows for irregular cycles",
+      "family": "PRED",
+      "route": "/app/predictions",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/predictions/PredictionWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/prediction-local.spec.ts"
+      ],
+      "user_promise": "Wider uncertainty windows for irregular cycles"
+    },
+    {
+      "id": "PRED-011",
+      "name": "Prediction history",
+      "family": "PRED",
+      "route": "/app/predictions",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/predictions/PredictionWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/prediction-local.spec.ts"
+      ],
+      "user_promise": "Prediction history"
+    },
+    {
+      "id": "PRED-012",
+      "name": "Algorithm version stored with prediction",
+      "family": "PRED",
+      "route": "/app/predictions",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/predictions/PredictionWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/prediction-local.spec.ts"
+      ],
+      "user_promise": "Algorithm version stored with prediction"
+    },
+    {
+      "id": "PRED-013",
+      "name": "Prediction input snapshot/reference",
+      "family": "PRED",
+      "route": "/app/predictions",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/predictions/PredictionWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/prediction-local.spec.ts"
+      ],
+      "user_promise": "Prediction input snapshot/reference"
+    },
+    {
+      "id": "PRED-014",
+      "name": "Prediction accuracy evaluation against outcomes",
+      "family": "PRED",
+      "route": "/app/predictions",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/predictions/PredictionWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/prediction-local.spec.ts"
+      ],
+      "user_promise": "Prediction accuracy evaluation against outcomes"
+    },
+    {
+      "id": "REM-001",
+      "name": "Default three-day-before-period reminder",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Default three-day-before-period reminder"
+    },
+    {
+      "id": "REM-002",
+      "name": "Optional seven-day reminder",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Optional seven-day reminder"
+    },
+    {
+      "id": "REM-003",
+      "name": "Optional one-day reminder",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Optional one-day reminder"
+    },
+    {
+      "id": "REM-004",
+      "name": "Expected-period-day reminder",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Expected-period-day reminder"
+    },
+    {
+      "id": "REM-005",
+      "name": "Late-period reminder",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Late-period reminder"
+    },
+    {
+      "id": "REM-006",
+      "name": "Medication reminders",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Medication reminders"
+    },
+    {
+      "id": "REM-007",
+      "name": "Contraceptive reminders",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Contraceptive reminders"
+    },
+    {
+      "id": "REM-008",
+      "name": "Supplement reminders",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Supplement reminders"
+    },
+    {
+      "id": "REM-009",
+      "name": "Ovulation-test reminders",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Ovulation-test reminders"
+    },
+    {
+      "id": "REM-010",
+      "name": "Pregnancy-test reminders",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Pregnancy-test reminders"
+    },
+    {
+      "id": "REM-011",
+      "name": "User-selected notification time",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "User-selected notification time"
+    },
+    {
+      "id": "REM-012",
+      "name": "Quiet hours",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Quiet hours"
+    },
+    {
+      "id": "REM-013",
+      "name": "Snooze",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Snooze"
+    },
+    {
+      "id": "REM-014",
+      "name": "\"Period started\" notification action where supported",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "\"Period started\" notification action where supported"
+    },
+    {
+      "id": "REM-015",
+      "name": "Time-zone-aware scheduling",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Time-zone-aware scheduling"
+    },
+    {
+      "id": "REM-016",
+      "name": "Daylight-saving-aware scheduling",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Daylight-saving-aware scheduling"
+    },
+    {
+      "id": "REM-017",
+      "name": "Automatic rescheduling when prediction changes",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Automatic rescheduling when prediction changes"
+    },
+    {
+      "id": "REM-018",
+      "name": "Notification-permission health check",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Notification-permission health check"
+    },
+    {
+      "id": "REM-019",
+      "name": "Discreet notification contents",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Discreet notification contents"
+    },
+    {
+      "id": "REM-020",
+      "name": "Detailed notification contents only when opted in",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Detailed notification contents only when opted in"
+    },
+    {
+      "id": "REM-021",
+      "name": "Reminder Health dashboard",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Reminder Health dashboard"
+    },
+    {
+      "id": "REM-022",
+      "name": "Next scheduled reminder visibility",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Next scheduled reminder visibility"
+    },
+    {
+      "id": "REM-023",
+      "name": "Rebuild plan after relevant reboot/time/update/permission events where supported",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Rebuild plan after relevant reboot/time/update/permission events where supported"
+    },
+    {
+      "id": "REM-024",
+      "name": "Adaptive Android/iOS/PWA/browser delivery mechanism",
+      "family": "REM",
+      "route": "/app/reminders",
+      "surface_type": "interaction",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/reminder-health.spec.ts"
+      ],
+      "user_promise": "Adaptive Android/iOS/PWA/browser delivery mechanism"
+    },
+    {
+      "id": "LOG-001",
+      "name": "Cramps",
+      "family": "LOG",
+      "route": "/app/symptoms",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/SymptomsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Cramps"
+    },
+    {
+      "id": "LOG-002",
+      "name": "Headache/migraine",
+      "family": "LOG",
+      "route": "/app/symptoms",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/SymptomsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Headache/migraine"
+    },
+    {
+      "id": "LOG-003",
+      "name": "Back pain",
+      "family": "LOG",
+      "route": "/app/symptoms",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/SymptomsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Back pain"
+    },
+    {
+      "id": "LOG-004",
+      "name": "Breast tenderness",
+      "family": "LOG",
+      "route": "/app/symptoms",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/SymptomsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Breast tenderness"
+    },
+    {
+      "id": "LOG-005",
+      "name": "Bloating",
+      "family": "LOG",
+      "route": "/app/symptoms",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/SymptomsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Bloating"
+    },
+    {
+      "id": "LOG-006",
+      "name": "Acne",
+      "family": "LOG",
+      "route": "/app/symptoms",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/SymptomsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Acne"
+    },
+    {
+      "id": "LOG-007",
+      "name": "Nausea",
+      "family": "LOG",
+      "route": "/app/symptoms",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/SymptomsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Nausea"
+    },
+    {
+      "id": "LOG-008",
+      "name": "Digestion",
+      "family": "LOG",
+      "route": "/app/symptoms",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/SymptomsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Digestion"
+    },
+    {
+      "id": "LOG-009",
+      "name": "Fatigue",
+      "family": "LOG",
+      "route": "/app/symptoms",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/SymptomsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Fatigue"
+    },
+    {
+      "id": "LOG-010",
+      "name": "Dizziness",
+      "family": "LOG",
+      "route": "/app/symptoms",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/SymptomsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Dizziness"
+    },
+    {
+      "id": "LOG-011",
+      "name": "Appetite/cravings",
+      "family": "LOG",
+      "route": "/app/wellness",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/WellnessWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Appetite/cravings"
+    },
+    {
+      "id": "LOG-012",
+      "name": "Sleep",
+      "family": "LOG",
+      "route": "/app/wellness",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/WellnessWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Sleep"
+    },
+    {
+      "id": "LOG-013",
+      "name": "Energy",
+      "family": "LOG",
+      "route": "/app/wellness",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/WellnessWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Energy"
+    },
+    {
+      "id": "LOG-014",
+      "name": "Stress",
+      "family": "LOG",
+      "route": "/app/wellness",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/WellnessWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Stress"
+    },
+    {
+      "id": "LOG-015",
+      "name": "Mood",
+      "family": "LOG",
+      "route": "/app/wellness",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/WellnessWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Mood"
+    },
+    {
+      "id": "LOG-016",
+      "name": "Anxiety/irritability",
+      "family": "LOG",
+      "route": "/app/wellness",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/WellnessWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Anxiety/irritability"
+    },
+    {
+      "id": "LOG-017",
+      "name": "Libido",
+      "family": "LOG",
+      "route": "/app/wellness",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/WellnessWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Libido"
+    },
+    {
+      "id": "LOG-018",
+      "name": "Vaginal discharge",
+      "family": "LOG",
+      "route": "/app/reproductive-health",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/ReproductiveHealthWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Vaginal discharge"
+    },
+    {
+      "id": "LOG-019",
+      "name": "Cervical mucus",
+      "family": "LOG",
+      "route": "/app/reproductive-health",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/ReproductiveHealthWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Cervical mucus"
+    },
+    {
+      "id": "LOG-020",
+      "name": "Basal body temperature",
+      "family": "LOG",
+      "route": "/app/reproductive-health",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/ReproductiveHealthWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Basal body temperature"
+    },
+    {
+      "id": "LOG-021",
+      "name": "Weight",
+      "family": "LOG",
+      "route": "/app/wellness",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/WellnessWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Weight"
+    },
+    {
+      "id": "LOG-022",
+      "name": "Exercise",
+      "family": "LOG",
+      "route": "/app/wellness",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/WellnessWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Exercise"
+    },
+    {
+      "id": "LOG-023",
+      "name": "Water",
+      "family": "LOG",
+      "route": "/app/wellness",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/WellnessWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Water"
+    },
+    {
+      "id": "LOG-024",
+      "name": "Custom symptoms",
+      "family": "LOG",
+      "route": "/app/symptoms",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/SymptomsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Custom symptoms"
+    },
+    {
+      "id": "LOG-025",
+      "name": "Severity scales",
+      "family": "LOG",
+      "route": "/app/symptoms",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/SymptomsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Severity scales"
+    },
+    {
+      "id": "LOG-026",
+      "name": "Notes",
+      "family": "LOG",
+      "route": "/app/log",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/StructuredObservationWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Notes"
+    },
+    {
+      "id": "REPRO-001",
+      "name": "Ovulation-test recording",
+      "family": "REPRO",
+      "route": "/app/reproductive-health",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/ReproductiveHealthWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Ovulation-test recording"
+    },
+    {
+      "id": "REPRO-002",
+      "name": "Pregnancy-test recording",
+      "family": "REPRO",
+      "route": "/app/reproductive-health",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/ReproductiveHealthWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Pregnancy-test recording"
+    },
+    {
+      "id": "REPRO-003",
+      "name": "Basal-temperature fertility observations",
+      "family": "REPRO",
+      "route": "/app/reproductive-health",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/ReproductiveHealthWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Basal-temperature fertility observations"
+    },
+    {
+      "id": "REPRO-004",
+      "name": "Cervical-mucus observations",
+      "family": "REPRO",
+      "route": "/app/reproductive-health",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/ReproductiveHealthWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Cervical-mucus observations"
+    },
+    {
+      "id": "REPRO-005",
+      "name": "Sexual-activity logging",
+      "family": "REPRO",
+      "route": "/app/reproductive-health",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/ReproductiveHealthWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Sexual-activity logging"
+    },
+    {
+      "id": "REPRO-006",
+      "name": "Protection-used logging",
+      "family": "REPRO",
+      "route": "/app/reproductive-health",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/ReproductiveHealthWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Protection-used logging"
+    },
+    {
+      "id": "REPRO-007",
+      "name": "Contraception context",
+      "family": "REPRO",
+      "route": "/app/reproductive-health",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/ReproductiveHealthWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Contraception context"
+    },
+    {
+      "id": "REPRO-008",
+      "name": "Fertility observations",
+      "family": "REPRO",
+      "route": "/app/reproductive-health",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/ReproductiveHealthWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Fertility observations"
+    },
+    {
+      "id": "REPRO-009",
+      "name": "Pregnancy-planning context",
+      "family": "REPRO",
+      "route": "/app/reproductive-health",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/ReproductiveHealthWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Pregnancy-planning context"
+    },
+    {
+      "id": "REPRO-010",
+      "name": "No certified avoid-pregnancy claim in initial release",
+      "family": "REPRO",
+      "route": "/app/reproductive-health",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/logging/ReproductiveHealthWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "No certified avoid-pregnancy claim in initial release"
+    },
+    {
+      "id": "LIFE-001",
+      "name": "Regular-cycle mode",
+      "family": "LIFE",
+      "route": "/app/life-stage",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/life-stage/LifeStageWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Regular-cycle mode"
+    },
+    {
+      "id": "LIFE-002",
+      "name": "Trying-to-conceive mode",
+      "family": "LIFE",
+      "route": "/app/life-stage",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/life-stage/LifeStageWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Trying-to-conceive mode"
+    },
+    {
+      "id": "LIFE-003",
+      "name": "Pregnancy mode",
+      "family": "LIFE",
+      "route": "/app/life-stage",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/life-stage/LifeStageWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Pregnancy mode"
+    },
+    {
+      "id": "LIFE-004",
+      "name": "Postpartum mode",
+      "family": "LIFE",
+      "route": "/app/life-stage",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/life-stage/LifeStageWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Postpartum mode"
+    },
+    {
+      "id": "LIFE-005",
+      "name": "Breastfeeding context",
+      "family": "LIFE",
+      "route": "/app/life-stage",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/life-stage/LifeStageWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Breastfeeding context"
+    },
+    {
+      "id": "LIFE-006",
+      "name": "Perimenopause mode",
+      "family": "LIFE",
+      "route": "/app/life-stage",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/life-stage/LifeStageWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Perimenopause mode"
+    },
+    {
+      "id": "LIFE-007",
+      "name": "Menopause-transition tracking",
+      "family": "LIFE",
+      "route": "/app/life-stage",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/life-stage/LifeStageWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Menopause-transition tracking"
+    },
+    {
+      "id": "LIFE-008",
+      "name": "Hormonal-contraception context",
+      "family": "LIFE",
+      "route": "/app/life-stage",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/life-stage/LifeStageWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Hormonal-contraception context"
+    },
+    {
+      "id": "LIFE-009",
+      "name": "Changing mode never deletes previous history",
+      "family": "LIFE",
+      "route": "/app/life-stage",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/life-stage/LifeStageWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Changing mode never deletes previous history"
+    },
+    {
+      "id": "INS-001",
+      "name": "Average cycle length",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Average cycle length"
+    },
+    {
+      "id": "INS-002",
+      "name": "Average period duration",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Average period duration"
+    },
+    {
+      "id": "INS-003",
+      "name": "Cycle variation",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Cycle variation"
+    },
+    {
+      "id": "INS-004",
+      "name": "Shortest cycle",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Shortest cycle"
+    },
+    {
+      "id": "INS-005",
+      "name": "Longest cycle",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Longest cycle"
+    },
+    {
+      "id": "INS-006",
+      "name": "Flow patterns",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Flow patterns"
+    },
+    {
+      "id": "INS-007",
+      "name": "Symptom trends",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Symptom trends"
+    },
+    {
+      "id": "INS-008",
+      "name": "PMS patterns",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "PMS patterns"
+    },
+    {
+      "id": "INS-009",
+      "name": "Mood trends",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Mood trends"
+    },
+    {
+      "id": "INS-010",
+      "name": "Pain trends",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Pain trends"
+    },
+    {
+      "id": "INS-011",
+      "name": "Sleep correlations",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Sleep correlations"
+    },
+    {
+      "id": "INS-012",
+      "name": "Historical graphs",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Historical graphs"
+    },
+    {
+      "id": "INS-013",
+      "name": "Personal pattern observations",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Personal pattern observations"
+    },
+    {
+      "id": "INS-014",
+      "name": "Explain where an insight came from",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Explain where an insight came from"
+    },
+    {
+      "id": "INS-015",
+      "name": "Never invent medical explanations",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Never invent medical explanations"
+    },
+    {
+      "id": "INS-016",
+      "name": "Prediction-accuracy insight/history",
+      "family": "INS",
+      "route": "/app/insights",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/insights/InsightsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Prediction-accuracy insight/history"
+    },
+    {
+      "id": "RPT-001",
+      "name": "Select report date range",
+      "family": "RPT",
+      "route": "/app/reports",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reports/ReportsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Select report date range"
+    },
+    {
+      "id": "RPT-002",
+      "name": "Select included categories",
+      "family": "RPT",
+      "route": "/app/reports",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reports/ReportsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Select included categories"
+    },
+    {
+      "id": "RPT-003",
+      "name": "Generate concise cycle-history report",
+      "family": "RPT",
+      "route": "/app/reports",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reports/ReportsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Generate concise cycle-history report"
+    },
+    {
+      "id": "RPT-004",
+      "name": "Period dates",
+      "family": "RPT",
+      "route": "/app/reports",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reports/ReportsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Period dates"
+    },
+    {
+      "id": "RPT-005",
+      "name": "Flow history",
+      "family": "RPT",
+      "route": "/app/reports",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reports/ReportsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Flow history"
+    },
+    {
+      "id": "RPT-006",
+      "name": "Pain/symptom history",
+      "family": "RPT",
+      "route": "/app/reports",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reports/ReportsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Pain/symptom history"
+    },
+    {
+      "id": "RPT-007",
+      "name": "Temperature/ovulation observations",
+      "family": "RPT",
+      "route": "/app/reports",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reports/ReportsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Temperature/ovulation observations"
+    },
+    {
+      "id": "RPT-008",
+      "name": "Optional notes",
+      "family": "RPT",
+      "route": "/app/reports",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reports/ReportsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Optional notes"
+    },
+    {
+      "id": "RPT-009",
+      "name": "CSV export",
+      "family": "RPT",
+      "route": "/app/reports",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reports/ReportsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "CSV export"
+    },
+    {
+      "id": "RPT-010",
+      "name": "PDF export",
+      "family": "RPT",
+      "route": "/app/reports",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reports/ReportsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "PDF export"
+    },
+    {
+      "id": "RPT-011",
+      "name": "Preview report before sharing",
+      "family": "RPT",
+      "route": "/app/reports",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reports/ReportsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Preview report before sharing"
+    },
+    {
+      "id": "RPT-012",
+      "name": "Generate report locally",
+      "family": "RPT",
+      "route": "/app/reports",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reports/ReportsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Generate report locally"
+    },
+    {
+      "id": "RPT-013",
+      "name": "User decides exactly what is exported",
+      "family": "RPT",
+      "route": "/app/reports",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reports/ReportsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "User decides exactly what is exported"
+    },
+    {
+      "id": "INT-001",
+      "name": "Tap-based interaction",
+      "family": "INT",
+      "route": "/app/assistant",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/assistant/AssistantWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Tap-based interaction"
+    },
+    {
+      "id": "INT-002",
+      "name": "Text interaction",
+      "family": "INT",
+      "route": "/app/assistant",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/assistant/AssistantWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Text interaction"
+    },
+    {
+      "id": "INT-003",
+      "name": "Voice interaction where supported",
+      "family": "INT",
+      "route": "/app/assistant",
+      "surface_type": "platform-adapted",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/assistant/AssistantWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Voice interaction where supported"
+    },
+    {
+      "id": "INT-004",
+      "name": "Natural-language command box",
+      "family": "INT",
+      "route": "/app/assistant",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/assistant/AssistantWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Natural-language command box"
+    },
+    {
+      "id": "INT-005",
+      "name": "Local structured intent extraction",
+      "family": "INT",
+      "route": "/app/assistant",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/assistant/AssistantWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Local structured intent extraction"
+    },
+    {
+      "id": "INT-006",
+      "name": "Confirmation when ambiguous",
+      "family": "INT",
+      "route": "/app/assistant",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/assistant/AssistantWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Confirmation when ambiguous"
+    },
+    {
+      "id": "INT-007",
+      "name": "Ask questions about personal history",
+      "family": "INT",
+      "route": "/app/assistant",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/assistant/AssistantWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Ask questions about personal history"
+    },
+    {
+      "id": "INT-008",
+      "name": "Create reminders using natural language",
+      "family": "INT",
+      "route": "/app/assistant",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/assistant/AssistantWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Create reminders using natural language"
+    },
+    {
+      "id": "INT-009",
+      "name": "Search historical records",
+      "family": "INT",
+      "route": "/app/assistant",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/assistant/AssistantWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Search historical records"
+    },
+    {
+      "id": "PART-001",
+      "name": "Completely opt-in partner mode",
+      "family": "PART",
+      "route": "/app/sharing",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sharing/SharingWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Completely opt-in partner mode"
+    },
+    {
+      "id": "PART-002",
+      "name": "Granular sharing grant",
+      "family": "PART",
+      "route": "/app/sharing",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sharing/SharingWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Granular sharing grant"
+    },
+    {
+      "id": "PART-003",
+      "name": "Share predicted period",
+      "family": "PART",
+      "route": "/app/sharing",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sharing/SharingWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Share predicted period"
+    },
+    {
+      "id": "PART-004",
+      "name": "Share cycle phase",
+      "family": "PART",
+      "route": "/app/sharing",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sharing/SharingWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Share cycle phase"
+    },
+    {
+      "id": "PART-005",
+      "name": "Share selected reminders",
+      "family": "PART",
+      "route": "/app/sharing",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sharing/SharingWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Share selected reminders"
+    },
+    {
+      "id": "PART-006",
+      "name": "Share selected wellness status",
+      "family": "PART",
+      "route": "/app/sharing",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sharing/SharingWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Share selected wellness status"
+    },
+    {
+      "id": "PART-007",
+      "name": "Sensitive categories excluded by default",
+      "family": "PART",
+      "route": "/app/sharing",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sharing/SharingWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Sensitive categories excluded by default"
+    },
+    {
+      "id": "PART-008",
+      "name": "Revoke access immediately",
+      "family": "PART",
+      "route": "/app/sharing",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sharing/SharingWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Revoke access immediately"
+    },
+    {
+      "id": "PART-009",
+      "name": "Manual/zero-backend sharing path",
+      "family": "PART",
+      "route": "/app/sharing",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sharing/SharingWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Manual/zero-backend sharing path"
+    },
+    {
+      "id": "PART-010",
+      "name": "E2EE live-sharing transport interface",
+      "family": "PART",
+      "route": "/app/sharing",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sharing/SharingWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "E2EE live-sharing transport interface"
+    },
+    {
+      "id": "HEALTH-001",
+      "name": "Apple HealthKit integration",
+      "family": "HEALTH",
+      "route": "/app/settings",
+      "surface_type": "platform-adapted",
+      "web_applicability": "na",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Apple HealthKit integration"
+    },
+    {
+      "id": "HEALTH-002",
+      "name": "Android Health Connect integration",
+      "family": "HEALTH",
+      "route": "/app/settings",
+      "surface_type": "platform-adapted",
+      "web_applicability": "na",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Android Health Connect integration"
+    },
+    {
+      "id": "HEALTH-003",
+      "name": "Import supported reproductive-health records",
+      "family": "HEALTH",
+      "route": "/app/settings",
+      "surface_type": "platform-adapted",
+      "web_applicability": "na",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Import supported reproductive-health records"
+    },
+    {
+      "id": "HEALTH-004",
+      "name": "Export supported records where platform permits",
+      "family": "HEALTH",
+      "route": "/app/settings",
+      "surface_type": "platform-adapted",
+      "web_applicability": "na",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Export supported records where platform permits"
+    },
+    {
+      "id": "HEALTH-005",
+      "name": "Explicit granular permissions",
+      "family": "HEALTH",
+      "route": "/app/settings",
+      "surface_type": "platform-adapted",
+      "web_applicability": "na",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Explicit granular permissions"
+    },
+    {
+      "id": "HEALTH-006",
+      "name": "Record provenance/source tracking",
+      "family": "HEALTH",
+      "route": "/app/settings",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Record provenance/source tracking"
+    },
+    {
+      "id": "HEALTH-007",
+      "name": "External record ID/revision tracking",
+      "family": "HEALTH",
+      "route": "/app/settings",
+      "surface_type": "status",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "External record ID/revision tracking"
+    },
+    {
+      "id": "HEALTH-008",
+      "name": "Duplicate prevention/deduplication",
+      "family": "HEALTH",
+      "route": "/app/settings",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Duplicate prevention/deduplication"
+    },
+    {
+      "id": "HEALTH-009",
+      "name": "Sreva vault remains authoritative application datastore",
+      "family": "HEALTH",
+      "route": "/app/settings",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Sreva vault remains authoritative application datastore"
+    },
+    {
+      "id": "A11Y-001",
+      "name": "Dark mode",
+      "family": "A11Y",
+      "route": "/app/settings",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Dark mode"
+    },
+    {
+      "id": "A11Y-002",
+      "name": "Light mode",
+      "family": "A11Y",
+      "route": "/app/settings",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Light mode"
+    },
+    {
+      "id": "A11Y-003",
+      "name": "Dynamic text/scaling",
+      "family": "A11Y",
+      "route": "/app/settings",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Dynamic text/scaling"
+    },
+    {
+      "id": "A11Y-004",
+      "name": "Screen-reader support",
+      "family": "A11Y",
+      "route": "/app/settings",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Screen-reader support"
+    },
+    {
+      "id": "A11Y-005",
+      "name": "Colour-blind-safe states",
+      "family": "A11Y",
+      "route": "/app/settings",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Colour-blind-safe states"
+    },
+    {
+      "id": "A11Y-006",
+      "name": "One-handed mobile interaction",
+      "family": "A11Y",
+      "route": "/app/settings",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "One-handed mobile interaction"
+    },
+    {
+      "id": "A11Y-007",
+      "name": "Low-literacy/easy-language mode",
+      "family": "A11Y",
+      "route": "/app/settings",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Low-literacy/easy-language mode"
+    },
+    {
+      "id": "A11Y-008",
+      "name": "RTL languages",
+      "family": "A11Y",
+      "route": "/app/settings",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "RTL languages"
+    },
+    {
+      "id": "A11Y-009",
+      "name": "Localization infrastructure",
+      "family": "A11Y",
+      "route": "/app/settings",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Localization infrastructure"
+    },
+    {
+      "id": "A11Y-010",
+      "name": "Metric/imperial settings",
+      "family": "A11Y",
+      "route": "/app/settings",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Metric/imperial settings"
+    },
+    {
+      "id": "A11Y-011",
+      "name": "Locale-specific dates",
+      "family": "A11Y",
+      "route": "/app/settings",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Locale-specific dates"
+    },
+    {
+      "id": "A11Y-012",
+      "name": "12/24-hour time",
+      "family": "A11Y",
+      "route": "/app/settings",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "12/24-hour time"
+    },
+    {
+      "id": "A11Y-013",
+      "name": "Offline operation",
+      "family": "A11Y",
+      "route": "/app/settings",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Offline operation"
+    },
+    {
+      "id": "A11Y-014",
+      "name": "Poor-network resilience",
+      "family": "A11Y",
+      "route": "/app/settings",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "Poor-network resilience"
+    },
+    {
+      "id": "A11Y-015",
+      "name": "High-contrast presentation",
+      "family": "A11Y",
+      "route": "/app/settings",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/settings/SettingsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/accessibility-i18n.spec.ts"
+      ],
+      "user_promise": "High-contrast presentation"
+    },
+    {
+      "id": "PRIV-001",
+      "name": "Biometric app lock",
+      "family": "PRIV",
+      "route": "/app/privacy",
+      "surface_type": "protection",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/privacy/PrivacyWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Biometric app lock"
+    },
+    {
+      "id": "PRIV-002",
+      "name": "PIN fallback",
+      "family": "PRIV",
+      "route": "/app/privacy",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/privacy/PrivacyWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "PIN fallback"
+    },
+    {
+      "id": "PRIV-003",
+      "name": "Hide sensitive notification contents",
+      "family": "PRIV",
+      "route": "/app/privacy",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/privacy/PrivacyWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Hide sensitive notification contents"
+    },
+    {
+      "id": "PRIV-004",
+      "name": "Offline-only operation",
+      "family": "PRIV",
+      "route": "/app/privacy",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/privacy/PrivacyWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Offline-only operation"
+    },
+    {
+      "id": "PRIV-005",
+      "name": "Full no-account mode",
+      "family": "PRIV",
+      "route": "/app/privacy",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/privacy/PrivacyWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Full no-account mode"
+    },
+    {
+      "id": "PRIV-006",
+      "name": "Delete individual records",
+      "family": "PRIV",
+      "route": "/app/privacy",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/privacy/PrivacyWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Delete individual records"
+    },
+    {
+      "id": "PRIV-007",
+      "name": "Delete account",
+      "family": "PRIV",
+      "route": "/app/account",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/AccountWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Delete account"
+    },
+    {
+      "id": "PRIV-008",
+      "name": "Export all user data",
+      "family": "PRIV",
+      "route": "/app/vault",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Export all user data"
+    },
+    {
+      "id": "PRIV-009",
+      "name": "Review permissions",
+      "family": "PRIV",
+      "route": "/app/privacy",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/privacy/PrivacyWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Review permissions"
+    },
+    {
+      "id": "PRIV-010",
+      "name": "Review connected devices",
+      "family": "PRIV",
+      "route": "/app/devices",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/DevicesWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Review connected devices"
+    },
+    {
+      "id": "PRIV-011",
+      "name": "Review partner access",
+      "family": "PRIV",
+      "route": "/app/sharing",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sharing/SharingWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Review partner access"
+    },
+    {
+      "id": "PRIV-012",
+      "name": "Revoke partner access",
+      "family": "PRIV",
+      "route": "/app/sharing",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sharing/SharingWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Revoke partner access"
+    },
+    {
+      "id": "PRIV-013",
+      "name": "Session/device management",
+      "family": "PRIV",
+      "route": "/app/devices",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/DevicesWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Session/device management"
+    },
+    {
+      "id": "PRIV-014",
+      "name": "Automatic lock",
+      "family": "PRIV",
+      "route": "/app/privacy",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/privacy/PrivacyWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Automatic lock"
+    },
+    {
+      "id": "PRIV-015",
+      "name": "App-switcher preview protection",
+      "family": "PRIV",
+      "route": "/app/privacy",
+      "surface_type": "protection",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/privacy/PrivacyWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "App-switcher preview protection"
+    },
+    {
+      "id": "PRIV-016",
+      "name": "Clipboard restrictions where supported",
+      "family": "PRIV",
+      "route": "/app/privacy",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/privacy/PrivacyWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Clipboard restrictions where supported"
+    },
+    {
+      "id": "PRIV-017",
+      "name": "Sensitive-screen protection where supported",
+      "family": "PRIV",
+      "route": "/app/privacy",
+      "surface_type": "protection",
+      "web_applicability": "adapted",
+      "implementation": [
+        "web/src/features/privacy/PrivacyWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Sensitive-screen protection where supported"
+    },
+    {
+      "id": "PRIV-018",
+      "name": "Maximum/Balanced/Detailed notification privacy",
+      "family": "PRIV",
+      "route": "/app/reminders",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "Maximum/Balanced/Detailed notification privacy"
+    },
+    {
+      "id": "PRIV-019",
+      "name": "\"Why is this stored?\" transparency",
+      "family": "PRIV",
+      "route": "/app/privacy",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/privacy/PrivacyWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "\"Why is this stored?\" transparency"
+    },
+    {
+      "id": "PRIV-020",
+      "name": "No health payload in ordinary logs/analytics",
+      "family": "PRIV",
+      "route": "/app/privacy",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/privacy/PrivacyWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "No health payload in ordinary logs/analytics"
+    },
+    {
+      "id": "PRIV-021",
+      "name": "No advertising profile from reproductive-health data",
+      "family": "PRIV",
+      "route": "/app/privacy",
+      "surface_type": "protection",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/privacy/PrivacyWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/task13-local-intelligence.spec.ts"
+      ],
+      "user_promise": "No advertising profile from reproductive-health data"
+    },
+    {
+      "id": "VAULT-001",
+      "name": "Encrypted local health vault",
+      "family": "VAULT",
+      "route": "/app/vault",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/cyclevault-production.spec.ts"
+      ],
+      "user_promise": "Encrypted local health vault"
+    },
+    {
+      "id": "VAULT-002",
+      "name": "Device-protected encryption key",
+      "family": "VAULT",
+      "route": "/app/vault",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/cyclevault-production.spec.ts"
+      ],
+      "user_promise": "Device-protected encryption key"
+    },
+    {
+      "id": "VAULT-003",
+      "name": "Encrypted CycleVault backup",
+      "family": "VAULT",
+      "route": "/app/vault",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/cyclevault-production.spec.ts"
+      ],
+      "user_promise": "Encrypted CycleVault backup"
+    },
+    {
+      "id": "VAULT-004",
+      "name": "Versioned backup format",
+      "family": "VAULT",
+      "route": "/app/vault",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/cyclevault-production.spec.ts"
+      ],
+      "user_promise": "Versioned backup format"
+    },
+    {
+      "id": "VAULT-005",
+      "name": "Backup integrity metadata",
+      "family": "VAULT",
+      "route": "/app/vault",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/cyclevault-production.spec.ts"
+      ],
+      "user_promise": "Backup integrity metadata"
+    },
+    {
+      "id": "VAULT-006",
+      "name": "User-selected backup destination",
+      "family": "VAULT",
+      "route": "/app/vault",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/cyclevault-production.spec.ts"
+      ],
+      "user_promise": "User-selected backup destination"
+    },
+    {
+      "id": "VAULT-007",
+      "name": "Restore integrity validation",
+      "family": "VAULT",
+      "route": "/app/vault",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/cyclevault-production.spec.ts"
+      ],
+      "user_promise": "Restore integrity validation"
+    },
+    {
+      "id": "VAULT-008",
+      "name": "Schema-compatibility validation",
+      "family": "VAULT",
+      "route": "/app/vault",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/cyclevault-production.spec.ts"
+      ],
+      "user_promise": "Schema-compatibility validation"
+    },
+    {
+      "id": "VAULT-009",
+      "name": "Atomic restore",
+      "family": "VAULT",
+      "route": "/app/vault",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/cyclevault-production.spec.ts"
+      ],
+      "user_promise": "Atomic restore"
+    },
+    {
+      "id": "VAULT-010",
+      "name": "Pre-migration snapshot",
+      "family": "VAULT",
+      "route": "/app/vault",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/cyclevault-production.spec.ts"
+      ],
+      "user_promise": "Pre-migration snapshot"
+    },
+    {
+      "id": "VAULT-011",
+      "name": "Transactional database migration",
+      "family": "VAULT",
+      "route": "/app/vault",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/cyclevault-production.spec.ts"
+      ],
+      "user_promise": "Transactional database migration"
+    },
+    {
+      "id": "VAULT-012",
+      "name": "Rollback on migration failure",
+      "family": "VAULT",
+      "route": "/app/vault",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/cyclevault-production.spec.ts"
+      ],
+      "user_promise": "Rollback on migration failure"
+    },
+    {
+      "id": "VAULT-013",
+      "name": "Support users skipping application versions",
+      "family": "VAULT",
+      "route": "/app/vault",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/cyclevault-production.spec.ts"
+      ],
+      "user_promise": "Support users skipping application versions"
+    },
+    {
+      "id": "VAULT-014",
+      "name": "Health-vault integrity check",
+      "family": "VAULT",
+      "route": "/app/vault",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/cyclevault-production.spec.ts"
+      ],
+      "user_promise": "Health-vault integrity check"
+    },
+    {
+      "id": "DIAG-001",
+      "name": "User-generated sanitized diagnostic export",
+      "family": "DIAG",
+      "route": "/app/diagnostics",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/diagnostics/DiagnosticsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "User-generated sanitized diagnostic export"
+    },
+    {
+      "id": "DIAG-002",
+      "name": "Preview diagnostic report before sharing",
+      "family": "DIAG",
+      "route": "/app/diagnostics",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/diagnostics/DiagnosticsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Preview diagnostic report before sharing"
+    },
+    {
+      "id": "DIAG-003",
+      "name": "App version",
+      "family": "DIAG",
+      "route": "/app/diagnostics",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/diagnostics/DiagnosticsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "App version"
+    },
+    {
+      "id": "DIAG-004",
+      "name": "Database-schema version",
+      "family": "DIAG",
+      "route": "/app/diagnostics",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/diagnostics/DiagnosticsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Database-schema version"
+    },
+    {
+      "id": "DIAG-005",
+      "name": "Prediction-engine version",
+      "family": "DIAG",
+      "route": "/app/diagnostics",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/diagnostics/DiagnosticsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Prediction-engine version"
+    },
+    {
+      "id": "DIAG-006",
+      "name": "Reminder-engine version",
+      "family": "DIAG",
+      "route": "/app/diagnostics",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/diagnostics/DiagnosticsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Reminder-engine version"
+    },
+    {
+      "id": "DIAG-007",
+      "name": "Health-adapter version/status",
+      "family": "DIAG",
+      "route": "/app/diagnostics",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/diagnostics/DiagnosticsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Health-adapter version/status"
+    },
+    {
+      "id": "DIAG-008",
+      "name": "Notification state",
+      "family": "DIAG",
+      "route": "/app/diagnostics",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/diagnostics/DiagnosticsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Notification state"
+    },
+    {
+      "id": "DIAG-009",
+      "name": "Last migration status",
+      "family": "DIAG",
+      "route": "/app/diagnostics",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/diagnostics/DiagnosticsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Last migration status"
+    },
+    {
+      "id": "DIAG-010",
+      "name": "Integrity-check status",
+      "family": "DIAG",
+      "route": "/app/diagnostics",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/diagnostics/DiagnosticsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Integrity-check status"
+    },
+    {
+      "id": "DIAG-011",
+      "name": "Never include health payloads by default",
+      "family": "DIAG",
+      "route": "/app/diagnostics",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/diagnostics/DiagnosticsWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Never include health payloads by default"
+    },
+    {
+      "id": "ID-001",
+      "name": "Full account-free Sreva experience",
+      "family": "ID",
+      "route": "/app/account",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/AccountWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Full account-free Sreva experience"
+    },
+    {
+      "id": "ID-002",
+      "name": "Full account-based Sreva experience",
+      "family": "ID",
+      "route": "/app/account",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/AccountWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Full account-based Sreva experience"
+    },
+    {
+      "id": "ID-003",
+      "name": "Email-only account permitted",
+      "family": "ID",
+      "route": "/app/account",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/AccountWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Email-only account permitted"
+    },
+    {
+      "id": "ID-004",
+      "name": "Mobile-number-only account permitted",
+      "family": "ID",
+      "route": "/app/account",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/AccountWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Mobile-number-only account permitted"
+    },
+    {
+      "id": "ID-005",
+      "name": "Email + mobile-number account permitted",
+      "family": "ID",
+      "route": "/app/account",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/AccountWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Email + mobile-number account permitted"
+    },
+    {
+      "id": "ID-006",
+      "name": "Mobile number remains optional",
+      "family": "ID",
+      "route": "/app/account",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/AccountWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Mobile number remains optional"
+    },
+    {
+      "id": "ID-007",
+      "name": "Passkey setup/sign-in",
+      "family": "ID",
+      "route": "/app/account",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/AccountWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Passkey setup/sign-in"
+    },
+    {
+      "id": "ID-008",
+      "name": "Trusted-device approval",
+      "family": "ID",
+      "route": "/app/devices",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/DevicesWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Trusted-device approval"
+    },
+    {
+      "id": "ID-009",
+      "name": "Emergency recovery key",
+      "family": "ID",
+      "route": "/app/recovery",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/RecoveryWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Emergency recovery key"
+    },
+    {
+      "id": "ID-010",
+      "name": "Email may recover account identity",
+      "family": "ID",
+      "route": "/app/recovery",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/RecoveryWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Email may recover account identity"
+    },
+    {
+      "id": "ID-011",
+      "name": "SMS may recover account identity",
+      "family": "ID",
+      "route": "/app/recovery",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/RecoveryWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "SMS may recover account identity"
+    },
+    {
+      "id": "ID-012",
+      "name": "Email/SMS alone cannot decrypt old vault",
+      "family": "ID",
+      "route": "/app/recovery",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/RecoveryWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Email/SMS alone cannot decrypt old vault"
+    },
+    {
+      "id": "ID-013",
+      "name": "Account-free and account modes remain equal-class",
+      "family": "ID",
+      "route": "/app/recovery",
+      "surface_type": "interaction",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/RecoveryWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Account-free and account modes remain equal-class"
+    },
+    {
+      "id": "SYNC-001",
+      "name": "End-to-end encrypted multi-device sync",
+      "family": "SYNC",
+      "route": "/app/sync",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sync/SyncWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "End-to-end encrypted multi-device sync"
+    },
+    {
+      "id": "SYNC-002",
+      "name": "Android ↔ iOS ↔ Web continuity",
+      "family": "SYNC",
+      "route": "/app/sync",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sync/SyncWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Android ↔ iOS ↔ Web continuity"
+    },
+    {
+      "id": "SYNC-003",
+      "name": "Server stores health content only as ciphertext",
+      "family": "SYNC",
+      "route": "/app/sync",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sync/SyncWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Server stores health content only as ciphertext"
+    },
+    {
+      "id": "SYNC-004",
+      "name": "Encrypt locally before synchronization",
+      "family": "SYNC",
+      "route": "/app/sync",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sync/SyncWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Encrypt locally before synchronization"
+    },
+    {
+      "id": "SYNC-005",
+      "name": "Decrypt locally after synchronization",
+      "family": "SYNC",
+      "route": "/app/sync",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sync/SyncWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Decrypt locally after synchronization"
+    },
+    {
+      "id": "SYNC-006",
+      "name": "Trusted-device list",
+      "family": "SYNC",
+      "route": "/app/devices",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/DevicesWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Trusted-device list"
+    },
+    {
+      "id": "SYNC-007",
+      "name": "Rename trusted device",
+      "family": "SYNC",
+      "route": "/app/devices",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/DevicesWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Rename trusted device"
+    },
+    {
+      "id": "SYNC-008",
+      "name": "Remove/revoke device",
+      "family": "SYNC",
+      "route": "/app/devices",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/DevicesWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Remove/revoke device"
+    },
+    {
+      "id": "SYNC-009",
+      "name": "Pause synchronization",
+      "family": "SYNC",
+      "route": "/app/sync",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sync/SyncWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Pause synchronization"
+    },
+    {
+      "id": "SYNC-010",
+      "name": "Disable synchronization",
+      "family": "SYNC",
+      "route": "/app/sync",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sync/SyncWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Disable synchronization"
+    },
+    {
+      "id": "SYNC-011",
+      "name": "Last successful sync state",
+      "family": "SYNC",
+      "route": "/app/sync",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sync/SyncWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Last successful sync state"
+    },
+    {
+      "id": "SYNC-012",
+      "name": "Pending-change state",
+      "family": "SYNC",
+      "route": "/app/sync",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sync/SyncWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Pending-change state"
+    },
+    {
+      "id": "SYNC-013",
+      "name": "Deterministic/conflict-safe reconciliation",
+      "family": "SYNC",
+      "route": "/app/sync",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sync/SyncWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Deterministic/conflict-safe reconciliation"
+    },
+    {
+      "id": "SYNC-014",
+      "name": "New-device approval/key transfer",
+      "family": "SYNC",
+      "route": "/app/devices",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/account/DevicesWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "New-device approval/key transfer"
+    },
+    {
+      "id": "SYNC-015",
+      "name": "Infrastructure cannot decrypt health vault",
+      "family": "SYNC",
+      "route": "/app/sync",
+      "surface_type": "provider-dependent",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/sync/SyncWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/product-completeness.spec.ts"
+      ],
+      "user_promise": "Infrastructure cannot decrypt health vault"
+    },
+    {
+      "id": "WEB-001",
+      "name": "Full browser-based Sreva client",
+      "family": "WEB",
+      "route": "/app/more",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/app/app/more/page.tsx"
+      ],
+      "evidence": [
+        "web/e2e/navigation.spec.ts"
+      ],
+      "user_promise": "Full browser-based Sreva client"
+    },
+    {
+      "id": "WEB-002",
+      "name": "Installable PWA",
+      "family": "WEB",
+      "route": "/install/pwa",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/components/pwa/InstallGuide.tsx"
+      ],
+      "evidence": [
+        "web/e2e/navigation.spec.ts"
+      ],
+      "user_promise": "Installable PWA"
+    },
+    {
+      "id": "WEB-003",
+      "name": "Standalone Home Screen/Desktop experience",
+      "family": "WEB",
+      "route": "/install/pwa",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/components/pwa/InstallGuide.tsx"
+      ],
+      "evidence": [
+        "web/e2e/navigation.spec.ts"
+      ],
+      "user_promise": "Standalone Home Screen/Desktop experience"
+    },
+    {
+      "id": "WEB-004",
+      "name": "Offline PWA application shell",
+      "family": "WEB",
+      "route": "/install/pwa",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/components/pwa/InstallGuide.tsx"
+      ],
+      "evidence": [
+        "web/e2e/navigation.spec.ts"
+      ],
+      "user_promise": "Offline PWA application shell"
+    },
+    {
+      "id": "WEB-005",
+      "name": "Encrypted browser-local health vault",
+      "family": "WEB",
+      "route": "/app/vault",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/vault/CycleVaultWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/navigation.spec.ts"
+      ],
+      "user_promise": "Encrypted browser-local health vault"
+    },
+    {
+      "id": "WEB-006",
+      "name": "Web Push where supported",
+      "family": "WEB",
+      "route": "/app/reminders",
+      "surface_type": "platform-adapted",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/navigation.spec.ts"
+      ],
+      "user_promise": "Web Push where supported"
+    },
+    {
+      "id": "WEB-007",
+      "name": "Browser/in-app reminder fallback",
+      "family": "WEB",
+      "route": "/app/reminders",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/features/reminders/ReminderWorkspace.tsx"
+      ],
+      "evidence": [
+        "web/e2e/navigation.spec.ts"
+      ],
+      "user_promise": "Browser/in-app reminder fallback"
+    },
+    {
+      "id": "WEB-008",
+      "name": "Easy iPhone PWA-install guidance",
+      "family": "WEB",
+      "route": "/install/iphone",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/components/pwa/InstallGuide.tsx"
+      ],
+      "evidence": [
+        "web/e2e/navigation.spec.ts"
+      ],
+      "user_promise": "Easy iPhone PWA-install guidance"
+    },
+    {
+      "id": "WEB-009",
+      "name": "Easy Android/PWA-install guidance",
+      "family": "WEB",
+      "route": "/install/android",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/components/pwa/InstallGuide.tsx"
+      ],
+      "evidence": [
+        "web/e2e/navigation.spec.ts"
+      ],
+      "user_promise": "Easy Android/PWA-install guidance"
+    },
+    {
+      "id": "WEB-010",
+      "name": "Responsive desktop/tablet/mobile layouts",
+      "family": "WEB",
+      "route": "/",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/app/page.tsx"
+      ],
+      "evidence": [
+        "web/e2e/navigation.spec.ts"
+      ],
+      "user_promise": "Responsive desktop/tablet/mobile layouts"
+    },
+    {
+      "id": "WEB-011",
+      "name": "Shareable/deep-linkable public pages",
+      "family": "WEB",
+      "route": "/features",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/components/CapabilityCatalogue.tsx"
+      ],
+      "evidence": [
+        "web/e2e/navigation.spec.ts"
+      ],
+      "user_promise": "Shareable/deep-linkable public pages"
+    },
+    {
+      "id": "WEB-012",
+      "name": "Seamless public-site → private-workspace transition",
+      "family": "WEB",
+      "route": "/",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/app/page.tsx"
+      ],
+      "evidence": [
+        "web/e2e/navigation.spec.ts"
+      ],
+      "user_promise": "Seamless public-site → private-workspace transition"
+    },
+    {
+      "id": "WEB-013",
+      "name": "Android download/store entry",
+      "family": "WEB",
+      "route": "/download",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/components/PublicTopicContent.tsx"
+      ],
+      "evidence": [
+        "web/e2e/navigation.spec.ts"
+      ],
+      "user_promise": "Android download/store entry"
+    },
+    {
+      "id": "WEB-014",
+      "name": "Native iOS store entry when available",
+      "family": "WEB",
+      "route": "/download",
+      "surface_type": "status",
+      "web_applicability": "full",
+      "implementation": [
+        "web/src/components/PublicTopicContent.tsx"
+      ],
+      "evidence": [
+        "web/e2e/navigation.spec.ts"
+      ],
+      "user_promise": "Native iOS store entry when available"
+    }
+  ]
+}

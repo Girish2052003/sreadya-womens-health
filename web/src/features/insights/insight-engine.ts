@@ -35,6 +35,8 @@ export type InsightSnapshot = {
   observationCounts: Partial<Record<ObservationKind, number>>;
   observationalMessages: string[];
   predictionEvaluation?: PredictionEvaluation;
+  cycleLengths: number[];
+  pmsPatternMessages: string[];
   provenance: InsightProvenance;
 };
 
@@ -165,6 +167,7 @@ export function summarizeInsights({
   }
 
   const observationalMessages: string[] = [];
+  const pmsPatternMessages: string[] = [];
   const timingKinds: Array<[ObservationKind, string]> = [
     ['cramps', 'Cramps'],
     ['headache', 'Headaches'],
@@ -177,6 +180,24 @@ export function summarizeInsights({
   for (const [kind, label] of timingKinds) {
     const days = cycleDaysFor(kind, ordered, observations);
     if (days.length >= 2) observationalMessages.push(symptomTimingInsight(label, days));
+  }
+
+  const pmsKinds = new Set<ObservationKind>(['cramps', 'bloating', 'breastTenderness', 'headache', 'migraine', 'fatigue', 'mood', 'irritability']);
+  const pmsCounts = new Map<ObservationKind, number>();
+  for (const observation of observations) {
+    if (!pmsKinds.has(observation.kind)) continue;
+    const observationDay = utcDateMs(observation.occurredAt);
+    const nextPeriod = ordered.find((period) => utcDateMs(period.start) > observationDay);
+    if (!nextPeriod) continue;
+    const daysBefore = Math.round((utcDateMs(nextPeriod.start) - observationDay) / DAY_MS);
+    if (daysBefore >= 1 && daysBefore <= 7) {
+      pmsCounts.set(observation.kind, (pmsCounts.get(observation.kind) ?? 0) + 1);
+    }
+  }
+  for (const [kind, count] of pmsCounts) {
+    pmsPatternMessages.push(
+      `${title(kind)} was recorded ${count} time${count === 1 ? '' : 's'} in the seven days before a recorded period. This is an observed timing pattern, not a PMS diagnosis.`,
+    );
   }
 
   const flowEntries = Object.entries(flowCounts) as Array<[FlowLevel, number]>;
@@ -197,6 +218,8 @@ export function summarizeInsights({
     observationCounts,
     observationalMessages,
     ...(predictionEvaluation ? { predictionEvaluation } : {}),
+    cycleLengths,
+    pmsPatternMessages,
     provenance: buildProvenance(ordered, observations),
   };
 }

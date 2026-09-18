@@ -53,8 +53,9 @@ test('Task 13 workspaces are account-free, local-first and truthful', async ({ p
     await expect(page.getByText('Sign in required')).toHaveCount(0);
   }
 
-  await expect(page.getByText('Unavailable — Phase F is not enabled')).toBeVisible();
-  await expect(page.getByText('Unavailable in this Web build')).toBeVisible();
+  await expect(page.getByText('Remote continuity endpoint not configured')).toBeVisible();
+  await expect(page.getByText(/PIN app lock available but not configured/)).toBeVisible();
+  await expect(page.getByText(/native biometric protection not claimed/)).toBeVisible();
   await expect(page.getByText(/Browser controlled — no Web guarantee/)).toBeVisible();
   expect(remoteRequests).toEqual([]);
 });

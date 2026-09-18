@@ -1,24 +1,17 @@
 import { notFound } from 'next/navigation';
 
-import { AccessibilityPreferencesWorkspace } from '../../../accessibility/AccessibilityPreferencesWorkspace';
 import { WorkspaceNav } from '../../../components/navigation/WorkspaceNav';
-import { Card } from '../../../components/ui/Card';
 import { StatusChip } from '../../../components/ui/StatusChip';
 import { workspaceSections, workspaceTitles } from '../../../content/routes';
 import { AccountFreeWorkspace } from '../../../features/core/AccountFreeWorkspace';
 
-const TASK10_CORE_SECTIONS = ['home', 'today', 'log', 'calendar', 'cycle'] as const;
-type Task10CoreSection = (typeof TASK10_CORE_SECTIONS)[number];
+const CORE_SECTIONS = ['home', 'today', 'log', 'calendar', 'cycle'] as const;
+type CoreSection = (typeof CORE_SECTIONS)[number];
+
 const DEDICATED_WORKSPACE_SECTIONS = new Set([
-  'predictions',
-  'reminders',
-  'life-stage',
-  'insights',
-  'reports',
-  'assistant',
-  'sharing',
-  'privacy',
-  'vault',
+  'predictions', 'reminders', 'symptoms', 'wellness', 'medication', 'reproductive-health',
+  'life-stage', 'insights', 'reports', 'assistant', 'sharing', 'privacy', 'vault',
+  'sync', 'devices', 'account', 'recovery', 'diagnostics', 'settings', 'more',
 ]);
 
 export function generateStaticParams() {
@@ -32,16 +25,17 @@ function activeKey(section: string) {
   return 'more';
 }
 
-function isTask10CoreSection(section: string): section is Task10CoreSection {
-  return (TASK10_CORE_SECTIONS as readonly string[]).includes(section);
+function isCoreSection(section: string): section is CoreSection {
+  return (CORE_SECTIONS as readonly string[]).includes(section);
 }
 
 export default async function WorkspaceSection({ params }: { params: Promise<{ section: string }> }) {
   const { section } = await params;
   if (!workspaceSections.includes(section as (typeof workspaceSections)[number])) notFound();
   if (DEDICATED_WORKSPACE_SECTIONS.has(section)) notFound();
-  const key = section as (typeof workspaceSections)[number];
-  const title = workspaceTitles[key];
+  if (!isCoreSection(section)) notFound();
+
+  const title = workspaceTitles[section];
 
   return (
     <div className="workspace-shell">
@@ -54,21 +48,7 @@ export default async function WorkspaceSection({ params }: { params: Promise<{ s
           </div>
           <StatusChip tone="success">Local-first</StatusChip>
         </header>
-
-        {isTask10CoreSection(key) ? <AccountFreeWorkspace section={key} /> : null}
-        {key === 'settings' ? <AccessibilityPreferencesWorkspace /> : null}
-
-        {!isTask10CoreSection(key) && key !== 'settings' ? (
-          <div className="workspace-grid">
-            <Card eyebrow="Sreva" title={title}>
-              <p>This workspace is ready for the capability implementation assigned to this route.</p>
-              <p className="workspace-note">Core health functions remain available without an account.</p>
-            </Card>
-            <Card eyebrow="Privacy boundary" title="Your device stays authoritative">
-              <p>Sreva keeps local health work separate from optional continuity and never treats telemetry as a requirement.</p>
-            </Card>
-          </div>
-        ) : null}
+        <AccountFreeWorkspace section={section} />
       </main>
     </div>
   );

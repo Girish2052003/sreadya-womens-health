@@ -25,11 +25,14 @@ test('accessibility preferences apply immediately and persist locally', async ({
   await page.getByLabel('Large').check();
   await page.getByLabel('Reduce motion').check();
   await page.getByLabel('High contrast').check();
+  await page.getByRole('radio', { name: 'Easy language' }).check();
 
   const root = page.locator('html');
   await expect(root).toHaveAttribute('data-sreva-text-scale', 'large');
   await expect(root).toHaveAttribute('data-sreva-motion', 'reduced');
   await expect(root).toHaveAttribute('data-sreva-contrast', 'high');
+  await expect(root).toHaveAttribute('data-sreva-language-mode', 'easy');
+  await expect(page.getByLabel('Easy language guide')).toBeVisible();
 
   await page.getByRole('button', { name: 'Save accessibility preferences' }).click();
   await expect(page.getByRole('status')).toContainText('Accessibility preferences saved on this device.');
@@ -40,15 +43,19 @@ test('accessibility preferences apply immediately and persist locally', async ({
     textScale: 'large',
     motion: 'reduced',
     contrast: 'high',
+    easyLanguage: true,
   });
 
   await page.reload();
   await expect(page.getByLabel('Large')).toBeChecked();
   await expect(page.getByLabel('Reduce motion')).toBeChecked();
   await expect(page.getByLabel('High contrast')).toBeChecked();
+  await expect(page.getByRole('radio', { name: 'Easy language' })).toBeChecked();
   await expect(root).toHaveAttribute('data-sreva-text-scale', 'large');
   await expect(root).toHaveAttribute('data-sreva-motion', 'reduced');
   await expect(root).toHaveAttribute('data-sreva-contrast', 'high');
+  await expect(root).toHaveAttribute('data-sreva-language-mode', 'easy');
+  await expect(page.getByLabel('Easy language guide')).toBeVisible();
   expect(offOriginRequests).toEqual([]);
 });
 
@@ -56,17 +63,21 @@ test('keyboard focus, 200 percent reflow, large text, RTL and long-copy fixtures
   await page.setViewportSize({ width: 320, height: 900 });
   await page.goto(SETTINGS_URL);
 
-  await page.keyboard.press('Tab');
-  const focusEvidence = await page.evaluate(() => {
-    const active = document.activeElement as HTMLElement | null;
-    if (!active) return null;
-    const style = getComputedStyle(active);
-    return {
-      tagName: active.tagName,
-      outlineStyle: style.outlineStyle,
-      outlineWidth: style.outlineWidth,
-    };
-  });
+  let focusEvidence: { tagName: string; outlineStyle: string; outlineWidth: string } | null = null;
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    await page.keyboard.press('Tab');
+    focusEvidence = await page.evaluate(() => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active || !['A', 'BUTTON', 'INPUT'].includes(active.tagName)) return null;
+      const style = getComputedStyle(active);
+      return {
+        tagName: active.tagName,
+        outlineStyle: style.outlineStyle,
+        outlineWidth: style.outlineWidth,
+      };
+    });
+    if (focusEvidence) break;
+  }
   expect(focusEvidence).not.toBeNull();
   expect(['A', 'BUTTON', 'INPUT']).toContain(focusEvidence!.tagName);
   expect(focusEvidence!.outlineStyle).not.toBe('none');
@@ -79,14 +90,15 @@ test('keyboard focus, 200 percent reflow, large text, RTL and long-copy fixtures
   expect(rootFontSize).toBeGreaterThanOrEqual(20);
   expect(await hasHorizontalOverflow(page)).toBe(false);
 
-  await page.evaluate(() => {
-    document.documentElement.dir = 'rtl';
-    const title = document.querySelector('[data-testid="accessibility-preferences"] h2');
-    if (title) {
-      title.textContent = Array.from({ length: 9 }, () => 'Long localized accessibility preference wording').join(' ');
-    }
-  });
+  await page.getByLabel('Formatting locale').fill('ar-EG');
+  await page.getByRole('button', { name: 'Save general settings' }).click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'ar-EG');
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+
+  await page.evaluate(() => {
+    const title = document.querySelector('[data-testid="accessibility-preferences"] h2');
+    if (title) title.textContent = Array.from({ length: 9 }, () => 'Long localized accessibility preference wording').join(' ');
+  });
   expect(await hasHorizontalOverflow(page)).toBe(false);
 });
 

@@ -58,7 +58,7 @@ async function readReminderPreferenceRecord(page: Page) {
   }));
 }
 
-test('Reminder Health is account-free, truthful, local and opt-in by default', async ({ page }) => {
+test('Reminder Health is account-free, truthful, local and starts with the private 3-day default', async ({ page }) => {
   const remoteRequests: string[] = [];
   page.on('request', (request) => {
     const url = new URL(request.url());
@@ -73,7 +73,7 @@ test('Reminder Health is account-free, truthful, local and opt-in by default', a
   await expect(page.getByRole('heading', { name: 'Reminder settings' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Reminder Health' })).toBeVisible();
   await expect(page.getByLabel('7 days before')).not.toBeChecked();
-  await expect(page.getByLabel('3 days before')).not.toBeChecked();
+  await expect(page.getByLabel('3 days before')).toBeChecked();
   await expect(page.getByLabel('1 day before')).not.toBeChecked();
   await expect(page.getByLabel('Expected day')).not.toBeChecked();
   await expect(page.getByRole('radio', { name: /Maximum Privacy/ })).toBeChecked();

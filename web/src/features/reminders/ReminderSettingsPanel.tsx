@@ -48,7 +48,7 @@ export function ReminderSettingsPanel({
       <Card eyebrow="Account-free preferences" title="Reminder settings">
         <fieldset className="reminder-fieldset">
           <legend>Cycle reminders</legend>
-          <p className="workspace-note">Choose only the reminders you want. New local vaults start with all cycle reminders off.</p>
+          <p className="workspace-note">Sreva enables the private 3-day-before reminder by default. You can change reminder days and time whenever you want.</p>
           <div className="reminder-option-grid">
             {OFFSET_OPTIONS.map(({ days, label }) => (
               <label key={days} className="reminder-option">
@@ -145,6 +145,18 @@ export function ReminderSettingsPanel({
             />
           </label>
         </div>
+      </Card>
+
+      <Card eyebrow="Personal reminder families" title="More than cycle reminders">
+        <ul>
+          <li>Medication reminder</li>
+          <li>Contraception reminder</li>
+          <li>Supplement reminder</li>
+          <li>Ovulation-test reminder</li>
+          <li>Pregnancy-test reminder</li>
+        </ul>
+        <p>Snooze is configured per personal reminder in the reminder manager below.</p>
+        <p className="workspace-note">These are user-created wellness reminder intents. Sreva does not prescribe medicine, contraception, tests, or treatment.</p>
       </Card>
 
       <Card eyebrow="Notification wording" title="Privacy level">

@@ -6,7 +6,7 @@ export type PublicPage = {
 };
 
 export const publicPages: PublicPage[] = [
-  { slug: ['features'], title: 'Features', eyebrow: 'One Sreva', summary: 'Cycle tracking, predictions, reminders, insights, reports and privacy-first tools designed to stay useful without an account.' },
+  { slug: ['features'], title: 'Features', eyebrow: 'One Sreva', summary: 'Explore the complete launch capability contract: tracking, predictions, reminders, logging, reproductive observations, life stages, privacy, backup and optional encrypted continuity.' },
   { slug: ['how-it-works'], title: 'How it works', eyebrow: 'Local first', summary: 'Your device is the authoritative home of your health experience. Optional continuity is separate and privacy-preserving.' },
   { slug: ['cycle-tracking'], title: 'Cycle Tracking', eyebrow: 'Understand your rhythm', summary: 'Record period episodes and daily context with a calm interface built around your own history.' },
   { slug: ['predictions'], title: 'Predictions', eyebrow: 'Transparent estimates', summary: 'Sreva uses the same frozen Prediction v1 semantics across clients and communicates confidence rather than certainty.' },
@@ -27,13 +27,14 @@ export const publicPages: PublicPage[] = [
   { slug: ['release-notes'], title: 'Release Notes', eyebrow: 'What changed', summary: 'Release notes make meaningful product, privacy and compatibility changes visible.' },
   { slug: ['privacy-policy'], title: 'Privacy Policy', eyebrow: 'Plain-language policy', summary: 'Read how local account-free use and optional end-to-end encrypted continuity handle health content, operational metadata, recovery, retention and deletion.' },
   { slug: ['terms'], title: 'Terms', eyebrow: 'Product terms', summary: 'Terms are kept separate from health guidance and never expand Sreva into unvalidated diagnostic or contraception claims.' },
-  { slug: ['security-report'], title: 'Security Report', eyebrow: 'Responsible disclosure', summary: 'Security reporting follows the repository disclosure process without asking users to expose health records.' },
+  { slug: ['security', 'report'], title: 'Security Report', eyebrow: 'Responsible disclosure', summary: 'Security reporting follows the repository disclosure process without asking users to expose health records.' },
+  { slug: ['security-report'], title: 'Security Report', eyebrow: 'Legacy route', summary: 'This compatibility route points users to the canonical security reporting guidance.' },
 ];
 
 export const workspaceSections = [
   'home', 'today', 'calendar', 'log', 'cycle', 'predictions', 'reminders', 'symptoms', 'wellness',
   'medication', 'reproductive-health', 'life-stage', 'insights', 'reports', 'assistant', 'sharing', 'vault',
-  'sync', 'devices', 'privacy', 'account', 'recovery', 'settings',
+  'sync', 'devices', 'privacy', 'account', 'recovery', 'diagnostics', 'settings', 'more',
 ] as const;
 
 export const workspaceTitles: Record<(typeof workspaceSections)[number], string> = {
@@ -41,5 +42,5 @@ export const workspaceTitles: Record<(typeof workspaceSections)[number], string>
   reminders: 'Reminders', symptoms: 'Symptoms', wellness: 'Wellness', medication: 'Medication',
   'reproductive-health': 'Reproductive Health', 'life-stage': 'Life Stage', insights: 'Insights', reports: 'Reports',
   assistant: 'Assistant', sharing: 'Sharing', vault: 'Vault', sync: 'Sync', devices: 'Devices', privacy: 'Privacy',
-  account: 'Account', recovery: 'Recovery', settings: 'Settings',
+  account: 'Account', recovery: 'Recovery', diagnostics: 'Diagnostics', settings: 'Settings', more: 'More',
 };

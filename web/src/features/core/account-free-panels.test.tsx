@@ -108,10 +108,13 @@ describe('account-free workspace panels', () => {
     const html = renderToStaticMarkup(
       <CycleCorePanel
         periods={periods}
+        cycleNotes={[]}
         onStartPeriodToday={noop}
         onEndPeriod={noop}
         onEditPeriod={noop}
         onDeletePeriod={noop}
+        onSaveCycleNote={noop}
+        onDeleteCycleNote={noop}
       />,
     );
 

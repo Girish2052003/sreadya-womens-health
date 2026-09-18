@@ -19,6 +19,11 @@ describe('Task 13 local assistant parity', () => {
     }
   });
 
+  it('supports deterministic local historical search', () => {
+    const parsed = parseLocalIntent('Find cramps', new Date(vectors.now));
+    expect(parsed).toMatchObject({ intent: 'searchHistory', value: 'cramps', requiresConfirmation: false });
+  });
+
   it('keeps all parsing local and deterministic', () => {
     const now = new Date(vectors.now);
     expect(parseLocalIntent('When is my next period?', now)).toEqual(

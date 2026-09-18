@@ -40,12 +40,23 @@ describe('accessibility preferences', () => {
     ).toEqual(DEFAULT_ACCESSIBILITY_PREFERENCES);
   });
 
+  it('migrates the earlier v1 preference shape with easy language safely off', () => {
+    const legacy = JSON.stringify({ version: 1, textScale: 'large', motion: 'reduced', contrast: 'high' });
+    expect(parseAccessibilityPreferences(legacy)).toEqual({
+      textScale: 'large',
+      motion: 'reduced',
+      contrast: 'high',
+      easyLanguage: false,
+    });
+  });
+
   it('persists only the reviewed non-health presentation preferences on this device', () => {
     const { values, storage } = memoryStorage();
     const preferences: AccessibilityPreferences = {
       textScale: 'large',
       motion: 'reduced',
       contrast: 'high',
+      easyLanguage: true,
     };
 
     saveAccessibilityPreferences(preferences, storage);
@@ -56,17 +67,19 @@ describe('accessibility preferences', () => {
 
   it('maps preferences to a constrained document attribute contract', () => {
     expect(
-      accessibilityDataAttributes({ textScale: 'large', motion: 'reduced', contrast: 'high' }),
+      accessibilityDataAttributes({ textScale: 'large', motion: 'reduced', contrast: 'high', easyLanguage: true }),
     ).toEqual({
       'data-sreva-text-scale': 'large',
       'data-sreva-motion': 'reduced',
       'data-sreva-contrast': 'high',
+      'data-sreva-language-mode': 'easy',
     });
 
     expect(accessibilityDataAttributes(DEFAULT_ACCESSIBILITY_PREFERENCES)).toEqual({
       'data-sreva-text-scale': 'normal',
       'data-sreva-motion': 'system',
       'data-sreva-contrast': 'system',
+      'data-sreva-language-mode': 'standard',
     });
   });
 
@@ -82,12 +95,14 @@ describe('accessibility preferences', () => {
       textScale: 'large',
       motion: 'reduced',
       contrast: 'high',
+      easyLanguage: true,
     });
 
     expect(Object.fromEntries(applied)).toEqual({
       'data-sreva-text-scale': 'large',
       'data-sreva-motion': 'reduced',
       'data-sreva-contrast': 'high',
+      'data-sreva-language-mode': 'easy',
     });
   });
 });

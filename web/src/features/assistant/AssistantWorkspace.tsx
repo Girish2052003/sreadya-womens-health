@@ -9,6 +9,7 @@ import { DexieVaultPersistence } from '../../vault/db';
 import { HealthVaultRepository } from '../../vault/health-repository';
 import { VaultService } from '../../vault/vault-service';
 import { ObservationActions } from '../cycle/observation-actions';
+import { PersonalReminderRepository } from '../reminders/personal-reminder-repository';
 import { PeriodActions } from '../cycle/period-actions';
 import { continuePrivately } from '../onboarding/private-onboarding';
 import { predictFromRepository } from '../predictions/prediction-service';
@@ -29,6 +30,7 @@ function displayDate(dateKey: string): string {
 
 export function AssistantWorkspace() {
   const repositoryRef = useRef<HealthVaultRepository | null>(null);
+  const reminderRepositoryRef = useRef<PersonalReminderRepository | null>(null);
   const [text, setText] = useState('');
   const [command, setCommand] = useState<ParsedCommand | null>(null);
   const [answer, setAnswer] = useState<string | null>(null);
@@ -43,6 +45,7 @@ export function AssistantWorkspace() {
       await continuePrivately(vault);
       if (cancelled) return;
       repositoryRef.current = new HealthVaultRepository(vault);
+      reminderRepositoryRef.current = new PersonalReminderRepository(vault);
       setStatus('Encrypted local vault ready');
       setReady(true);
     })().catch(() => {
@@ -54,6 +57,7 @@ export function AssistantWorkspace() {
     return () => {
       cancelled = true;
       repositoryRef.current = null;
+      reminderRepositoryRef.current = null;
       vault.lock();
     };
   }, []);
@@ -77,8 +81,19 @@ export function AssistantWorkspace() {
       setAnswer(recent.length === 0
         ? 'No period history is stored yet.'
         : recent.map((period) => displayDate(period.start.slice(0, 10))).join(' · '));
+    } else if (parsed.intent === 'searchHistory') {
+      const query = (parsed.value ?? '').toLowerCase();
+      const observations = await repository.listObservations();
+      const matches = observations.filter((item) =>
+        item.kind.toLowerCase().includes(query)
+        || item.label?.toLowerCase().includes(query)
+        || item.note?.toLowerCase().includes(query)
+      ).slice(-10).reverse();
+      setAnswer(matches.length === 0
+        ? `No local observation matched “${parsed.value ?? ''}”.`
+        : matches.map((item) => `${displayDate(item.occurredAt.slice(0, 10))}: ${item.label ?? item.kind}`).join(' · '));
     } else if (parsed.intent === 'addReminder') {
-      setAnswer('The command was parsed locally. Personal medication/contraception reminder scheduling is not enabled in this reviewed Web build, so nothing will be scheduled unless that adapter is added later.');
+      setAnswer('The reminder was parsed locally. Review the type, label and time, then confirm to save it in the encrypted personal reminder store.');
     } else if (parsed.intent === 'unknown') {
       setAnswer('I could not safely turn that into a local health action. Nothing was saved.');
     }
@@ -105,7 +120,21 @@ export function AssistantWorkspace() {
           ...(command.note ? { note: command.note } : {}),
         });
       } else if (command.intent === 'addReminder') {
-        throw new Error('Personal reminder scheduling is not enabled in this reviewed Web build. Nothing was saved.');
+        const reminders = reminderRepositoryRef.current;
+        if (!reminders) throw new Error('The encrypted personal reminder store is unavailable.');
+        if (command.reminderHour === undefined) throw new Error('Add a reminder time, for example “at 8”.');
+        const kind = command.reminderKind ?? 'medication';
+        await reminders.save({
+          id: crypto.randomUUID(),
+          kind,
+          label: command.label ?? 'Health reminder',
+          hour: command.reminderHour,
+          minute: command.reminderMinute ?? 0,
+          enabled: true,
+          snoozeMinutes: 10,
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+          createdAt: new Date().toISOString(),
+        });
       } else if (command.intent === 'unknown') {
         throw new Error('That command could not be converted safely. Nothing was saved.');
       } else {
@@ -132,7 +161,7 @@ export function AssistantWorkspace() {
       {ready ? (
         <div className="workspace-grid">
           <Card eyebrow="Private assistant" title="Tell Sreva">
-            <p>Try “My period started yesterday”, “Yesterday was heavy”, “I have severe cramps today”, “When is my next period?”, or “Show my last six periods”.</p>
+            <p>Try “My period started yesterday”, “Yesterday was heavy”, “I have severe cramps today”, “When is my next period?”, “Show my last six periods”, “Find cramps”, or “Remind me about medicine at 8”.</p>
             <label>
               <span>Private command</span>
               <textarea
@@ -143,7 +172,7 @@ export function AssistantWorkspace() {
               />
             </label>
             <Button disabled={text.trim().length === 0} onClick={() => { void interpret(); }}>Understand locally</Button>
-            <p className="workspace-note">Voice input is not enabled in this Web build because no reviewed private offline-recognition adapter is available.</p>
+            <p className="workspace-note">Voice input is not enabled in this Web build because no reviewed private offline-recognition adapter is available. Text reminder creation is available locally.</p>
           </Card>
 
           <Card eyebrow="Local interpretation" title="Sreva understood">
@@ -154,7 +183,7 @@ export function AssistantWorkspace() {
                 {command.label ? <p>Detail: <strong>{command.label}</strong></p> : null}
                 {command.reminderHour !== undefined ? <p>Reminder time: <strong>{String(command.reminderHour).padStart(2, '0')}:{String(command.reminderMinute ?? 0).padStart(2, '0')}</strong></p> : null}
                 {answer ? <p data-testid="assistant-answer">{answer}</p> : null}
-                {command.requiresConfirmation && command.intent !== 'unknown' && command.intent !== 'addReminder' ? (
+                {command.requiresConfirmation && command.intent !== 'unknown' ? (
                   <Button onClick={() => { void confirm(); }}>Confirm local action</Button>
                 ) : null}
               </>

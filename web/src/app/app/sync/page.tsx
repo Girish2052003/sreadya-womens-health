@@ -1,6 +1,6 @@
 import { WorkspaceNav } from '../../../components/navigation/WorkspaceNav';
-import { Card } from '../../../components/ui/Card';
 import { StatusChip } from '../../../components/ui/StatusChip';
+import { SyncWorkspace } from '../../../features/sync/SyncWorkspace';
 
 export default function SyncPage() {
   return (
@@ -11,21 +11,11 @@ export default function SyncPage() {
           <div>
             <p className="workspace-kicker">Private workspace</p>
             <h1>Sync</h1>
-            <p className="workspace-note">
-              Encrypted sync is optional. Sreva remains usable offline and without an account, and sync can be paused without deleting the local vault.
-            </p>
+            <p className="workspace-note">Inspect and control the local encrypted sync queue while keeping account-free Sreva fully operational.</p>
           </div>
           <StatusChip tone="info">Optional encrypted sync</StatusChip>
         </header>
-
-        <div className="workspace-grid">
-          <Card eyebrow="Ciphertext continuity" title="Encrypted device continuity">
-            <p>Only opaque identifiers, versions and encrypted envelopes cross the sync boundary; health payloads remain encrypted before upload.</p>
-          </Card>
-          <Card eyebrow="Control" title="Pause or disable sync">
-            <p>You can pause encrypted sync while keeping local health data available on this device. Re-enabling continuity does not make account mode mandatory.</p>
-          </Card>
-        </div>
+        <SyncWorkspace />
       </main>
     </div>
   );
