@@ -119,8 +119,9 @@ class _SreadyaBootstrapState extends State<SreadyaBootstrap>
     if (ok) {
       setState(() => _unlocked = true);
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Incorrect Sreadya PIN.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Incorrect Sreadya PIN.')),
+      );
     }
   }
 
