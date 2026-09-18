@@ -295,7 +295,7 @@ def protect_text(value: str) -> tuple[str, dict[str, str]]:
 
     def reserve(literal: str) -> str:
         nonlocal counter
-        token = f"SREADYAPROTECT{counter:04d}TOKEN"
+        token = f"ZXQPROTECT{counter:04d}TOKEN"
         counter += 1
         token_map[token] = literal
         return token
@@ -312,7 +312,7 @@ def restore_text(value: str, token_map: dict[str, str], message_id: str) -> str:
         if token not in restored:
             raise SystemExit(f"translation provider altered protected token for {message_id}: {token}")
         restored = restored.replace(token, literal)
-    if "SREADYAPROTECT" in restored:
+    if "ZXQPROTECT" in restored:
         raise SystemExit(f"unrestored translation token remains in {message_id}")
     return restored
 
