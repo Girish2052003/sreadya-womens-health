@@ -3,34 +3,44 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import {
-  POPULAR_LANGUAGE_CODES,
-  PUBLIC_LANGUAGE_COUNT,
   allLanguageChoices,
   currentLanguageChoice,
-  languageChoice,
+  popularLanguageChoices,
   type LanguageChoice,
 } from '../../i18n/locale-registry';
 import { useI18n } from '../../i18n/I18nProvider';
 
 function searchable(choice: LanguageChoice): string {
-  return [choice.nativeName, choice.englishName, choice.language, choice.tag]
+  return [choice.nativeName, choice.englishName, choice.tag]
     .join(' ')
     .toLocaleLowerCase('en');
 }
 
 export function LanguageChooser() {
-  const { locale, setLocale, t, plural, status } = useI18n();
+  const { locale, setLocale, t, plural, status, availableLocales } = useI18n();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const rootRef = useRef<HTMLDivElement>(null);
-  const current = useMemo(() => currentLanguageChoice(locale), [locale]);
-  const choices = useMemo(() => allLanguageChoices(), []);
-  const popular = useMemo(() => POPULAR_LANGUAGE_CODES.map((code) => languageChoice(code)), []);
+
+  const choices = useMemo(
+    () => allLanguageChoices(availableLocales),
+    [availableLocales],
+  );
+  const popular = useMemo(
+    () => popularLanguageChoices(availableLocales),
+    [availableLocales],
+  );
+  const current = useMemo(
+    () => currentLanguageChoice(locale, availableLocales),
+    [availableLocales, locale],
+  );
 
   useEffect(() => {
     if (!open) return;
     const close = (event: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(event.target as Node)) setOpen(false);
+      if (rootRef.current && !rootRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
     };
     const escape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setOpen(false);
@@ -45,7 +55,9 @@ export function LanguageChooser() {
 
   const normalizedQuery = query.trim().toLocaleLowerCase('en');
   const filtered = useMemo(
-    () => !normalizedQuery ? choices : choices.filter((choice) => searchable(choice).includes(normalizedQuery)),
+    () => !normalizedQuery
+      ? choices
+      : choices.filter((choice) => searchable(choice).includes(normalizedQuery)),
     [choices, normalizedQuery],
   );
 
@@ -66,22 +78,33 @@ export function LanguageChooser() {
         onClick={() => setOpen((value) => !value)}
         title={t('language.button')}
       >
-        <span className="language-chooser__flag" aria-hidden="true">{current.flag}</span>
         <span className="language-chooser__trigger-copy">
           <small>{t('language.button')}</small>
-          <strong>{current.nativeName}</strong>
+          <strong>{status === 'loading' ? '…' : current.nativeName}</strong>
         </span>
         <span aria-hidden="true">⌄</span>
       </button>
 
       {open ? (
-        <section className="language-chooser__panel" role="dialog" aria-modal="false" aria-labelledby="language-chooser-title">
+        <section
+          className="language-chooser__panel"
+          role="dialog"
+          aria-modal="false"
+          aria-labelledby="language-chooser-title"
+        >
           <div className="language-chooser__panel-head">
             <div>
               <p className="public-eyebrow">{t('language.button')}</p>
               <h2 id="language-chooser-title">{t('language.dialogTitle')}</h2>
             </div>
-            <button type="button" className="language-chooser__close" onClick={() => setOpen(false)} aria-label={t('language.close')}>×</button>
+            <button
+              type="button"
+              className="language-chooser__close"
+              onClick={() => setOpen(false)}
+              aria-label={t('language.close')}
+            >
+              ×
+            </button>
           </div>
 
           <label className="language-chooser__search">
@@ -101,9 +124,13 @@ export function LanguageChooser() {
               <strong>{t('language.popular')}</strong>
               <div className="language-chooser__chips">
                 {popular.map((choice) => (
-                  <button key={choice.tag} type="button" onClick={() => choose(choice)}>
-                    <span aria-hidden="true">{choice.flag}</span>
-                    <span>{choice.nativeName}</span>
+                  <button
+                    key={choice.tag}
+                    type="button"
+                    onClick={() => choose(choice)}
+                    data-language-tag={choice.tag}
+                  >
+                    {choice.nativeName}
                   </button>
                 ))}
               </div>
@@ -112,12 +139,18 @@ export function LanguageChooser() {
 
           <div className="language-chooser__list-head">
             <strong>{t('language.all')}</strong>
-            <span>{plural('language.resultCount', filtered.length, { count: filtered.length })}</span>
+            <span>
+              {plural('language.resultCount', filtered.length, { count: filtered.length })}
+            </span>
           </div>
 
-          <div className="language-chooser__list" role="listbox" aria-label={t('language.dialogTitle')}>
+          <div
+            className="language-chooser__list"
+            role="listbox"
+            aria-label={t('language.dialogTitle')}
+          >
             {filtered.map((choice) => {
-              const selected = choice.language === current.language;
+              const selected = choice.tag.toLowerCase() === current.tag.toLowerCase();
               return (
                 <button
                   key={choice.tag}
@@ -127,23 +160,20 @@ export function LanguageChooser() {
                   className="language-chooser__option"
                   data-language-tag={choice.tag}
                   onClick={() => choose(choice)}
-                  title={t('language.representativeFlag')}
                 >
-                  <span className="language-chooser__flag" aria-hidden="true">{choice.flag}</span>
-                  <span className="language-chooser__name">
+                  <span className="language-chooser__name" dir={choice.direction}>
                     <strong>{choice.nativeName}</strong>
-                    <small>{choice.englishName !== choice.nativeName ? choice.englishName : choice.language}</small>
+                    {choice.englishName !== choice.nativeName ? (
+                      <small>{choice.englishName}</small>
+                    ) : null}
                   </span>
-                  {selected ? <span className="language-chooser__selected" aria-hidden="true">✓</span> : null}
+                  {selected ? (
+                    <span className="language-chooser__selected" aria-hidden="true">✓</span>
+                  ) : null}
                 </button>
               );
             })}
           </div>
-
-          <p className="language-chooser__foot">
-            {PUBLIC_LANGUAGE_COUNT} {PUBLIC_LANGUAGE_COUNT === 1 ? 'fully translated language' : 'fully translated languages'}
-            {status === 'loading' ? ' · Loading language…' : ''}
-          </p>
         </section>
       ) : null}
     </div>
