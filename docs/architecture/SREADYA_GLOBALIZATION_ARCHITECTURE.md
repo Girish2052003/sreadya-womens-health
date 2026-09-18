@@ -42,7 +42,23 @@ translate + validate
 publish automatically when complete
 ```
 
-CI MUST fail if the provider-supported target set unexpectedly drops below the frozen 194-language baseline or if a frozen baseline language disappears. Future provider additions MAY raise the public language count without a code rewrite.
+When multilingual publication is enabled, provider-sync verification MUST fail if the provider-supported target set unexpectedly drops below the frozen 194-language baseline or if a frozen baseline language disappears. Future provider additions MAY raise the public language count without a code rewrite.
+
+
+### 1.1 Current launch mode: English-only, zero provider cost
+
+SREADYA may ship with **English as the only public locale** while the provider-backed globalization machinery remains dormant.
+
+In this mode:
+
+- `publicLocales` contains only `en`;
+- the public language chooser is hidden rather than showing a one-item control;
+- no Google Cloud credential is required;
+- no provider API call is made;
+- normal CI validates the English-only release contract plus all dormant globalization invariants;
+- the Google synchronization workflow may run as a no-op when no protected credential is configured.
+
+The moment more than one public locale is published, SREADYA leaves English-only mode and the full 194+ provider closure becomes mandatory again. This keeps the future wiring intact without making paid translation a prerequisite for the current release.
 
 ---
 
@@ -180,7 +196,7 @@ DISCOVERED_PROVIDER_SET
 = baseline + future additions
 ```
 
-Release rule:
+Multilingual release rule:
 
 ```text
 FROZEN_BASELINE ⊆ DISCOVERED_PROVIDER_SET
@@ -649,7 +665,7 @@ Implementation sequence:
 15. generate/validate provider-backed bundles
 16. deploy only after all required gates pass
 17. verify live GitHub Pages state
-18. merge only after formal evidence is green
+18. merge English-only mode after release-ready evidence is green; require full provider formal evidence before multilingual publication
 ```
 
 ---
