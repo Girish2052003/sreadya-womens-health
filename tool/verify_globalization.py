@@ -129,6 +129,8 @@ def check_hardcoded_copy() -> list[str]:
         if ".test." in path.name or rel in EXEMPT_FILES or rel in STATIC_SOURCE_EXEMPT:
             continue
         text = strip_test_regions(path.read_text("utf-8"))
+        if "cause.message" in text:
+            failures.append(f"{rel}: raw internal exception message can reach translated UI")
         matches: list[str] = []
         for regex in (LITERAL_TEXT, INPUT_HINT_ATTR, STATE_LITERAL, CARD_LITERAL):
             matches.extend(regex.findall(text))
@@ -150,6 +152,48 @@ def check_hardcoded_copy() -> list[str]:
         if normalized:
             sample = " | ".join(dict.fromkeys(normalized[:4]))
             failures.append(f"{rel}: hard-coded user-visible copy -> {sample}")
+    return failures
+
+
+def check_generated_copy_boundaries() -> list[str]:
+    failures: list[str] = []
+    report_path = ROOT / "web/src/features/reports/report-builder.ts"
+    sharing_path = ROOT / "web/src/features/sharing/partner-sharing.ts"
+    report = report_path.read_text("utf-8")
+    sharing = sharing_path.read_text("utf-8")
+
+    report_forbidden = (
+        "Report date range must use calendar dates.",
+        "Report start date cannot be after end date.",
+        "Select at least one report category.",
+        "Unsupported report category.",
+        "'Sreadya cycle history report'",
+        "'Generated locally on this device. This report is not a diagnosis.'",
+        "'Selected observations'",
+    )
+    sharing_forbidden = (
+        "Partner grant timestamp must be UTC.",
+        "Select at least one partner-sharing category.",
+        "Unsupported partner-sharing category.",
+        "Partner grant id is required.",
+        "Partner grant cannot be revoked before it was created.",
+        "Partner grant is revoked.",
+        "'Sreadya shared summary'",
+        "'Shared intentionally by the Sreadya user.'",
+        "Expected period window:",
+        "Reminder:",
+        "Wellness:",
+    )
+    for value in report_forbidden:
+        if value in report:
+            failures.append(f"{report_path.relative_to(ROOT)}: generated report copy bypasses catalogue -> {value}")
+    for value in sharing_forbidden:
+        if value in sharing:
+            failures.append(f"{sharing_path.relative_to(ROOT)}: generated share copy bypasses catalogue -> {value}")
+    if "ReportCopy" not in report or "report_pdf_font_unsupported" not in report:
+        failures.append("report generator lacks localized-copy / non-Unicode-font fail-closed contract")
+    if "PartnerShareCopy" not in sharing:
+        failures.append("partner-share generator lacks localized-copy contract")
     return failures
 
 
@@ -349,6 +393,7 @@ def main() -> None:
         + check_flutter_parity()
         + check_contract_files()
         + check_hardcoded_copy()
+        + check_generated_copy_boundaries()
         + check_client_provider_boundary()
         + check_translation_artifacts()
     )
