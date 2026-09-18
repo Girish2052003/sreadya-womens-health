@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"sreva.dev/sync_service/internal/deviceauth"
+	"sreadya.dev/sync_service/internal/deviceauth"
 )
 
 type fakeSignedDeviceAuth struct {
@@ -44,8 +44,8 @@ func newSignedTestHandler(api SyncAPI, sessions SessionResolver) http.Handler {
 }
 
 func signedTestHeaders(request *http.Request) {
-	request.Header.Set("X-Sreva-Device-Challenge", "test-challenge")
-	request.Header.Set("X-Sreva-Device-Signature", base64.StdEncoding.EncodeToString([]byte{1}))
+	request.Header.Set("X-Sreadya-Device-Challenge", "test-challenge")
+	request.Header.Set("X-Sreadya-Device-Signature", base64.StdEncoding.EncodeToString([]byte{1}))
 }
 
 func TestTask22ChallengePushUsesAuthenticatedSessionAndExactBodyDigest(t *testing.T) {
@@ -114,8 +114,8 @@ func TestTask22PushVerifiesExactReceivedBytesBeforeCallingSyncAPI(t *testing.T) 
 	signature := []byte{1, 2, 3, 4}
 
 	request := httptest.NewRequest(http.MethodPost, "/v1/sync/push", strings.NewReader(body))
-	request.Header.Set("X-Sreva-Device-Challenge", "challenge-push")
-	request.Header.Set("X-Sreva-Device-Signature", base64.StdEncoding.EncodeToString(signature))
+	request.Header.Set("X-Sreadya-Device-Challenge", "challenge-push")
+	request.Header.Set("X-Sreadya-Device-Signature", base64.StdEncoding.EncodeToString(signature))
 	response := httptest.NewRecorder()
 	handler.ServeHTTP(response, request)
 
@@ -146,8 +146,8 @@ func TestTask22PullVerifiesSameCanonicalTargetAsChallenge(t *testing.T) {
 	handler := NewHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}}, authz)
 	signature := []byte{5, 6, 7, 8}
 	request := httptest.NewRequest(http.MethodGet, "/v1/sync/pull?limit=25&vault_id=vault-a&cursor=v1.AAAAAAAAACo", nil)
-	request.Header.Set("X-Sreva-Device-Challenge", "challenge-pull")
-	request.Header.Set("X-Sreva-Device-Signature", base64.StdEncoding.EncodeToString(signature))
+	request.Header.Set("X-Sreadya-Device-Challenge", "challenge-pull")
+	request.Header.Set("X-Sreadya-Device-Signature", base64.StdEncoding.EncodeToString(signature))
 	response := httptest.NewRecorder()
 	handler.ServeHTTP(response, request)
 
@@ -182,8 +182,8 @@ func TestTask22SignedAuthorizationFailuresNeverReachSyncAPIOrReflectSecrets(t *t
 		secret := "SECRET-CIPHERTEXT-MUST-NOT-REFLECT"
 		body := `{"account_id":"acct-a","vault_id":"vault-a","event_id":"evt-secret","object_id":"obj-1","source_device_id":"dev-a","ciphertext_and_tag":"` + base64.StdEncoding.EncodeToString([]byte(secret)) + `"}`
 		request := httptest.NewRequest(http.MethodPost, "/v1/sync/push", strings.NewReader(body))
-		request.Header.Set("X-Sreva-Device-Challenge", "secret-challenge")
-		request.Header.Set("X-Sreva-Device-Signature", base64.StdEncoding.EncodeToString([]byte("secret-signature")))
+		request.Header.Set("X-Sreadya-Device-Challenge", "secret-challenge")
+		request.Header.Set("X-Sreadya-Device-Signature", base64.StdEncoding.EncodeToString([]byte("secret-signature")))
 		response := httptest.NewRecorder()
 		handler.ServeHTTP(response, request)
 
@@ -207,9 +207,9 @@ func TestTask22MissingOrMalformedSignedAuthHeadersAreUnauthorized(t *testing.T) 
 		authz := &fakeSignedDeviceAuth{}
 		handler := NewHandler(api, fakeSessionResolver{session: Session{AccountID: "acct-a", DeviceID: "dev-a"}}, authz)
 		request := httptest.NewRequest(http.MethodGet, "/v1/sync/pull?vault_id=vault-a&limit=25", nil)
-		request.Header.Set("X-Sreva-Device-Challenge", "challenge-pull")
+		request.Header.Set("X-Sreadya-Device-Challenge", "challenge-pull")
 		if signature != "" {
-			request.Header.Set("X-Sreva-Device-Signature", signature)
+			request.Header.Set("X-Sreadya-Device-Signature", signature)
 		}
 		response := httptest.NewRecorder()
 		handler.ServeHTTP(response, request)

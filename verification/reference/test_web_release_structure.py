@@ -53,7 +53,7 @@ def test_pages_deployment_is_static_secret_free_and_least_privilege():
     pages = PAGES_PATH.read_text(encoding='utf-8')
 
     for required in [
-        'name: Sreva Web Pages',
+        'name: Sreadya Web Pages',
         'pull_request:',
         'push:',
         'branches: [main]',
@@ -63,7 +63,7 @@ def test_pages_deployment_is_static_secret_free_and_least_privilege():
         "node-version: '24.21.0'",
         'npm ci --ignore-scripts',
         'npm run build',
-        'SREVA_BASE_PATH: /${{ github.event.repository.name }}',
+        'SREADYA_BASE_PATH: /${{ github.event.repository.name }}',
         'path: web/out',
         'actions/checkout@11d5960a326750d5838078e36cf38b85af677262',
         'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020',
@@ -74,8 +74,8 @@ def test_pages_deployment_is_static_secret_free_and_least_privilege():
         assert required in pages
 
     assert 'secrets.' not in pages
-    assert 'NEXT_PUBLIC_SREVA_VAULT_TEST_HARNESS' not in pages
-    assert 'NEXT_PUBLIC_SREVA_CYCLEVAULT_TEST_HARNESS' not in pages
+    assert 'NEXT_PUBLIC_SREADYA_VAULT_TEST_HARNESS' not in pages
+    assert 'NEXT_PUBLIC_SREADYA_CYCLEVAULT_TEST_HARNESS' not in pages
 
 
 def test_pages_deployment_runs_synthetic_live_acceptance_only_after_successful_deploy():
@@ -86,7 +86,7 @@ def test_pages_deployment_runs_synthetic_live_acceptance_only_after_successful_d
         'page_url: ${{ steps.deployment.outputs.page_url }}',
         'live-web-acceptance:',
         'needs: deploy-pages',
-        'SREVA_LIVE_BASE_URL: ${{ needs.deploy-pages.outputs.page_url }}',
+        'SREADYA_LIVE_BASE_URL: ${{ needs.deploy-pages.outputs.page_url }}',
         'npx playwright install --with-deps chromium',
         'npx playwright test e2e/task18-live-acceptance.spec.ts --project=chromium',
     ]:
@@ -94,8 +94,8 @@ def test_pages_deployment_runs_synthetic_live_acceptance_only_after_successful_d
 
     assert pages.index('deploy-pages:') < pages.index('live-web-acceptance:')
     assert "if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'" in pages
-    assert 'SREVA_LIVE_BASE_URL' in PLAYWRIGHT_CONFIG
-    assert 'process.env.SREVA_LIVE_BASE_URL ? undefined' in PLAYWRIGHT_CONFIG
+    assert 'SREADYA_LIVE_BASE_URL' in PLAYWRIGHT_CONFIG
+    assert 'process.env.SREADYA_LIVE_BASE_URL ? undefined' in PLAYWRIGHT_CONFIG
 
 
 def test_privacy_scan_covers_web_health_logging_transport_cache_and_analytics_packages():

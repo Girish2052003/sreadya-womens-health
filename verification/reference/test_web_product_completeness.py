@@ -5,7 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
-REGISTRY = ROOT / "shared/capabilities/sreva-capabilities.v1.json"
+REGISTRY = ROOT / "shared/capabilities/sreadya-capabilities.v1.json"
 SURFACES = ROOT / "shared/capabilities/web-surfaces.v2.json"
 ROUTES = ROOT / "web/src/content/routes.ts"
 NAV = ROOT / "web/src/components/navigation/WorkspaceNav.tsx"
@@ -79,7 +79,7 @@ def test_workspace_has_explicit_back_and_brand_home_actions() -> None:
     assert "Back" in header
     nav = read(NAV)
     assert 'href="/app/home"' in nav
-    assert 'aria-label="Sreva workspace home"' in nav
+    assert 'aria-label="Sreadya workspace home"' in nav
 
 
 def test_former_shell_routes_are_dedicated_real_workspaces() -> None:

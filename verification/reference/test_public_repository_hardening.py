@@ -3,7 +3,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW_DIR = ROOT / ".github" / "workflows"
-CANONICAL_REPOSITORY = "Girish2052003/sreva-womens-health"
+CANONICAL_REPOSITORY = "Girish2052003/sreadya-womens-health"
 
 
 def _text(path: Path) -> str:
@@ -16,11 +16,11 @@ def test_public_ci_keeps_verification_but_does_not_publish_installable_builds() 
     assert "flutter build appbundle --release" in ci
     assert "flutter build apk --release" in ci
     assert "flutter build ios --release --no-codesign" in ci
-    assert "sreva-security-evidence" in ci
+    assert "sreadya-security-evidence" in ci
 
-    assert "sreva-android-v1-ci-test-signed" not in ci
-    assert "sreva-android-family-preview-ci-test-signed" not in ci
-    assert "sreva-ios-unsigned-release" not in ci
+    assert "sreadya-android-v1-ci-test-signed" not in ci
+    assert "sreadya-android-family-preview-ci-test-signed" not in ci
+    assert "sreadya-ios-unsigned-release" not in ci
 
 
 def test_all_external_actions_are_immutable_sha_pinned() -> None:
@@ -44,20 +44,20 @@ def test_manual_release_workflows_are_canonical_main_only_and_clean_up_keys() ->
         assert "github.ref == 'refs/heads/main'" in workflow
         assert "persist-credentials: false" in workflow
         assert "if: always()" in workflow
-        assert 'rm -f "$SREVA_ANDROID_KEYSTORE_PATH"' in workflow
+        assert 'rm -f "$SREADYA_ANDROID_KEYSTORE_PATH"' in workflow
 
 
 def test_signed_release_payloads_are_encrypted_before_public_artifact_upload() -> None:
     expectations = {
         "android-production.yml": (
-            "SREVA_PRODUCTION_ARTIFACT_PASSWORD",
-            "sreva-android-1.0.0-production-encrypted",
-            "sreva-1.0.0+1-production-release.tar.gz.enc",
+            "SREADYA_PRODUCTION_ARTIFACT_PASSWORD",
+            "sreadya-android-1.0.0-production-encrypted",
+            "sreadya-1.0.0+1-production-release.tar.gz.enc",
         ),
         "android-family-preview.yml": (
-            "SREVA_PREVIEW_ARTIFACT_PASSWORD",
-            "sreva-android-1.0.0-family-preview-encrypted",
-            "sreva-1.0.0+1-family-preview-release.tar.gz.enc",
+            "SREADYA_PREVIEW_ARTIFACT_PASSWORD",
+            "sreadya-android-1.0.0-family-preview-encrypted",
+            "sreadya-1.0.0+1-family-preview-release.tar.gz.enc",
         ),
     }
 
