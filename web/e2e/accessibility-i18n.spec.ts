@@ -28,16 +28,16 @@ test('accessibility preferences apply immediately and persist locally', async ({
   await page.getByRole('radio', { name: 'Easy language' }).check();
 
   const root = page.locator('html');
-  await expect(root).toHaveAttribute('data-sreva-text-scale', 'large');
-  await expect(root).toHaveAttribute('data-sreva-motion', 'reduced');
-  await expect(root).toHaveAttribute('data-sreva-contrast', 'high');
-  await expect(root).toHaveAttribute('data-sreva-language-mode', 'easy');
+  await expect(root).toHaveAttribute('data-sreadya-text-scale', 'large');
+  await expect(root).toHaveAttribute('data-sreadya-motion', 'reduced');
+  await expect(root).toHaveAttribute('data-sreadya-contrast', 'high');
+  await expect(root).toHaveAttribute('data-sreadya-language-mode', 'easy');
   await expect(page.getByLabel('Easy language guide')).toBeVisible();
 
   await page.getByRole('button', { name: 'Save accessibility preferences' }).click();
   await expect(page.getByRole('status')).toContainText('Accessibility preferences saved on this device.');
 
-  const stored = await page.evaluate(() => localStorage.getItem('sreva:accessibility:v1'));
+  const stored = await page.evaluate(() => localStorage.getItem('sreadya:accessibility:v1'));
   expect(JSON.parse(stored!)).toEqual({
     version: 1,
     textScale: 'large',
@@ -51,10 +51,10 @@ test('accessibility preferences apply immediately and persist locally', async ({
   await expect(page.getByLabel('Reduce motion')).toBeChecked();
   await expect(page.getByLabel('High contrast')).toBeChecked();
   await expect(page.getByRole('radio', { name: 'Easy language' })).toBeChecked();
-  await expect(root).toHaveAttribute('data-sreva-text-scale', 'large');
-  await expect(root).toHaveAttribute('data-sreva-motion', 'reduced');
-  await expect(root).toHaveAttribute('data-sreva-contrast', 'high');
-  await expect(root).toHaveAttribute('data-sreva-language-mode', 'easy');
+  await expect(root).toHaveAttribute('data-sreadya-text-scale', 'large');
+  await expect(root).toHaveAttribute('data-sreadya-motion', 'reduced');
+  await expect(root).toHaveAttribute('data-sreadya-contrast', 'high');
+  await expect(root).toHaveAttribute('data-sreadya-language-mode', 'easy');
   await expect(page.getByLabel('Easy language guide')).toBeVisible();
   expect(offOriginRequests).toEqual([]);
 });
@@ -116,7 +116,7 @@ test('system reduced motion remains honored and explicit high contrast strengthe
   await page.goto(SETTINGS_URL);
   await page.getByLabel('High contrast').check();
   const contrast = await page.getByTestId('accessibility-preferences').evaluate((element) => ({
-    muted: getComputedStyle(document.documentElement).getPropertyValue('--sreva-muted').trim(),
+    muted: getComputedStyle(document.documentElement).getPropertyValue('--sreadya-muted').trim(),
     resolvedBorderColor: getComputedStyle(element).borderTopColor,
   }));
   expect(contrast.muted).toBe('#3d3035');

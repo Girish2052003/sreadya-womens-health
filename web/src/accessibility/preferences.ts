@@ -16,7 +16,7 @@ type StoredAccessibilityPreferences = AccessibilityPreferences & {
   version: 1;
 };
 
-export const ACCESSIBILITY_STORAGE_KEY = 'sreva:accessibility:v1';
+export const ACCESSIBILITY_STORAGE_KEY = 'sreadya:accessibility:v1';
 
 export const DEFAULT_ACCESSIBILITY_PREFERENCES: AccessibilityPreferences = Object.freeze({
   textScale: 'normal',
@@ -68,12 +68,12 @@ export function saveAccessibilityPreferences(preferences: AccessibilityPreferenc
   storage.setItem(ACCESSIBILITY_STORAGE_KEY, JSON.stringify(record));
 }
 
-export function accessibilityDataAttributes(preferences: AccessibilityPreferences): Record<`data-sreva-${string}`, string> {
+export function accessibilityDataAttributes(preferences: AccessibilityPreferences): Record<`data-sreadya-${string}`, string> {
   return {
-    'data-sreva-text-scale': preferences.textScale,
-    'data-sreva-motion': preferences.motion,
-    'data-sreva-contrast': preferences.contrast,
-    'data-sreva-language-mode': preferences.easyLanguage ? 'easy' : 'standard',
+    'data-sreadya-text-scale': preferences.textScale,
+    'data-sreadya-motion': preferences.motion,
+    'data-sreadya-contrast': preferences.contrast,
+    'data-sreadya-language-mode': preferences.easyLanguage ? 'easy' : 'standard',
   };
 }
 

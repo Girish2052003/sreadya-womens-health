@@ -11,7 +11,7 @@ export default function LifeStagePage() {
           <div>
             <p className="workspace-kicker">Private workspace</p>
             <h1>Life Stage</h1>
-            <p className="workspace-note">Adapt Sreva’s local context without deleting or rewriting your existing health history.</p>
+            <p className="workspace-note">Adapt Sreadya’s local context without deleting or rewriting your existing health history.</p>
           </div>
           <StatusChip tone="success">Local-first</StatusChip>
         </header>

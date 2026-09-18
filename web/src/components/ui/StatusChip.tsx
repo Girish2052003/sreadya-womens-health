@@ -9,8 +9,8 @@ type Props = {
 
 export function StatusChip({ children, tone = 'neutral' }: Props) {
   return (
-    <span className={`sreva-status sreva-status--${tone}`} data-tone={tone}>
-      <span className="sreva-status__dot" aria-hidden="true" />
+    <span className={`sreadya-status sreadya-status--${tone}`} data-tone={tone}>
+      <span className="sreadya-status__dot" aria-hidden="true" />
       <span>{children}</span>
     </span>
   );
