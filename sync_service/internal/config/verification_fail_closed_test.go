@@ -7,8 +7,8 @@ import (
 
 func TestOTPRouteEnablementFailsClosedWithoutApprovedProductionSender(t *testing.T) {
 	values := map[string]string{
-		"SREVA_SYNC_DATABASE_URL": "postgres://example.invalid/sreva",
-		"SREVA_SYNC_OTP_ENABLED":  "true",
+		"SREADYA_SYNC_DATABASE_URL": "postgres://example.invalid/sreadya",
+		"SREADYA_SYNC_OTP_ENABLED":  "true",
 	}
 	_, err := LoadFromLookup(func(key string) (string, bool) {
 		value, ok := values[key]
@@ -24,8 +24,8 @@ func TestOTPRouteEnablementFailsClosedWithoutApprovedProductionSender(t *testing
 
 func TestOTPRouteDisabledKeepsProviderIndependentConfigValid(t *testing.T) {
 	values := map[string]string{
-		"SREVA_SYNC_DATABASE_URL": "postgres://example.invalid/sreva",
-		"SREVA_SYNC_OTP_ENABLED":  "false",
+		"SREADYA_SYNC_DATABASE_URL": "postgres://example.invalid/sreadya",
+		"SREADYA_SYNC_OTP_ENABLED":  "false",
 	}
 	cfg, err := LoadFromLookup(func(key string) (string, bool) {
 		value, ok := values[key]

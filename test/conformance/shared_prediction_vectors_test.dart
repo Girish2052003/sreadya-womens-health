@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sreva/features/predictions/domain/cycle_predictor.dart';
+import 'package:sreadya/features/predictions/domain/cycle_predictor.dart';
 
 void main() {
   test('prediction-v1 matches every shared golden vector', () {
