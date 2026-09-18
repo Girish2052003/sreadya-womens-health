@@ -25,7 +25,7 @@ test('accessibility preferences apply immediately and persist locally', async ({
   await page.getByLabel('Large').check();
   await page.getByLabel('Reduce motion').check();
   await page.getByLabel('High contrast').check();
-  await page.getByLabel('Easy language').check();
+  await page.getByRole('radio', { name: 'Easy language' }).check();
 
   const root = page.locator('html');
   await expect(root).toHaveAttribute('data-sreva-text-scale', 'large');
@@ -50,7 +50,7 @@ test('accessibility preferences apply immediately and persist locally', async ({
   await expect(page.getByLabel('Large')).toBeChecked();
   await expect(page.getByLabel('Reduce motion')).toBeChecked();
   await expect(page.getByLabel('High contrast')).toBeChecked();
-  await expect(page.getByLabel('Easy language')).toBeChecked();
+  await expect(page.getByRole('radio', { name: 'Easy language' })).toBeChecked();
   await expect(root).toHaveAttribute('data-sreva-text-scale', 'large');
   await expect(root).toHaveAttribute('data-sreva-motion', 'reduced');
   await expect(root).toHaveAttribute('data-sreva-contrast', 'high');
