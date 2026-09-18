@@ -1183,5 +1183,13 @@
   "language.machineComplete": "Machine translated",
   "language.reviewed": "Human reviewed",
   "language.source": "Source language",
-  "language.pseudo": "Test locale"
+  "language.pseudo": "Test locale",
+  "brand.homeAria": "Sreadya home",
+  "nav.workspace.controls": "Workspace controls",
+  "appLock.pinAria": "Sreadya PIN",
+  "sharing.shareTitle": "Sreadya shared summary",
+  "vault.exportPassphraseAria": "CycleVault export passphrase",
+  "vault.confirmPassphraseAria": "Confirm CycleVault export passphrase",
+  "vault.restorePassphraseAria": "CycleVault restore passphrase",
+  "vault.ackAria": "Acknowledge CycleVault replacement"
 }

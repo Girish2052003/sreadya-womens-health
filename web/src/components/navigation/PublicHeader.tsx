@@ -20,7 +20,7 @@ export function PublicHeader({ showLanguageChooser = false }: { showLanguageChoo
 
   return (
     <header className="public-header">
-      <Link className="public-header__brand" href="/" aria-label="Sreadya home" title="Sreadya home">
+      <Link className="public-header__brand" href="/" aria-label={t('brand.homeAria')} title={t('brand.homeAria')}>
         <span className="public-header__mark" aria-hidden="true">S</span>
         <span>{t('brand.name')}</span>
       </Link>

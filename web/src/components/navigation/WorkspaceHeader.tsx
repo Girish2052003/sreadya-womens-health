@@ -7,10 +7,7 @@ import { useI18n } from '../../i18n/I18nProvider';
 
 function fallbackSectionLabel(pathname: string): string {
   const part = pathname.split('/').filter(Boolean).at(-1) ?? 'home';
-  return part
-    .split('-')
-    .map((piece) => piece ? piece[0].toUpperCase() + piece.slice(1) : piece)
-    .join(' ');
+  return part.split('-').map((piece) => piece ? piece[0].toUpperCase() + piece.slice(1) : piece).join(' ');
 }
 
 export function WorkspaceHeader() {
@@ -29,7 +26,7 @@ export function WorkspaceHeader() {
   };
 
   return (
-    <header className="workspace-topbar" aria-label="Workspace controls">
+    <header className="workspace-topbar" aria-label={t('nav.workspace.controls')}>
       <button className="workspace-topbar__back" type="button" onClick={goBack} aria-label={t('common.back')}>
         <span aria-hidden="true">←</span>
         <span>{t('common.back')}</span>
