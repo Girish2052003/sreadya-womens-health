@@ -7,8 +7,8 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SPEC = ROOT / "docs/superpowers/specs/2026-09-15-sreva-master-design.md"
-SPEC_TITLE = "Sreva Master Product Specification v1.0"
+SPEC = ROOT / "docs/superpowers/specs/2026-09-15-sreadya-master-design.md"
+SPEC_TITLE = "Sreadya Master Product Specification v1.0"
 
 # Each frozen Section 4 capability family has at least one concrete
 # implementation location and one executable evidence location. Shared
@@ -127,7 +127,7 @@ CAPABILITIES = {
             "lib/features/health_integration/data/health_platform.dart",
             "lib/features/health_integration/data/health_import_service.dart",
             "platform_templates/android/MainActivity.kt",
-            "platform_templates/ios/SrevaPlatformBridge.swift",
+            "platform_templates/ios/SreadyaPlatformBridge.swift",
         ],
         "evidence": ["verification/reference/test_v1_closure_structure.py"],
     },
@@ -205,7 +205,7 @@ CAPABILITIES = {
         "evidence": [
             "test/domain/cycle_predictor_test.dart",
             "test/predictions/prediction_history_test.dart",
-            "verification/reference/test_sreva_reference.py",
+            "verification/reference/test_sreadya_reference.py",
         ],
     },
     "4.21": {
@@ -217,7 +217,7 @@ CAPABILITIES = {
         "evidence": [
             "test/reminders/reminder_policy_test.dart",
             "platform_templates/android/ReminderWallClockTest.kt",
-            "verification/reference/test_sreva_reference.py",
+            "verification/reference/test_sreadya_reference.py",
         ],
     },
     "4.22": {
@@ -236,16 +236,16 @@ CAPABILITIES = {
 
 # Positive medical/contraceptive claims are release blockers. Match affirmative
 # product claims rather than naked medical phrases so transparent disclaimers
-# such as "Sreva does not diagnose disease" remain valid safety copy.
+# such as "Sreadya does not diagnose disease" remain valid safety copy.
 forbidden_claims = (
-    r"\b(?:sreva|the app)\s+(?:can\s+)?diagnos(?:e|es)\b",
-    r"\b(?:sreva|the app)\s+(?:can\s+)?treat(?:s)?\s+(?:disease|condition|symptoms?)\b",
-    r"\b(?:sreva|the app)\s+(?:can\s+)?prevent(?:s)?\s+pregnancy\b",
+    r"\b(?:sreadya|the app)\s+(?:can\s+)?diagnos(?:e|es)\b",
+    r"\b(?:sreadya|the app)\s+(?:can\s+)?treat(?:s)?\s+(?:disease|condition|symptoms?)\b",
+    r"\b(?:sreadya|the app)\s+(?:can\s+)?prevent(?:s)?\s+pregnancy\b",
     r"\bguaranteed contraception\b",
     r"\bguaranteed contraceptive effectiveness\b",
     r"\bcontraceptive effectiveness is guaranteed\b",
     r"\bclinically guarantees ovulation\b",
-    r"\btreatment decision provided by sreva\b",
+    r"\btreatment decision provided by sreadya\b",
 )
 
 

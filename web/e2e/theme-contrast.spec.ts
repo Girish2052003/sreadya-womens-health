@@ -28,21 +28,21 @@ test('public appearance control switches and persists System, Light and Dark', a
   await expect(page.getByRole('button', { name: 'Dark theme' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Dark theme' }).click();
-  await expect(page.locator('html')).toHaveAttribute('data-sreva-theme', 'dark');
+  await expect(page.locator('html')).toHaveAttribute('data-sreadya-theme', 'dark');
 
-  const storedDark = await page.evaluate(() => JSON.parse(localStorage.getItem('sreva:general-settings:v1') ?? '{}'));
+  const storedDark = await page.evaluate(() => JSON.parse(localStorage.getItem('sreadya:general-settings:v1') ?? '{}'));
   expect(storedDark.theme).toBe('dark');
 
   await page.goto('/features/');
-  await expect(page.locator('html')).toHaveAttribute('data-sreva-theme', 'dark');
+  await expect(page.locator('html')).toHaveAttribute('data-sreadya-theme', 'dark');
 
   await page.getByRole('button', { name: 'Light theme' }).click();
-  await expect(page.locator('html')).toHaveAttribute('data-sreva-theme', 'light');
+  await expect(page.locator('html')).toHaveAttribute('data-sreadya-theme', 'light');
   await page.reload();
-  await expect(page.locator('html')).toHaveAttribute('data-sreva-theme', 'light');
+  await expect(page.locator('html')).toHaveAttribute('data-sreadya-theme', 'light');
 
   await page.getByRole('button', { name: 'System theme' }).click();
-  const storedSystem = await page.evaluate(() => JSON.parse(localStorage.getItem('sreva:general-settings:v1') ?? '{}'));
+  const storedSystem = await page.evaluate(() => JSON.parse(localStorage.getItem('sreadya:general-settings:v1') ?? '{}'));
   expect(storedSystem.theme).toBe('system');
 });
 

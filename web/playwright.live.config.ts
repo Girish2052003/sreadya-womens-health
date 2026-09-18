@@ -7,7 +7,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['line'], ['html', { open: 'never' }]] : 'list',
   use: {
-    baseURL: process.env.SREVA_LIVE_BASE_URL ?? 'https://girish2052003.github.io/sreva-womens-health/',
+    baseURL: process.env.SREADYA_LIVE_BASE_URL ?? 'https://girish2052003.github.io/sreadya-womens-health/',
     trace: 'retain-on-failure',
   },
   projects: [
