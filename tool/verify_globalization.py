@@ -194,6 +194,51 @@ def check_generated_copy_boundaries() -> list[str]:
         failures.append("report generator lacks localized-copy / non-Unicode-font fail-closed contract")
     if "PartnerShareCopy" not in sharing:
         failures.append("partner-share generator lacks localized-copy contract")
+
+    assistant_path = ROOT / "web/src/features/assistant/local-intent-parser.ts"
+    capability_path = ROOT / "web/src/pwa/notification-capability.ts"
+    privacy_path = ROOT / "web/src/features/privacy/privacy-status.ts"
+    assistant = assistant_path.read_text("utf-8")
+    capability = capability_path.read_text("utf-8")
+    privacy = privacy_path.read_text("utf-8")
+
+    for value in ("'Health reminder'", "${flow} flow", "label: observationKind"):
+        if value in assistant:
+            failures.append(f"{assistant_path.relative_to(ROOT)}: generated assistant copy bypasses catalogue -> {value}")
+    for value in (
+        "Maximum Privacy keeps reminder delivery local to Sreadya.",
+        "This browser does not expose notification delivery",
+        "Browser notification permission is denied",
+        "Browser notification permission has not been granted",
+        "A reviewed push relay and the required browser capabilities are configured.",
+        "Browser notifications are available while Sreadya is active",
+    ):
+        if value in capability:
+            failures.append(f"{capability_path.relative_to(ROOT)}: capability reason bypasses catalogue -> {value}")
+    for value in (
+        "This browser/device",
+        "AES-GCM encrypted local vault",
+        "Native HealthKit / Health Connect unavailable in Web",
+        "Browser controlled — no Web guarantee",
+    ):
+        if value in privacy:
+            failures.append(f"{privacy_path.relative_to(ROOT)}: privacy status copy bypasses catalogue -> {value}")
+
+    if "reminder.capabilityReason." not in capability:
+        failures.append("notification capability must return stable message IDs")
+    if "privacy.value." not in privacy:
+        failures.append("privacy status must return stable message IDs")
+
+    reminder_policy = ROOT / "web/src/domain/reminders/reminder-policy.ts"
+    for path in sorted(WEB.rglob("*")):
+        if not path.is_file() or path.suffix not in {".ts", ".tsx"} or ".test." in path.name:
+            continue
+        if path == reminder_policy:
+            continue
+        if "notificationBody(" in path.read_text("utf-8"):
+            failures.append(
+                f"{path.relative_to(ROOT)}: frozen English notificationBody wired into Web runtime; localize at render/delivery boundary"
+            )
     return failures
 
 
