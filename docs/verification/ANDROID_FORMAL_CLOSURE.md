@@ -1,10 +1,10 @@
-# Sreva Worldwide v1 Formal Closure Ledger
+# Sreadya Worldwide v1 Formal Closure Ledger
 
 > **C2 scope notice — 16 September 2026:** The historical evidence ledger below is preserved verbatim in substance for the Flutter/mobile v1 baseline and Android production pipeline. It does **not** prove the later Web/PWA, account, passkey, E2EE sync, trusted-device, or recovery-key capabilities. Those require the separate C2 258-ID cross-platform closure programme. This scope notice narrows future interpretation; it does not rewrite the evidence that was recorded.
 
 Status: **FORMAL CLOSURE — evidence-backed and fail-closed.**
 
-Release candidate: Sreva `1.0.0+1`
+Release candidate: Sreadya `1.0.0+1`
 
 Verified feature implementation SHA: `be21114372fdb6167ef2869c668c666dc57ff41e`
 
@@ -24,18 +24,18 @@ This ledger is itself subject to the evidence law at the end of this file: the f
 4. Predictions execute locally.
 5. Insights execute locally.
 6. Period reminders use local OS scheduling.
-7. Sreva operates no developer reproductive-health database.
+7. Sreadya operates no developer reproductive-health database.
 8. Health integrations require granular explicit permission.
 9. Sensitive health data never enters ordinary logs or analytics.
 10. Application updates use signed distribution channels.
 11. Database migrations preserve and validate existing history or fail safely.
 12. Medical/contraceptive claims remain outside v1 unless separately validated and regulated.
 
-> **C2 interpretation of law 7:** for the recorded v1 release, no Sreva reproductive-health sync backend existed. The later approved C2 extension still prohibits a plaintext or developer-decryptable reproductive-health database; optional future infrastructure may hold ciphertext plus minimum operational metadata only after its own security/release gates pass.
+> **C2 interpretation of law 7:** for the recorded v1 release, no Sreadya reproductive-health sync backend existed. The later approved C2 extension still prohibits a plaintext or developer-decryptable reproductive-health database; optional future infrastructure may hold ciphertext plus minimum operational metadata only after its own security/release gates pass.
 
 ## Worldwide v1.0 capability contract
 
-The machine-enforced release gate reads `Sreva Master Product Specification v1.0` and requires exactly Sections `4.1` through `4.22`. Every capability family must map to concrete implementation and executable verification evidence. The verifier additionally checks the complete health-observation model, every life-stage mode, reminder families and privacy modes, and the regulatory firewall.
+The machine-enforced release gate reads `Sreadya Master Product Specification v1.0` and requires exactly Sections `4.1` through `4.22`. Every capability family must map to concrete implementation and executable verification evidence. The verifier additionally checks the complete health-observation model, every life-stage mode, reminder families and privacy modes, and the regulatory firewall.
 
 Required verifier result:
 
@@ -120,9 +120,9 @@ Run `34989149967` on `be21114372fdb6167ef2869c668c666dc57ff41e` completed succes
 
 Evidence artifacts from this run include:
 
-- `sreva-android-v1-ci-test-signed`, artifact `10405223701`, digest `sha256:fc7f8f3d0a3511bd1dd82ee6ebaee8d3cdf9358d168967bebf87eaaaad5aa290`
-- `sreva-security-evidence`, artifact `10405021312`, digest `sha256:09a0408193b5dd293679f0900c553314fad3e1359d3caa012653f207512725ff`
-- `sreva-ios-unsigned-release`, artifact `10404729118`, digest `sha256:123ee653bb6cdaaac997327e1eb8caa7b597d756dc15233cf13c28a6dd99f2ee`
+- `sreadya-android-v1-ci-test-signed`, artifact `10405223701`, digest `sha256:fc7f8f3d0a3511bd1dd82ee6ebaee8d3cdf9358d168967bebf87eaaaad5aa290`
+- `sreadya-security-evidence`, artifact `10405021312`, digest `sha256:09a0408193b5dd293679f0900c553314fad3e1359d3caa012653f207512725ff`
+- `sreadya-ios-unsigned-release`, artifact `10404729118`, digest `sha256:123ee653bb6cdaaac997327e1eb8caa7b597d756dc15233cf13c28a6dd99f2ee`
 
 ## Verified `main` evidence before sealing this record
 
@@ -140,9 +140,9 @@ Run `34993055457` on `f90159000874e936186c8e2fc7eea7252a770ba7` completed succes
 
 Evidence artifacts from this run include:
 
-- `sreva-android-v1-ci-test-signed`, artifact `10407137792`, digest `sha256:d0284a562a749170de1401cd99ea3f26bac1d72b86b00294b2cafac687ba9d54`
-- `sreva-security-evidence`, artifact `10406931304`, digest `sha256:6d20424d71b900c93a0231fd80db8b202654a48452ec0636c24d732fda93208a`
-- `sreva-ios-unsigned-release`, artifact `10406338673`, digest `sha256:8d39e5adf454c3d282e18f34ce996f2422394e3e6f57f78d95122b79dbb10a8d`
+- `sreadya-android-v1-ci-test-signed`, artifact `10407137792`, digest `sha256:d0284a562a749170de1401cd99ea3f26bac1d72b86b00294b2cafac687ba9d54`
+- `sreadya-security-evidence`, artifact `10406931304`, digest `sha256:6d20424d71b900c93a0231fd80db8b202654a48452ec0636c24d732fda93208a`
+- `sreadya-ios-unsigned-release`, artifact `10406338673`, digest `sha256:8d39e5adf454c3d282e18f34ce996f2422394e3e6f57f78d95122b79dbb10a8d`
 
 ## Repository closure
 

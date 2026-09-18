@@ -3,13 +3,13 @@ import 'dart:typed_data';
 
 import 'package:cryptography/cryptography.dart';
 
-const srevaE2eeSuiteV1 = 'SREVA-AES256GCM-HKDFSHA256-ED25519-V1';
+const sreadyaE2eeSuiteV1 = 'SREADYA-AES256GCM-HKDFSHA256-ED25519-V1';
 
 Uint8List lp16Frame(Iterable<List<int>> fields) {
   final output = BytesBuilder(copy: false);
   for (final field in fields) {
     if (field.length > 0xffff) {
-      throw const FormatException('Sreva protocol field is too large.');
+      throw const FormatException('Sreadya protocol field is too large.');
     }
     output.add([(field.length >> 8) & 0xff, field.length & 0xff]);
     output.add(field);
@@ -45,11 +45,11 @@ class SyncEventCryptoContext {
     required List<int> kdfSalt,
     required List<int> nonce,
     this.protocolVersion = 1,
-    this.suiteId = srevaE2eeSuiteV1,
+    this.suiteId = sreadyaE2eeSuiteV1,
   }) : kdfSalt = Uint8List.fromList(kdfSalt),
        nonce = Uint8List.fromList(nonce) {
-    if (protocolVersion != 1 || suiteId != srevaE2eeSuiteV1) {
-      throw const FormatException('Unsupported Sreva E2EE protocol suite.');
+    if (protocolVersion != 1 || suiteId != sreadyaE2eeSuiteV1) {
+      throw const FormatException('Unsupported Sreadya E2EE protocol suite.');
     }
     for (final entry in <(String, String)>[
       (accountId, 'accountId'),
@@ -62,10 +62,10 @@ class SyncEventCryptoContext {
       _requireNonEmpty(entry.$1, entry.$2);
     }
     if (keyEpoch < 0 || baseRevision < 0) {
-      throw const FormatException('Sreva sync revisions must be non-negative.');
+      throw const FormatException('Sreadya sync revisions must be non-negative.');
     }
     if (operation != 'upsert' && operation != 'tombstone') {
-      throw const FormatException('Unsupported Sreva sync operation.');
+      throw const FormatException('Unsupported Sreadya sync operation.');
     }
     _requireLength(this.kdfSalt, 32, 'kdfSalt');
     _requireLength(this.nonce, 12, 'nonce');
@@ -91,13 +91,13 @@ class RecoveryEnvelopeContext {
     required this.accountId,
     required this.vaultId,
     required this.keyEpoch,
-    this.suiteId = srevaE2eeSuiteV1,
+    this.suiteId = sreadyaE2eeSuiteV1,
   }) {
     _requireNonEmpty(accountId, 'accountId');
     _requireNonEmpty(vaultId, 'vaultId');
-    if (keyEpoch < 0) throw const FormatException('Invalid Sreva key epoch.');
-    if (suiteId != srevaE2eeSuiteV1) {
-      throw const FormatException('Unsupported Sreva E2EE protocol suite.');
+    if (keyEpoch < 0) throw const FormatException('Invalid Sreadya key epoch.');
+    if (suiteId != sreadyaE2eeSuiteV1) {
+      throw const FormatException('Unsupported Sreadya E2EE protocol suite.');
     }
   }
 
@@ -115,7 +115,7 @@ class TrustedDeviceTransferContext {
     required this.sourceDeviceId,
     required this.targetDeviceId,
     required this.keyEpoch,
-    this.suiteId = srevaE2eeSuiteV1,
+    this.suiteId = sreadyaE2eeSuiteV1,
   }) {
     for (final entry in <(String, String)>[
       (accountId, 'accountId'),
@@ -126,9 +126,9 @@ class TrustedDeviceTransferContext {
     ]) {
       _requireNonEmpty(entry.$1, entry.$2);
     }
-    if (keyEpoch < 0) throw const FormatException('Invalid Sreva key epoch.');
-    if (suiteId != srevaE2eeSuiteV1) {
-      throw const FormatException('Unsupported Sreva E2EE protocol suite.');
+    if (keyEpoch < 0) throw const FormatException('Invalid Sreadya key epoch.');
+    if (suiteId != sreadyaE2eeSuiteV1) {
+      throw const FormatException('Unsupported Sreadya E2EE protocol suite.');
     }
   }
 
@@ -142,7 +142,7 @@ class TrustedDeviceTransferContext {
 }
 
 Uint8List syncEventKeyInfo(SyncEventCryptoContext context) => lp16Frame([
-  _utf8('sreva-event-key-v1'),
+  _utf8('sreadya-event-key-v1'),
   _utf8(context.eventId),
   _utf8(context.objectId),
   _utf8(context.sourceDeviceId),
@@ -151,7 +151,7 @@ Uint8List syncEventKeyInfo(SyncEventCryptoContext context) => lp16Frame([
 ]);
 
 Uint8List syncEventAad(SyncEventCryptoContext context) => lp16Frame([
-  _utf8('sreva-sync-event-v1'),
+  _utf8('sreadya-sync-event-v1'),
   _utf8(context.accountId),
   _utf8(context.vaultId),
   _utf8(context.eventId),
@@ -165,7 +165,7 @@ Uint8List syncEventAad(SyncEventCryptoContext context) => lp16Frame([
 ]);
 
 Uint8List recoveryKeyInfo(RecoveryEnvelopeContext context) => lp16Frame([
-  _utf8('sreva-recovery-wrap-key-v1'),
+  _utf8('sreadya-recovery-wrap-key-v1'),
   _utf8(context.accountId),
   _utf8(context.vaultId),
   _utf8('${context.keyEpoch}'),
@@ -173,7 +173,7 @@ Uint8List recoveryKeyInfo(RecoveryEnvelopeContext context) => lp16Frame([
 ]);
 
 Uint8List recoveryEnvelopeAad(RecoveryEnvelopeContext context) => lp16Frame([
-  _utf8('sreva-recovery-envelope-v1'),
+  _utf8('sreadya-recovery-envelope-v1'),
   _utf8(context.accountId),
   _utf8(context.vaultId),
   _utf8('${context.keyEpoch}'),
@@ -182,7 +182,7 @@ Uint8List recoveryEnvelopeAad(RecoveryEnvelopeContext context) => lp16Frame([
 
 Uint8List trustedDeviceTransferKeyInfo(TrustedDeviceTransferContext context) =>
     lp16Frame([
-      _utf8('sreva-transfer-wrap-key-v1'),
+      _utf8('sreadya-transfer-wrap-key-v1'),
       _utf8(context.accountId),
       _utf8(context.vaultId),
       _utf8(context.enrollmentId),
@@ -194,7 +194,7 @@ Uint8List trustedDeviceTransferKeyInfo(TrustedDeviceTransferContext context) =>
 
 Uint8List trustedDeviceTransferAad(TrustedDeviceTransferContext context) =>
     lp16Frame([
-      _utf8('sreva-device-transfer-envelope-v1'),
+      _utf8('sreadya-device-transfer-envelope-v1'),
       _utf8(context.accountId),
       _utf8(context.vaultId),
       _utf8(context.enrollmentId),
@@ -223,7 +223,7 @@ Uint8List deviceAuthenticationTranscript({
     _requireNonEmpty(entry.$1, entry.$2);
   }
   return lp16Frame([
-    _utf8('sreva-device-auth-v1'),
+    _utf8('sreadya-device-auth-v1'),
     _utf8(accountId),
     _utf8(deviceId),
     _utf8(method.toUpperCase()),
@@ -311,7 +311,7 @@ class E2eeV1Crypto {
     _requireLength(key, 32, 'key');
     _requireLength(nonce, 12, 'nonce');
     if (ciphertextAndTag.length < 16) {
-      throw const FormatException('Invalid Sreva AES-GCM ciphertext.');
+      throw const FormatException('Invalid Sreadya AES-GCM ciphertext.');
     }
     final split = ciphertextAndTag.length - 16;
     final box = SecretBox(

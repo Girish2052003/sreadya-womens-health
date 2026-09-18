@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Give Sreva's family-preview build a distinct Android application ID.
+"""Give Sreadya's family-preview build a distinct Android application ID.
 
 This changes only the install/distribution identity. The Android namespace,
 Kotlin package, native bridges, Health Connect integration, reminders, privacy
-controls, encrypted vault, and every Sreva feature remain the same as the
+controls, encrypted vault, and every Sreadya feature remain the same as the
 production build.
 """
 
@@ -14,9 +14,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 GRADLE = ROOT / "android" / "app" / "build.gradle.kts"
-PRODUCTION_APPLICATION_ID = "com.sreva.health.sreva"
-PREVIEW_APPLICATION_ID = "com.sreva.health.sreva.preview"
-PRODUCTION_NAMESPACE = "com.sreva.health.sreva"
+PRODUCTION_APPLICATION_ID = "com.sreadya.health.sreadya"
+PREVIEW_APPLICATION_ID = "com.sreadya.health.sreadya.preview"
+PRODUCTION_NAMESPACE = "com.sreadya.health.sreadya"
 
 
 def require_file(path: Path) -> None:
@@ -33,7 +33,7 @@ def configure() -> None:
     if preview_line not in text:
         if production_line not in text:
             raise SystemExit(
-                "Unable to locate Sreva production applicationId in generated Gradle file"
+                "Unable to locate Sreadya production applicationId in generated Gradle file"
             )
         text = text.replace(production_line, preview_line, 1)
 
@@ -49,16 +49,16 @@ def check() -> None:
     namespace_line = f'namespace = "{PRODUCTION_NAMESPACE}"'
 
     if preview_line not in text:
-        raise SystemExit("Sreva family-preview applicationId is not configured")
+        raise SystemExit("Sreadya family-preview applicationId is not configured")
     if production_line in text:
         raise SystemExit("Family-preview build still carries the production applicationId")
     if namespace_line not in text:
         raise SystemExit(
-            "Sreva Android namespace changed unexpectedly; native identity must remain intact"
+            "Sreadya Android namespace changed unexpectedly; native identity must remain intact"
         )
 
     print(
-        "Sreva Android family preview identity: OK "
+        "Sreadya Android family preview identity: OK "
         f"({PREVIEW_APPLICATION_ID}; namespace {PRODUCTION_NAMESPACE})"
     )
 
