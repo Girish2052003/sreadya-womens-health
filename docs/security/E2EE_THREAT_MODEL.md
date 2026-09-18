@@ -1,6 +1,6 @@
-# Sreva E2EE Threat Model v1
+# Sreadya E2EE Threat Model v1
 
-**Scope:** optional Sreva account/device continuity and ciphertext synchronization designed in Task 19. This document does not claim a third-party audit or a proof of cryptographic security.
+**Scope:** optional Sreadya account/device continuity and ciphertext synchronization designed in Task 19. This document does not claim a third-party audit or a proof of cryptographic security.
 
 ## 1. Assets
 
@@ -10,7 +10,7 @@ Confidential assets include health plaintext and local interpretations, VRS and 
 
 **Authorized client:** trusted to hold plaintext while unlocked and perform encryption/decryption. Platform keystores, browser storage, OS sandboxing, device biometrics, and WebAuthn have platform-specific limits.
 
-**Sreva sync/identity service:** trusted for account authorization, device state, sequencing, opaque metadata, and ciphertext transport. It is **not trusted with health plaintext or VRS/RS/TS**.
+**Sreadya sync/identity service:** trusted for account authorization, device state, sequencing, opaque metadata, and ciphertext transport. It is **not trusted with health plaintext or VRS/RS/TS**.
 
 **Network:** untrusted. HTTPS is mandatory; ciphertext integrity and device request signatures provide additional application-layer controls.
 
@@ -46,7 +46,7 @@ Email/SMS identity recovery alone cannot decrypt old vault data. RS is independe
 In-browser E2EE cannot protect plaintext from code executing with equivalent page privileges while the vault is unlocked. CSP, dependency controls, code review, service-worker integrity/update discipline, and minimal dependencies remain release-critical.
 
 ### Rooted/jailbroken/fully compromised OS
-Outside the guarantee boundary. Sreva can reduce exposure but cannot guarantee secret secrecy against a runtime/OS-level attacker.
+Outside the guarantee boundary. Sreadya can reduce exposure but cannot guarantee secret secrecy against a runtime/OS-level attacker.
 
 ### Dependency/supply-chain compromise
 Malicious client dependencies may steal plaintext/secrets. Lock files, dependency review, SBOM, secret/privacy scans, and minimized cryptographic dependencies are mandatory release controls.
@@ -59,7 +59,7 @@ Malicious client dependencies may steal plaintext/secrets. Lock files, dependenc
 4. Loss of all authorized device secret material plus RS makes old E2EE vault unrecoverable; there is no administrator escrow key.
 5. Ciphertext tampering/context substitution is authenticated before plaintext application.
 6. Revoked devices cannot perform future authorized sync operations; no retroactive-erasure claim is made.
-7. Sync failure cannot become silent local health-data loss; local Sreva remains authoritative and usable.
+7. Sync failure cannot become silent local health-data loss; local Sreadya remains authoritative and usable.
 8. Conflicting health edits are not semantically resolved by the server.
 
 ## 5. Metadata not hidden

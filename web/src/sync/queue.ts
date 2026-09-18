@@ -61,11 +61,11 @@ function equalBytes(left: Uint8Array<ArrayBuffer>, right: Uint8Array<ArrayBuffer
   return true;
 }
 
-class SrevaSyncDatabase extends Dexie {
+class SreadyaSyncDatabase extends Dexie {
   outbox!: Table<StoredQueuedSyncEvent, number>;
   state!: Table<StoredSyncQueueState, string>;
 
-  constructor(name = 'sreva-sync-v1') {
+  constructor(name = 'sreadya-sync-v1') {
     super(name);
     this.version(1).stores({
       outbox: '&sequence,&eventId,vaultId',
@@ -75,7 +75,7 @@ class SrevaSyncDatabase extends Dexie {
 }
 
 export class DexieSyncQueuePersistence implements SyncQueuePersistence {
-  constructor(readonly db = new SrevaSyncDatabase()) {}
+  constructor(readonly db = new SreadyaSyncDatabase()) {}
 
   async getEvent(eventId: string): Promise<QueuedSyncEvent | null> {
     const event = await this.db.outbox.where('eventId').equals(eventId).first();

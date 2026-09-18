@@ -10,13 +10,13 @@ import './vault.css';
 import './product-completeness.css';
 
 export const metadata: Metadata = {
-  title: 'Sreva — Private, local-first women\'s health',
+  title: 'Sreadya — Private, local-first women\'s health',
   description:
-    'Sreva is a privacy-first menstrual and cycle health companion with local-first core features and optional encrypted continuity.',
+    'Sreadya is a privacy-first menstrual and cycle health companion with local-first core features and optional encrypted continuity.',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const basePath = process.env.NEXT_PUBLIC_SREVA_BASE_PATH ?? '';
+  const basePath = process.env.NEXT_PUBLIC_SREADYA_BASE_PATH ?? '';
 
   return (
     <html lang="en">
@@ -24,7 +24,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <link rel="manifest" href={`${basePath}/manifest.webmanifest`} />
         <meta name="theme-color" content="#75153a" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-title" content="Sreva" />
+        <meta name="apple-mobile-web-app-title" content="Sreadya" />
       </head>
       <body>
         <AccessibilityBootstrap />

@@ -87,7 +87,7 @@ function lp16(fields: readonly Uint8Array<ArrayBuffer>[]): Uint8Array<ArrayBuffe
 
 export function deviceAuthTranscript(input: DeviceAuthTranscriptInput): Uint8Array<ArrayBuffer> {
   return lp16([
-    utf8('sreva-device-auth-v1'),
+    utf8('sreadya-device-auth-v1'),
     utf8(input.accountId),
     utf8(input.deviceId),
     utf8(input.method.toUpperCase()),
@@ -197,8 +197,8 @@ export class SignedSyncClient {
       cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',
-        'X-Sreva-Device-Challenge': challenge,
-        'X-Sreva-Device-Signature': bytesToBase64(signature),
+        'X-Sreadya-Device-Challenge': challenge,
+        'X-Sreadya-Device-Signature': bytesToBase64(signature),
       },
       body,
     });
@@ -239,8 +239,8 @@ export class SignedSyncClient {
       credentials: 'include',
       cache: 'no-store',
       headers: {
-        'X-Sreva-Device-Challenge': challenge,
-        'X-Sreva-Device-Signature': bytesToBase64(signature),
+        'X-Sreadya-Device-Challenge': challenge,
+        'X-Sreadya-Device-Signature': bytesToBase64(signature),
       },
     });
     if (!response.ok) throw new SyncTransportError(response.status);

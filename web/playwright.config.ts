@@ -15,7 +15,7 @@ export default defineConfig({
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
     { name: 'webkit', use: { ...devices['Desktop Safari'] } },
   ],
-  webServer: process.env.SREVA_LIVE_BASE_URL ? undefined : {
+  webServer: process.env.SREADYA_LIVE_BASE_URL ? undefined : {
     command: 'python3 -m http.server 3000 -d out',
     url: 'http://127.0.0.1:3000',
     reuseExistingServer: !process.env.CI,
