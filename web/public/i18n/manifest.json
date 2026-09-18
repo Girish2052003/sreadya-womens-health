@@ -2,11 +2,11 @@
   "artifacts": {
     "ar": {
       "coverage": "partial",
-      "gitBlobSha": "46819a895f54ba0fd84f67a5cafe666820fecb41",
+      "gitBlobSha": "0d7941b77129a9955c7aa84fb503229c6d962e68",
       "locale": "ar",
       "messageCount": 96,
       "method": "machine",
-      "path": "i18n/ar.46819a895f54ba0f.json",
+      "path": "i18n/ar.0d7941b77129a995.json",
       "provider": "openai-assistant",
       "providerModel": "gpt-5.6-sol",
       "reviewStatus": "machine-unreviewed",

@@ -53,7 +53,7 @@
   "language.popular": "مقترحة",
   "language.refine": "يتم عرض أول {count} نتيجة. ضيّقي البحث لتقليل القائمة.",
   "language.resultCount": "تطابق {count} لغة",
-  "language.resultCount.one": "تطابق لغة واحدة",
+  "language.resultCount.one": "تطابق {count} لغة",
   "language.resultCount.other": "تطابق {count} لغة",
   "language.reviewed": "مراجعة بشرية",
   "language.searchLabel": "ابحثي عن اللغات",

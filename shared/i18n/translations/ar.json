@@ -60,7 +60,7 @@
     "language.available": "مترجم",
     "language.fallback": "الرجوع إلى الإنجليزية",
     "language.resultCount": "تطابق {count} لغة",
-    "language.resultCount.one": "تطابق لغة واحدة",
+    "language.resultCount.one": "تطابق {count} لغة",
     "language.resultCount.other": "تطابق {count} لغة",
     "language.refine": "يتم عرض أول {count} نتيجة. ضيّقي البحث لتقليل القائمة.",
     "language.current": "اللغة الحالية",
