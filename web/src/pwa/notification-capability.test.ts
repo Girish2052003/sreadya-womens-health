@@ -19,7 +19,7 @@ describe('adaptive Web reminder capability', () => {
       timeZone: 'Europe/Helsinki',
       installed: true,
       closedAppDelivery: 'not-guaranteed',
-      reason: 'Maximum Privacy keeps reminder delivery local to Sreadya.',
+      reason: 'reminder.capabilityReason.maximumLocal',
     });
   });
 
@@ -37,7 +37,7 @@ describe('adaptive Web reminder capability', () => {
 
     expect(capability.mechanism).toBe('browser-notification');
     expect(capability.closedAppDelivery).toBe('not-guaranteed');
-    expect(capability.reason).toContain('reviewed push relay');
+    expect(capability.reason).toBe('reminder.capabilityReason.browserActiveOnly');
   });
 
   it('falls back to in-app reminders when browser notifications are unsupported', () => {
