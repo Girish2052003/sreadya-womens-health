@@ -65,7 +65,20 @@ test('reviewed install guidance is explicit for iPhone and Android', async ({ pa
 });
 
 
-test('selected language bundle is cached as a static globalization artifact', async ({ page }) => {
+test('selected language bundle is cached as a static globalization artifact', async ({ page, request }) => {
+  const manifestResponse = await request.get('/i18n/manifest.json');
+  expect(manifestResponse.ok()).toBeTruthy();
+  const globalizationManifest = await manifestResponse.json() as {
+    publicLocales?: Array<{ tag?: string }>;
+  };
+  const arabicPublished = globalizationManifest.publicLocales?.some(
+    (locale) => locale.tag?.toLowerCase() === 'ar',
+  ) ?? false;
+  test.skip(
+    !arabicPublished,
+    'Arabic is intentionally not selectable until the complete Google-generated bundle is published.',
+  );
+
   await page.goto('/');
   await page.evaluate(async () => {
     if (!('serviceWorker' in navigator)) throw new Error('Service worker unavailable');
