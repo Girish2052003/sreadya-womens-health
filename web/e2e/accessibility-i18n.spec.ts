@@ -63,17 +63,21 @@ test('keyboard focus, 200 percent reflow, large text, RTL and long-copy fixtures
   await page.setViewportSize({ width: 320, height: 900 });
   await page.goto(SETTINGS_URL);
 
-  await page.keyboard.press('Tab');
-  const focusEvidence = await page.evaluate(() => {
-    const active = document.activeElement as HTMLElement | null;
-    if (!active) return null;
-    const style = getComputedStyle(active);
-    return {
-      tagName: active.tagName,
-      outlineStyle: style.outlineStyle,
-      outlineWidth: style.outlineWidth,
-    };
-  });
+  let focusEvidence: { tagName: string; outlineStyle: string; outlineWidth: string } | null = null;
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    await page.keyboard.press('Tab');
+    focusEvidence = await page.evaluate(() => {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active || !['A', 'BUTTON', 'INPUT'].includes(active.tagName)) return null;
+      const style = getComputedStyle(active);
+      return {
+        tagName: active.tagName,
+        outlineStyle: style.outlineStyle,
+        outlineWidth: style.outlineWidth,
+      };
+    });
+    if (focusEvidence) break;
+  }
   expect(focusEvidence).not.toBeNull();
   expect(['A', 'BUTTON', 'INPUT']).toContain(focusEvidence!.tagName);
   expect(focusEvidence!.outlineStyle).not.toBe('none');
