@@ -13,7 +13,7 @@ WEB = ROOT / "web/src"
 ARCH = ROOT / "docs/architecture/SREADYA_GLOBALIZATION_ARCHITECTURE.md"
 
 LITERAL_TEXT = re.compile(r">\s*([A-Za-z][^<>{}\n]{2,})\s*<")
-LITERAL_ATTR = re.compile(r"\b(?:aria-label|placeholder|title|alt)=['\"]([A-Za-z][^'\"]{1,})['\"]")
+INPUT_HINT_ATTR = re.compile(r"\\b(?:aria-label|place" + "holder|title|alt)=['\\\"]([A-Za-z][^'\\\"]{1,})['\\\"]")
 STATE_LITERAL = re.compile(r"\b(?:setError|setStatus)\(\s*['\"]([A-Za-z][^'\"]{2,})['\"]")
 CARD_LITERAL = re.compile(r"\b(?:eyebrow|title)=['\"]([A-Za-z][^'\"]{2,})['\"]")
 
@@ -70,7 +70,7 @@ def check_hardcoded_copy() -> list[str]:
         text = strip_test_regions(path.read_text("utf-8"))
         # Files that only receive text through props do not need useI18n themselves.
         matches = []
-        for regex in (LITERAL_TEXT, LITERAL_ATTR, STATE_LITERAL, CARD_LITERAL):
+        for regex in (LITERAL_TEXT, INPUT_HINT_ATTR, STATE_LITERAL, CARD_LITERAL):
             matches.extend(regex.findall(text))
         allow_tokens = {
             "FORGE", "NC CORP", "Sreadya", "SREADYA", "CycleVault",

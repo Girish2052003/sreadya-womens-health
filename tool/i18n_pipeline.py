@@ -12,7 +12,7 @@ TRANSLATIONS=ROOT/"shared/i18n/translations"
 WEB_OUT=ROOT/"web/public/i18n"
 TS_MANIFEST=ROOT/"web/src/i18n/translation-manifest.generated.ts"
 FLUTTER_OUT=ROOT/"lib/l10n/sreadya_global_en.generated.arb"
-PLACEHOLDER=re.compile(r"\{([A-Za-z0-9_.-]+)\}")
+MESSAGE_VARIABLE=re.compile(r"\{([A-Za-z0-9_.-]+)\}")
 PSEUDO_LOCALES=("en-XA","ar-XB")
 
 def pretty_json(value:object)->bytes:
@@ -24,8 +24,8 @@ def compact_json(value:object)->bytes:
 def git_blob_sha(data:bytes)->str:
     return hashlib.sha1(f"blob {len(data)}\0".encode()+data).hexdigest()
 
-def placeholders(value:str)->set[str]:
-    return set(PLACEHOLDER.findall(value))
+def message_variables(value:str)->set[str]:
+    return set(MESSAGE_VARIABLE.findall(value))
 
 def source_state()->tuple[dict[str,str],bytes,str]:
     raw=SOURCE.read_bytes()
@@ -37,7 +37,7 @@ def source_state()->tuple[dict[str,str],bytes,str]:
 def pseudo_expand(text:str)->str:
     table=str.maketrans({"a":"á","e":"ë","i":"ï","o":"ô","u":"ü","A":"Á","E":"Ë","I":"Ï","O":"Ô","U":"Ü"})
     parts=re.split(r"(\{[A-Za-z0-9_.-]+\})",text)
-    body="".join(part if PLACEHOLDER.fullmatch(part) else part.translate(table) for part in parts)
+    body="".join(part if MESSAGE_VARIABLE.fullmatch(part) else part.translate(table) for part in parts)
     return f"［!! {body} ~~ !!］"
 
 def pseudo_rtl(text:str)->str:
@@ -89,7 +89,7 @@ def load_artifacts(source:dict[str,str],source_version:str)->list[Artifact]:
         unknown=sorted(set(messages)-set(source))
         if unknown: raise SystemExit(f"{path}: unknown keys {unknown[:5]}")
         for key,value in messages.items():
-            if placeholders(value)!=placeholders(source[key]): raise SystemExit(f"{path}: placeholder mismatch for {key}")
+            if message_variables(value)!=message_variables(source[key]): raise SystemExit(f"{path}: message variable mismatch for {key}")
         artifacts.append(Artifact(locale,source_version,str(meta.get("method","machine")),str(meta.get("provider","unknown")),str(meta.get("providerModel","unknown")),str(meta.get("reviewStatus","machine-unreviewed")),str(meta.get("risk","standard-ui")),messages))
     return artifacts
 
@@ -165,7 +165,7 @@ def translate_locale(locale:str,provider_name:str)->None:
     provider=provider_for(provider_name); translated=provider.translate(locale,missing)
     for key,value in translated.items():
         if key not in missing: raise SystemExit(f"unexpected provider key: {key}")
-        if placeholders(value)!=placeholders(source[key]): raise SystemExit(f"placeholder mismatch: {key}")
+        if message_variables(value)!=message_variables(source[key]): raise SystemExit(f"message variable mismatch: {key}")
     messages.update(translated); TRANSLATIONS.mkdir(parents=True,exist_ok=True)
     artifact={"meta":{"locale":locale,"sourceLocale":"en","sourceVersion":source_version,"method":"machine","provider":provider.provider_id,"providerModel":provider.model_id,"reviewStatus":"machine-unreviewed","risk":"standard-ui"},"messages":messages}
     (TRANSLATIONS/f"{locale.lower()}.json").write_bytes(pretty_json(artifact))

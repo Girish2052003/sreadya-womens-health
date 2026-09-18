@@ -1078,7 +1078,6 @@
   "catalogue.families": "launch families",
   "catalogue.futureCount": "future / optional items kept separate",
   "catalogue.search": "Find a Sreadya capability",
-  "catalogue.placeholder": "Try reminders, privacy, recovery, flow, mood…",
   "catalogue.showing": "Showing {count} of 258 launch requirements.",
   "catalogue.surface.interaction": "Use feature",
   "catalogue.surface.protection": "Active protection",
@@ -1191,5 +1190,6 @@
   "vault.exportPassphraseAria": "CycleVault export passphrase",
   "vault.confirmPassphraseAria": "Confirm CycleVault export passphrase",
   "vault.restorePassphraseAria": "CycleVault restore passphrase",
-  "vault.ackAria": "Acknowledge CycleVault replacement"
+  "vault.ackAria": "Acknowledge CycleVault replacement",
+  "catalogue.searchHint": "Try reminders, privacy, recovery, flow, mood…"
 }

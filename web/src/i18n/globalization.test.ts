@@ -38,7 +38,7 @@ describe('SREADYA globalization contract', () => {
     });
   });
 
-  it('preserves placeholders through the public interpolation facade', () => {
+  it('preserves message variables through the public interpolation facade', () => {
     expect(interpolateMessage(sourceMessage('language.resultCount.other'), { count: 7 })).toContain('7');
     expect(interpolateMessage('Hello {name}', { name: 'Sreadya' })).toBe('Hello Sreadya');
   });
