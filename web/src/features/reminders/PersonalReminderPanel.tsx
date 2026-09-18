@@ -1,174 +1,19 @@
 'use client';
-
-import { useEffect, useRef, useState } from 'react';
-
+import { useEffect,useRef,useState } from 'react';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { StatusChip } from '../../components/ui/StatusChip';
+import { useI18n } from '../../i18n/I18nProvider';
 import { DexieVaultPersistence } from '../../vault/db';
 import { VaultService } from '../../vault/vault-service';
 import { continuePrivately } from '../onboarding/private-onboarding';
-import {
-  PERSONAL_REMINDER_KINDS,
-  PersonalReminderRepository,
-  type PersonalReminder,
-  type PersonalReminderKind,
-} from './personal-reminder-repository';
-
-const LABELS: Record<PersonalReminderKind, string> = {
-  medication: 'Medication reminder',
-  contraception: 'Contraception reminder',
-  supplement: 'Supplement reminder',
-  ovulationTest: 'Ovulation-test reminder',
-  pregnancyTest: 'Pregnancy-test reminder',
-  custom: 'Custom reminder',
-};
-
-function time(value: PersonalReminder): string {
-  return `${String(value.hour).padStart(2, '0')}:${String(value.minute).padStart(2, '0')}`;
-}
-
-export function PersonalReminderPanel() {
-  const repositoryRef = useRef<PersonalReminderRepository | null>(null);
-  const vaultRef = useRef<VaultService | null>(null);
-  const [items, setItems] = useState<PersonalReminder[]>([]);
-  const [status, setStatus] = useState('Opening encrypted reminder store…');
-  const [error, setError] = useState('');
-  const [ready, setReady] = useState(false);
-
-  const refresh = async (repository: PersonalReminderRepository) => setItems(await repository.list());
-
-  useEffect(() => {
-    let cancelled = false;
-    const vault = new VaultService(new DexieVaultPersistence());
-    vaultRef.current = vault;
-    void (async () => {
-      await continuePrivately(vault);
-      const repository = new PersonalReminderRepository(vault);
-      if (cancelled) return;
-      repositoryRef.current = repository;
-      await refresh(repository);
-      setStatus('Encrypted personal reminders ready');
-      setReady(true);
-    })().catch(() => {
-      if (cancelled) return;
-      setError('Sreadya could not open the encrypted personal reminder store.');
-      setStatus('Personal reminder store unavailable');
-      setReady(true);
-    });
-    return () => {
-      cancelled = true;
-      repositoryRef.current = null;
-      vaultRef.current = null;
-      vault.lock();
-    };
-  }, []);
-
-  const create = async (form: HTMLFormElement) => {
-    const repository = repositoryRef.current;
-    if (!repository) return;
-    const data = new FormData(form);
-    const [hour, minute] = String(data.get('time') || '08:00').split(':').map(Number);
-    const kind = String(data.get('kind')) as PersonalReminderKind;
-    const label = String(data.get('label') ?? '').trim();
-    const date = String(data.get('date') ?? '').trim();
-    const snoozeMinutes = Number(data.get('snooze') ?? 10);
-
-    if (!label) {
-      setError('Give the reminder a private label.');
-      return;
-    }
-
-    const reminder: PersonalReminder = {
-      id: crypto.randomUUID(),
-      kind,
-      label,
-      hour,
-      minute,
-      ...(date ? { date } : {}),
-      enabled: true,
-      snoozeMinutes,
-      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
-      createdAt: new Date().toISOString(),
-    };
-
-    setError('');
-    try {
-      await repository.save(reminder);
-      await refresh(repository);
-      form.reset();
-      setStatus('Personal reminder saved locally · encrypted');
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Sreadya could not save the personal reminder.');
-    }
-  };
-
-  const changeEnabled = async (item: PersonalReminder, enabled: boolean) => {
-    const repository = repositoryRef.current;
-    if (!repository) return;
-    await repository.save({ ...item, enabled });
-    await refresh(repository);
-  };
-
-  const snooze = async (item: PersonalReminder) => {
-    const repository = repositoryRef.current;
-    if (!repository) return;
-    await repository.snooze(item.id);
-    await refresh(repository);
-    setStatus(`Snoozed for ${item.snoozeMinutes} minutes`);
-  };
-
-  const remove = async (id: string) => {
-    const repository = repositoryRef.current;
-    if (!repository) return;
-    await repository.delete(id);
-    await refresh(repository);
-    setStatus('Personal reminder deleted');
-  };
-
-  return (
-    <div className="core-panel-grid" data-testid="personal-reminders" aria-busy={!ready}>
-      <Card eyebrow="Personal reminder manager" title="Medication, tests & custom reminders">
-        <div className="account-free-core__status">
-          <StatusChip tone={error ? 'danger' : ready ? 'success' : 'info'}>{status}</StatusChip>
-        </div>
-        {error ? <p className="core-error" role="alert">{error}</p> : null}
-        {ready ? (
-          <form className="structured-observation__form" onSubmit={(event) => { event.preventDefault(); void create(event.currentTarget); }}>
-            <label><span>Reminder type</span><select name="kind" defaultValue="medication">
-              {PERSONAL_REMINDER_KINDS.map((kind) => <option value={kind} key={kind}>{LABELS[kind]}</option>)}
-            </select></label>
-            <label><span>Private label</span><input name="label" maxLength={120} required /></label>
-            <div className="structured-observation__row">
-              <label><span>Date (optional; empty repeats daily)</span><input name="date" type="date" /></label>
-              <label><span>Time</span><input name="time" type="time" defaultValue="08:00" required /></label>
-            </div>
-            <label><span>Snooze</span><select name="snooze" defaultValue="10">
-              <option value="5">5 minutes</option><option value="10">10 minutes</option>
-              <option value="30">30 minutes</option><option value="60">60 minutes</option>
-            </select></label>
-            <Button type="submit">Save personal reminder</Button>
-            <p className="workspace-note">The intent is stored locally with its wall-clock time and time zone. Browser/PWA delivery uses the strongest currently available reviewed mechanism; closed-app delivery is not promised without a reviewed push relay.</p>
-          </form>
-        ) : null}
-      </Card>
-
-      <Card eyebrow="Saved locally" title={items.length ? 'Your personal reminders' : 'No personal reminders yet'}>
-        {items.length ? <ul className="structured-observation__records">
-          {items.map((item) => (
-            <li key={item.id}>
-              <header><strong>{item.label}</strong><span>{LABELS[item.kind]}</span></header>
-              <p className="structured-observation__meta">{item.date ? item.date + ' · ' : 'Daily · '}{time(item)} · {item.timeZone}</p>
-              {item.snoozedUntil ? <p>Snoozed until {new Date(item.snoozedUntil).toLocaleString()}.</p> : null}
-              <div className="continuity-actions">
-                <Button variant="secondary" onClick={() => { void changeEnabled(item, !item.enabled); }}>{item.enabled ? 'Pause' : 'Enable'}</Button>
-                <Button variant="secondary" onClick={() => { void snooze(item); }}>Snooze</Button>
-                <Button variant="quiet" onClick={() => { void remove(item.id); }}>Delete</Button>
-              </div>
-            </li>
-          ))}
-        </ul> : <p>Create medication, contraception, supplement, ovulation-test, pregnancy-test or custom reminder intents here.</p>}
-      </Card>
-    </div>
-  );
+import { PERSONAL_REMINDER_KINDS,PersonalReminderRepository,type PersonalReminder,type PersonalReminderKind } from './personal-reminder-repository';
+function time(value:PersonalReminder):string{return `${String(value.hour).padStart(2,'0')}:${String(value.minute).padStart(2,'0')}`;}
+export function PersonalReminderPanel(){
+ const {t,locale}=useI18n(),repositoryRef=useRef<PersonalReminderRepository|null>(null),vaultRef=useRef<VaultService|null>(null);const[items,setItems]=useState<PersonalReminder[]>([]),[status,setStatus]=useState(()=>t('reminder.personalOpening')),[error,setError]=useState(''),[ready,setReady]=useState(false);const refresh=async(r:PersonalReminderRepository)=>setItems(await r.list());
+ useEffect(()=>{let cancelled=false;const vault=new VaultService(new DexieVaultPersistence());vaultRef.current=vault;void(async()=>{await continuePrivately(vault);const r=new PersonalReminderRepository(vault);if(cancelled)return;repositoryRef.current=r;await refresh(r);setStatus(t('reminder.personalReady'));setReady(true);})().catch(()=>{if(cancelled)return;setError(t('reminder.personalOpenError'));setStatus(t('reminder.personalUnavailable'));setReady(true);});return()=>{cancelled=true;repositoryRef.current=null;vaultRef.current=null;vault.lock();};},[t]);
+ const create=async(form:HTMLFormElement)=>{const r=repositoryRef.current;if(!r)return;const data=new FormData(form),[hour,minute]=String(data.get('time')||'08:00').split(':').map(Number),kind=String(data.get('kind')) as PersonalReminderKind,label=String(data.get('label')??'').trim(),date=String(data.get('date')??'').trim(),snoozeMinutes=Number(data.get('snooze')??10);if(!label){setError(t('reminder.personalLabelError'));return;}const reminder:PersonalReminder={id:crypto.randomUUID(),kind,label,hour,minute,...(date?{date}:{}),enabled:true,snoozeMinutes,timeZone:Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC',createdAt:new Date().toISOString()};setError('');try{await r.save(reminder);await refresh(r);form.reset();setStatus(t('reminder.personalSaved'));}catch(cause){setError(cause instanceof Error?cause.message:t('reminder.personalSaveError'));}};
+ const changeEnabled=async(item:PersonalReminder,enabled:boolean)=>{const r=repositoryRef.current;if(!r)return;await r.save({...item,enabled});await refresh(r);};const snooze=async(item:PersonalReminder)=>{const r=repositoryRef.current;if(!r)return;await r.snooze(item.id);await refresh(r);setStatus(t('reminder.personalSnoozed',{minutes:item.snoozeMinutes}));};const remove=async(id:string)=>{const r=repositoryRef.current;if(!r)return;await r.delete(id);await refresh(r);setStatus(t('reminder.personalDeleted'));};
+ return <div className="core-panel-grid" data-testid="personal-reminders" aria-busy={!ready}><Card eyebrow={t('reminder.personalEyebrow')} title={t('reminder.personalTitle')}><div className="account-free-core__status"><StatusChip tone={error?'danger':ready?'success':'info'}>{status}</StatusChip></div>{error?<p className="core-error" role="alert">{error}</p>:null}{ready?<form className="structured-observation__form" onSubmit={e=>{e.preventDefault();void create(e.currentTarget);}}><label><span>{t('reminder.type')}</span><select name="kind" defaultValue="medication">{PERSONAL_REMINDER_KINDS.map(kind=><option value={kind} key={kind}>{t(`reminder.kind.${kind}`)}</option>)}</select></label><label><span>{t('reminder.privateLabel')}</span><input name="label" maxLength={120} required/></label><div className="structured-observation__row"><label><span>{t('reminder.date')}</span><input name="date" type="date"/></label><label><span>{t('reminder.time')}</span><input name="time" type="time" defaultValue="08:00" required/></label></div><label><span>{t('reminder.snooze')}</span><select name="snooze" defaultValue="10">{[5,10,30,60].map(m=><option key={m} value={m}>{t('reminder.minutes',{minutes:m})}</option>)}</select></label><Button type="submit">{t('reminder.personalSave')}</Button><p className="workspace-note">{t('reminder.personalBoundary')}</p></form>:null}</Card>
+ <Card eyebrow={t('reminder.savedEyebrow')} title={items.length?t('reminder.savedTitle'):t('reminder.savedEmpty')}>{items.length?<ul className="structured-observation__records">{items.map(item=><li key={item.id}><header><strong>{item.label}</strong><span>{t(`reminder.kind.${item.kind}`)}</span></header><p className="structured-observation__meta">{item.date?item.date+' · ':t('reminder.daily')+' · '}{time(item)} · {item.timeZone}</p>{item.snoozedUntil?<p>{t('reminder.snoozedUntil',{time:new Date(item.snoozedUntil).toLocaleString(locale)})}</p>:null}<div className="continuity-actions"><Button variant="secondary" onClick={()=>{void changeEnabled(item,!item.enabled);}}>{item.enabled?t('reminder.pause'):t('reminder.enable')}</Button><Button variant="secondary" onClick={()=>{void snooze(item);}}>{t('reminder.snoozeAction')}</Button><Button variant="quiet" onClick={()=>{void remove(item.id);}}>{t('common.delete')}</Button></div></li>)}</ul>:<p>{t('reminder.emptyBody')}</p>}</Card></div>;
 }
