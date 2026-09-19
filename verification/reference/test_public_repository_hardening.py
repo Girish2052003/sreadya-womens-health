@@ -1,3 +1,4 @@
+import json
 import re
 from pathlib import Path
 
@@ -131,4 +132,30 @@ def test_production_release_unit_tests_keep_complete_signing_environment() -> No
         "SREADYA_ANDROID_KEY_PASSWORD",
     ):
         assert name in block
+
+def test_published_android_release_matches_public_web_download_surface() -> None:
+    manifest = json.loads(_text(ROOT / "release" / "android-production.json"))
+    release_source = _text(ROOT / "web" / "src" / "content" / "android-release.ts")
+    topic_source = _text(ROOT / "web" / "src" / "content" / "public-topic-content.ts")
+    install_source = _text(ROOT / "web" / "src" / "components" / "pwa" / "InstallGuide.tsx")
+
+    version = manifest["version"]
+    tag = manifest["release_tag"]
+    asset = manifest["public_apk_asset"]
+    expected_apk = (
+        "https://github.com/Girish2052003/sreadya-womens-health/releases/download/"
+        + tag.replace("+", "%2B")
+        + "/"
+        + asset
+    )
+    expected_checksum = expected_apk + ".sha256"
+
+    assert f"version: '{version}'" in release_source
+    assert f"tag: '{tag}'" in release_source
+    assert expected_apk in release_source
+    assert expected_checksum in release_source
+    assert "androidProductionRelease.apkUrl" in topic_source
+    assert "androidProductionRelease.apkUrl" in install_source
+    assert "androidProductionRelease.checksumUrl" in install_source
+    assert "Download Android APK" not in topic_source
 
