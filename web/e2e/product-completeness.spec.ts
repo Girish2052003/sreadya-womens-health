@@ -38,13 +38,30 @@ test('structured symptom workspace performs a real encrypted local task', async 
   await expect(page.getByText('SYNTHETIC_PRODUCT_COMPLETENESS_NOTE')).toHaveCount(0);
 });
 
-test('public Features catalogue exposes all 258 launch IDs and keeps future items separate', async ({ page }) => {
+test('public Features page exposes user-facing feature homes without internal planning metadata', async ({ page }) => {
   await page.goto('/features/');
   await expect(page.getByRole('heading', { level: 1, name: 'Features' })).toBeVisible();
-  await expect(page.locator('[data-capability-id]')).toHaveCount(258);
-  await expect(page.getByText('Future / optional — not launch promises')).toBeVisible();
-  await page.getByLabel('Find a Sreadya capability').fill('recovery');
-  await expect(page.getByText('ID-009')).toBeVisible();
+  await expect(page.locator('[data-capability-id]')).toHaveCount(0);
+  await expect(page.locator('[data-feature-route]')).toHaveCount(24);
+
+  await page.getByLabel('Find a Sreadya feature').fill('recovery');
+  await expect(page.getByRole('link', { name: /Recovery/i })).toBeVisible();
+
+  const publicText = await page.locator('body').innerText();
+  expect(publicText).not.toMatch(/\b(?:CYC|PRED|REM|SYM|REPRO|WELL|REP|PRIV|BACK|ACC|ARCH|PART|LIFE|ID|SYNC|WEB|FUT)-\d{3}\b/);
+  expect(publicText).not.toContain('258');
+  expect(publicText).not.toContain('launch requirements');
+  expect(publicText).not.toContain('Engineering tracks');
+  expect(publicText).not.toContain('Complete launch contract');
+});
+
+test('workspace More is the single secondary-feature hub without an All features loop', async ({ page }) => {
+  await page.goto('/app/more/');
+  await expect(page.getByRole('heading', { level: 1, name: 'More' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'All features' })).toHaveCount(0);
+  await expect(page.getByText(/Browse the complete 258-ID capability catalogue/i)).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Cycle & periods' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Privacy Center' })).toBeVisible();
 });
 
 test('provider-dependent continuity surfaces fail honestly while local controls remain usable', async ({ page }) => {
