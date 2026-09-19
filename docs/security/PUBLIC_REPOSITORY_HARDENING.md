@@ -20,13 +20,15 @@ The normal `Sreadya CI` workflow is verification-only for installable applicatio
 
 Normal CI may publish non-secret verification evidence such as the CycloneDX SBOM and `pubspec.lock`.
 
-The Android production and family-preview workflows are separate, manually dispatched release paths. They are guarded so release jobs run only in the canonical repository on `refs/heads/main`. Both release paths use environment-scoped secrets, disable persisted checkout credentials, and remove decoded keystores and plaintext release staging material in an `always()` cleanup step.
+The Android production and family-preview workflows are separate controlled release paths. Family preview remains manually dispatched. Production may be manually dispatched or intentionally triggered by a change to the reviewed `release/android-production.json` manifest on canonical `main`. Both paths are guarded to the canonical repository and `refs/heads/main`, use environment-scoped secrets, disable persisted checkout credentials, and remove decoded keystores and plaintext release staging material in an `always()` cleanup step.
 
 ## Public artifact boundary
 
 A public repository makes Actions metadata and artifacts more visible, so signed Android release files are not uploaded as plaintext Actions artifacts.
 
-Before upload, each controlled release workflow packages its APK/AAB, internal SHA-256 checksums, SBOM, and lockfile into a tar archive and encrypts that archive with AES-256-CBC using PBKDF2 and 200,000 iterations. Only the encrypted `.tar.gz.enc` payload is uploaded.
+Before Actions-artifact upload, each controlled release workflow packages its APK/AAB, internal SHA-256 checksums, SBOM, and lockfile into a tar archive and encrypts that archive with AES-256-CBC using PBKDF2 and 200,000 iterations. Only the encrypted `.tar.gz.enc` payload is uploaded to **Actions artifact storage**.
+
+For the production channel only, a separate publication job may download that encrypted payload, decrypt it using the environment-scoped artifact password, re-run the recorded SHA-256 checks, and publish the verified production APK as a public GitHub Release asset. That job publishes `sreadya-android.apk`, `sreadya-android.apk.sha256`, and the CycloneDX SBOM. It does **not** publish the Play AAB. The publication job receives a scoped `contents: write` token but does not receive the Android keystore or signing-key passwords.
 
 The required encryption secrets are intentionally absent from Git:
 
@@ -50,9 +52,9 @@ Use the corresponding preview password variable for the family-preview payload. 
 
 GitHub Actions dependencies in `.github/workflows/` are pinned to immutable 40-character commit SHAs. Human-readable major-version comments are retained only as documentation. A version upgrade must deliberately update the pinned SHA and pass the hardening regression tests.
 
-Workflow token permissions are kept at `contents: read`. A future workflow must not request broader permissions unless that permission is necessary, separately reviewed, and documented.
+Workflow token permissions are kept at `contents: read` by default. The production APK publication job is the reviewed exception: it receives `contents: write` only to create/update the public GitHub Release after the signed payload has already passed the production build job and encrypted-artifact boundary.
 
-Public pull requests must never be given release-signing or artifact-encryption secrets. Release workflows remain `workflow_dispatch`-only and environment-scoped.
+Public pull requests must never be given release-signing or artifact-encryption secrets. Production release publication can run only from canonical `main` through manual dispatch or a committed change to `release/android-production.json`; family preview remains `workflow_dispatch`-only and environment-scoped.
 
 ## Machine-enforced non-regression
 
@@ -97,7 +99,7 @@ Repository settings are not fully enforceable from source files. At the time thi
 
 Before changing release workflows, signing configuration, repository visibility, artifact handling, or CI permissions, read this file together with `SECURITY.md`, `docs/verification/ANDROID_FORMAL_CLOSURE.md`, and `docs/android/DISTRIBUTION_IDENTITY_BOUNDARY.md`.
 
-If a proposed change would expose signing material, publish plaintext signed binaries from routine public CI, weaken the canonical release guard, broaden workflow token privileges without justification, or bypass the Sreadya verification gates, treat it as a release-blocking regression rather than a convenience change.
+If a proposed change would expose signing material, publish plaintext signed binaries from routine public CI, publish the Play AAB publicly, weaken the canonical release guard, broaden workflow token privileges beyond the reviewed publication job without justification, or bypass the Sreadya verification gates, treat it as a release-blocking regression rather than a convenience change.
 
 ## C2 cross-platform hardening extension
 

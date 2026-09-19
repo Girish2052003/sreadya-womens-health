@@ -111,20 +111,28 @@ The normal `Sreadya CI` workflow must be green on `main` before production relea
 
 For a sync-enabled candidate, C2 E2EE, sync-service, account/recovery, mobile-adapter and Task-26 policy gates are additive. A red gate is a release blocker.
 
-## 7. Build the real production artifacts
+## 7. Build and publish the real production Android APK
 
-After `main` is green and the GitHub production secrets exist:
+After `main` is green and the GitHub production secrets exist, an intentional production publication can be started in either of two reviewed ways:
 
-1. Open GitHub Actions.
-2. Select **Sreadya Android production release**.
-3. Run the workflow from `main`.
-4. The workflow repeats source, privacy, dependency and native tests.
-5. It builds the Play-ready upload-key-signed AAB and production-signed APK.
-6. It verifies both signatures.
-7. It generates SHA-256 checksums.
-8. It uploads the release artifacts under the repository's controlled artifact-protection boundary.
+1. manually run **Sreadya Android production release** from `main`; or
+2. change `release/android-production.json` in a reviewed pull request and merge that manifest change to `main`.
 
-Expected plaintext payload after authorized decryption:
+The workflow repeats source, privacy, dependency and native tests, builds the Play-ready upload-key-signed AAB and production-signed APK, verifies both signatures, and generates SHA-256 checksums. The complete maintainer payload remains encrypted in Actions storage.
+
+After the build job succeeds, a separate publication job downloads and decrypts the protected payload, verifies its checksums again, and publishes only the installable production APK plus its integrity file and SBOM to the public GitHub Release. The publication job does not receive the Android signing key and does not publish the Play AAB.
+
+Public release assets:
+
+```text
+sreadya-android.apk
+sreadya-android.apk.sha256
+sreadya-cyclonedx.json
+```
+
+The stable direct-download path is the repository's latest-release asset named `sreadya-android.apk`.
+
+Expected encrypted maintainer payload after authorized decryption:
 
 ```text
 sreadya-1.0.0+1-play.aab
