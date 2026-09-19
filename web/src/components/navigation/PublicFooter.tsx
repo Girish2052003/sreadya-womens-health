@@ -4,7 +4,13 @@ import Link from 'next/link';
 
 import { useI18n } from '../../i18n/I18nProvider';
 
-export function PublicFooter() {
+const footerLinks = [
+  ['/privacy-policy', 'footer.privacyPolicy'],
+  ['/terms', 'footer.terms'],
+  ['/security/report', 'footer.security'],
+] as const;
+
+export function PublicFooter({ currentPath }: { currentPath?: string }) {
   const { t } = useI18n();
 
   return (
@@ -14,9 +20,11 @@ export function PublicFooter() {
         <p>{t('footer.tagline')}</p>
       </div>
       <div className="public-footer__links" aria-label={t('footer.links')}>
-        <Link href="/privacy-policy">{t('footer.privacyPolicy')}</Link>
-        <Link href="/terms">{t('footer.terms')}</Link>
-        <Link href="/security/report">{t('footer.security')}</Link>
+        {footerLinks.map(([href, labelKey]) => (
+          href === currentPath
+            ? <span key={href} className="public-footer__current" aria-current="page">{t(labelKey)}</span>
+            : <Link key={href} href={href}>{t(labelKey)}</Link>
+        ))}
       </div>
       <div className="forge-lockup" aria-label={t('footer.provenance')}>
         <span>FORGE</span>
