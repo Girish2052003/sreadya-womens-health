@@ -50,6 +50,8 @@ class MobileSyncControlStore {
     await _storage.write(key: _pausedKey, value: 'false');
   }
 
-  Future<void> recordSuccessfulSync(DateTime when) =>
-      _storage.write(key: _lastSuccessKey, value: when.toUtc().toIso8601String());
+  Future<void> recordSuccessfulSync(DateTime when) => _storage.write(
+    key: _lastSuccessKey,
+    value: when.toUtc().toIso8601String(),
+  );
 }
