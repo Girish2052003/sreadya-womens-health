@@ -2,6 +2,10 @@ name: Sreadya Android production release
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - release/android-production.json
 
 permissions:
   contents: read
@@ -48,6 +52,27 @@ jobs:
           chmod 600 "$SREADYA_ANDROID_KEYSTORE_PATH"
           test -s "$SREADYA_ANDROID_KEYSTORE_PATH"
       - run: flutter pub get
+      - name: Verify Android release publication manifest
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path("release/android-production.json").read_text(encoding="utf-8"))
+          version = next(
+              line.split(":", 1)[1].strip()
+              for line in Path("pubspec.yaml").read_text(encoding="utf-8").splitlines()
+              if line.startswith("version:")
+          )
+          assert manifest["schema_version"] == 1
+          assert manifest["channel"] == "production"
+          assert manifest["publication"] == "github-release"
+          assert manifest["version"] == version, (manifest["version"], version)
+          assert manifest["release_tag"] == f"android-v{version}"
+          assert manifest["source_apk"] == f"sreadya-{version}-production.apk"
+          assert manifest["public_apk_asset"] == "sreadya-android.apk"
+          print(f"Android production publication manifest verified for {version}")
+          PY
       - run: dart format --output=none --set-exit-if-changed lib test tool
       - run: flutter analyze
       - run: flutter test
@@ -147,3 +172,84 @@ jobs:
           rm -f "$SREADYA_ANDROID_KEYSTORE_PATH"
           rm -f "$RUNNER_TEMP/sreadya-1.0.0+1-production-release.tar.gz"
           rm -rf build/private-release-payload build/release
+
+  publish-public-apk:
+    name: Publish verified Android APK
+    needs: production-release
+    if: ${{ github.repository == 'Girish2052003/sreadya-womens-health' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    environment: android-production
+    permissions:
+      actions: read
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: sreadya-android-1.0.0-production-encrypted
+          path: build/release-download
+      - name: Decrypt reviewed production payload
+        env:
+          ARTIFACT_PASSWORD: ${{ secrets.SREADYA_PRODUCTION_ARTIFACT_PASSWORD }}
+        run: |
+          test -n "$ARTIFACT_PASSWORD"
+          mkdir -p "$RUNNER_TEMP/sreadya-public-apk"
+          printf '%s' "$ARTIFACT_PASSWORD" | openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 \
+            -in build/release-download/sreadya-1.0.0+1-production-release.tar.gz.enc \
+            -out "$RUNNER_TEMP/sreadya-production-release.tar.gz" \
+            -pass stdin
+          tar -C "$RUNNER_TEMP/sreadya-public-apk" -xzf "$RUNNER_TEMP/sreadya-production-release.tar.gz"
+      - name: Re-verify checksums and prepare public APK
+        run: |
+          cd "$RUNNER_TEMP/sreadya-public-apk"
+          sha256sum -c SHA256SUMS.txt
+          test -s sreadya-1.0.0+1-production.apk
+          cp sreadya-1.0.0+1-production.apk sreadya-android.apk
+          sha256sum sreadya-android.apk > sreadya-android.apk.sha256
+      - name: Create or update public GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="$(python3 -c 'import json; print(json.load(open("release/android-production.json"))["release_tag"])')"
+          version="$(python3 -c 'import json; print(json.load(open("release/android-production.json"))["version"])')"
+          cat > "$RUNNER_TEMP/android-release-notes.md" <<EOF
+          ## Sreadya Android ${version}
+
+          This is the production-signed Sreadya Android APK built from the canonical `main` branch after the complete release verification pipeline passed.
+
+          - Package: `com.sreadya.health.sreadya`
+          - Version: `${version}`
+          - Source commit: `${GITHUB_SHA}`
+          - User-installable asset: `sreadya-android.apk`
+          - Integrity file: `sreadya-android.apk.sha256`
+
+          The Android App Bundle remains inside the encrypted maintainer release payload and is not published as a public download.
+          EOF
+
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" \
+              "$RUNNER_TEMP/sreadya-public-apk/sreadya-android.apk" \
+              "$RUNNER_TEMP/sreadya-public-apk/sreadya-android.apk.sha256" \
+              "$RUNNER_TEMP/sreadya-public-apk/sreadya-cyclonedx.json" \
+              --clobber
+            gh release edit "$tag" --title "Sreadya Android ${version}" --notes-file "$RUNNER_TEMP/android-release-notes.md"
+          else
+            gh release create "$tag" \
+              "$RUNNER_TEMP/sreadya-public-apk/sreadya-android.apk" \
+              "$RUNNER_TEMP/sreadya-public-apk/sreadya-android.apk.sha256" \
+              "$RUNNER_TEMP/sreadya-public-apk/sreadya-cyclonedx.json" \
+              --target "$GITHUB_SHA" \
+              --title "Sreadya Android ${version}" \
+              --notes-file "$RUNNER_TEMP/android-release-notes.md"
+          fi
+      - name: Remove decrypted public-release staging material
+        if: always()
+        run: |
+          rm -f "$RUNNER_TEMP/sreadya-production-release.tar.gz"
+          rm -f "$RUNNER_TEMP/android-release-notes.md"
+          rm -rf "$RUNNER_TEMP/sreadya-public-apk"
+          rm -rf build/release-download
+
