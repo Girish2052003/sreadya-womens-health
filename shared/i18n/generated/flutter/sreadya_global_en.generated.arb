@@ -1080,6 +1080,15 @@
   "@sreadya_insights__dot__windowCoverage": {
     "description": "SREADYA canonical message ID: insights.windowCoverage"
   },
+  "@sreadya_install__dot__android__dot__badge": {
+    "description": "SREADYA canonical message ID: install.android.badge"
+  },
+  "@sreadya_install__dot__android__dot__checksum": {
+    "description": "SREADYA canonical message ID: install.android.checksum"
+  },
+  "@sreadya_install__dot__android__dot__releaseDetails": {
+    "description": "SREADYA canonical message ID: install.android.releaseDetails"
+  },
   "@sreadya_install__dot__android__dot__step1": {
     "description": "SREADYA canonical message ID: install.android.step1"
   },
@@ -4110,6 +4119,9 @@
   "sreadya_insights__dot__truthTitle": "No insight invented",
   "sreadya_insights__dot__variation": "Recorded variation: {days} days",
   "sreadya_insights__dot__windowCoverage": "Window coverage: {percent}%",
+  "sreadya_install__dot__android__dot__badge": "Production Android",
+  "sreadya_install__dot__android__dot__checksum": "SHA-256 checksum",
+  "sreadya_install__dot__android__dot__releaseDetails": "Release details",
   "sreadya_install__dot__android__dot__step1": "Download the production-signed Sreadya Android APK from this page.",
   "sreadya_install__dot__android__dot__step2": "Open the downloaded APK. Android may ask you to allow installation from your browser or file manager for this install.",
   "sreadya_install__dot__android__dot__step3": "Confirm installation, open Sreadya, and keep the downloaded APK only if you want your own installer copy.",
