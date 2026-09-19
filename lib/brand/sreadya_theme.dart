@@ -19,8 +19,9 @@ ThemeData sreadyaTheme({
   return ThemeData(
     colorScheme: scheme,
     useMaterial3: true,
-    scaffoldBackgroundColor:
-        dark ? const Color(0xFF181215) : SreadyaBrand.pearl,
+    scaffoldBackgroundColor: dark
+        ? const Color(0xFF181215)
+        : SreadyaBrand.pearl,
     canvasColor: dark ? const Color(0xFF181215) : SreadyaBrand.pearl,
     appBarTheme: const AppBarTheme(
       centerTitle: false,

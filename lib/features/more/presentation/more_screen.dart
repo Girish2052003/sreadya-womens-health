@@ -184,7 +184,11 @@ class MoreScreen extends StatelessWidget {
                     clipBehavior: Clip.antiAlias,
                     child: Column(
                       children: [
-                        for (var index = 0; index < group.$2.length; index++) ...[
+                        for (
+                          var index = 0;
+                          index < group.$2.length;
+                          index++
+                        ) ...[
                           _MoreTile(item: group.$2[index]),
                           if (index != group.$2.length - 1)
                             const Divider(height: 1, indent: 72),
@@ -223,10 +227,7 @@ class _MoreTile extends StatelessWidget {
         ),
         child: Icon(item.$1, color: scheme.onPrimaryContainer),
       ),
-      title: Text(
-        item.$2,
-        style: const TextStyle(fontWeight: FontWeight.w800),
-      ),
+      title: Text(item.$2, style: const TextStyle(fontWeight: FontWeight.w800)),
       subtitle: Padding(
         padding: const EdgeInsets.only(top: 3),
         child: Text(item.$3),

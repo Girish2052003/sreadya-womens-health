@@ -27,10 +27,7 @@ class _SreadyaBootstrapState extends State<SreadyaBootstrap>
   Future<bool> _loadOnboardingAfterBloom() async {
     final values = await Future.wait<bool>([
       OnboardingStore().isComplete(),
-      Future<bool>.delayed(
-        const Duration(milliseconds: 1500),
-        () => true,
-      ),
+      Future<bool>.delayed(const Duration(milliseconds: 1500), () => true),
     ]);
     return values.first;
   }
@@ -134,9 +131,8 @@ class _SreadyaBootstrapState extends State<SreadyaBootstrap>
       setState(() => _unlocked = true);
     } else {
       const messengerText = 'Incorrect Sreadya PIN.';
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text(messengerText)));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text(messengerText)));
     }
   }
 
@@ -216,17 +212,25 @@ class _SreadyaBootstrapState extends State<SreadyaBootstrap>
                                 FilledButton.icon(
                                   onPressed: _unlock,
                                   icon: const Icon(Icons.face),
-                                  label: const Text('Use device authentication'),
+                                  label: const Text(
+                                    'Use device authentication',
+                                  ),
                                 ),
                                 FutureBuilder<bool>(
                                   future: PinLockService().isConfigured(),
                                   builder: (context, pin) => pin.data == true
                                       ? Padding(
-                                          padding: const EdgeInsets.only(top: 8),
+                                          padding: const EdgeInsets.only(
+                                            top: 8,
+                                          ),
                                           child: OutlinedButton.icon(
                                             onPressed: _unlockWithPin,
-                                            icon: const Icon(Icons.pin_outlined),
-                                            label: const Text('Use Sreadya PIN'),
+                                            icon: const Icon(
+                                              Icons.pin_outlined,
+                                            ),
+                                            label: const Text(
+                                              'Use Sreadya PIN',
+                                            ),
                                           ),
                                         )
                                       : const SizedBox.shrink(),

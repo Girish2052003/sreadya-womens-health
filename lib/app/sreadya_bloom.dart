@@ -14,8 +14,11 @@ class SreadyaBloom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final disableAnimations = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
-    final duration = disableAnimations ? Duration.zero : const Duration(milliseconds: 1250);
+    final disableAnimations =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    final duration = disableAnimations
+        ? Duration.zero
+        : const Duration(milliseconds: 1250);
 
     return Scaffold(
       backgroundColor: SreadyaBrand.crimson,
@@ -122,20 +125,15 @@ class _BloomPainter extends CustomPainter {
       ..shader = const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [
-          Color(0xFFFF4D86),
-          Color(0xFFD11659),
-          Color(0xFF760C36),
-        ],
+        colors: [Color(0xFFFF4D86), Color(0xFFD11659), Color(0xFF760C36)],
         stops: [0, .48, 1],
       ).createShader(rect);
     canvas.drawRect(rect, background);
 
     void glow(Offset center, double radius, Color color) {
       final paint = Paint()
-        ..shader = RadialGradient(
-          colors: [color, color.withValues(alpha: 0)],
-        ).createShader(Rect.fromCircle(center: center, radius: radius));
+        ..shader = RadialGradient(colors: [color, color.withValues(alpha: 0)])
+            .createShader(Rect.fromCircle(center: center, radius: radius));
       canvas.drawCircle(center, radius, paint);
     }
 

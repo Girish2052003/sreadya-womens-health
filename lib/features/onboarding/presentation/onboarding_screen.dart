@@ -196,8 +196,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   Text(
                     'Your cycle. Your rhythm. Your space.',
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleMedium
-                        ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ],
               ),
