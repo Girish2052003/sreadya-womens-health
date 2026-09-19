@@ -7,6 +7,16 @@ import { useI18n } from '../i18n/I18nProvider';
 
 const featureGroups = [
   {
+    titleKey: 'catalogue.group.daily',
+    items: [
+      ['workspace.title.home', '/app/home'],
+      ['workspace.title.today', '/app/today'],
+      ['workspace.title.log', '/app/log'],
+      ['workspace.title.calendar', '/app/calendar'],
+      ['workspace.title.reminders', '/app/reminders'],
+    ],
+  },
+  {
     titleKey: 'workspace.more.group.track',
     items: [
       ['workspace.more.cycle', '/app/cycle'],
@@ -22,11 +32,6 @@ const featureGroups = [
   {
     titleKey: 'workspace.more.group.share',
     items: [
-      ['workspace.title.home', '/app/home'],
-      ['workspace.title.today', '/app/today'],
-      ['workspace.title.log', '/app/log'],
-      ['workspace.title.calendar', '/app/calendar'],
-      ['workspace.title.reminders', '/app/reminders'],
       ['workspace.more.doctorReports', '/app/reports'],
       ['workspace.more.privateAssistant', '/app/assistant'],
       ['workspace.more.partnerSharing', '/app/sharing'],
