@@ -130,3 +130,13 @@ def test_production_release_unit_tests_keep_complete_signing_environment() -> No
     ):
         assert name in block
 
+def test_production_release_checksums_are_payload_relative() -> None:
+    workflow = _text(WORKFLOW_DIR / "android-production.yml")
+    block = workflow.split("      - name: Create release checksums", 1)[1].split(
+        "      - name: Encrypt production release payload", 1
+    )[0]
+
+    assert "cd build/release" in block
+    assert "sha256sum sreadya-1.0.0+1-play.aab sreadya-1.0.0+1-production.apk > SHA256SUMS.txt" in block
+    assert "sha256sum build/release/" not in block
+
