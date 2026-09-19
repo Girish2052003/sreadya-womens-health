@@ -56,16 +56,16 @@ test('dark mode preserves readable text on deliberately light surfaces', async (
 
   const ratios = await firstCapability.evaluate((item) => {
     const title = item.querySelector('strong');
-    const detail = item.querySelector('small');
-    if (!title || !detail) throw new Error('Capability text missing');
+    const action = item.querySelector('a');
+    if (!title || !action) throw new Error('Feature text missing');
     const background = getComputedStyle(item).backgroundColor;
     return {
       titleColor: getComputedStyle(title).color,
-      detailColor: getComputedStyle(detail).color,
+      actionColor: getComputedStyle(action).color,
       background,
     };
   });
 
   expect(contrastRatio(ratios.titleColor, ratios.background)).toBeGreaterThanOrEqual(4.5);
-  expect(contrastRatio(ratios.detailColor, ratios.background)).toBeGreaterThanOrEqual(4.5);
+  expect(contrastRatio(ratios.actionColor, ratios.background)).toBeGreaterThanOrEqual(4.5);
 });

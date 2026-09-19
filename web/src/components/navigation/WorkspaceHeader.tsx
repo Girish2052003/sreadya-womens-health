@@ -37,7 +37,6 @@ export function WorkspaceHeader() {
         <span>{t('brand.name')}</span>
       </Link>
       <span className="workspace-topbar__section" aria-live="polite">{label}</span>
-      <Link className="workspace-topbar__all" href="/app/more">{t('nav.workspace.allFeatures')}</Link>
     </header>
   );
 }
