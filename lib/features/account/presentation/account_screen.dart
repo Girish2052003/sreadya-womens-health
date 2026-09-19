@@ -234,8 +234,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   const SizedBox(height: 8),
                   OutlinedButton(
-                    onPressed:
-                        _remoteReady && !_working && _passkeysAvailable
+                    onPressed: _remoteReady && !_working && _passkeysAvailable
                         ? _signIn
                         : null,
                     child: const Text('Sign in with passkey'),
