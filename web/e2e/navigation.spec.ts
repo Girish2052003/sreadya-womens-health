@@ -108,3 +108,29 @@ test('legal and security footers do not link a page back to itself', async ({ pa
     await expect(footer.getByRole('link', { name: label, exact: true })).toHaveCount(0);
   }
 });
+
+
+test('secondary mobile heroes begin promptly after the compact header', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+
+  for (const route of ['/how-it-works/', '/privacy-policy/', '/terms/', '/security/report/']) {
+    await page.goto(route);
+    const headerBox = await page.locator('.public-header--section').boundingBox();
+    const heroBox = await page.locator('.public-page__hero').boundingBox();
+
+    expect(headerBox).not.toBeNull();
+    expect(heroBox).not.toBeNull();
+    if (!headerBox || !heroBox) throw new Error('Expected public header and hero layout boxes');
+
+    const gap = heroBox.y - (headerBox.y + headerBox.height);
+    expect(gap).toBeGreaterThanOrEqual(0);
+    expect(gap).toBeLessThanOrEqual(32);
+  }
+
+  await page.goto('/how-it-works/');
+  const ctaBox = await page.getByRole('link', { name: 'Open Sreadya', exact: true }).boundingBox();
+  expect(ctaBox).not.toBeNull();
+  if (!ctaBox) throw new Error('Expected How it works primary CTA layout box');
+  expect(ctaBox.width).toBeGreaterThanOrEqual(180);
+  expect(ctaBox.width).toBeLessThanOrEqual(260);
+});
