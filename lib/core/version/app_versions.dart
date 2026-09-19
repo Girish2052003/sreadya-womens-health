@@ -1,5 +1,5 @@
 abstract final class AppVersions {
-  static const String app = '1.0.0';
+  static const String app = '1.1.0';
   static const int databaseSchema = 1;
   static const String predictionEngine = 'prediction-v1';
   static const String reminderEngine = 'reminder-v1';
