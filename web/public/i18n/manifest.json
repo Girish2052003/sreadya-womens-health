@@ -3,47 +3,47 @@
     "ar-xb": {
       "coverage": "pseudo",
       "englishName": "ar-XB",
-      "gitBlobSha": "b6b2ad5f2b9fc3b2ceabb663dbdf82ecf4e702a3",
+      "gitBlobSha": "dc56a92ac43dab6869fdf95bceeeebadb8b7ff17",
       "locale": "ar-XB",
-      "messageCount": 1249,
+      "messageCount": 1250,
       "method": "pseudo",
-      "path": "i18n/ar-xb.b6b2ad5f2b9fc3b2.json",
+      "path": "i18n/ar-xb.dc56a92ac43dab68.json",
       "provider": "sreadya-ci",
       "providerModel": "rtl-v1",
       "reviewStatus": "test-only",
       "risk": "test-only",
-      "sourceMessageCount": 1249,
-      "sourceVersion": "18f93e3765c7d252bda20287125b550f96883151"
+      "sourceMessageCount": 1250,
+      "sourceVersion": "3de30ef962296542dfc0d158d79d29c2ebc54d70"
     },
     "en": {
       "coverage": "source",
       "englishName": "English",
-      "gitBlobSha": "2ba67f658067260275dcb1f5e0f33b80a3216f6f",
+      "gitBlobSha": "2bd164ae53a1bc5f8f3b94ea1dce9271d6964ccb",
       "locale": "en",
-      "messageCount": 1249,
+      "messageCount": 1250,
       "method": "source",
-      "path": "i18n/en.2ba67f6580672602.json",
+      "path": "i18n/en.2bd164ae53a1bc5f.json",
       "provider": "sreadya",
       "providerModel": "authoritative-source",
       "reviewStatus": "source-authoritative",
       "risk": "mixed",
-      "sourceMessageCount": 1249,
-      "sourceVersion": "18f93e3765c7d252bda20287125b550f96883151"
+      "sourceMessageCount": 1250,
+      "sourceVersion": "3de30ef962296542dfc0d158d79d29c2ebc54d70"
     },
     "en-xa": {
       "coverage": "pseudo",
       "englishName": "en-XA",
-      "gitBlobSha": "eb6d47d77d210e81e4e9b663297886afaaa0d857",
+      "gitBlobSha": "9c825498730dc50b0c2fb91b39f9c57c0fa6fabe",
       "locale": "en-XA",
-      "messageCount": 1249,
+      "messageCount": 1250,
       "method": "pseudo",
-      "path": "i18n/en-xa.eb6d47d77d210e81.json",
+      "path": "i18n/en-xa.9c825498730dc50b.json",
       "provider": "sreadya-ci",
       "providerModel": "expansion-v1",
       "reviewStatus": "test-only",
       "risk": "test-only",
-      "sourceMessageCount": 1249,
-      "sourceVersion": "18f93e3765c7d252bda20287125b550f96883151"
+      "sourceMessageCount": 1250,
+      "sourceVersion": "3de30ef962296542dfc0d158d79d29c2ebc54d70"
     }
   },
   "publicLocales": [
@@ -55,8 +55,8 @@
       "tag": "en"
     }
   ],
-  "sourceGitBlobSha": "18f93e3765c7d252bda20287125b550f96883151",
+  "sourceGitBlobSha": "3de30ef962296542dfc0d158d79d29c2ebc54d70",
   "sourceLocale": "en",
-  "sourceVersion": "18f93e3765c7d252bda20287125b550f96883151",
+  "sourceVersion": "3de30ef962296542dfc0d158d79d29c2ebc54d70",
   "version": 2
 }
