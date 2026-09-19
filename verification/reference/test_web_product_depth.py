@@ -135,3 +135,38 @@ def test_theme_toggle_and_light_surface_contrast_are_release_contracts() -> None
     assert "--muted-on-light" in globals_css
     assert "capability-catalogue__item" in product_css
     assert "var(--ink-on-light)" in product_css
+
+def test_public_feature_surface_hides_internal_planning_metadata() -> None:
+    directory = read("web/src/components/CapabilityCatalogue.tsx")
+    header = read("web/src/components/navigation/WorkspaceHeader.tsx")
+    more = read("web/src/app/app/more/page.tsx")
+
+    assert "capabilities.generated.json" not in directory
+    assert "data-capability-id" not in directory
+    assert "workspace-topbar__all" not in header
+    assert "workspace.more.catalogue" not in more
+
+    forbidden_phrases = (
+        "258",
+        "launch requirements",
+        "launch families",
+        "engineering tracks",
+        "complete launch contract",
+        "capability catalogue",
+        "launch ids",
+        "backlog markers",
+        "capability contract",
+    )
+    internal_id = re.compile(
+        r"\b(?:CYC|PRED|REM|SYM|REPRO|WELL|REP|PRIV|BACK|ACC|ARCH|PART|LIFE|ID|SYNC|WEB|FUT)-\d{3}\b"
+    )
+
+    for path in (ROOT / "web/public/i18n").glob("*.json"):
+        if path.name == "manifest.json":
+            continue
+        text = path.read_text(encoding="utf-8")
+        lowered = text.lower()
+        for phrase in forbidden_phrases:
+            assert phrase not in lowered, f"{path.name} exposes internal wording: {phrase}"
+        assert internal_id.search(text) is None, f"{path.name} exposes an internal capability ID"
+
