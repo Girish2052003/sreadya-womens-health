@@ -122,6 +122,10 @@ jobs:
           python3 tool/configure_android_release.py --check --require-signing
       - name: Run Android Kotlin release unit tests
         working-directory: android
+        env:
+          SREADYA_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SREADYA_ANDROID_KEYSTORE_PASSWORD }}
+          SREADYA_ANDROID_KEY_ALIAS: ${{ secrets.SREADYA_ANDROID_KEY_ALIAS }}
+          SREADYA_ANDROID_KEY_PASSWORD: ${{ secrets.SREADYA_ANDROID_KEY_PASSWORD }}
         run: ./gradlew :app:testReleaseUnitTest --stacktrace
       - name: Build Play-ready AAB and production-signed APK
         env:
