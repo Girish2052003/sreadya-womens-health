@@ -3,47 +3,47 @@
     "ar-xb": {
       "coverage": "pseudo",
       "englishName": "ar-XB",
-      "gitBlobSha": "9d72b05169a9ed99f5ca370d56e5ecd2a389dbbb",
+      "gitBlobSha": "b6b2ad5f2b9fc3b2ceabb663dbdf82ecf4e702a3",
       "locale": "ar-XB",
       "messageCount": 1249,
       "method": "pseudo",
-      "path": "i18n/ar-xb.9d72b05169a9ed99.json",
+      "path": "i18n/ar-xb.b6b2ad5f2b9fc3b2.json",
       "provider": "sreadya-ci",
       "providerModel": "rtl-v1",
       "reviewStatus": "test-only",
       "risk": "test-only",
       "sourceMessageCount": 1249,
-      "sourceVersion": "2296eae37d238780630b4ab5bb577f177da995ed"
+      "sourceVersion": "18f93e3765c7d252bda20287125b550f96883151"
     },
     "en": {
       "coverage": "source",
       "englishName": "English",
-      "gitBlobSha": "6d0db8f2aa10b4ca99e5416f2e5b1e7d358014ef",
+      "gitBlobSha": "2ba67f658067260275dcb1f5e0f33b80a3216f6f",
       "locale": "en",
       "messageCount": 1249,
       "method": "source",
-      "path": "i18n/en.6d0db8f2aa10b4ca.json",
+      "path": "i18n/en.2ba67f6580672602.json",
       "provider": "sreadya",
       "providerModel": "authoritative-source",
       "reviewStatus": "source-authoritative",
       "risk": "mixed",
       "sourceMessageCount": 1249,
-      "sourceVersion": "2296eae37d238780630b4ab5bb577f177da995ed"
+      "sourceVersion": "18f93e3765c7d252bda20287125b550f96883151"
     },
     "en-xa": {
       "coverage": "pseudo",
       "englishName": "en-XA",
-      "gitBlobSha": "1dbf01330ef482550d64915757ea1bb1b7bfdc87",
+      "gitBlobSha": "eb6d47d77d210e81e4e9b663297886afaaa0d857",
       "locale": "en-XA",
       "messageCount": 1249,
       "method": "pseudo",
-      "path": "i18n/en-xa.1dbf01330ef48255.json",
+      "path": "i18n/en-xa.eb6d47d77d210e81.json",
       "provider": "sreadya-ci",
       "providerModel": "expansion-v1",
       "reviewStatus": "test-only",
       "risk": "test-only",
       "sourceMessageCount": 1249,
-      "sourceVersion": "2296eae37d238780630b4ab5bb577f177da995ed"
+      "sourceVersion": "18f93e3765c7d252bda20287125b550f96883151"
     }
   },
   "publicLocales": [
@@ -55,8 +55,8 @@
       "tag": "en"
     }
   ],
-  "sourceGitBlobSha": "2296eae37d238780630b4ab5bb577f177da995ed",
+  "sourceGitBlobSha": "18f93e3765c7d252bda20287125b550f96883151",
   "sourceLocale": "en",
-  "sourceVersion": "2296eae37d238780630b4ab5bb577f177da995ed",
+  "sourceVersion": "18f93e3765c7d252bda20287125b550f96883151",
   "version": 2
 }
