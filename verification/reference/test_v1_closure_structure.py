@@ -165,8 +165,8 @@ def test_privacy_policy_is_available_in_app_and_as_publishable_page_source():
 def test_release_version_is_worldwide_v1():
     pubspec = read("pubspec.yaml")
     versions = read("lib/core/version/app_versions.dart")
-    assert "version: 1.0.0+1" in pubspec
-    assert "static const String app = '1.0.0';" in versions
+    assert "version: 1.1.0+2" in pubspec
+    assert "static const String app = '1.1.0';" in versions
 
 
 def test_reminder_quiet_hours_are_user_editable():
