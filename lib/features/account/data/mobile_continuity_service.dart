@@ -78,11 +78,9 @@ class MobileIdentityDevice {
 }
 
 class MobileContinuityService implements AccountIdentityTransport {
-  MobileContinuityService({
-    required Uri endpoint,
-    HttpClient? client,
-  }) : _endpoint = endpoint,
-       _client = client ?? HttpClient();
+  MobileContinuityService({required Uri endpoint, HttpClient? client})
+    : _endpoint = endpoint,
+      _client = client ?? HttpClient();
 
   final Uri _endpoint;
   final HttpClient _client;
@@ -122,9 +120,7 @@ class MobileContinuityService implements AccountIdentityTransport {
     if (value is! Map) {
       throw FormatException('Invalid Sreadya $label response.');
     }
-    return value.map(
-      (key, item) => MapEntry(key.toString(), item as Object?),
-    );
+    return value.map((key, item) => MapEntry(key.toString(), item as Object?));
   }
 
   Future<void> createIdentity({
@@ -163,9 +159,8 @@ class MobileContinuityService implements AccountIdentityTransport {
     }
     return value
         .map(
-          (item) => MobileIdentityDevice.fromJson(
-            _object(item, 'device-list item'),
-          ),
+          (item) =>
+              MobileIdentityDevice.fromJson(_object(item, 'device-list item')),
         )
         .toList(growable: false);
   }
