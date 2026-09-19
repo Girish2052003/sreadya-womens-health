@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "version": "1.0.0+1",
-  "release_tag": "android-v1.0.0+1",
+  "version": "1.1.0+2",
+  "release_tag": "android-v1.1.0+2",
   "public_apk_asset": "sreadya-android.apk",
-  "source_apk": "sreadya-1.0.0+1-production.apk",
+  "source_apk": "sreadya-1.1.0+2-production.apk",
   "publication": "github-release",
   "channel": "production",
-  "publication_revision": 3
+  "publication_revision": 4
 }
