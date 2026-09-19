@@ -12,7 +12,7 @@ def test_onboarding_exposes_worldwide_v1_choices():
     assert "LifeStageMode" in src
     assert "NotificationPrivacy" in src
     assert "HealthImportService" in src
-    assert "Preview platform health import" in src
+    assert "Choose access & preview Health Connect" in src
 
 
 def test_calendar_has_month_timeline_and_year_views():
