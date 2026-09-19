@@ -145,11 +145,12 @@
   }
 
   .public-page__actions--single {
+    width: min(250px, 100%);
     margin-top: 26px;
   }
 
   .public-page__actions--single .link-button {
-    width: min(250px, 100%);
+    width: 100%;
   }
 }
 
