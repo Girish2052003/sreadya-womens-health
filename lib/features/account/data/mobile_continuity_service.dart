@@ -97,7 +97,7 @@ class MobileContinuityService implements AccountIdentityTransport {
   }) async {
     final request = await _client.openUrl(method, _uri(path));
     request.followRedirects = false;
-    request.headers.accept = 'application/json';
+    request.headers.set(HttpHeaders.acceptHeader, 'application/json');
     for (final entry in headers.entries) {
       request.headers.set(entry.key, entry.value);
     }
