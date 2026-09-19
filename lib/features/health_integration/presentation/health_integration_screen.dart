@@ -115,9 +115,29 @@ class _HealthIntegrationScreenState
                   ),
                 ),
               const SizedBox(height: 16),
+              Card(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                child: const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.lock_person_outlined),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Before Android shows Health Connect permissions, Sreadya lets you choose the exact categories. Access is optional, core tracking still works without it, and you can revoke access later in Android settings.',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
               Text(
                 'Choose categories',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.titleLarge
+                    ?.copyWith(fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 6),
               const Text(
