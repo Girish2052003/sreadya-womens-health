@@ -1,0 +1,43 @@
+name: Temporary Android closure Dart formatter
+
+on:
+  push:
+    branches:
+      - release/android-formal-closure-v2
+    paths:
+      - .github/workflows/temp-android-closure-format.yml
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: true
+          ref: release/android-formal-closure-v2
+          fetch-depth: 0
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          flutter-version: '3.47.2'
+          channel: stable
+          cache: true
+      - name: Canonically format Android closure Dart files
+        run: |
+          dart format             lib/app/bootstrap.dart             lib/app/sreadya_bloom.dart             lib/brand/sreadya_theme.dart             lib/features/more/presentation/more_screen.dart             lib/features/onboarding/presentation/onboarding_screen.dart
+          dart format --output=none --set-exit-if-changed             lib/app/bootstrap.dart             lib/app/sreadya_bloom.dart             lib/brand/sreadya_theme.dart             lib/features/more/presentation/more_screen.dart             lib/features/onboarding/presentation/onboarding_screen.dart
+      - name: Commit formatter output
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet --             lib/app/bootstrap.dart             lib/app/sreadya_bloom.dart             lib/brand/sreadya_theme.dart             lib/features/more/presentation/more_screen.dart             lib/features/onboarding/presentation/onboarding_screen.dart; then
+            echo "No formatting changes required."
+            exit 0
+          fi
+          git config user.name "sreadya-format-bot"
+          git config user.email "sreadya-format-bot@users.noreply.github.com"
+          git add             lib/app/bootstrap.dart             lib/app/sreadya_bloom.dart             lib/brand/sreadya_theme.dart             lib/features/more/presentation/more_screen.dart             lib/features/onboarding/presentation/onboarding_screen.dart
+          git commit -m "style: apply canonical Dart formatting"
+          git push origin HEAD:release/android-formal-closure-v2
