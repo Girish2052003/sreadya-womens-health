@@ -4,7 +4,7 @@
 
 **Product:** Sreadya  
 **Package:** `com.sreadya.health.sreadya`  
-**Current release line:** `1.0.0+1`  
+**Current release line:** `1.1.0+2`  
 **Android minimum:** API 26  
 **Google Play target:** API 36  
 **Primary release artifact:** Android App Bundle (`.aab`)  
@@ -135,8 +135,8 @@ The stable direct-download path is the repository's latest-release asset named `
 Expected encrypted maintainer payload after authorized decryption:
 
 ```text
-sreadya-1.0.0+1-play.aab
-sreadya-1.0.0+1-production.apk
+sreadya-1.1.0+2-play.aab
+sreadya-1.1.0+2-production.apk
 SHA256SUMS.txt
 sreadya-cyclonedx.json
 pubspec.lock
@@ -155,13 +155,13 @@ sha256sum -c SHA256SUMS.txt
 Verify the AAB:
 
 ```bash
-jarsigner -verify -strict -certs sreadya-1.0.0+1-play.aab
+jarsigner -verify -strict -certs sreadya-1.1.0+2-play.aab
 ```
 
 Verify the APK with the newest installed Android build-tools `apksigner`:
 
 ```bash
-apksigner verify --verbose --print-certs sreadya-1.0.0+1-production.apk
+apksigner verify --verbose --print-certs sreadya-1.1.0+2-production.apk
 ```
 
 The signer certificate must match the intended upload/release key, not the Android debug certificate.
@@ -237,11 +237,11 @@ Do not attempt to downgrade an installed Android app's database schema. Forward 
 
 Every Play upload must use a strictly greater Android `versionCode`. Semantic application versions are human-facing; the Android build number is monotonic.
 
-For v1.0.0 the repository starts at:
+For v1.1.0 the repository starts at:
 
 ```text
-versionName = 1.0.0
-versionCode = 1
+versionName = 1.1.0
+versionCode = 2
 ```
 
 Future releases must increment the build number even for a retry of the same semantic version.
