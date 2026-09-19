@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
+import { androidProductionRelease } from '../src/content/android-release';
+
 const LIVE_ROOT = process.env.SREADYA_LIVE_BASE_URL ?? 'https://girish2052003.github.io/sreadya-womens-health/';
 const LIVE_ORIGIN = new URL(LIVE_ROOT).origin;
 const SYNTHETIC_NOTE = 'Task18 synthetic private note 8F2A';
@@ -97,6 +99,25 @@ test('Task 18 live production desktop/account-free acceptance preflight', async 
   await page.goto(live('install/iphone/'));
   await expect(page.getByRole('heading', { level: 2, name: 'Install Sreadya on iPhone' })).toBeVisible();
   await expect(page.getByText('Add to Home Screen')).toBeVisible();
+
+  await page.goto(live('install/android/'));
+  await expect(page.getByRole('heading', { level: 2, name: 'Install Sreadya on Android' })).toBeVisible();
+  await expect(page.locator('[data-release-version]')).toHaveAttribute(
+    'data-release-version',
+    androidProductionRelease.version,
+  );
+  await expect(page.getByRole('link', { name: 'Download Android APK' })).toHaveAttribute(
+    'href',
+    androidProductionRelease.apkUrl,
+  );
+  await expect(page.getByRole('link', { name: 'SHA-256 checksum' })).toHaveAttribute(
+    'href',
+    androidProductionRelease.checksumUrl,
+  );
+  await expect(page.getByRole('link', { name: 'Release details' })).toHaveAttribute(
+    'href',
+    androidProductionRelease.releaseUrl,
+  );
 
   await page.goto(live('app/home/'));
   await expect(page.getByRole('heading', { level: 1, name: 'Home' })).toBeVisible();
