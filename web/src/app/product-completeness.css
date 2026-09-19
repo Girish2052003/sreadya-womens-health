@@ -107,15 +107,11 @@
 .continuity-state strong { display: block; margin-bottom: 4px; }
 
 .capability-catalogue { margin-top: 40px; }
-.capability-catalogue__summary { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
-.capability-catalogue__summary article { padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: #fff; }
-.capability-catalogue__summary strong { display: block; font-size: 2rem; letter-spacing: -.04em; }
 .capability-catalogue details { margin-bottom: 12px; border: 1px solid var(--line); border-radius: 18px; background: #fff; overflow: hidden; }
 .capability-catalogue summary { cursor: pointer; padding: 18px 20px; font-weight: 820; }
 .capability-catalogue__list { margin: 0; padding: 0 20px 20px; list-style: none; display: grid; gap: 8px; }
 .capability-catalogue__item { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 12px; border-radius: 12px; background: #fff9fb; }
 .capability-catalogue__item a { text-decoration: none; color: var(--sreadya-crimson); font-weight: 800; }
-.capability-catalogue__future { margin-top: 32px; padding: 20px; border: 1px dashed var(--line); border-radius: 18px; color: var(--sreadya-muted); }
 
 [data-sreadya-theme='dark'] {
   --sreadya-pearl: #1f171a;
@@ -145,7 +141,6 @@
 @media (max-width: 560px) {
   .workspace-topbar__brand > span:last-child { display: none; }
   .structured-observation__row { grid-template-columns: 1fr; }
-  .capability-catalogue__summary { grid-template-columns: 1fr; }
   .capability-catalogue__item { grid-template-columns: 1fr; }
 }
 
@@ -197,13 +192,10 @@ html[dir='rtl'] .public-topic, html[dir='rtl'] .workspace-main, html[dir='rtl'] 
 [data-sreadya-theme='dark'] .continuity-form textarea,
 [data-sreadya-theme='dark'] .settings-links a,
 [data-sreadya-theme='dark'] .continuity-state,
-[data-sreadya-theme='dark'] .capability-catalogue__summary article,
 [data-sreadya-theme='dark'] .capability-catalogue details,
 [data-sreadya-theme='dark'] .capability-catalogue__item {
   color: var(--ink-on-light);
 }
-[data-sreadya-theme='dark'] .capability-catalogue__item small,
-[data-sreadya-theme='dark'] .capability-catalogue__item .workspace-note,
 [data-sreadya-theme='dark'] .continuity-state .workspace-note {
   color: var(--muted-on-light);
 }
