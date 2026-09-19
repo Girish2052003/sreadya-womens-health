@@ -136,6 +136,7 @@ export const GENERATED_SOURCE_MESSAGES = {
   "catalogue.futureBody": "Sreadya keeps the core experience consistent across Web, Android and iPhone while device-specific integrations adapt to each platform.",
   "catalogue.futureCount": "ways to continue",
   "catalogue.futureTitle": "Across your devices",
+  "catalogue.group.daily": "Daily essentials",
   "catalogue.lede": "Sreadya brings 40+ thoughtful capabilities into clear feature areas across Web, Android and iPhone. Open any area to continue directly in the Sreadya workspace.",
   "catalogue.nativeOnly": "This experience adapts to the capabilities of your device.",
   "catalogue.requirements": "feature areas",
