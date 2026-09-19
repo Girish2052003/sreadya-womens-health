@@ -117,3 +117,16 @@ def test_production_apk_publication_is_manifest_gated_and_separates_signing_from
     assert '"public_apk_asset": "sreadya-android.apk"' in manifest
     assert '"release_tag": "android-v1.0.0+1"' in manifest
 
+def test_production_release_unit_tests_keep_complete_signing_environment() -> None:
+    workflow = _text(WORKFLOW_DIR / "android-production.yml")
+    block = workflow.split("      - name: Run Android Kotlin release unit tests", 1)[1].split(
+        "      - name: Build Play-ready AAB and production-signed APK", 1
+    )[0]
+
+    for name in (
+        "SREADYA_ANDROID_KEYSTORE_PASSWORD",
+        "SREADYA_ANDROID_KEY_ALIAS",
+        "SREADYA_ANDROID_KEY_PASSWORD",
+    ):
+        assert name in block
+
