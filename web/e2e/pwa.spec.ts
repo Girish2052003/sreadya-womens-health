@@ -65,7 +65,7 @@ test('reviewed install guidance is explicit for iPhone and Android', async ({ pa
     'href',
     'https://github.com/Girish2052003/sreadya-womens-health/releases/download/android-v1.0.0%2B1/sreadya-android.apk',
   );
-  await expect(page.getByRole('link', { name: 'SHA-256' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'SHA-256 checksum' })).toHaveAttribute(
     'href',
     'https://github.com/Girish2052003/sreadya-womens-health/releases/download/android-v1.0.0%2B1/sreadya-android.apk.sha256',
   );
