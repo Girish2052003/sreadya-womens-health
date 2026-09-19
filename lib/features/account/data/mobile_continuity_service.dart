@@ -78,9 +78,8 @@ class MobileIdentityDevice {
 }
 
 class MobileContinuityService implements AccountIdentityTransport {
-  MobileContinuityService({required Uri endpoint, HttpClient? client})
-    : _endpoint = endpoint,
-      _client = client ?? HttpClient();
+  MobileContinuityService({required this._endpoint, HttpClient? client})
+    : _client = client ?? HttpClient();
 
   final Uri _endpoint;
   final HttpClient _client;
