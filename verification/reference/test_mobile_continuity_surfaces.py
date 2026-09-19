@@ -91,3 +91,22 @@ def test_mobile_continuity_trace_generator_points_to_user_surfaces() -> None:
         "verification/reference/test_mobile_continuity_surfaces.py",
     ):
         assert path in generator
+
+def test_web_and_mobile_continuity_hubs_expose_the_same_core_destinations() -> None:
+    mobile = read("lib/features/more/presentation/more_screen.dart")
+    web = read("web/src/app/app/more/page.tsx")
+
+    pairs = (
+        ("/more/account", "/app/account"),
+        ("/more/sync", "/app/sync"),
+        ("/more/devices", "/app/devices"),
+        ("/more/recovery", "/app/recovery"),
+    )
+    for mobile_route, web_route in pairs:
+        assert mobile_route in mobile
+        assert web_route in web
+
+    for internal_term in ("CYC-", "FUT-", "258", "launch requirement"):
+        assert internal_term.lower() not in mobile.lower()
+        assert internal_term.lower() not in web.lower()
+
