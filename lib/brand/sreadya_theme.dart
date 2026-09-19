@@ -55,7 +55,7 @@ ThemeData sreadyaTheme({
         (states) => TextStyle(
           fontWeight: states.contains(WidgetState.selected)
               ? FontWeight.w800
-              : FontWeight.w650,
+              : FontWeight.w600,
           fontSize: 12,
           color: states.contains(WidgetState.selected)
               ? scheme.primary
@@ -77,7 +77,7 @@ ThemeData sreadyaTheme({
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         side: BorderSide(color: scheme.outlineVariant),
-        textStyle: const TextStyle(fontWeight: FontWeight.w750),
+        textStyle: const TextStyle(fontWeight: FontWeight.w700),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
