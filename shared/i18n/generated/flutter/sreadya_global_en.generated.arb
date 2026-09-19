@@ -408,6 +408,9 @@
   "@sreadya_catalogue__dot__futureTitle": {
     "description": "SREADYA canonical message ID: catalogue.futureTitle"
   },
+  "@sreadya_catalogue__dot__group__dot__daily": {
+    "description": "SREADYA canonical message ID: catalogue.group.daily"
+  },
   "@sreadya_catalogue__dot__lede": {
     "description": "SREADYA canonical message ID: catalogue.lede"
   },
@@ -3883,6 +3886,7 @@
   "sreadya_catalogue__dot__futureBody": "Sreadya keeps the core experience consistent across Web, Android and iPhone while device-specific integrations adapt to each platform.",
   "sreadya_catalogue__dot__futureCount": "ways to continue",
   "sreadya_catalogue__dot__futureTitle": "Across your devices",
+  "sreadya_catalogue__dot__group__dot__daily": "Daily essentials",
   "sreadya_catalogue__dot__lede": "Sreadya brings 40+ thoughtful capabilities into clear feature areas across Web, Android and iPhone. Open any area to continue directly in the Sreadya workspace.",
   "sreadya_catalogue__dot__nativeOnly": "This experience adapts to the capabilities of your device.",
   "sreadya_catalogue__dot__requirements": "feature areas",
