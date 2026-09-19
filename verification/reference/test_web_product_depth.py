@@ -156,6 +156,13 @@ def test_public_feature_surface_hides_internal_planning_metadata() -> None:
         "launch ids",
         "backlog markers",
         "capability contract",
+        "product-depth",
+        "fail-closed release evidence",
+        "static github pages",
+        "approved target architecture",
+        "frozen prediction",
+        "repository disclosure",
+        "open all features",
     )
     internal_id = re.compile(
         r"\b(?:CYC|PRED|REM|SYM|REPRO|WELL|REP|PRIV|BACK|ACC|ARCH|PART|LIFE|ID|SYNC|WEB|FUT)-\d{3}\b"
