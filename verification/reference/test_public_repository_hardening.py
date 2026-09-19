@@ -134,24 +134,29 @@ def test_production_release_unit_tests_keep_complete_signing_environment() -> No
         assert name in block
 
 def test_published_android_release_matches_public_web_download_surface() -> None:
-    manifest = json.loads(_text(ROOT / "release" / "android-production.json"))
+    candidate = json.loads(_text(ROOT / "release" / "android-production.json"))
     release_source = _text(ROOT / "web" / "src" / "content" / "android-release.ts")
     topic_source = _text(ROOT / "web" / "src" / "content" / "public-topic-content.ts")
     install_source = _text(ROOT / "web" / "src" / "components" / "pwa" / "InstallGuide.tsx")
 
-    version = manifest["version"]
-    tag = manifest["release_tag"]
-    asset = manifest["public_apk_asset"]
+    version_match = re.search(r"version: '([^']+)'", release_source)
+    tag_match = re.search(r"tag: '([^']+)'", release_source)
+    assert version_match is not None
+    assert tag_match is not None
+    published_version = version_match.group(1)
+    published_tag = tag_match.group(1)
+
+    assert published_tag == f"android-v{published_version}"
+    assert candidate["public_apk_asset"] == "sreadya-android.apk"
+    assert candidate["publication"] == "github-release"
+
     expected_apk = (
         "https://github.com/Girish2052003/sreadya-womens-health/releases/download/"
-        + tag.replace("+", "%2B")
-        + "/"
-        + asset
+        + published_tag.replace("+", "%2B")
+        + "/sreadya-android.apk"
     )
     expected_checksum = expected_apk + ".sha256"
 
-    assert f"version: '{version}'" in release_source
-    assert f"tag: '{tag}'" in release_source
     assert expected_apk in release_source
     assert expected_checksum in release_source
     assert "androidProductionRelease.apkUrl" in topic_source
