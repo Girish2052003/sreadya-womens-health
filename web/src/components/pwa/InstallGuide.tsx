@@ -15,10 +15,14 @@ export function InstallGuide({ target }: { target: InstallGuideTarget }) {
 
   if (target === 'android') {
     return (
-      <section className="install-guide" aria-labelledby="install-android-title">
+      <section
+        className="install-guide"
+        aria-labelledby="install-android-title"
+        data-release-version={androidProductionRelease.version}
+      >
         <div className="install-guide__topline">
           <p className="public-eyebrow">{t('install.eyebrow')}</p>
-          <StatusChip tone="success">Android {androidProductionRelease.version}</StatusChip>
+          <StatusChip tone="success">{t('install.android.badge')}</StatusChip>
         </div>
         <h2 id="install-android-title">{t('install.android.title')}</h2>
         <div className="public-page__actions">
@@ -32,7 +36,7 @@ export function InstallGuide({ target }: { target: InstallGuideTarget }) {
             className="link-button link-button--quiet"
             href={androidProductionRelease.checksumUrl}
           >
-            SHA-256
+            {t('install.android.checksum')}
           </a>
         </div>
         <ol>
@@ -42,7 +46,7 @@ export function InstallGuide({ target }: { target: InstallGuideTarget }) {
         </ol>
         <p>
           <a href={androidProductionRelease.releaseUrl}>
-            Android {androidProductionRelease.version} · GitHub Release
+            {t('install.android.releaseDetails')}
           </a>
         </p>
         <aside className="install-guide__privacy">
