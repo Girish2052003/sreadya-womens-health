@@ -78,7 +78,9 @@ class _DevicesScreenState extends State<DevicesScreen> {
       if (!RegExp(r'^[A-Za-z0-9_-]+$').hasMatch(encoded)) {
         throw const FormatException('Invalid trusted-device QR encoding.');
       }
-      secret = Uint8List.fromList(base64Url.decode(base64Url.normalize(encoded)));
+      secret = Uint8List.fromList(
+        base64Url.decode(base64Url.normalize(encoded)),
+      );
       if (secret.length != 32) {
         throw const FormatException('Trusted-device transfer secret is invalid.');
       }
@@ -89,7 +91,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
     } catch (error) {
       setState(() => _error = 'Trusted-device QR could not be validated: $error');
     } finally {
-      secret?.fillRange(0, secret.length, 0);
+      if (secret != null) secret.fillRange(0, secret.length, 0);
     }
   }
 
@@ -198,9 +200,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                   ),
                   const SizedBox(height: 12),
                   FilledButton(
-                    onPressed: _qrController.text.trim().isEmpty
-                        ? _validateQr
-                        : _validateQr,
+                    onPressed: _validateQr,
                     child: const Text('Validate locally'),
                   ),
                   if (_qrStatus.isNotEmpty) ...[
