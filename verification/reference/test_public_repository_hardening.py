@@ -116,6 +116,8 @@ def test_production_apk_publication_is_manifest_gated_and_separates_signing_from
     assert '"publication": "github-release"' in manifest
     assert '"public_apk_asset": "sreadya-android.apk"' in manifest
     assert '"release_tag": "android-v1.0.0+1"' in manifest
+    assert "(cd build/release && sha256sum sreadya-1.0.0+1-play.aab sreadya-1.0.0+1-production.apk > SHA256SUMS.txt)" in workflow
+    assert "sha256sum build/release/sreadya-1.0.0+1-play.aab" not in workflow
 
 def test_production_release_unit_tests_keep_complete_signing_environment() -> None:
     workflow = _text(WORKFLOW_DIR / "android-production.yml")
