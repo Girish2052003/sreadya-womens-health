@@ -78,7 +78,8 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
     Uint8List? key;
     Uint8List? rootSecret;
     try {
-      recoverySecret = _decodeHexSecret(_secretController.text);
+      final secret = _decodeHexSecret(_secretController.text);
+      recoverySecret = secret;
       final json = _object(jsonDecode(_packageController.text));
       final protocolVersion = _requiredInt(json, 'protocol_version');
       final suiteId = _requiredText(json, 'suite_id');
@@ -96,12 +97,14 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
       final nonce = _decodeBase64(json, 'nonce');
       final ciphertext = _decodeBase64(json, 'ciphertext_and_tag');
       if (salt.length != 32 || nonce.length != 12 || ciphertext.length < 16) {
-        throw const FormatException('Recovery package cryptographic sizes are invalid.');
+        throw const FormatException(
+          'Recovery package cryptographic sizes are invalid.',
+        );
       }
 
       final crypto = E2eeV1Crypto();
       key = await crypto.deriveRecoveryWrappingKey(
-        recoverySecret,
+        secret,
         salt,
         context,
       );
@@ -125,9 +128,13 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
         setState(() => _error = 'Recovery verification failed: $error');
       }
     } finally {
-      recoverySecret?.fillRange(0, recoverySecret.length, 0);
-      key?.fillRange(0, key.length, 0);
-      rootSecret?.fillRange(0, rootSecret.length, 0);
+      if (recoverySecret != null) {
+        recoverySecret.fillRange(0, recoverySecret.length, 0);
+      }
+      if (key != null) key.fillRange(0, key.length, 0);
+      if (rootSecret != null) {
+        rootSecret.fillRange(0, rootSecret.length, 0);
+      }
       if (mounted) setState(() => _working = false);
     }
   }
