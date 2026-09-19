@@ -87,9 +87,11 @@ Repository CI can prove repository-controlled tests and documents. It cannot pro
 
 This repository is public source. Public CI is verification-only for installable native application binaries: Android and iOS builds may be compiled and tested, but normal CI must not publish ordinary APK, AAB, or unsigned iOS application bundles as downloadable artifacts.
 
-Production and family-preview Android releases are manually dispatched from the canonical repository on `main`. Signing credentials and release-artifact encryption passwords are environment-scoped GitHub secrets. Signed release payloads must be encrypted before any Actions artifact upload, and decoded keystores plus plaintext staging material must be removed in an `always()` cleanup step.
+Production Android releases may be manually dispatched from the canonical repository on `main` or triggered by an intentional change to the reviewed `release/android-production.json` publication manifest. Family-preview releases remain manually dispatched. Signing credentials and release-artifact encryption passwords are environment-scoped GitHub secrets. Signed release payloads must be encrypted before any Actions artifact upload, and decoded keystores plus plaintext staging material must be removed in an `always()` cleanup step.
 
-External GitHub Actions used by Sreadya workflows must be pinned to immutable commit SHAs. Workflow permissions remain least-privilege unless a separately reviewed job proves broader permissions are necessary. Future GitHub Pages deployment may require Pages/OIDC permissions only in the dedicated deployment job; sync-service secrets must never be exposed to the static Web build.
+The reviewed production workflow may publish **only the verified production APK**, its SHA-256 integrity file, and its SBOM as plaintext GitHub Release assets after the encrypted build payload is re-verified in a separate publication job. The Play AAB is not a public download and remains inside the encrypted maintainer payload.
+
+External GitHub Actions used by Sreadya workflows must be pinned to immutable commit SHAs. Workflow permissions remain least-privilege. The Android build/signing job remains `contents: read`; only the separate public-APK publication job receives `contents: write`, and that job does not receive the Android signing key. GitHub Pages deployment may use the minimum Pages/OIDC permissions only in the dedicated deployment job; sync-service secrets must never be exposed to the static Web build.
 
 The maintained public-repository protection state and release-boundary rationale are documented in `docs/security/PUBLIC_REPOSITORY_HARDENING.md`.
 
