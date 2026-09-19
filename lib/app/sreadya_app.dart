@@ -3,6 +3,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/account/presentation/account_screen.dart';
+import '../features/account/presentation/devices_screen.dart';
+import '../features/account/presentation/recovery_screen.dart';
 import '../features/assistant/presentation/assistant_screen.dart';
 import '../features/backup/presentation/backup_screen.dart';
 import '../features/calendar/presentation/calendar_screen.dart';
@@ -22,6 +25,7 @@ import '../features/reminders/presentation/reminders_screen.dart';
 import '../features/reports/presentation/reports_screen.dart';
 import '../features/settings/domain/app_preferences.dart';
 import '../features/settings/presentation/settings_screen.dart';
+import '../features/sync/presentation/sync_screen.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'providers.dart';
 import 'sreadya_shell.dart';
@@ -84,6 +88,10 @@ final GoRouter _router = GoRouter(
     ),
     GoRoute(path: '/more/reports', builder: (_, _) => const ReportsScreen()),
     GoRoute(path: '/more/partner', builder: (_, _) => const PartnerScreen()),
+    GoRoute(path: '/more/account', builder: (_, _) => const AccountScreen()),
+    GoRoute(path: '/more/sync', builder: (_, _) => const SyncScreen()),
+    GoRoute(path: '/more/devices', builder: (_, _) => const DevicesScreen()),
+    GoRoute(path: '/more/recovery', builder: (_, _) => const RecoveryScreen()),
     GoRoute(
       path: '/more/privacy',
       builder: (_, _) => const PrivacyCenterScreen(),

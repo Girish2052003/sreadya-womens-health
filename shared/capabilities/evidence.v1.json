@@ -10563,10 +10563,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -10574,10 +10578,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -10612,10 +10620,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -10623,10 +10635,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -10661,10 +10677,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -10672,10 +10692,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -10710,10 +10734,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -10721,10 +10749,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -10759,10 +10791,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -10770,10 +10806,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -10808,10 +10848,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -10819,10 +10863,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -10857,10 +10905,12 @@
           "applicability": "adapted",
           "status": "implemented",
           "implementation": [
-            "platform_templates/android/SreadyaCredentialBridge.kt"
+            "platform_templates/android/SreadyaCredentialBridge.kt",
+            "lib/features/account/presentation/account_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task24-verify.yml"
+            ".github/workflows/c2-task24-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": "Android/iOS account continuity adapts the shared identity protocol through platform-native passkey credential APIs."
         },
@@ -10868,10 +10918,12 @@
           "applicability": "adapted",
           "status": "implemented",
           "implementation": [
-            "platform_templates/ios/SreadyaCredentialBridge.swift"
+            "platform_templates/ios/SreadyaCredentialBridge.swift",
+            "lib/features/account/presentation/account_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task24-verify.yml"
+            ".github/workflows/c2-task24-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": "Android/iOS account continuity adapts the shared identity protocol through platform-native passkey credential APIs."
         },
@@ -10906,10 +10958,12 @@
           "applicability": "adapted",
           "status": "implemented",
           "implementation": [
-            "platform_templates/android/SreadyaCredentialBridge.kt"
+            "platform_templates/android/SreadyaCredentialBridge.kt",
+            "lib/features/account/presentation/account_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task24-verify.yml"
+            ".github/workflows/c2-task24-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": "Android/iOS account continuity adapts the shared identity protocol through platform-native passkey credential APIs."
         },
@@ -10917,10 +10971,12 @@
           "applicability": "adapted",
           "status": "implemented",
           "implementation": [
-            "platform_templates/ios/SreadyaCredentialBridge.swift"
+            "platform_templates/ios/SreadyaCredentialBridge.swift",
+            "lib/features/account/presentation/account_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task24-verify.yml"
+            ".github/workflows/c2-task24-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": "Android/iOS account continuity adapts the shared identity protocol through platform-native passkey credential APIs."
         },
@@ -10955,10 +11011,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -10966,10 +11026,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11004,10 +11068,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11015,10 +11083,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11053,10 +11125,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11064,10 +11140,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11102,10 +11182,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11113,10 +11197,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11151,10 +11239,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11162,10 +11254,14 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/account/data/account_continuity_adapter.dart"
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart"
           ],
           "evidence": [
-            ".github/workflows/c2-task23-verify.yml"
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11200,10 +11296,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11211,10 +11309,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11249,10 +11349,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11260,10 +11362,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11298,10 +11402,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11309,10 +11415,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11347,10 +11455,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11358,10 +11468,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11396,10 +11508,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11407,10 +11521,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11445,10 +11561,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11456,10 +11574,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11494,10 +11614,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11505,10 +11627,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11543,10 +11667,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11554,10 +11680,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11592,10 +11720,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11603,10 +11733,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11641,10 +11773,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11652,10 +11786,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11690,10 +11826,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11701,10 +11839,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11739,10 +11879,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11750,10 +11892,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11788,10 +11932,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11799,10 +11945,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11837,10 +11985,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11848,10 +11998,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11886,10 +12038,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },
@@ -11897,10 +12051,12 @@
           "applicability": "full",
           "status": "implemented",
           "implementation": [
-            "lib/features/sync/data/encrypted_sync_adapter.dart"
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart"
           ],
           "evidence": [
-            "test/conformance/e2ee_vectors_mobile_test.dart"
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py"
           ],
           "rationale": ""
         },

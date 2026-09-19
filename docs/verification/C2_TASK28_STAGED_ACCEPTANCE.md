@@ -17,6 +17,12 @@ Task 28 is the final C2 roadmap task. The approved order is:
 
 The repository can prove preflight quality and enforce release blockers. **Repository preflight is not human acceptance.** CI must never claim that wife alpha, real-device multi-device use, private beta, iOS signing/distribution, or staged production happened when they did not.
 
+## Repository implementation-parity amendment — 19 September 2026
+
+The shared Flutter client now exposes Account & continuity, Encrypted sync, Trusted devices and Recovery workspaces from the mobile More hub. The Task-25 evidence ledger traces mobile ID/SYNC requirements through those user-facing surfaces in addition to the existing native passkey and E2EE adapters.
+
+This closes the repository-level mobile continuity navigation/surface gap. It does **not** convert any external Task-28 stage to accepted. Real-device wife-alpha, signed iOS distribution, real multi-device E2EE acceptance, private beta and staged production still require genuine external evidence.
+
 ## Product-equality acceptance rule
 
 Task 28 checks user-visible equality rather than pixel identity. The acceptance dimensions are terminology, data, predictions, privacy, reports, reminders, life-stage behavior, recovery semantics and sync results. Platform-native integrations may differ only where that difference is documented and consistent with the approved cross-platform capability ledger.

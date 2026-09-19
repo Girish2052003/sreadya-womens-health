@@ -27,8 +27,28 @@ MOBILE_TRACES = {
     "PRIV": (["lib/features/privacy/presentation/privacy_center_screen.dart"], ["verification/reference/test_v1_closure_structure.py"]),
     "VAULT": (["lib/features/backup/data/cycle_vault_service.dart"], ["test/backup/cycle_vault_restore_test.dart"]),
     "DIAG": (["lib/core/diagnostics/diagnostic_report_builder.dart"], ["test/privacy/diagnostic_report_builder_test.dart"]),
-    "ID": (["lib/features/account/data/account_continuity_adapter.dart"], [".github/workflows/c2-task23-verify.yml"]),
-    "SYNC": (["lib/features/sync/data/encrypted_sync_adapter.dart"], ["test/conformance/e2ee_vectors_mobile_test.dart"]),
+    "ID": (
+        [
+            "lib/features/account/data/account_continuity_adapter.dart",
+            "lib/features/account/presentation/account_screen.dart",
+            "lib/features/account/presentation/devices_screen.dart",
+            "lib/features/account/presentation/recovery_screen.dart",
+        ],
+        [
+            ".github/workflows/c2-task23-verify.yml",
+            "verification/reference/test_mobile_continuity_surfaces.py",
+        ],
+    ),
+    "SYNC": (
+        [
+            "lib/features/sync/data/encrypted_sync_adapter.dart",
+            "lib/features/sync/presentation/sync_screen.dart",
+        ],
+        [
+            "test/conformance/e2ee_vectors_mobile_test.dart",
+            "verification/reference/test_mobile_continuity_surfaces.py",
+        ],
+    ),
 }
 
 WEB_TRACES = {
@@ -96,9 +116,27 @@ def trace(capability_id: str, platform: str) -> tuple[list[str], list[str]]:
         return (["web/src/vault/health-repository.ts"], ["web/src/vault/health-repository.test.ts"])
 
     if family == "ID" and number in {7, 8} and platform == "android":
-        return (["platform_templates/android/SreadyaCredentialBridge.kt"], [".github/workflows/c2-task24-verify.yml"])
+        return (
+            [
+                "platform_templates/android/SreadyaCredentialBridge.kt",
+                "lib/features/account/presentation/account_screen.dart",
+            ],
+            [
+                ".github/workflows/c2-task24-verify.yml",
+                "verification/reference/test_mobile_continuity_surfaces.py",
+            ],
+        )
     if family == "ID" and number in {7, 8} and platform == "ios":
-        return (["platform_templates/ios/SreadyaCredentialBridge.swift"], [".github/workflows/c2-task24-verify.yml"])
+        return (
+            [
+                "platform_templates/ios/SreadyaCredentialBridge.swift",
+                "lib/features/account/presentation/account_screen.dart",
+            ],
+            [
+                ".github/workflows/c2-task24-verify.yml",
+                "verification/reference/test_mobile_continuity_surfaces.py",
+            ],
+        )
 
     traces = MOBILE_TRACES if platform in {"android", "ios"} else WEB_TRACES
     if family not in traces:
