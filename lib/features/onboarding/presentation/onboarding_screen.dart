@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../brand/sreadya_brand.dart';
+
 import '../../../app/providers.dart';
 import '../../../core/settings/local_settings_store.dart';
 import '../../../core/settings/user_formatters.dart';
@@ -32,6 +34,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final List<DateTime> _starts = [];
   LifeStageMode _lifeStage = LifeStageMode.cycleTracking;
   NotificationPrivacy _notificationPrivacy = NotificationPrivacy.maximum;
+  bool _enableReminders = false;
   bool _importHealth = false;
   List<Map<String, Object?>>? _healthPreview;
   bool _saving = false;
@@ -92,11 +95,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       await ref.read(lifeStageStoreProvider).write(_lifeStage);
       ref.invalidate(lifeStageProvider);
 
+      var notificationAllowed = false;
+      if (_enableReminders) {
+        notificationAllowed = await ref
+            .read(reminderSchedulerProvider)
+            .requestPermission();
+      }
+
       final reminderStore = ref.read(reminderPreferencesStoreProvider);
       final reminder = await reminderStore.read();
       await reminderStore.write(
         reminder.copyWith(
-          enabled: true,
+          enabled: _enableReminders && notificationAllowed,
           enabledOffsetsDays: const {3},
           privacy: _notificationPrivacy,
         ),
@@ -113,9 +123,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         await ref.read(healthActionsProvider).startPeriod(date);
       }
 
-      if (_importHealth) {
-        if (_healthPreview == null) await _previewHealth();
-        final rows = _healthPreview ?? const <Map<String, Object?>>[];
+      if (_importHealth && _healthPreview != null) {
+        final rows = _healthPreview!;
         if (rows.isNotEmpty) {
           final status = await ref.read(healthPlatformProvider).status();
           final source = status.platformName.toLowerCase().contains('apple')
@@ -128,9 +137,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         }
       }
 
-      await ref.read(reminderSchedulerProvider).requestPermission();
       await OnboardingStore().complete();
       widget.onComplete();
+
+      if (_enableReminders && !notificationAllowed && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Notification access was not granted. Sreadya left reminders off; you can enable them later from More > Reminders.',
+            ),
+          ),
+        );
+      }
     } catch (error) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -150,23 +168,47 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [
-            const SizedBox(height: 28),
-            Text(
-              'Sreadya',
-              style: Theme.of(context).textTheme.displaySmall
-                  ?.copyWith(fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Your cycle belongs to you.',
-              style: Theme.of(context).textTheme.titleLarge,
+            const SizedBox(height: 12),
+            Center(
+              child: Column(
+                children: [
+                  const SreadyaBrandIcon(
+                    size: 92,
+                    semanticLabel: 'Sreadya app icon',
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Welcome to Sreadya',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headlineMedium
+                        ?.copyWith(fontWeight: FontWeight.w900),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Your cycle. Your rhythm. Your space.',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleMedium
+                        ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 20),
-            const Card(
-              child: Padding(
+            Card(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              child: const Padding(
                 padding: EdgeInsets.all(18),
-                child: Text(
-                  'Sreadya stores and processes reproductive-health information on this device. No account is required. Predictions are estimates, not medical diagnoses or contraceptive guarantees.',
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.shield_outlined),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'Sreadya stores and processes reproductive-health information on this device. No account is required. Predictions are estimates, not medical diagnoses or contraceptive guarantees.',
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -220,41 +262,63 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               icon: const Icon(Icons.add),
               label: const Text('Add a previous period start'),
             ),
-            const SizedBox(height: 20),
-            DropdownButtonFormField<NotificationPrivacy>(
-              initialValue: _notificationPrivacy,
-              decoration: const InputDecoration(
-                labelText: 'Lock-screen reminder privacy',
-              ),
-              items: const [
-                DropdownMenuItem(
-                  value: NotificationPrivacy.maximum,
-                  child: Text('Maximum — “You have a reminder.”'),
-                ),
-                DropdownMenuItem(
-                  value: NotificationPrivacy.balanced,
-                  child: Text('Balanced — cycle reminder'),
-                ),
-                DropdownMenuItem(
-                  value: NotificationPrivacy.detailed,
-                  child: Text('Detailed — timing may appear'),
-                ),
-              ],
-              onChanged: (value) {
-                if (value != null) setState(() => _notificationPrivacy = value);
-              },
+            const SizedBox(height: 24),
+            Text(
+              'Reminders & permissions',
+              style: Theme.of(context).textTheme.titleLarge
+                  ?.copyWith(fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Sreadya enables the private 3-day-before reminder by default. You can change reminder days and time later.',
+            Card(
+              child: SwitchListTile(
+                value: _enableReminders,
+                secondary: const Icon(Icons.notifications_active_outlined),
+                title: const Text('Enable private cycle reminders'),
+                subtitle: const Text(
+                  'Optional. If you turn this on, Android will ask for notification access only after you tap Start using Sreadya.',
+                ),
+                onChanged: (value) => setState(() => _enableReminders = value),
+              ),
             ),
+            if (_enableReminders) ...[
+              const SizedBox(height: 12),
+              DropdownButtonFormField<NotificationPrivacy>(
+                initialValue: _notificationPrivacy,
+                decoration: const InputDecoration(
+                  labelText: 'Lock-screen reminder privacy',
+                ),
+                items: const [
+                  DropdownMenuItem(
+                    value: NotificationPrivacy.maximum,
+                    child: Text('Maximum — “You have a reminder.”'),
+                  ),
+                  DropdownMenuItem(
+                    value: NotificationPrivacy.balanced,
+                    child: Text('Balanced — cycle reminder'),
+                  ),
+                  DropdownMenuItem(
+                    value: NotificationPrivacy.detailed,
+                    child: Text('Detailed — timing may appear'),
+                  ),
+                ],
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() => _notificationPrivacy = value);
+                  }
+                },
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'The initial plan is a private 3-day-before reminder. You can change days, time and quiet hours later.',
+              ),
+            ],
             const SizedBox(height: 20),
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
               value: _importHealth,
-              title: const Text('Optional platform health import'),
+              title: const Text('Connect Health Connect'),
               subtitle: const Text(
-                'Import menstrual-flow history only after an explicit OS permission choice and preview.',
+                'Optional. Turning this switch on does not request access. Use the preview button below to choose menstrual-flow access in Android.',
               ),
               onChanged: (value) => setState(() {
                 _importHealth = value;
@@ -265,8 +329,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               OutlinedButton.icon(
                 onPressed: _saving ? null : _previewHealth,
                 icon: const Icon(Icons.preview_outlined),
-                label: const Text('Preview platform health import'),
+                label: const Text('Choose access & preview Health Connect'),
               ),
+              if (_healthPreview == null)
+                const Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: Text(
+                    'No health permission is requested until you tap the button above. You can also finish setup without connecting Health Connect.',
+                  ),
+                ),
               if (_healthPreview != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
