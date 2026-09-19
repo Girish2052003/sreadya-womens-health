@@ -54,6 +54,35 @@ class MoreScreen extends StatelessWidget {
         ],
       ),
       (
+        'Continuity',
+        [
+          (
+            Icons.person_outline,
+            'Account & continuity',
+            'Optional identity for encrypted cross-device continuity',
+            '/more/account',
+          ),
+          (
+            Icons.sync_lock_outlined,
+            'Encrypted sync',
+            'Pause, resume or disable optional encrypted continuity',
+            '/more/sync',
+          ),
+          (
+            Icons.devices_outlined,
+            'Trusted devices',
+            'Review device access and validate enrollment requests',
+            '/more/devices',
+          ),
+          (
+            Icons.key_outlined,
+            'Recovery',
+            'Verify an emergency vault-recovery package locally',
+            '/more/recovery',
+          ),
+        ],
+      ),
+      (
         'Privacy & resilience',
         [
           (
