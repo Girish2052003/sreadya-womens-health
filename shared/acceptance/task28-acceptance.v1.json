@@ -7,79 +7,129 @@
     {
       "id": "terminology",
       "repository_preflight": "covered",
-      "evidence": ["shared/terminology", "shared/capabilities/evidence.v1.json"]
+      "evidence": [
+        "shared/terminology",
+        "shared/capabilities/evidence.v1.json"
+      ]
     },
     {
       "id": "data",
       "repository_preflight": "covered",
-      "evidence": ["shared/schemas", "shared/capabilities/evidence.v1.json"]
+      "evidence": [
+        "shared/schemas",
+        "shared/capabilities/evidence.v1.json"
+      ]
     },
     {
       "id": "predictions",
       "repository_preflight": "covered",
-      "evidence": ["shared/prediction", "shared/capabilities/evidence.v1.json"]
+      "evidence": [
+        "shared/prediction",
+        "shared/capabilities/evidence.v1.json"
+      ]
     },
     {
       "id": "privacy",
       "repository_preflight": "covered",
-      "evidence": ["PRIVACY.md", "shared/privacy", "shared/capabilities/evidence.v1.json"]
+      "evidence": [
+        "PRIVACY.md",
+        "shared/privacy",
+        "shared/capabilities/evidence.v1.json",
+        "verification/reference/test_mobile_continuity_surfaces.py"
+      ]
     },
     {
       "id": "reports",
       "repository_preflight": "covered",
-      "evidence": ["shared/capabilities/evidence.v1.json", "web/e2e/task18-live-acceptance.spec.ts"]
+      "evidence": [
+        "shared/capabilities/evidence.v1.json",
+        "web/e2e/task18-live-acceptance.spec.ts"
+      ]
     },
     {
       "id": "reminders",
       "repository_preflight": "covered",
-      "evidence": ["shared/reminders", "shared/capabilities/evidence.v1.json"]
+      "evidence": [
+        "shared/reminders",
+        "shared/capabilities/evidence.v1.json"
+      ]
     },
     {
       "id": "life_stage_behavior",
       "repository_preflight": "covered",
-      "evidence": ["shared/capabilities/evidence.v1.json"]
+      "evidence": [
+        "shared/capabilities/evidence.v1.json"
+      ]
     },
     {
       "id": "recovery_semantics",
       "repository_preflight": "covered",
-      "evidence": ["docs/verification/TASK23_TRUSTED_DEVICE_RECOVERY_CLOSURE.md", "shared/capabilities/evidence.v1.json"]
+      "evidence": [
+        "docs/verification/TASK23_TRUSTED_DEVICE_RECOVERY_CLOSURE.md",
+        "shared/capabilities/evidence.v1.json",
+        "verification/reference/test_mobile_continuity_surfaces.py"
+      ]
     },
     {
       "id": "sync_results",
       "repository_preflight": "covered",
-      "evidence": ["docs/verification/C2_TASK22_CIPHERTEXT_SYNC_CLOSURE.md", "shared/sync", "shared/capabilities/evidence.v1.json"]
+      "evidence": [
+        "docs/verification/C2_TASK22_CIPHERTEXT_SYNC_CLOSURE.md",
+        "shared/sync",
+        "shared/capabilities/evidence.v1.json",
+        "verification/reference/test_mobile_continuity_surfaces.py"
+      ]
     }
   ],
   "production_stop_gates": [
     {
       "id": "privacy",
       "status": "repository_green",
-      "evidence": ["PRIVACY.md", "SECURITY.md", "tool/privacy_scan.py"]
+      "evidence": [
+        "PRIVACY.md",
+        "SECURITY.md",
+        "tool/privacy_scan.py"
+      ]
     },
     {
       "id": "migration",
       "status": "repository_green",
-      "evidence": ["test/database/migration_coordinator_test.dart", "test/hardening/task27_recovery_hardening_test.dart"]
+      "evidence": [
+        "test/database/migration_coordinator_test.dart",
+        "test/hardening/task27_recovery_hardening_test.dart"
+      ]
     },
     {
       "id": "reminder",
       "status": "repository_green",
-      "evidence": ["verification/reference/test_android_reminder_resilience.py", "shared/reminders"]
+      "evidence": [
+        "verification/reference/test_android_reminder_resilience.py",
+        "shared/reminders"
+      ]
     },
     {
       "id": "recovery",
       "status": "repository_green",
-      "evidence": ["docs/verification/TASK23_TRUSTED_DEVICE_RECOVERY_CLOSURE.md", "test/hardening/task27_recovery_hardening_test.dart"]
+      "evidence": [
+        "docs/verification/TASK23_TRUSTED_DEVICE_RECOVERY_CLOSURE.md",
+        "test/hardening/task27_recovery_hardening_test.dart"
+      ]
     },
     {
       "id": "ciphertext_authorization",
       "status": "repository_green",
-      "evidence": ["docs/verification/C2_TASK22_CIPHERTEXT_SYNC_CLOSURE.md", "sync_service/internal/sync/task27_hardening_test.go"]
+      "evidence": [
+        "docs/verification/C2_TASK22_CIPHERTEXT_SYNC_CLOSURE.md",
+        "sync_service/internal/sync/task27_hardening_test.go"
+      ]
     },
     {
       "id": "data_loss",
       "status": "repository_green",
-      "evidence": ["web/src/sync/queue.test.ts", "test/backup/cycle_vault_restore_test.dart"]
+      "evidence": [
+        "web/src/sync/queue.test.ts",
+        "test/backup/cycle_vault_restore_test.dart"
+      ]
     }
   ],
   "stages": [
@@ -87,7 +137,10 @@
       "id": "web_pwa_wife_alpha",
       "kind": "external",
       "status": "external_pending",
-      "repository_preflight": ["docs/verification/WEB_PWA_LOCAL_ACCEPTANCE.md", "web/e2e/task18-live-acceptance.spec.ts"],
+      "repository_preflight": [
+        "docs/verification/WEB_PWA_LOCAL_ACCEPTANCE.md",
+        "web/e2e/task18-live-acceptance.spec.ts"
+      ],
       "evidence_required": [
         "sanitized wife-alpha acceptance receipt with date/build SHA and no health payload",
         "device/browser class used for acceptance"
@@ -98,7 +151,10 @@
       "id": "android_wife_alpha_regression",
       "kind": "external",
       "status": "external_pending",
-      "repository_preflight": [".github/workflows/ci.yml", ".github/workflows/android-family-preview.yml"],
+      "repository_preflight": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/android-family-preview.yml"
+      ],
       "evidence_required": [
         "sanitized Android wife-alpha acceptance receipt with date/build SHA and no health payload",
         "device/Android version used for acceptance"
@@ -109,7 +165,10 @@
       "id": "ios_native_distribution",
       "kind": "external",
       "status": "external_pending",
-      "repository_preflight": [".github/workflows/ci.yml", ".github/workflows/c2-task24-verify.yml"],
+      "repository_preflight": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/c2-task24-verify.yml"
+      ],
       "evidence_required": [
         "signed iOS distribution evidence when signing exists",
         "sanitized iOS native acceptance receipt with date/build SHA and no health payload"
@@ -135,7 +194,9 @@
       "id": "private_beta",
       "kind": "external",
       "status": "external_pending",
-      "repository_preflight": ["docs/verification/C2_CROSS_PLATFORM_RELEASE_CLOSURE.md"],
+      "repository_preflight": [
+        "docs/verification/C2_CROSS_PLATFORM_RELEASE_CLOSURE.md"
+      ],
       "evidence_required": [
         "private-beta acceptance summary with tester count/build SHA and no health payload",
         "open blocker count and disposition"
