@@ -45,7 +45,7 @@ test('public Features page exposes user-facing feature homes without internal pl
   await expect(page.locator('[data-feature-route]')).toHaveCount(24);
 
   await page.getByLabel('Find a Sreadya feature').fill('recovery');
-  await expect(page.getByRole('link', { name: /Recovery/i })).toBeVisible();
+  await expect(page.locator('[data-feature-route="/app/recovery"]')).toBeVisible();
 
   const publicText = await page.locator('body').innerText();
   expect(publicText).not.toMatch(/\b(?:CYC|PRED|REM|SYM|REPRO|WELL|REP|PRIV|BACK|ACC|ARCH|PART|LIFE|ID|SYNC|WEB|FUT)-\d{3}\b/);
