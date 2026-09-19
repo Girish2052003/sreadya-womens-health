@@ -137,7 +137,7 @@
 [data-sreadya-theme='dark'] .workspace-topbar__back { background: #2b2024; }
 
 @media (max-width: 820px) {
-  .workspace-topbar { left: 0; grid-template-columns: auto 1fr auto; padding: 7px 14px; }
+  .workspace-topbar { left: 0; grid-template-columns: auto 1fr; padding: 7px 14px; }
   .workspace-topbar__section { display: none; }
   .workspace-main { padding-top: 86px; }
   .feature-hub__links, .settings-links { grid-template-columns: 1fr; }
