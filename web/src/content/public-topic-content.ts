@@ -1,3 +1,5 @@
+import { androidProductionRelease } from './android-release';
+
 export type PublicTopicSection = {
   id: string;
   href?: string;
@@ -207,7 +209,7 @@ export const publicTopicContent: Record<string, PublicTopic> = {
       },
       {
         "id": "section2",
-        "href": "/install/android"
+        "href": androidProductionRelease.apkUrl
       },
       {
         "id": "section3",
