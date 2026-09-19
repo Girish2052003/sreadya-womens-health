@@ -10,6 +10,7 @@ Dart application expects.
 from __future__ import annotations
 
 import argparse
+import base64
 import plistlib
 import re
 from pathlib import Path
@@ -56,7 +57,8 @@ ANDROID_MANIFEST = r'''<manifest xmlns:android="http://schemas.android.com/apk/r
     <application
         android:label="Sreadya"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/sreadya_app_icon"
+        android:roundIcon="@drawable/sreadya_app_icon"
         android:allowBackup="false"
         android:fullBackupContent="false">
         <activity
@@ -118,6 +120,58 @@ ANDROID_MANIFEST = r'''<manifest xmlns:android="http://schemas.android.com/apk/r
 </manifest>
 '''
 
+ANDROID_COLORS = r'''<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="sreadya_launch_pink">#B80F4B</color>
+</resources>
+'''
+
+ANDROID_LAUNCH_BACKGROUND = r'''<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/sreadya_launch_pink" />
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/sreadya_app_icon" />
+    </item>
+</layer-list>
+'''
+
+ANDROID_STYLES = r'''<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/sreadya_launch_pink</item>
+        <item name="android:navigationBarColor">@color/sreadya_launch_pink</item>
+        <item name="android:windowBackground">@drawable/launch_background</item>
+    </style>
+    <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="android:windowBackground">@color/sreadya_launch_pink</item>
+    </style>
+</resources>
+'''
+
+ANDROID_STYLES_V31 = r'''<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="android:windowSplashScreenBackground">@color/sreadya_launch_pink</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/sreadya_app_icon</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
+        <item name="android:windowSplashScreenAnimationDuration">300</item>
+        <item name="android:statusBarColor">@color/sreadya_launch_pink</item>
+        <item name="android:navigationBarColor">@color/sreadya_launch_pink</item>
+    </style>
+    <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="android:windowBackground">@color/sreadya_launch_pink</item>
+    </style>
+</resources>
+'''
+
 RATIONALE_ACTIVITY = r'''
 
 class PermissionsRationaleActivity : android.app.Activity() {
@@ -171,6 +225,42 @@ def require(path: Path, description: str) -> None:
         raise SystemExit(f"Missing {description}: {path}")
 
 
+def _brand_icon_bytes() -> bytes:
+    parts = [
+        ROOT / "assets" / "brand" / f"sreadya_app_icon.webp.b64.{index:02d}"
+        for index in range(1, 5)
+    ]
+    for part in parts:
+        require(part, "Sreadya brand icon chunk")
+    encoded = "".join(part.read_text(encoding="utf-8").strip() for part in parts)
+    try:
+        payload = base64.b64decode(encoded, validate=True)
+    except ValueError as error:
+        raise SystemExit(f"Sreadya brand icon is not valid base64: {error}") from error
+    if len(payload) < 10_000 or not payload.startswith(b"RIFF") or b"WEBP" not in payload[:16]:
+        raise SystemExit("Sreadya brand icon payload is not a valid production WebP asset")
+    return payload
+
+
+def _configure_android_branding(app_dir: Path) -> None:
+    res = app_dir / "src" / "main" / "res"
+    drawable = res / "drawable"
+    drawable_nodpi = res / "drawable-nodpi"
+    values = res / "values"
+    values_v31 = res / "values-v31"
+    for directory in (drawable, drawable_nodpi, values, values_v31):
+        directory.mkdir(parents=True, exist_ok=True)
+
+    (drawable_nodpi / "sreadya_app_icon.webp").write_bytes(_brand_icon_bytes())
+    (drawable / "launch_background.xml").write_text(
+        ANDROID_LAUNCH_BACKGROUND,
+        encoding="utf-8",
+    )
+    (values / "colors.xml").write_text(ANDROID_COLORS, encoding="utf-8")
+    (values / "styles.xml").write_text(ANDROID_STYLES, encoding="utf-8")
+    (values_v31 / "styles.xml").write_text(ANDROID_STYLES_V31, encoding="utf-8")
+
+
 def configure_android() -> None:
     app_dir = ROOT / "android" / "app"
     require(app_dir, "generated Android project; run flutter create first")
@@ -189,6 +279,7 @@ def configure_android() -> None:
     manifest = app_dir / "src" / "main" / "AndroidManifest.xml"
     manifest.parent.mkdir(parents=True, exist_ok=True)
     manifest.write_text(ANDROID_MANIFEST, encoding="utf-8")
+    _configure_android_branding(app_dir)
 
     source = ROOT / "platform_templates" / "android" / "MainActivity.kt"
     credential_source = ROOT / "platform_templates" / "android" / "SreadyaCredentialBridge.kt"
@@ -221,7 +312,23 @@ def check_android() -> None:
     source_dir = ROOT / "android" / "app" / "src" / "main" / "kotlin" / "com" / "sreadya" / "health" / "sreadya"
     source = source_dir / "MainActivity.kt"
     credential_source = source_dir / "SreadyaCredentialBridge.kt"
-    for path in (gradle, manifest, source, credential_source):
+    res = ROOT / "android" / "app" / "src" / "main" / "res"
+    icon = res / "drawable-nodpi" / "sreadya_app_icon.webp"
+    launch_background = res / "drawable" / "launch_background.xml"
+    styles = res / "values" / "styles.xml"
+    styles_v31 = res / "values-v31" / "styles.xml"
+    colors = res / "values" / "colors.xml"
+    for path in (
+        gradle,
+        manifest,
+        source,
+        credential_source,
+        icon,
+        launch_background,
+        styles,
+        styles_v31,
+        colors,
+    ):
         require(path, "configured Android file")
     checks = {
         gradle: [
@@ -233,6 +340,8 @@ def check_android() -> None:
         ],
         manifest: [
             'android:allowBackup="false"',
+            'android:icon="@drawable/sreadya_app_icon"',
+            'android:roundIcon="@drawable/sreadya_app_icon"',
             'android.permission.health.READ_MENSTRUATION',
             'android.permission.health.READ_SEXUAL_ACTIVITY',
             'android.permission.health.WRITE_SEXUAL_ACTIVITY',
@@ -259,6 +368,17 @@ def check_android() -> None:
         missing = [marker for marker in markers if marker not in text]
         if missing:
             raise SystemExit(f"Android configuration incomplete in {path}: {missing}")
+
+    if "android.permission.READ_CONTACTS" in manifest.read_text(encoding="utf-8"):
+        raise SystemExit("Sreadya Android must not request contacts access for partner sharing")
+    if icon.read_bytes() != _brand_icon_bytes():
+        raise SystemExit("Materialized Android launcher icon differs from the canonical Sreadya brand asset")
+    if "@color/sreadya_launch_pink" not in launch_background.read_text(encoding="utf-8"):
+        raise SystemExit("Android launch background is not Sreadya-branded")
+    if "android:windowSplashScreenAnimatedIcon" not in styles_v31.read_text(encoding="utf-8"):
+        raise SystemExit("Android 12+ launch theme is missing the Sreadya icon")
+    if "#B80F4B" not in colors.read_text(encoding="utf-8"):
+        raise SystemExit("Sreadya launch color is not materialized")
     print("Android native host configuration: OK")
 
 
