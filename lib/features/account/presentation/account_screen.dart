@@ -3,7 +3,6 @@ import 'package:uuid/uuid.dart';
 
 import '../data/account_continuity_adapter.dart';
 import '../data/mobile_continuity_service.dart';
-import '../domain/account_continuity.dart';
 import 'account_continuity_controller.dart';
 
 class AccountScreen extends StatefulWidget {
