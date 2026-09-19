@@ -11,6 +11,41 @@ import { privacyPolicyLastUpdatedIso, privacyPolicySectionIds } from '../content
 import { formatLocaleDate } from '../i18n/locale';
 import { useI18n } from '../i18n/I18nProvider';
 
+export type PublicPageFamily = 'product' | 'legal' | 'security' | 'support';
+
+const legalTopics = new Set(['privacy', 'privacy-policy', 'terms']);
+const securityTopics = new Set(['security', 'security/report', 'security-report']);
+const supportTopics = new Set([
+  'accessibility',
+  'download',
+  'install/iphone',
+  'install/android',
+  'install/pwa',
+  'help',
+  'about',
+  'release-notes',
+]);
+
+export function publicPagePresentation(topicKey: string): {
+  family: PublicPageFamily;
+  showOpenSreadya: boolean;
+  showPrinciples: boolean;
+} {
+  const family: PublicPageFamily = legalTopics.has(topicKey)
+    ? 'legal'
+    : securityTopics.has(topicKey)
+      ? 'security'
+      : supportTopics.has(topicKey)
+        ? 'support'
+        : 'product';
+
+  return {
+    family,
+    showOpenSreadya: topicKey === 'how-it-works',
+    showPrinciples: family === 'product',
+  };
+}
+
 export function PublicPageContent({
   topicKey,
   titleKey,
@@ -29,19 +64,22 @@ export function PublicPageContent({
   isFeatures: boolean;
 }) {
   const { t, locale } = useI18n();
+  const presentation = publicPagePresentation(topicKey);
+  const currentPath = `/${topicKey}`;
 
   return (
-    <div className="public-site">
-      <PublicHeader />
-      <main className="public-page">
+    <div className={`public-site public-site--section public-site--${presentation.family}`}>
+      <PublicHeader variant="section" currentLabel={t(titleKey)} />
+      <main className={`public-page public-page--${presentation.family}`}>
         <section className="public-page__hero">
           <p className="public-eyebrow">{t(eyebrowKey)}</p>
           <h1>{t(titleKey)}</h1>
           <p className="public-lede">{t(summaryKey)}</p>
-          <div className="public-page__actions">
-            <Link className="link-button link-button--primary" href="/app/home">{t('publicPage.open')}</Link>
-            <Link className="link-button link-button--quiet" href="/how-it-works">{t('publicPage.how')}</Link>
-          </div>
+          {presentation.showOpenSreadya ? (
+            <div className="public-page__actions public-page__actions--single">
+              <Link className="link-button link-button--primary" href="/app/home">{t('publicPage.open')}</Link>
+            </div>
+          ) : null}
         </section>
         {isFeatures ? <CapabilityCatalogue /> : null}
         <PublicTopicContent topicKey={topicKey} />
@@ -58,13 +96,15 @@ export function PublicPageContent({
             ))}
           </section>
         ) : null}
-        <section className="principle-grid" aria-label={t('publicPage.principlesAria')}>
-          <article><span>01</span><h2>{t('publicPage.principle1.title')}</h2><p>{t('publicPage.principle1.body')}</p></article>
-          <article><span>02</span><h2>{t('publicPage.principle2.title')}</h2><p>{t('publicPage.principle2.body')}</p></article>
-          <article><span>03</span><h2>{t('publicPage.principle3.title')}</h2><p>{t('publicPage.principle3.body')}</p></article>
-        </section>
+        {presentation.showPrinciples ? (
+          <section className="principle-grid" aria-label={t('publicPage.principlesAria')}>
+            <article><span>01</span><h2>{t('publicPage.principle1.title')}</h2><p>{t('publicPage.principle1.body')}</p></article>
+            <article><span>02</span><h2>{t('publicPage.principle2.title')}</h2><p>{t('publicPage.principle2.body')}</p></article>
+            <article><span>03</span><h2>{t('publicPage.principle3.title')}</h2><p>{t('publicPage.principle3.body')}</p></article>
+          </section>
+        ) : null}
       </main>
-      <PublicFooter />
+      <PublicFooter currentPath={currentPath} />
     </div>
   );
 }
