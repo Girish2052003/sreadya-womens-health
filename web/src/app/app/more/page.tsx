@@ -61,7 +61,6 @@ export default function MorePage() {
     >
       <p className="feature-hub__intro">
         {t('workspace.more.intro')}
-        <br /><Link className="workspace-text-link" href="/features">{t('workspace.more.catalogue')}</Link>
       </p>
       <div className="feature-hub__groups">
         {groups.map((group) => (
