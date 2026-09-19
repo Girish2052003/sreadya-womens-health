@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import { androidProductionRelease } from '../src/content/android-release';
+
 test('manifest identifies Sreadya as a standalone account-free Web app', async ({ request }) => {
   const response = await request.get('/manifest.webmanifest');
   expect(response.ok()).toBeTruthy();
@@ -63,11 +65,11 @@ test('reviewed install guidance is explicit for iPhone and Android', async ({ pa
   await expect(page.getByRole('heading', { level: 2, name: 'Install Sreadya on Android' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Download Android APK' })).toHaveAttribute(
     'href',
-    'https://github.com/Girish2052003/sreadya-womens-health/releases/download/android-v1.0.0%2B1/sreadya-android.apk',
+    androidProductionRelease.apkUrl,
   );
   await expect(page.getByRole('link', { name: 'SHA-256 checksum' })).toHaveAttribute(
     'href',
-    'https://github.com/Girish2052003/sreadya-womens-health/releases/download/android-v1.0.0%2B1/sreadya-android.apk.sha256',
+    androidProductionRelease.checksumUrl,
   );
   await expect(page.getByText('Open the downloaded APK. Android may ask you to allow installation from your browser or file manager for this install.')).toBeVisible();
 });
