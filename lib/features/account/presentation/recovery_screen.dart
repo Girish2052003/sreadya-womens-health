@@ -37,9 +37,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
     if (value is! Map) {
       throw const FormatException('Recovery package must be a JSON object.');
     }
-    return value.map(
-      (key, item) => MapEntry(key.toString(), item as Object?),
-    );
+    return value.map((key, item) => MapEntry(key.toString(), item as Object?));
   }
 
   String _requiredText(Map<String, Object?> json, String key) {
@@ -103,11 +101,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
       }
 
       final crypto = E2eeV1Crypto();
-      key = await crypto.deriveRecoveryWrappingKey(
-        secret,
-        salt,
-        context,
-      );
+      key = await crypto.deriveRecoveryWrappingKey(secret, salt, context);
       rootSecret = await crypto.open(
         key: key,
         nonce: nonce,
@@ -120,8 +114,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
 
       if (!mounted) return;
       setState(
-        () => _status =
-            'Recovery package verified locally. The recovered vault secret was not displayed, logged or uploaded.',
+        () => _status = 'Recovery package verified locally. The recovered vault secret was not displayed, logged or uploaded.',
       );
     } catch (error) {
       if (mounted) {
