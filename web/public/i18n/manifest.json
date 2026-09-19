@@ -13,7 +13,7 @@
       "reviewStatus": "test-only",
       "risk": "test-only",
       "sourceMessageCount": 1249,
-      "sourceVersion": "6f6decb54d8452b216d3bc33cd2f8c7f20c30643"
+      "sourceVersion": "4271479daba921a1a9f8451a863de4de3d0c98f3"
     },
     "en": {
       "coverage": "source",
@@ -28,7 +28,7 @@
       "reviewStatus": "source-authoritative",
       "risk": "mixed",
       "sourceMessageCount": 1249,
-      "sourceVersion": "6f6decb54d8452b216d3bc33cd2f8c7f20c30643"
+      "sourceVersion": "4271479daba921a1a9f8451a863de4de3d0c98f3"
     },
     "en-xa": {
       "coverage": "pseudo",
@@ -43,7 +43,7 @@
       "reviewStatus": "test-only",
       "risk": "test-only",
       "sourceMessageCount": 1249,
-      "sourceVersion": "6f6decb54d8452b216d3bc33cd2f8c7f20c30643"
+      "sourceVersion": "4271479daba921a1a9f8451a863de4de3d0c98f3"
     }
   },
   "publicLocales": [
@@ -55,8 +55,8 @@
       "tag": "en"
     }
   ],
-  "sourceGitBlobSha": "6f6decb54d8452b216d3bc33cd2f8c7f20c30643",
+  "sourceGitBlobSha": "4271479daba921a1a9f8451a863de4de3d0c98f3",
   "sourceLocale": "en",
-  "sourceVersion": "6f6decb54d8452b216d3bc33cd2f8c7f20c30643",
+  "sourceVersion": "4271479daba921a1a9f8451a863de4de3d0c98f3",
   "version": 2
 }
