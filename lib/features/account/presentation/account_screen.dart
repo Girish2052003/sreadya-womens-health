@@ -36,7 +36,7 @@ class _AccountScreenState extends State<AccountScreen> {
     super.initState();
     final endpoint = _endpoint;
     if (endpoint != null) {
-      final service = MobileContinuityService(endpoint: endpoint);
+      final service = MobileContinuityService(endpoint);
       final adapter = MobileAccountContinuityAdapter(
         identityTransport: service,
       );
