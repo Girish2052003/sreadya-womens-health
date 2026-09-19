@@ -10,6 +10,7 @@ import './pwa.css';
 import './vault.css';
 import './product-completeness.css';
 import './globalization.css';
+import './public-information-architecture.css';
 
 export const metadata: Metadata = {
   title: 'Sreadya — Private, local-first women\'s health',
