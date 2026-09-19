@@ -82,14 +82,18 @@ class _DevicesScreenState extends State<DevicesScreen> {
         base64Url.decode(base64Url.normalize(encoded)),
       );
       if (secret.length != 32) {
-        throw const FormatException('Trusted-device transfer secret is invalid.');
+        throw const FormatException(
+          'Trusted-device transfer secret is invalid.',
+        );
       }
       setState(
         () => _qrStatus =
             'Enrollment request ${parts[1]} is structurally valid. The transfer secret stayed in memory only.',
       );
     } catch (error) {
-      setState(() => _error = 'Trusted-device QR could not be validated: $error');
+      setState(
+        () => _error = 'Trusted-device QR could not be validated: $error',
+      );
     } finally {
       if (secret != null) secret.fillRange(0, secret.length, 0);
     }
@@ -133,7 +137,9 @@ class _DevicesScreenState extends State<DevicesScreen> {
                   ),
                   if (_accountId == null) ...[
                     const SizedBox(height: 8),
-                    const Text('No continuity account is linked on this device.'),
+                    const Text(
+                      'No continuity account is linked on this device.',
+                    ),
                     TextButton(
                       onPressed: () => context.push('/more/account'),
                       child: const Text('Open Account & continuity'),
