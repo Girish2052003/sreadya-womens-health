@@ -29,7 +29,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
     super.initState();
     final endpoint = MobileContinuityConfig.endpoint;
     if (endpoint != null) {
-      _service = MobileContinuityService(endpoint: endpoint);
+      _service = MobileContinuityService(endpoint);
     }
     _load();
   }
