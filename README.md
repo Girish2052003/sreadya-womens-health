@@ -14,7 +14,7 @@ The clients may use different operating-system mechanisms, but they are governed
 
 ## Current repository status
 
-The **implemented production baseline today** is the Flutter Android/iOS client. Android is the current native production-distribution priority and uses package `com.sreadya.health.sreadya` with release line `1.0.0+1`. iOS remains a first-class client and is continuously compiled/adapter-verified without production Apple signing until publisher signing/App Store capability is available.
+The **implemented production baseline today** is the Flutter Android/iOS client. Android is the current native production-distribution priority and uses package `com.sreadya.health.sreadya` with release line `1.1.0+2`. iOS remains a first-class client and is continuously compiled/adapter-verified without production Apple signing until publisher signing/App Store capability is available.
 
 The **approved next architecture** adds a browser-native Next.js/React/TypeScript Web/PWA client, shared language-neutral contracts, and optional end-to-end encrypted account continuity. Those C2 additions are documented and planned, but they must not be described as already implemented or shipping until the corresponding code, tests, privacy disclosures, and release gates are complete.
 
@@ -79,7 +79,7 @@ The approved internal capability contract contains **18 launch families and 258 
 - trusted-device approval + user-held recovery key;
 - email/SMS may recover account identity but must not independently decrypt old health history.
 
-The currently implemented `1.0.0+1` mobile runtime remains local-first and does **not** silently gain a sync backend merely because the future architecture is documented. A sync-enabled release requires implementation, protocol/security review, conformance tests, and updated privacy/store declarations first.
+The currently implemented `1.1.0+2` mobile runtime remains local-first and does **not** silently gain a sync backend merely because the future architecture is documented. A sync-enabled release requires implementation, protocol/security review, conformance tests, and updated privacy/store declarations first.
 
 ## Existing mobile release engineering
 
