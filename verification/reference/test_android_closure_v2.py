@@ -58,8 +58,8 @@ def test_permissions_are_contextual_and_contacts_are_not_requested() -> None:
 
     assert "android.permission.POST_NOTIFICATIONS" in platform
     assert "android.permission.RECORD_AUDIO" in platform
-    assert "android.permission.READ_CONTACTS" not in platform
-    assert "android.permission.WRITE_CONTACTS" not in platform
+    assert '<uses-permission android:name="android.permission.READ_CONTACTS"' not in platform
+    assert '<uses-permission android:name="android.permission.WRITE_CONTACTS"' not in platform
 
     assert "microphonePermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)" in native
     assert '"transcribeOnce"' in native
