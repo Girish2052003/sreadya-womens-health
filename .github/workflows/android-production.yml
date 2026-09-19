@@ -126,13 +126,16 @@ jobs:
           SREADYA_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SREADYA_ANDROID_KEYSTORE_PASSWORD }}
           SREADYA_ANDROID_KEY_ALIAS: ${{ secrets.SREADYA_ANDROID_KEY_ALIAS }}
           SREADYA_ANDROID_KEY_PASSWORD: ${{ secrets.SREADYA_ANDROID_KEY_PASSWORD }}
-        run: ./gradlew :app:testReleaseUnitTest --stacktrace
+        run: |
+          ./gradlew --stop || true
+          ./gradlew --no-daemon :app:testReleaseUnitTest --stacktrace
       - name: Build Play-ready AAB and production-signed APK
         env:
           SREADYA_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SREADYA_ANDROID_KEYSTORE_PASSWORD }}
           SREADYA_ANDROID_KEY_ALIAS: ${{ secrets.SREADYA_ANDROID_KEY_ALIAS }}
           SREADYA_ANDROID_KEY_PASSWORD: ${{ secrets.SREADYA_ANDROID_KEY_PASSWORD }}
         run: |
+          (cd android && ./gradlew --stop) || true
           flutter build appbundle --release
           flutter build apk --release
       - name: Verify production signatures
