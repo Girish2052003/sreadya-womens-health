@@ -52,13 +52,13 @@ def test_signed_release_payloads_are_encrypted_before_public_artifact_upload() -
     expectations = {
         "android-production.yml": (
             "SREADYA_PRODUCTION_ARTIFACT_PASSWORD",
-            "sreadya-android-1.0.0-production-encrypted",
-            "sreadya-1.0.0+1-production-release.tar.gz.enc",
+            "sreadya-android-1.1.0-production-encrypted",
+            "sreadya-1.1.0+2-production-release.tar.gz.enc",
         ),
         "android-family-preview.yml": (
             "SREADYA_PREVIEW_ARTIFACT_PASSWORD",
-            "sreadya-android-1.0.0-family-preview-encrypted",
-            "sreadya-1.0.0+1-family-preview-release.tar.gz.enc",
+            "sreadya-android-1.1.0-family-preview-encrypted",
+            "sreadya-1.1.0+2-family-preview-release.tar.gz.enc",
         ),
     }
 
@@ -112,13 +112,13 @@ def test_production_apk_publication_is_manifest_gated_and_separates_signing_from
     assert "SREADYA_ANDROID_UPLOAD_KEYSTORE_B64" in build_job
     assert "SREADYA_ANDROID_UPLOAD_KEYSTORE_B64" not in publish_job
     assert "SREADYA_ANDROID_KEYSTORE_PASSWORD" not in publish_job
-    assert "sreadya-1.0.0+1-play.aab" not in publish_job.split("Create or update public GitHub Release", 1)[1]
+    assert "sreadya-1.1.0+2-play.aab" not in publish_job.split("Create or update public GitHub Release", 1)[1]
 
     assert '"publication": "github-release"' in manifest
     assert '"public_apk_asset": "sreadya-android.apk"' in manifest
-    assert '"release_tag": "android-v1.0.0+1"' in manifest
-    assert "(cd build/release && sha256sum sreadya-1.0.0+1-play.aab sreadya-1.0.0+1-production.apk > SHA256SUMS.txt)" in workflow
-    assert "sha256sum build/release/sreadya-1.0.0+1-play.aab" not in workflow
+    assert '"release_tag": "android-v1.1.0+2"' in manifest
+    assert "(cd build/release && sha256sum sreadya-1.1.0+2-play.aab sreadya-1.1.0+2-production.apk > SHA256SUMS.txt)" in workflow
+    assert "sha256sum build/release/sreadya-1.1.0+2-play.aab" not in workflow
 
 def test_production_release_unit_tests_keep_complete_signing_environment() -> None:
     workflow = _text(WORKFLOW_DIR / "android-production.yml")
