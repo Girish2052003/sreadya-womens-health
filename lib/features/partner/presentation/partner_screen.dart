@@ -171,9 +171,18 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
         children: [
           const Card(
             child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                'Nothing is shared automatically. The Sreadya user selects categories, reviews the exact summary/QR, then explicitly opens the system share sheet.',
+              padding: EdgeInsets.all(18),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.privacy_tip_outlined),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Nothing is shared automatically. You select categories, review the exact summary/QR, then explicitly open Android’s system share sheet. Sreadya never reads your Contacts or address book.',
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

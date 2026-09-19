@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../brand/sreadya_brand.dart';
+import '../brand/sreadya_theme.dart';
 import '../core/platform/privacy_platform.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/privacy/data/app_lock_service.dart';
 import '../features/privacy/data/pin_lock_service.dart';
 import '../features/settings/data/privacy_settings_store.dart';
 import 'sreadya_app.dart';
+import 'sreadya_bloom.dart';
 
 class SreadyaBootstrap extends StatefulWidget {
   const SreadyaBootstrap({super.key});
@@ -16,10 +19,18 @@ class SreadyaBootstrap extends StatefulWidget {
 
 class _SreadyaBootstrapState extends State<SreadyaBootstrap>
     with WidgetsBindingObserver {
-  late Future<bool> _onboarding = OnboardingStore().isComplete();
+  late Future<bool> _onboarding = _loadOnboardingAfterBloom();
   bool _unlocked = false;
   bool _unlockAttempted = false;
   DateTime? _backgroundedAt;
+
+  Future<bool> _loadOnboardingAfterBloom() async {
+    final values = await Future.wait<bool>([
+      OnboardingStore().isComplete(),
+      Future<bool>.delayed(const Duration(milliseconds: 1500), () => true),
+    ]);
+    return values.first;
+  }
 
   @override
   void initState() {
@@ -119,11 +130,20 @@ class _SreadyaBootstrapState extends State<SreadyaBootstrap>
     if (ok) {
       setState(() => _unlocked = true);
     } else {
-      const message = 'Incorrect Sreadya PIN.';
-      final messenger = ScaffoldMessenger.of(context);
-      messenger.showSnackBar(const SnackBar(content: Text(message)));
+      const messengerText = 'Incorrect Sreadya PIN.';
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text(messengerText)));
     }
   }
+
+  MaterialApp _frame(Widget home) => MaterialApp(
+    title: 'Sreadya',
+    debugShowCheckedModeBanner: false,
+    theme: sreadyaTheme(brightness: Brightness.light),
+    darkTheme: sreadyaTheme(brightness: Brightness.dark),
+    themeMode: ThemeMode.system,
+    home: home,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -131,14 +151,11 @@ class _SreadyaBootstrapState extends State<SreadyaBootstrap>
       future: _onboarding,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const MaterialApp(
-            home: Scaffold(body: Center(child: CircularProgressIndicator())),
-          );
+          return _frame(const SreadyaBloom());
         }
         if (snapshot.data != true) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: OnboardingScreen(
+          return _frame(
+            OnboardingScreen(
               onComplete: () =>
                   setState(() => _onboarding = Future.value(true)),
             ),
@@ -146,55 +163,83 @@ class _SreadyaBootstrapState extends State<SreadyaBootstrap>
         }
         if (!_unlockAttempted) {
           WidgetsBinding.instance.addPostFrameCallback((_) => _unlock());
-          return const MaterialApp(
-            home: Scaffold(body: Center(child: CircularProgressIndicator())),
+          return _frame(
+            const SreadyaBloom(subtitle: 'Opening your private space…'),
           );
         }
         if (!_unlocked) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: Scaffold(
-              body: SafeArea(
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.lock_outline, size: 56),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Sreadya is locked',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w700,
+          return _frame(
+            Scaffold(
+              body: DecoratedBox(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      SreadyaBrand.pearl,
+                      Color(0xFFFFE5EF),
+                      Color(0xFFFFF8FB),
+                    ],
+                  ),
+                ),
+                child: SafeArea(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 430),
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(24),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SreadyaBrandIcon(size: 88),
+                                const SizedBox(height: 20),
+                                const Text(
+                                  'Sreadya is locked',
+                                  style: TextStyle(
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  'Unlock your private space with device authentication or your Sreadya PIN.',
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 20),
+                                FilledButton.icon(
+                                  onPressed: _unlock,
+                                  icon: const Icon(Icons.face),
+                                  label: const Text(
+                                    'Use device authentication',
+                                  ),
+                                ),
+                                FutureBuilder<bool>(
+                                  future: PinLockService().isConfigured(),
+                                  builder: (context, pin) => pin.data == true
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 8,
+                                          ),
+                                          child: OutlinedButton.icon(
+                                            onPressed: _unlockWithPin,
+                                            icon: const Icon(
+                                              Icons.pin_outlined,
+                                            ),
+                                            label: const Text(
+                                              'Use Sreadya PIN',
+                                            ),
+                                          ),
+                                        )
+                                      : const SizedBox.shrink(),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Unlock with Face ID, Touch ID, Android biometrics, or your device PIN/passcode.',
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 12),
-                        FilledButton.icon(
-                          onPressed: _unlock,
-                          icon: const Icon(Icons.face),
-                          label: const Text('Use device authentication'),
-                        ),
-                        FutureBuilder<bool>(
-                          future: PinLockService().isConfigured(),
-                          builder: (context, pin) => pin.data == true
-                              ? Padding(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  child: OutlinedButton.icon(
-                                    onPressed: _unlockWithPin,
-                                    icon: const Icon(Icons.pin_outlined),
-                                    label: const Text('Use Sreadya PIN'),
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),

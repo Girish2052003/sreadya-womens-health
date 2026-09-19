@@ -3,6 +3,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../brand/sreadya_theme.dart';
+
 import '../features/account/presentation/account_screen.dart';
 import '../features/account/presentation/devices_screen.dart';
 import '../features/account/presentation/recovery_screen.dart';
@@ -153,16 +155,6 @@ class _SreadyaAppState extends ConsumerState<SreadyaApp> {
       ThemePreference.light => ThemeMode.light,
       ThemePreference.dark => ThemeMode.dark,
     };
-    final lightScheme = ColorScheme.fromSeed(
-      seedColor: const Color(0xFF9D426B),
-      brightness: Brightness.light,
-      contrastLevel: preferences.highContrast ? 1.0 : 0.0,
-    );
-    final darkScheme = ColorScheme.fromSeed(
-      seedColor: const Color(0xFFE59AB9),
-      brightness: Brightness.dark,
-      contrastLevel: preferences.highContrast ? 1.0 : 0.0,
-    );
     return MaterialApp.router(
       title: 'Sreadya',
       debugShowCheckedModeBanner: false,
@@ -174,16 +166,14 @@ class _SreadyaAppState extends ConsumerState<SreadyaApp> {
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       themeMode: themeMode,
-      theme: ThemeData(
-        colorScheme: lightScheme,
-        useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFFFFFBFD),
-        cardTheme: const CardThemeData(margin: EdgeInsets.zero),
-        inputDecorationTheme: const InputDecorationTheme(
-          border: OutlineInputBorder(),
-        ),
+      theme: sreadyaTheme(
+        brightness: Brightness.light,
+        highContrast: preferences.highContrast,
       ),
-      darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
+      darkTheme: sreadyaTheme(
+        brightness: Brightness.dark,
+        highContrast: preferences.highContrast,
+      ),
       routerConfig: _router,
     );
   }

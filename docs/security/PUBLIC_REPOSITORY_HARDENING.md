@@ -12,7 +12,7 @@ I maintain Sreadya as a public source repository while preserving the product's 
 
 This document records the repository-level controls that must remain intact so future maintenance does not accidentally weaken the release boundary.
 
-> **C2 interpretation:** the statement above describes the currently implemented `1.0.0+1` mobile data flow. The approved future C2 architecture may add optional E2EE continuity in which authorized clients encrypt health content before upload and Sreadya infrastructure stores only ciphertext plus minimum operational metadata without the health-vault decryption key. That future flow is not active merely because it is documented.
+> **C2 interpretation:** the statement above describes the currently implemented `1.1.0+2` mobile data flow. The approved future C2 architecture may add optional E2EE continuity in which authorized clients encrypt health content before upload and Sreadya infrastructure stores only ciphertext plus minimum operational metadata without the health-vault decryption key. That future flow is not active merely because it is documented.
 
 ## Hardened workflow boundary
 
@@ -41,8 +41,8 @@ To decrypt an authorized downloaded production payload locally, the maintainer c
 
 ```bash
 openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 \
-  -in sreadya-1.0.0+1-production-release.tar.gz.enc \
-  -out sreadya-1.0.0+1-production-release.tar.gz \
+  -in sreadya-1.1.0+2-production-release.tar.gz.enc \
+  -out sreadya-1.1.0+2-production-release.tar.gz \
   -pass env:SREADYA_PRODUCTION_ARTIFACT_PASSWORD
 ```
 
