@@ -148,7 +148,10 @@ jobs:
           mkdir -p build/release
           cp build/app/outputs/bundle/release/app-release.aab build/release/sreadya-1.0.0+1-play.aab
           cp build/app/outputs/flutter-apk/app-release.apk build/release/sreadya-1.0.0+1-production.apk
-          sha256sum build/release/sreadya-1.0.0+1-play.aab build/release/sreadya-1.0.0+1-production.apk > build/release/SHA256SUMS.txt
+          (
+            cd build/release
+            sha256sum sreadya-1.0.0+1-play.aab sreadya-1.0.0+1-production.apk > SHA256SUMS.txt
+          )
       - name: Encrypt production release payload for public Actions storage
         env:
           ARTIFACT_PASSWORD: ${{ secrets.SREADYA_PRODUCTION_ARTIFACT_PASSWORD }}
