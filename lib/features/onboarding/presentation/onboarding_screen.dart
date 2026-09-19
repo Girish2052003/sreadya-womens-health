@@ -137,18 +137,27 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         }
       }
 
-      await OnboardingStore().complete();
-      widget.onComplete();
-
       if (_enableReminders && !notificationAllowed && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Notification access was not granted. Sreadya left reminders off; you can enable them later from More > Reminders.',
+        await showDialog<void>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            icon: const Icon(Icons.notifications_off_outlined),
+            title: const Text('Reminders stay off for now'),
+            content: const Text(
+              'Android notification access was not granted. Sreadya will continue normally without reminders. You can enable them later from More > Reminders.',
             ),
+            actions: [
+              FilledButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text('Continue'),
+              ),
+            ],
           ),
         );
       }
+
+      await OnboardingStore().complete();
+      widget.onComplete();
     } catch (error) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
