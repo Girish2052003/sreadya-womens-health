@@ -87,3 +87,33 @@ def test_public_maintainer_security_posture_is_documented_and_linked() -> None:
     assert "ChatGPT" not in note_text
     assert "PUBLIC_REPOSITORY_HARDENING.md" in readme
     assert "PUBLIC_REPOSITORY_HARDENING.md" in security
+
+def test_production_apk_publication_is_manifest_gated_and_separates_signing_from_release_write() -> None:
+    workflow = _text(WORKFLOW_DIR / "android-production.yml")
+    manifest = _text(ROOT / "release" / "android-production.json")
+
+    assert "workflow_dispatch:" in workflow
+    assert "push:" in workflow
+    assert "branches: [main]" in workflow
+    assert "release/android-production.json" in workflow
+    assert "Verify Android release publication manifest" in workflow
+    assert "publish-public-apk:" in workflow
+    assert "needs: production-release" in workflow
+    assert "actions: read" in workflow
+    assert "contents: write" in workflow
+    assert "actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093" in workflow
+    assert "gh release create" in workflow
+    assert "gh release upload" in workflow
+    assert "sreadya-android.apk" in workflow
+    assert "sreadya-android.apk.sha256" in workflow
+
+    build_job, publish_job = workflow.split("  publish-public-apk:", 1)
+    assert "SREADYA_ANDROID_UPLOAD_KEYSTORE_B64" in build_job
+    assert "SREADYA_ANDROID_UPLOAD_KEYSTORE_B64" not in publish_job
+    assert "SREADYA_ANDROID_KEYSTORE_PASSWORD" not in publish_job
+    assert "sreadya-1.0.0+1-play.aab" not in publish_job.split("Create or update public GitHub Release", 1)[1]
+
+    assert '"publication": "github-release"' in manifest
+    assert '"public_apk_asset": "sreadya-android.apk"' in manifest
+    assert '"release_tag": "android-v1.0.0+1"' in manifest
+
