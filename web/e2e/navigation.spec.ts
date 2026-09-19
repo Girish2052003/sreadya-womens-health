@@ -25,3 +25,19 @@ test('private workspace deep links expose the calm five-item primary navigation'
   await page.goto('/app/privacy/');
   await expect(page.getByRole('heading', { level: 1, name: 'Privacy' })).toBeVisible();
 });
+
+test('mobile public header keeps every public tab including Download visible', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+
+  const mobileNav = page.locator('.public-header__mobile-nav');
+  await expect(mobileNav).toBeVisible();
+
+  for (const item of ['Features', 'How it works', 'Privacy', 'Security', 'Help', 'Download']) {
+    await expect(mobileNav.getByRole('link', { name: item, exact: true })).toBeVisible();
+  }
+
+  await mobileNav.getByRole('link', { name: 'Download', exact: true }).click();
+  await expect(page).toHaveURL(/\/download\/$/);
+});
+

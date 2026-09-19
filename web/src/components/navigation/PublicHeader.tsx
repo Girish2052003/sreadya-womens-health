@@ -32,6 +32,11 @@ export function PublicHeader({ showLanguageChooser = false }: { showLanguageChoo
       {showLanguageChooser && availableLocales.length > 1 ? <LanguageChooser /> : null}
       <ThemeToggle />
       <Link className="public-header__cta" href="/app/home">{t('common.openSreadya')}</Link>
+      <nav className="public-header__mobile-nav" aria-label={t('nav.public.label')}>
+        {publicLinks.map(([labelKey, href]) => (
+          <Link key={href} href={href}>{t(labelKey)}</Link>
+        ))}
+      </nav>
     </header>
   );
 }
