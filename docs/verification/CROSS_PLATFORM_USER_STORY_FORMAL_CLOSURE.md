@@ -2,7 +2,7 @@
 
 **Scope:** Android, iOS, Web and PWA launch-product implementation parity.  
 **Authority:** `shared/capabilities/sreadya-capabilities.v1.json`, the cross-platform evidence ledger, the Web surface ledger, the mobile worldwide-v1 baseline, and the approved C2 architecture.  
-**Status:** IMPLEMENTATION CLOSURE CANDIDATE — authoritative only after the exact branch head passes the required CI gates and is merged to `main`.
+**Status:** FORMAL IMPLEMENTATION CLOSURE — merged to `main` at `b34af51654807943465dea152f210693ec869953` after the exact PR head `fa9d1566c420b55739341c7724702e436ea92453` passed all 24 pull-request workflows; all 7 post-merge `main` workflows also passed.
 
 ## Closure statement
 
@@ -44,6 +44,19 @@ Repository implementation closure is not a substitute for a human acceptance eve
 
 No external acceptance status is changed by this implementation closure, and no personal reproductive-health data is required in acceptance evidence.
 
-## Closure condition
+## Closure evidence
 
-This document becomes **FORMAL IMPLEMENTATION CLOSURE** only when the exact change set that contains these mobile continuity surfaces and evidence updates passes all required GitHub Actions checks and is merged to `main`. External production rollout remains governed independently by Task 28.
+The closure condition was satisfied on 19 September 2026:
+
+- PR #27 exact head: `fa9d1566c420b55739341c7724702e436ea92453`
+- Pull-request workflows: **24/24 completed successfully**
+- Squash-merge commit on `main`: `b34af51654807943465dea152f210693ec869953`
+- Post-merge `main` workflows: **7/7 completed successfully**
+- Post-merge gates included Cross-Platform Traceability, Mobile E2EE Continuity, Final Web Product Completeness, Release Hardening, Sync Release Policy, Staged Acceptance and the umbrella Sreadya CI.
+- Sreadya CI completed Web security/core/E2E, Flutter core, shared contracts, iOS no-codesign compilation, Android production-release verification and Android family-preview verification successfully.
+
+Accordingly, the repository-level Android/iOS/Web/PWA implementation parity described above is **formally closed** at the merge commit named above.
+
+## External acceptance boundary remains open
+
+This repository closure does not fabricate real-world events. Web/PWA wife-alpha observation, Android wife-alpha observation, signed iOS distribution, real multi-device E2EE acceptance, private beta and staged production remain governed independently by Task 28 and stay pending until genuine sanitized external evidence exists.
