@@ -1248,5 +1248,8 @@
   "privacy.value.pinEnabled": "PIN app lock enabled · automatic lock active · native biometric protection not claimed",
   "privacy.value.pinNotConfigured": "PIN app lock available but not configured · native biometric protection not claimed",
   "privacy.value.browserControlled": "Browser controlled — no Web guarantee",
-  "privacy.value.noneReproductiveHealth": "None from reproductive-health data"
+  "privacy.value.noneReproductiveHealth": "None from reproductive-health data",
+  "install.android.badge": "Production Android",
+  "install.android.checksum": "SHA-256 checksum",
+  "install.android.releaseDetails": "Release details"
 }
