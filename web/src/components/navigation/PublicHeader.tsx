@@ -15,11 +15,39 @@ const publicLinks = [
   ['nav.public.download', '/download'],
 ] as const;
 
-export function PublicHeader({ showLanguageChooser = false }: { showLanguageChooser?: boolean }) {
+type PublicHeaderVariant = 'landing' | 'section';
+
+export function PublicHeader({
+  showLanguageChooser = false,
+  variant = 'landing',
+  currentLabel,
+}: {
+  showLanguageChooser?: boolean;
+  variant?: PublicHeaderVariant;
+  currentLabel?: string;
+}) {
   const { t, availableLocales } = useI18n();
 
+  if (variant === 'section') {
+    return (
+      <header className="public-header public-header--section">
+        <Link className="public-header__brand" href="/" aria-label={t('brand.homeAria')} title={t('brand.homeAria')}>
+          <span className="public-header__mark" aria-hidden="true">S</span>
+          <span>{t('brand.name')}</span>
+        </Link>
+        {currentLabel ? (
+          <span className="public-header__context" aria-current="page">{currentLabel}</span>
+        ) : null}
+        <nav className="public-header__section-nav" aria-label={t('nav.public.label')}>
+          <Link href="/">{t('common.home')}</Link>
+        </nav>
+        <ThemeToggle />
+      </header>
+    );
+  }
+
   return (
-    <header className="public-header">
+    <header className="public-header public-header--landing">
       <Link className="public-header__brand" href="/" aria-label={t('brand.homeAria')} title={t('brand.homeAria')}>
         <span className="public-header__mark" aria-hidden="true">S</span>
         <span>{t('brand.name')}</span>
